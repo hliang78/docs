@@ -12,3 +12,13 @@
   - `collection_jitter` / `collection_offset` / `flush_jitter` 用来错峰
   - 这些都比“继续修全局 priority 队列”更接近容量解法
 - 交接给下一位 AI 时，建议默认从计划文档 Task 1 开始，而不是再回到 `REAL-075/076` 那套旧 global queue 假设
+- 状态更新：
+  - 核心 refactor 已在 `2026-06-01` 落地，不再只是计划
+  - 真实验证见 `REAL-077`：在恢复 `41` 条持久化任务后再次 replay，目标设备 `ping/snmp` 已可直接在当前版本上收敛为 `running`
+  - 通用 limiter 现在不再是 SNMP-only；phase one 已覆盖两类真实远端采集：
+    - `network_device_poll`：`snmp-passthrough` / `snmp_passthrough` / `snmp-basic`
+    - `remote_probe`：`ping-basic`
+  - 旧 `snmp_global_limit` / `snmp_per_device_limit` 现在只保留兼容入口：仅在 `input_limits` 缺省时映射到 `network_device_poll`，显式配置 `input_limits` 后以新结构为准
+  - `network_device_poll.target_limit` 的 target key 归一化回归仍保留：会优先按常见 SNMP 远端模板后的 target part 归一化，并忽略尾部任务 hash，避免“同设备不同 task hash”绕过限流
+  - 这条归一化不只覆盖 `172_32_2_14_161_hashxxxx` 这类 IP 目标，也覆盖 `DEV20260401000043_hashxxxx` 这类稳定设备码目标，以及不同 SNMP 模板名下的同目标任务
+  - 下一步更值得继续追的是“大规模任务下限流参数是否合适”、以及是否要为后续独立计划引入更激进的 SNMP batching/sharding

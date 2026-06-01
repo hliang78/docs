@@ -14,7 +14,7 @@ periodic jobs such as reminders or scheduled reports.
 
 ## Directory Layout
 
-All automation-owned files live under:
+Published/static OpenClaw docs live under:
 
 ```text
 docs/openclaw-autodev/
@@ -27,13 +27,27 @@ runtime-template.md        runtime guardrail template
 project-template.conf.example task-pool project file template
 shared-d2.md               D2 FE/BE shared coordination
 loops/*.conf               task configs
-stories/*.json             Ralph-style small story queues
-memory/autodev-memory.sqlite lightweight local memory index
+stories/*.json             story seed/templates for runtime copies
+issues/                    automation-created issue notes
+```
+
+Mutable runtime data lives outside the published docs checkout:
+
+```text
+/Users/huangliang/project/OneOPS-ALL/.openclaw-runtime/openclaw-autodev/
+```
+
+```text
+stories/                   mutable runtime story copies
+memory/                    local memory index
 state/                     loop state, locks, maintenance archives
 logs/                      automation logs
 evidence/                  automation-level evidence
-issues/                    automation-created issue notes
+archive/                   archived runtime artifacts
 ```
+
+This split keeps `docs/` clean and synchronized with `hliang78/docs.git` while
+still letting OpenClaw loops run locally.
 
 Commands:
 
@@ -66,7 +80,7 @@ Weixin equivalents use the `REPAIR` prefix, for example
 `REPAIR 启动 D2FE`, `REPAIR 状态`, `REPAIR 现场`, and `REPAIR 关闭`.
 The start note is optional; without it the repair agent captures the current
 BLOCKED scene and generates a default repair brief. Repair state and evidence are kept under
-`docs/openclaw-autodev/state/repair/<repair-id>/`.
+`.openclaw-runtime/openclaw-autodev/state/repair/<repair-id>/`.
 
 Tasks:
 
@@ -162,7 +176,7 @@ Notes:
   the default prompt. `qwen-worker` remains as a compatibility alias for older
   loops and docs. When `strict-worker` is active, the controller also compiles
   the selected story
-  into `docs/openclaw-autodev/state/<task-id>/current-execution-pack.json` and
+  into `.openclaw-runtime/openclaw-autodev/state/<task-id>/current-execution-pack.json` and
   injects a compact execution-pack summary into the worker prompt.
 - `HARNESS_CONTRACT_DOC` is optional. When present, a compact leading excerpt of
   that file is injected into the worker prompt after read budget and precheck
@@ -204,7 +218,7 @@ next fresh OpenClaw session if the task remains enabled and control is
 The controller writes a deterministic handoff file after every turn:
 
 ```text
-docs/openclaw-autodev/state/<task-id>/handoff.md
+.openclaw-runtime/openclaw-autodev/state/<task-id>/handoff.md
 ```
 
 ## State Manager
@@ -244,8 +258,8 @@ first `HANDOFF_PROMPT_LINES` lines of handoff (default `24`) and the first
 exact prompt sent to OpenClaw:
 
 ```text
-docs/openclaw-autodev/state/<task-id>/<run-id>-turn-<n>.prompt.txt
-docs/openclaw-autodev/state/<task-id>/current-prompt.txt
+.openclaw-runtime/openclaw-autodev/state/<task-id>/<run-id>-turn-<n>.prompt.txt
+.openclaw-runtime/openclaw-autodev/state/<task-id>/current-prompt.txt
 ```
 
 Inspect prompt size before a run:
@@ -257,10 +271,16 @@ Inspect prompt size before a run:
 ## Story Queue
 
 The loop uses a Ralph-style story queue to keep each worker turn small and
-fresh. Story files live under:
+fresh. Published story seeds live under:
 
 ```text
 docs/openclaw-autodev/stories/<task-or-group>.json
+```
+
+At runtime, the controller copies them into:
+
+```text
+.openclaw-runtime/openclaw-autodev/stories/<task-or-group>.json
 ```
 
 Each worker receives at most one current story. If no selectable story exists,

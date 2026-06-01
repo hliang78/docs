@@ -15,6 +15,22 @@ The script intentionally excludes runtime-heavy material such as:
 - `__pycache__/`
 - `oneops-backend`
 
+## Local Runtime Rule
+
+`docs/` is the live checkout of `hliang78/docs.git`, so OpenClaw runtime output
+must stay outside this repo working tree.
+
+Local mutable runtime data now lives under:
+
+```text
+/Users/huangliang/project/OneOPS-ALL/.openclaw-runtime/openclaw-autodev/
+```
+
+That runtime tree owns mutable `stories/`, `state/`, `logs/`, `memory/`,
+`archive/`, and `evidence/` content. The published `docs/openclaw-autodev/`
+tree stays focused on static configs, templates, guides, and story seeds that
+are safe to sync to GitHub.
+
 Default mode is conservative: it merges curated files into the target repo and preserves target-only files. Use `--delete` only when you want a true mirror.
 
 ## Recommended Flow

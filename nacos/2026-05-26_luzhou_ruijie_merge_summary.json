@@ -1,0 +1,29 @@
+{
+  "cipher_profile_dataset_keys_before": [
+    "snmp_sys_descr",
+    "snmp_if_table",
+    "cli_interface_brief"
+  ],
+  "cipher_profile_dataset_keys_after": [
+    "snmp_sys_descr",
+    "snmp_if_table",
+    "cli_lldp_neighbors"
+  ],
+  "candidate_engine_extractors_before": [
+    "huawei_vrp_paren_model_version",
+    "huawei_vrp_inline_model_version",
+    "h3c_comware_model",
+    "cisco_ios_xe_version",
+    "cisco_ios_version",
+    "cisco_vios_model"
+  ],
+  "candidate_engine_extractors_after": [
+    "huawei_vrp_paren_model_version",
+    "huawei_vrp_inline_model_version",
+    "h3c_comware_model",
+    "cisco_ios_xe_version",
+    "cisco_ios_version",
+    "cisco_vios_model",
+    "ruijie_vendor_backfill"
+  ]
+}

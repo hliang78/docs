@@ -1,0 +1,3073 @@
+server:
+  port: 8080
+  host: 0.0.0.0
+bidi:
+  listen_addr: :7070
+  enable_debug: true
+platform:
+  enable_bidi: true
+license:
+  authorizer: 上海亚安软件技术有限公司
+  authorized: 测试组织Demo
+  additional:
+  - FirewallOrderMod
+mysql:
+  host: 127.0.0.1
+  port: 3306
+  dbName: UniOPS
+  username: UniOPS
+  password: UniOPS@Passw0rd
+  autoMigrate: true
+minio:
+  endpoint: 127.0.0.1:9000
+  accessKey: oneopse01f16d001
+  secretKey: OneOps297881a1c8782a81222c5a307a317f1833
+  bucket: uniops
+mongodb:
+  host: 127.0.0.1:27017
+  database: uniops
+  username: root
+  password: UniOPS_Passw0rd
+credential:
+  providers:
+    vault:
+      enabled: true
+      address: http://127.0.0.1:8200
+      token: <REDACTED_VAULT_TOKEN>
+      namespace: ''
+      timeout_seconds: 5
+      insecure_skip_verify: false
+      handle_signing_key: oneops-quick-env-vault-handle-signing-key
+      handle_ttl_seconds: 300
+      handle_single_use: true
+      credentials:
+      - code: vault_linux_ops
+        name: Linux Ops
+        type: ssh_account
+        usage: inband
+        path: kv/data/oneops/secrets/linux_ops
+        field_mapping:
+          username: username
+          password: password
+          private_key: private_key
+          auth_pass: auth_pass
+        description: Quick env linux ssh credential from Vault
+      - code: vault_snmp_default
+        name: SNMP Default
+        type: snmp_community
+        usage: snmp_inband
+        path: kv/data/oneops/communities/snmp_default
+        field_mapping:
+          community: community
+        description: Quick env snmp community from Vault
+      - code: vault_git_prod
+        name: Git Prod
+        type: http_basic
+        usage: change_execution
+        path: kv/data/oneops/git/prod
+        field_mapping:
+          username: username
+          password: password
+          token: token
+        description: Quick env local Gitea credential from Vault
+jwt:
+  exp: 36000
+  iss: netxops
+  signKey: Pa1Q5saG90NueZf6XDyS9GUI
+debugToken: abc123
+system:
+  debug: false
+  casbin: false
+redis:
+  host: 127.0.0.1
+  port: 6379
+  password: Redis@Passw0rd
+  db: 0
+prometheus:
+  url: http://127.0.0.1:9090
+observationMIB:
+  enabled: true
+  treeFile: /home/jacky/project/OneOPS-ALL/quick_env/init-data/mib_tree.json
+device_v2:
+  enabled: true
+  enable_legacy_collect_to_entity_v2: false
+  candidate_engine:
+    enabled: true
+    apply_in_prepare: true
+    nacos_data_id: device_v2_candidate_engine
+    nacos_group: DEFAULT_GROUP
+device_collection2:
+  enabled: true
+  collection_mode: dc2_only
+  store_pipeline_probe_enabled: true
+  contract_key: common_mib
+  dataset_keys:
+  - snmp_sys_descr
+  - snmp_if_table
+  - snmp_ip_addr_entry
+  - snmp_arp
+  - snmp_entPhysicalEntry
+  - snmp_lldpRemEntry
+  - snmp_cdp_neighbors
+  collection_profiles:
+  - id: net-h3c-comware
+    priority: 200
+    match:
+      catalog_names:
+      - SWITCH
+      - Network
+      platform_names:
+      - Comware
+    contract_key: h3c_comware
+    dataset_keys:
+    - snmp_sys_descr
+    - snmp_if_table
+    - snmp_ip_addr_entry
+    - snmp_arp
+    - snmp_entPhysicalEntry
+    - snmp_lldpRemEntry
+    - cli_interface_brief
+    - cli_lldp_neighbors
+  - id: net-huawei-vrp
+    priority: 200
+    match:
+      catalog_names:
+      - SWITCH
+      - Network
+      platform_names:
+      - VRP
+      - HuaWei
+    contract_key: huawei_vrp
+    dataset_keys:
+    - snmp_sys_descr
+    - snmp_if_table
+    - snmp_ip_addr_entry
+    - snmp_arp
+    - snmp_entPhysicalEntry
+    - snmp_lldpRemEntry
+    - cli_interface_brief
+    - cli_lldp_neighbors
+  - id: net-cisco-ios
+    priority: 200
+    match:
+      catalog_names:
+      - SWITCH
+      - ROUTER
+      - Network
+      platform_names:
+      - IOS
+    contract_key: cisco_ios
+    dataset_keys:
+    - snmp_sys_descr
+    - snmp_if_table
+    - snmp_ip_addr_entry
+    - snmp_arp
+    - snmp_entPhysicalEntry
+    - snmp_lldpRemEntry
+    - snmp_cdp_neighbors
+    - cli_interface_brief
+    - cli_cdp_neighbors
+  - id: srv-linux-ubuntu
+    priority: 150
+    match:
+      catalog_names:
+      - SERVER
+      platform_names:
+      - Ubuntu
+    contract_key: server_ubuntu
+    dataset_keys:
+    - linux_hostname
+    - linux_machine_id
+    - linux_os_release
+    - linux_interfaces
+    - linux_interface_ip
+    - linux_default_route
+    - linux_cpu
+    - linux_memory
+  - id: srv-linux-generic
+    priority: 100
+    match:
+      catalog_names:
+      - SERVER
+      platform_names:
+      - Centos
+      - Redhat
+      - Debian
+      - AlmaLinux
+      - Other
+    contract_key: server_linux
+    dataset_keys:
+    - linux_hostname
+    - linux_machine_id
+    - linux_os_release
+    - linux_interfaces
+    - linux_interface_ip
+    - linux_default_route
+    - linux_cpu
+    - linux_memory
+  - id: srv-windows
+    priority: 150
+    match:
+      catalog_names:
+      - SERVER
+      - Windows
+      platform_names:
+      - Windows
+    contract_key: server_windows
+    dataset_keys:
+    - windows_hostname
+    - windows_computer_system
+    - windows_bios
+    - windows_os
+    - windows_net_adapter
+    - windows_net_ip_address
+    - windows_default_route
+    - windows_processor
+  - id: fw-h3c-secpath
+    priority: 180
+    match:
+      catalog_names:
+      - FIREWALL
+      platform_names:
+      - SecPath
+    contract_key: h3c_secpath
+    dataset_keys:
+    - snmp_sys_descr
+    - snmp_if_table
+    - cli_interface_brief
+  - id: fw-huawei-usg
+    priority: 180
+    match:
+      catalog_names:
+      - FIREWALL
+      platform_names:
+      - USG
+    contract_key: huawei_usg
+    dataset_keys:
+    - snmp_sys_descr
+    - snmp_if_table
+    - cli_interface_brief
+  - id: net-ruijie
+    priority: 150
+    match:
+      catalog_names:
+      - SWITCH
+      - Network
+      platform_names:
+      - Ruijie
+    contract_key: ruijie_ruijie
+    dataset_keys:
+    - snmp_sys_descr
+    - snmp_if_table
+    - cli_lldp_neighbors
+  - id: net-dptech
+    priority: 150
+    match:
+      catalog_names:
+      - SWITCH
+      - FIREWALL
+      - Network
+      platform_names:
+      - Dptech
+      - FWNFV
+    contract_key: dptech_fwnfv
+    dataset_keys:
+    - snmp_sys_descr
+    - snmp_if_table
+    - cli_interface_brief
+  block_on_failure: true
+  block_on_partial: true
+  scheduler_enabled: true
+rpc:
+  prefix: /rpcx
+  tls:
+    enable: true
+    certFile: ./certs/client.crt
+    keyFile: ./certs/client.key
+    caFile: ./certs/ca.crt
+    insecureSkipVerify: false
+etcd:
+  addr: 127.0.0.1:2379
+  username: root
+  password: Etcd@Passw0rd
+l2selector: ENV
+env: DefaultEnv
+auth:
+  defaultPassword: '12345678'
+  superAdmin: admin
+  maxRetryLogin: 5
+  accountLockedTime: 10
+alert:
+  inhibitLogsKeepDay: 2
+  stateMachine:
+  - name: TriggerEvent
+    src:
+    - Init
+    - Recovery
+    dst: Trigger
+    duration: 20
+    not_use_extend: true
+    value: 0
+  - name: RecoveryEvent
+    src:
+    - Trigger
+    - Init
+    dst: Recovery
+    duration: 20
+    not_use_extend: true
+    value: 1
+  dingTalk:
+    accessToken: xxxx
+    secret: xxxxx
+  smtp:
+    host: xxx.smtp.com
+    port: 465
+    username: i@xx.com
+    password: passwd
+grafana:
+  host: 127.0.0.1
+  port: 3000
+  username: admin
+  password: admin
+  embedded:
+  - label: SwitchDetails
+    desc: 交换机详情监控面板，在设备详情页的监控信息标签页中显示，用于非服务器设备
+  - label: ServerDetails
+    desc: 服务器详情监控面板，在设备详情页的监控信息标签页中显示，用于服务器设备
+  - label: MainDashboard
+    desc: 系统监控
+interfaceFilter:
+  linux:
+    ip:
+    - 127
+    - ::1
+    - fe80
+    - 169.254
+    port:
+    - docker
+    - lo
+    - tap
+    - virbr
+    - br
+    - dummy0
+    - wps-svc
+    - veth
+fieldCheckRule:
+  must:
+  - Site
+  - Hostname
+  - DeviceModel
+  - Rack
+validator:
+  uniqCheckList:
+  - inputField: SN
+    databaseField: SN
+  - inputField: DeviceName
+    databaseField: Name
+  ignore:
+  - ignoreRule:
+    - COLLECT_IP_PAGE
+    - COLLECT_IPAM
+    - DEVICE_IP_ADDRESS
+    - WORKER_DEVICE_IP
+    platform:
+    - ESXI
+    - Vmware
+  - deviceType:
+    - C3750
+    - SL4510
+    - XL450 Gen9
+    - SHTERM-EH5
+    - 安全配置核查CVS-2700
+    - 天镜脆弱性扫描与管理系统TJCS-NS-H
+    - 天清NGIPS8000-A
+    - 网站监控预警平台
+    - 3PAR管理机
+    - 3PAR NODE
+    - 610L
+    - AIX HMC
+    - APIC-CLUSTER-L3
+    - APIC-L2
+    - AS5600
+    - ASA5555-X
+    - ASA5585
+    - ASR1006
+    - ASR9010
+    - AVAYA G450
+    - AVAYA S8800
+    - BGI-IP I2600
+    - BVSNX3-S
+    - CF-FEP2000
+    - CXA-05070-B010
+    - D01-7100
+    - DAS-A5500
+    - DAS-AW5200
+    - DCX8510-4
+    - DCX8510-8
+    - DL360 G7
+    - DS-C9148S-D12PSK9
+    - DS2246
+    - DS4246
+    - DS8870
+    - DS8886
+    - DW700-CBX
+    - DW-F700-DBS盘柜
+    - eSpace U2980
+    - F1000-E-SI
+    - F5-10050
+    - F5-10050s
+    - F5-5000s
+    - F5000-C
+    - FAS3220
+    - FC7000
+    - Firepower4125
+    - G450
+    - GFT1501S
+    - HDS DW-700
+    - Infoblox 2200
+    - k01-1000+
+    - N9K-C93180YC-EX
+    - N9K-C9372PX
+    - N9K-C9372PX-E
+    - NBU盘柜
+    - Netapp8020
+    - Netapp8040
+    - Netapp8080
+    - NetBackup 5230
+    - NetBackup 5240
+    - NIPS NX5
+    - NTANX3-1000E
+    - NX5-N8000A
+    - OceanStor 18500
+    - OSN1500
+    - PC-610
+    - R104L
+    - RSASNX3-S
+    - RSW-9800L
+    - SAG210
+    - SAN Cainet C36
+    - Shterm-MZ6
+    - SJJ1214
+    - SJl06
+    - SJL1312-b
+    - SRX3600
+    - SS56DE24
+    - Strontech 工控机
+    - SYMC DCSCRTY6.5
+    - TS3584
+    - USG6000V4
+    - USG6650
+    - V3000-G
+    - VPN-1000-E640
+    - VPN-4050-L
+    - WAF-2200AG
+    - WAF-W2200AG
+    ignore_rule:
+    - COLLECT_IP_PAGE
+    - COLLECT_IPAM
+    - WORKER_DEVICE_IP
+    - DEVICE_IP_ADDRESS
+  - device_type:
+    - SL4540
+    - SL4510
+    ignore_rule:
+    - COLLECT_IP_PAGE
+    - WORKER_RACK_RESOURCES
+    - WORKER_DEVICE_IP
+  - deviceType:
+    - C3750
+    ignoreRule:
+    - DEVICE_SN_NUMBER
+flexmapping:
+  after:
+    rules:
+    - fields:
+      - new_version: Platform
+      functions:
+        new_version: db
+    - fields:
+      - catalog: Catalog
+      functions:
+        catalog: db
+  before:
+    rules:
+    - fields:
+      - RackPosition: \(([\d+A-Za-z-]+)
+      functions:
+        StartU: RE
+    - fields:
+      - InBandIP: true
+      - OutBandIP: true
+  mapping:
+  - rules:
+    - fields:
+      - Version:
+        - red
+        - rhel
+        - rehl
+        - rh
+      functions:
+        Version: In
+      map: redhat
+    - fields:
+      - Version:
+        - debian
+        - deb
+      functions:
+        Version: In
+      map: Debian
+    - fields:
+      - Version:
+        - almaLinux
+        - alma
+      functions:
+        Version: In
+      map: AlmaLinux
+    - fields:
+      - Version:
+        - ubun
+      functions:
+        Version: In
+      map: ubuntu
+    - fields:
+      - Version:
+        - esxi
+      functions:
+        Version: In
+      map: esxi
+    - fields:
+      - Version:
+        - aix
+      functions:
+        Version: In
+      map: aix
+    - fields:
+      - Version:
+        - centos
+      functions:
+        Version: In
+      map: Centos
+    - fields:
+      - Version:
+        - win
+      functions:
+        Version: In
+      map: Windows
+    - fields:
+      - Version:
+        - vm
+      functions:
+        Version: In
+      map: Vmware
+    - fields:
+      - Version:
+        - comware
+        - 交换机
+      functions:
+        Version: In
+      map: Comware
+    targetFiled: new_version
+  - rules:
+    - fields:
+      - DeviceType: '!交换机'
+      - AttributionType: 网络设备
+      functions:
+        Version: In
+      map: Network
+    - fields:
+      - DeviceType:
+        - ASA
+        - FortiGate
+        - SecPath
+        - FWNFV
+        - USG
+        - SangforOS
+      - AttributionType: 网络设备
+      functions:
+        Version: In
+      map: FIREWALL
+    - fields:
+      - DeviceType:
+        - F5
+      - AttributionType: 网络设备
+      functions:
+        Version: In
+      map: LoadBalance
+    - fields:
+      - DeviceType:
+        - Nexus
+        - IOS
+        - 交换机
+        - Comware
+        - HuaWei
+        - Ruijie
+        - INOS
+        - ANSHI
+      - AttributionType: 网络设备
+      functions:
+        Version: In
+      map: Switch
+    - fields:
+      - DeviceType:
+        - 路由器
+      - AttributionType: 网络设备
+      functions:
+        Version: In
+      map: Router
+    - fields:
+      - DeviceType:
+        - Comware
+        - Ruijie
+      - AttributionType: 路由器
+      functions:
+        Version: In
+      map: Router
+    - fields:
+      - InBandIP: false
+      - OutBandIP: true
+      - AttributionType: 主机设备
+      map: Hypervisor
+    - fields:
+      - Version:
+        - red
+        - rhel
+        - centos
+        - Ubuntu
+        - almaLinux
+        - alma
+        - debian
+        - deb
+        - rh
+        - reh
+      - AttributionType: 主机设备
+      functions:
+        Version: In
+      map: Server
+    - fields:
+      - Version:
+        - esxi
+      - AttributionType: 主机设备
+      functions:
+        Version: In
+      map: Hypervisor
+    - fields:
+      - Version:
+        - aix
+      - AttributionType: 主机设备
+      functions:
+        Version: In
+      map: others
+    - fields:
+      - Version:
+        - win
+      - AttributionType: 主机设备
+      functions:
+        Version: In
+      map: Windows
+    - fields:
+      - AttributionType: IB网络设备
+      functions:
+        Version: In
+      map: InfinibandSwitch
+    - fields:
+      - AttributionType: 安全设备
+      map: security
+    - fields:
+      - AttributionType: 特殊设备
+      map: others
+    - fields:
+      - AttributionType: 存储设备
+      map: hdfs
+    targetFiled: catalog
+roleConfig:
+  inBandSecret:
+    name: 带内管理
+    type: secret
+  inBandSnmp:
+    name: 公用snmp
+    type: config
+  outBandRedfish:
+    name: 带外Redfish
+    type: secret
+  outBandSecret:
+    name: 带外管理
+    type: secret
+  outBandSnmp:
+    name: 带外公用snmp
+    type: config
+  vmwareSecret:
+    name: 带内免密_maintain
+    type: secret
+  vCenterSecret:
+    name: Vmware
+    type: secret
+localStorage:
+  sshRecordPath: ./local_storage/ssh_record
+  nfsPath: /home/jacky/project/nfs
+switchUpdate:
+  ftpImgPath: os_images
+  upload: upload/
+  backup: backup/
+  host: 127.0.0.1
+  ftpUser: dev
+  ftpPwd: dev
+  huaweiFtpUser: client
+  huaweiFtpPwd: admin@123
+imagesConfig:
+  savePath: ./uploads_image
+periodCollect:
+- name: IfTable
+  cron: 0 0 19 * * *
+  expire: 86400
+  type: AcquisitionServer
+- name: SnmpIfEntry
+  cron: 0 5 19 * * *
+  expire: 86400
+  type: AcquisitionServer
+- name: SnmpIfHighSpeed
+  cron: 0 10 19 * * *
+  expire: 86400
+  type: AcquisitionServer
+- name: SnmpIpAddrEntry
+  cron: 0 15 19 * * *
+  expire: 86400
+  type: AcquisitionServer
+- name: NeighborCdp
+  cron: 0 30 19 * * *
+  expire: 86400
+  type: AcquisitionServer
+- name: NeighborLldp
+  cron: 0 0 20 * * *
+  expire: 86400
+  type: AcquisitionServer
+- name: MACTABLE
+  cron: 0 20 20 * * *
+  expire: 86400
+  type: AcquisitionServer
+- name: SwitchArpTable
+  cron: 0 40 20 * * *
+  expire: 86400
+  type: AcquisitionServer
+processCache:
+- name: DevicePorts
+  cron: 0 0 21 * *
+  expire: 86400
+- name: L2nodeMapServer
+  cron: 0 20 21 * * *
+  expire: 86400
+- name: ArpTableServer
+  cron: 0 40 21 * * *
+  expire: 86400
+wareConfig:
+  sn: pass
+  out_band_sn: pass
+  out_band_version: pass
+  version: pass
+currency:
+  num: 10
+agentDiscovery:
+  allowPrefix:
+  - 192.168.0.0/16
+dashboard:
+  prometheusNodes:
+    prod: http://127.0.0.1:9090
+  lokiNodes:
+    prod: http://127.0.0.1:3100
+storeProcess:
+- name: 登录信息准备
+  phase: RemoteInfoPrepare
+- name: 信息采集
+  phase: InfoCollection
+- name: 采集数据处理
+  phase: CollectionDataProcess
+- name: 数据校验
+  phase: validationChains
+- name: 设备入库
+  phase: DeviceStore
+- name: 入库后处理
+  phase: AfterStore
+infoCollection:
+  sets:
+  - catalog: Server
+    stepName: META
+    actions:
+    - name: IsAlive
+    - name: NetworkDeviceVersion
+    - name: DeviceMeta
+      options:
+      - ip a
+    stopOnFailure:
+    - IsAlive
+  - catalog: Switch
+    stepName: META
+    actions:
+    - name: IsAlive
+    - name: NetworkDeviceVersion
+    - name: NetworkDevicePorts
+    stopOnFailure:
+    - IsAlive
+collectionDataProcess:
+- name: 基础信息处理
+- name: 带内连通性处理
+- name: 带外连通性处理
+- name: 设备序列号处理
+- name: 设备版本信息采集
+- name: 设备配置检查
+validations:
+- name: RACK_RESOURCES_FIELD
+  enabled: true
+- name: IP_ADDRESS_FIELD
+  enabled: true
+- name: WORKER_DEVICE_IP_FIELD
+  enabled: true
+- name: KNIFE_FRAME_FIELD
+  enabled: true
+- name: DEVICE_TYPE_FIELD
+  enabled: true
+- name: RACK_POSITION_FORMAT_FIELD
+  enabled: true
+- name: DEVICE_SN_FIELD
+  enabled: false
+- name: HA_TYPE_FIELD
+  enabled: true
+- name: HA_CLUSTER_FIELD
+  enabled: true
+- name: MustFieldExist
+  enabled: true
+  description: Validates that required fields exist
+- name: OneOfFieldExist
+  enabled: true
+  description: Ensures at least one of a set of fields exists
+- name: DeviceRackExist
+  enabled: true
+  description: Checks if the specified device rack exists
+- name: DeviceSiteExist
+  enabled: true
+  description: Verifies the existence of the device site
+- name: DeviceRegionExist
+  enabled: true
+  description: Confirms the existence of the device region
+- name: DeviceUniqueness
+  enabled: true
+  description: Ensures the device is unique in the system
+- name: DeviceWorkerUniqueness
+  enabled: true
+  description: Checks for uniqueness among device workers
+- name: DeviceHostName
+  enabled: true
+  description: Validates the device hostname
+- name: Tenant
+  enabled: true
+  description: Verifies tenant information
+- name: TenantSite
+  enabled: true
+  description: Checks the relationship between tenant and site
+- name: ContrastCollectIPPageIP
+  enabled: false
+  description: Compares collected IP with page IP
+processes:
+- name: Initialization
+  steps:
+  - name: Initialize
+    action: initializeAction
+- name: RemoteInfoPrepare
+  steps:
+  - name: PrepareRemoteInfo
+    action: prepareRemoteInfoAction
+- name: InfoCollection
+  steps:
+  - name: CollectInfo
+    action: collectInfoAction
+- name: CollectionDataProcess
+  steps:
+  - name: ProcessCollectedData
+    action: collectionDataProcessAction
+- name: DeviceStore
+  steps:
+  - name: StoreDevice
+    action: deviceStoreAction
+validationChains:
+- name: ResourceValidatorChain
+  validators:
+  - DeviceRackResourcesValidator
+  - DeviceIpAddressValidator
+  - WorkerDeviceIpValidator
+  - DeviceKnifeFrameValidator
+  - DeviceTypeValidator
+  - RackPositionFormatValidator
+  - DeviceSnValidator
+  - HATypeValidator
+  - HAClusterValidator
+- name: DeviceExistValidatorChain
+  validators:
+  - MustFieldExistValidator
+  - OneOfFieldExistValidator
+  - DeviceRackExistValidator
+  - DeviceSiteExistValidator
+  - DeviceRegionExistValidator
+  - DeviceUniquenessValidator
+  - DeviceWorkerUniquenessValidator
+  - DeviceHostNameValidator
+  - TenantValidator
+  - TenantSiteValidator
+  - ContrastCollectIPPageIPValidator
+logging:
+  actionPatterns:
+  - .*CollectionDataProcess.*
+  - .*DeviceStore.*
+  - .*ValidationChains.*
+  network_traffic_data:
+    data_type: network_traffic
+    keep_last: 2000
+    keep_daily: 30
+    keep_weekly: 8
+    keep_monthly: 6
+    max_age: 6m
+    schedule: 0 4 * * *
+  asset_inventory:
+    data_type: asset_inventory
+    keep_last: 10
+    keep_daily: 7
+    keep_weekly: 4
+    keep_monthly: 12
+    keep_yearly: 10
+    max_age: 10y
+    schedule: 0 3 * * 6
+  container_logs:
+    data_type: container_logs
+    keep_last: 500
+    keep_daily: 14
+    keep_weekly: 4
+    keep_monthly: 2
+    max_age: 2m
+    schedule: 0 2 * * *
+unifiedStorage:
+  relationalDb:
+    type: mysql
+    host: 127.0.0.1
+    port: 3306
+    database: groupdata
+    username: root
+    password: UniOPS@Passw0rd
+  logDb:
+    type: loki
+    url: http://127.0.0.1:3100
+  timeSeriesDb:
+    type: prometheus
+    url: http://127.0.0.1:9090
+  documentDb:
+    type: mongodb
+    uri: mongodb://root:UniOPS_Passw0rd@127.0.0.1:27017
+    database: metadata
+  objectStorage:
+    type: s3
+    endpoint: http://127.0.0.1:9000
+    access_key: oneopse01f16d001
+    secret_key: OneOps297881a1c8782a81222c5a307a317f1833
+    bucket: collectdata
+  graphDb:
+    type: neo4j
+    uri: neo4j://127.0.0.1:7687
+    username: neo4j
+    password: admin@123
+scheduling:
+  strategies:
+    roundRobin:
+      enabled: true
+    priorityBased:
+      enabled: false
+  defaultConfig:
+    interval: 1h
+    timeout: 30m
+    concurrency: 50
+    retryCount: 3
+    retryInterval: 5m
+  taskGroups:
+    network:
+      deviceTags:
+      - switch
+      - router
+      tasks:
+      - name: arp_collection
+        interval: 30m
+        deviceTags:
+        - core_switch
+      - name: config_backup
+        cron: 0 0 2 * * *
+        timeout: 1h
+        batchSize: 50
+      - name: lldp_collection
+    server:
+      device_tags:
+      - server
+      tasks:
+      - name: cpu_usage
+      - name: memory_usage
+      - name: disk_usage
+  workers:
+    high_priority:
+      size: 10
+    medium_priority:
+      size: 20
+    low_priority:
+      size: 30
+metricTemplates:
+- name: interface.traffic.in
+  description: 接口入方向流量
+  unit: bps
+  type: counter
+  categories:
+  - network
+  - performance
+  tags:
+  - interface
+  - traffic
+  range:
+  - 0
+  - null
+  aggregation: sum
+  retention:
+    raw: 2w
+    1h: 3m
+    1d: 1y
+  alert:
+    threshold: 80
+    duration: 5m
+  implementations:
+  - vendor: Cisco
+    platforms:
+    - Nexus
+    - IOS
+    versions:
+    - 7.x
+    - 8.x
+    - 9.x
+    - 10.x
+    - 1x
+    oid: 1.3.6.1.2.1.31.1.1.1.6
+    collection:
+      method: snmp
+      interval: 5m
+      timeout: 30s
+      conversion: delta($value) * 8 / delta($time)
+      extraTags:
+      - cisco-ios
+  - vendor: Huawei
+    oid: 1.3.6.1.4.1.2011.5.25.31.1.1.1.6
+    collection:
+      method: snmp
+      interval: 5m
+      conversion: ($value - last($value)) * 8 / ($time - last($time))
+  - vendor: H3C
+    oid: 1.3.6.1.4.1.25506.2.6.1.1.1.1.6
+    collection:
+      method: snmp
+      interval: 5m
+      conversion: scale(delta($value), 8) / delta($time)
+  - vendor: Arista
+    collection:
+      method: api
+      endpoint: /interfaces/{interface_id}/stats
+      interval: 1m
+      conversion: jq('.inOctets') * 8 / 60
+- name: cpu_usage
+  useFor: telegraf_snmp
+  description: CPU利用率
+  unit: percent
+  type: gauge
+  categories:
+  - system
+  - performance
+  tags:
+  - cpu
+  - utilization
+  range:
+  - 0
+  - 100
+  aggregation: avg
+  retention:
+    raw: 1d
+    5m: 1w
+    1h: 1m
+  alert:
+    threshold: 90
+    duration: 10m
+  implementations:
+  - vendor: Cisco
+    platforms:
+    - Nexus
+    oid: 1.3.6.1.4.1.9.9.109.1.1.1.1.8
+    collection:
+      method: snmp
+      interval: 1m
+      conversion: $value
+      extraTags:
+      - nxos-platform
+  - vendor: Cisco
+    platforms:
+    - IOS
+    oid: 1.3.6.1.4.1.9.9.109.1.1.1.1.3
+    collection:
+      method: snmp
+      interval: 1m
+      conversion: $value / 100
+      extraTags:
+      - cisco-specific
+  - vendor: Cisco
+    platforms:
+    - IOS
+    oid: 1.3.6.1.4.1.9.9.109.1.1.1.1.3
+    collection:
+      method: snmp
+      interval: 1m
+      conversion: $value / 100
+      extraTags:
+      - cisco-specific
+  - vendor: Cisco
+    deviceTypes:
+    - N7K-C7010
+    oid: 1.3.6.1.4.1.9.9.109.1.1.1.1.8.23
+  - vendor: Huawei
+    platforms:
+    - VRP
+    oid: 1.3.6.1.4.1.2011.5.25.31.1.1.1.1.5
+    collection:
+      method: snmp
+      interval: 1m
+      conversion: $value
+      extraTags:
+      - huawei-vrp
+  - vendor: Huawei
+    deviceTypes:
+    - S6735-S24X6C
+    - S6735-S48X6C
+    oid: 1.3.6.1.4.1.2011.5.25.31.1.1.1.1.5.67108873
+  - vendor: Huawei
+    deviceTypes:
+    - NE40E-X8A
+    oid: 1.3.6.1.4.1.2011.6.3.4.1.2.1.1.0
+  - vendor: Huawei
+    deviceTypes:
+    - S5736-S24T4XC
+    - S5736-S48S4XC
+    - S5735-L48T4S-A1
+    - S6730-H48X6C
+    - S5735
+    oid: 1.3.6.1.4.1.56813.5.25.31.1.1.1.1.5.67108873
+  - vendor: H3C
+    deviceTypes:
+    - MSR36-40
+    oid: 1.3.6.1.4.1.25506.2.6.1.1.1.1.6.11
+  - vendor: Ruijie
+    deviceTypes:
+    - RG-RSR20-XA-24
+    oid: 1.3.6.1.4.1.56813.5.25.31.1.1.1.1.5.67108873
+  - vendor: H3C
+    platforms:
+    - Comware
+    oid: 1.3.6.1.4.1.25506.2.6.1.1.1.1.6
+    collection:
+      method: snmp
+      interval: 1m
+      conversion: $value
+      extraTags:
+      - h3c-comware
+  - vendor: Ruijie
+    platforms:
+    - Ruijie
+    oid: 1.3.6.1.4.1.4881.1.1.10.2.36.1.1.2.0
+    collection:
+      method: snmp
+      interval: 1m
+      conversion: $value
+      extraTags:
+      - ruijie-rgos
+  - vendor: Linux
+    collection:
+      method: ssh
+      command: top -bn1 | grep 'Cpu(s)' | awk '{print $2 + $4}'
+      interval: 30s
+      conversion: float($value)
+- name: memory_usage
+  useFor: telegraf_snmp
+  description: 内存使用率
+  unit: percent
+  type: gauge
+  categories:
+  - system
+  - performance
+  tags:
+  - memory
+  - utilization
+  range:
+  - 0
+  - 100
+  aggregation: avg
+  retention:
+    raw: 1d
+    5m: 1w
+    1h: 1m
+  alert:
+    threshold: 85
+    duration: 15m
+  implementations:
+  - vendor: Cisco
+    platforms:
+    - Nexus
+    oid: 1.3.6.1.4.1.9.9.109.1.1.1.1.12
+    collection:
+      method: snmp
+      interval: 5m
+      conversion: $value
+      extraTags:
+      - nxos-platform
+  - vendor: Cisco
+    platforms:
+    - IOS
+    oid: 1.3.6.1.4.1.9.9.48.1.1.1.6.1
+    collection:
+      method: snmp
+      interval: 5m
+      conversion: 100 - $value
+      extraTags:
+      - cisco-ios
+  - vendor: Cisco
+    deviceTypes:
+    - N7K-C7010
+    oid: 1.3.6.1.4.1.9.9.109.1.1.1.1.12.23
+  - vendor: Huawei
+    platforms:
+    - VRP
+    oid: 1.3.6.1.4.1.2011.5.25.31.1.1.1.1.7
+    collection:
+      method: snmp
+      interval: 5m
+      conversion: $value
+      extraTags:
+      - huawei-vrp
+  - vendor: Huawei
+    deviceTypes:
+    - NE40E-X8A
+    oid: 1.3.6.1.4.1.2011.6.3.5.1.1.2.1.1.0
+  - vendor: Huawei
+    deviceTypes:
+    - S6735-S24X6C
+    - S6735-S48X6C
+    - S5735-L48T4S-A1
+    oid: 1.3.6.1.4.1.2011.5.25.31.1.1.1.1.7.67108873
+  - vendor: Huawei
+    deviceTypes:
+    - S5736-S24T4XC
+    - S5736-S48S4XC
+    - S6730-H48X6C
+    - S5735
+    oid: 1.3.6.1.4.1.56813.5.25.31.1.1.1.1.7.67108873
+  - vendor: H3C
+    deviceTypes:
+    - MSR36-40
+    oid: 1.3.6.1.4.1.25506.2.6.1.1.1.1.8.11
+  - vendor: Ruijie
+    deviceTypes:
+    - RG-RSR20-XA-24
+    oid: 1.3.6.1.4.1.56813.5.25.31.1.1.1.1.7.67108873
+  - vendor: H3C
+    platforms:
+    - Comware
+    oid: 1.3.6.1.4.1.25506.2.6.1.1.1.1.8
+    collection:
+      method: snmp
+      interval: 5m
+      conversion: $value
+      extraTags:
+      - h3c-comware
+  - vendor: Ruijie
+    platforms:
+    - Ruijie
+    oid: 1.3.6.1.4.1.4881.1.1.10.2.35.1.1.1.3.0
+    collection:
+      method: snmp
+      interval: 5m
+      conversion: $value
+      extraTags:
+      - ruijie-rgos
+  - vendor: Linux
+    collection:
+      method: ssh
+      command: free | grep Mem | awk '{print $3/$2 * 100.0}'
+      interval: 1m
+      conversion: float($value)
+- name: temperature
+  useFor: telegraf_snmp
+  implementations:
+  - vendor: Cisco
+    deviceTypes:
+    - N7K-C7010
+    oid: 1.3.6.1.4.1.9.9.91.1.1.1.1.4.21654
+  - vendor: Huawei
+    deviceTypes:
+    - NE40E-X8A
+    oid: 1.3.6.1.4.1.2011.5.25.31.1.1.8.1.6.16908287.0.72.0
+  - vendor: Huawei
+    deviceTypes:
+    - S6735-S24X6C
+    - S6735-S48X6C
+    oid: 1.3.6.1.4.1.2011.5.25.31.1.1.1.1.11.67108873
+  - vendor: Huawei
+    deviceTypes:
+    - S5736-S24T4XC
+    - S5736-S48S4XC
+    - S5735-L48T4S-A1
+    - S6730-H48X6C
+    - S5735
+    oid: 1.3.6.1.4.1.56813.5.25.31.1.1.1.1.11.67108873
+  - vendor: H3C
+    deviceTypes:
+    - MSR36-40
+    oid: 1.3.6.1.4.1.25506.2.6.1.1.1.1.12.90
+  - vendor: Ruijie
+    deviceTypes:
+    - RG-RSR20-XA-24
+    oid: 1.3.6.1.4.1.56813.5.25.31.1.1.1.1.11.67108873
+temporal:
+  address: 127.0.0.1:7233
+  namespace: oneops
+  taskQueue: oneops-tasks
+  workerCount: 5
+  clientOptions:
+    connectionTimeout: 30s
+    rpcTimeout: 10s
+    rpcRetryOptions:
+      initialInterval: 100ms
+      maximumInterval: 5s
+      maximumAttempts: 5
+      backoffCoefficient: 1.5
+  workflowOptions:
+    executionTimeout: 5m
+    runTimeout: 1m
+    taskTimeout: 30s
+    workflowIDReusePolicy: AllowDuplicate
+monitorProbeSetting:
+- area: DefaultArea
+  controller: http://127.0.0.1:8081
+  jumpServer:
+    host: 127.0.0.1
+    port: 50022
+    username: root
+    password: your-password
+    enable: true
+agentConfig:
+  agent:
+    name: oneops-agent
+    vars:
+    - workspace: /opt/oneops-packs
+    - is_user_unit: 'true'
+    - enable_lingering: 'true'
+    - grpc_port: 10380
+    - http_port: 10381
+    - debug: false
+    - enable_console: false
+    - pack_discovery_interval: 10
+    - etcd_connect_timeout: 5s
+  packages: []
+HealingActions:
+  clean_disk_space:
+    description: Clean up disk space using various strategies
+    deviceTypes:
+    - server
+    - network_device
+    strategies:
+    - name: remove_old_logs
+      type: command
+      command: find {{.path}} -type f -mtime +{{.days}} -delete
+    - name: compress_logs
+      type: script
+      scriptPath: /scripts/compress_logs.sh
+    params:
+    - name: path
+      required: true
+      allowedValues:
+      - /var/log
+      - /tmp
+      - /home
+      description: Target directory for cleanup
+    - name: days
+      required: false
+      default: '30'
+      description: Age of files to be cleaned (in days)
+    validation:
+      successCondition: contains(output, 'cleaned') || contains(output, 'compressed')
+      failureCondition: contains(output, 'error') || contains(output, 'permission
+        denied')
+    timeout: 1h
+    retries: 3
+    tags:
+    - disk
+    - maintenance
+  restart_service:
+    description: Restart a system service
+    deviceTypes:
+    - server
+    strategies:
+    - name: systemctl_restart
+      type: command
+      command: systemctl restart {{.service_name}}
+    - name: custom_restart
+      type: script
+      script: '#!/bin/bash
+
+        echo "Starting custom restart procedure"
+
+        systemctl stop service_name
+
+        sleep 2
+
+        systemctl start service_name
+
+        echo "Restart completed"
+
+        '
+    params:
+    - name: service_name
+      required: true
+      description: Name of the service to restart
+    validation:
+      successCondition: 'contains(output, ''Active: active (running)'')'
+      failureCondition: contains(output, 'Failed to restart')
+    timeout: 5m
+    retries: 2
+    tags:
+    - service
+    - maintenance
+  reset_network_interface:
+    description: Reset a network interface
+    deviceTypes:
+    - switch
+    - router
+    strategies:
+    - name: cli_reset
+      type: command
+      command: interface {{.interface_name}}; shutdown; no shutdown
+    - name: api_reset
+      type: api
+      apiEndpoint: /api/v1/interfaces/{{.interface_name}}/reset
+    params:
+    - name: interface_name
+      required: true
+      description: Name of the interface to reset
+    validation:
+      successCondition: contains(output, 'interface is up') || statusCode == 200
+      failureCondition: contains(output, 'Error:') || statusCode >= 400
+    timeout: 2m
+    retries: 1
+    tags:
+    - network
+    - interface
+planLayout:
+- block:
+    device_name: FW-HX
+    area:
+    - name: Internet
+      type: IPv4
+      interface: GigabitEthernet4/0
+    - name: CoreZone
+      type: IPv4
+      interface: GigabitEthernet2/0
+    stub:
+    - type: IPv4
+      interfaces: GigabitEthernet1/0
+    metadata:
+      policy_name_template: '{VAR:ticket_number}_policy_{SEQ:id:5:10000:1:MAIN}'
+      network_object_name_template: "{set:network.separator=\"_\"}\n{if:exist:policy_name==\"\
+        true\"}\n  {if:policy_name!=\"\"}\n    {policy_name}_{if:is_source==\"true\"\
+        }SRC{else}DST{endif}_\n            {if:type==\"range\"}{start}_{end}{else\
+        \ if:type==\"subnet\"}{cidr}{else}{ip}{endif}\n  {else}\n    {if:type==\"\
+        range\"}{start}_{end}\n    {else if:type==\"subnet\"}{cidr}{else}{ip}\n  \
+        \  {endif}\n  {endif}\n{else}\n  {if:type==\"range\"}{start}_{end}\n  {else\
+        \ if:type==\"subnet\"}{cidr}\n  {else}{ip}\n  {endif}\n{endif}\n"
+      mip_name_template: "{set:network.separator=\"_\"}\n{if:exist:policy_name==\"\
+        true\"}\n  {if:policy_name!=\"\"}\n    {policy_name}_{if:is_source==\"true\"\
+        }SRC{else}DST{endif}_\n            {if:type==\"range\"}{start}_{end}{else\
+        \ if:type==\"subnet\"}{cidr}{else}{ip}{endif}\n  {else}\n    {if:type==\"\
+        range\"}{start}_{end}\n    {else if:type==\"subnet\"}{cidr}{else}{ip}\n  \
+        \  {endif}\n  {endif}\n{else}\n  {if:type==\"range\"}{start}_{end}\n  {else\
+        \ if:type==\"subnet\"}{cidr}\n  {else}{ip}\n  {endif}\n{endif}      \n"
+      address_group_name_template: "{if:exist:policy_name==\"true\"}\n  {if:policy_name!=\"\
+        \"}\n    {policy_name}_{if:is_source==\"true\"}SRC{else}DST{endif}_group\n\
+        \  {else}\n    {if:is_source==\"true\"}SRC{else}DST{endif}_group\n  {endif}\n\
+        {else}\n  {if:exist:nat_name==\"true\"}\n    {if:nat_name!=\"\"}\n      {nat_name}_{if:is_source==\"\
+        true\"}SRC{else}DST{endif}_group\n    {else}\n      {if:is_source==\"true\"\
+        }SRC{else}DST{endif}_group\n    {endif}\n  {else}\n    {if:is_source==\"true\"\
+        }SRC{else}DST{endif}_group\n  {endif}\n{endif}\n"
+      service_group_name_template: "{if:exist:policy_name==\"true\"}\n  {if:policy_name!=\"\
+        \"}\n    {policy_name}_SRV_GROUP\n  {else}\n    {if:service.protocol!=\"\"\
+        }\n      {service.protocol:upper}_GROUP\n    {else}\n      SRV_GROUP\n   \
+        \ {endif}\n  {endif}\n{else}\n  {if:exist:nat_name==\"true\"}\n    {if:nat_name!=\"\
+        \"}\n      {nat_name}_SRV_GROUP\n    {else}\n      {if:service.protocol!=\"\
+        \"}\n        {service.protocol:upper}_GROUP\n      {else}\n        SRV_GROUP\n\
+        \      {endif}\n    {endif}\n  {else}\n    {if:service.protocol!=\"\"}\n \
+        \     {service.protocol:upper}_GROUP\n    {else}\n      SRV_GROUP\n    {endif}\n\
+        \  {endif}\n{endif}\n"
+      service_object_name_template: "{if:exist:policy_name==\"true\"}\n  {if:policy_name!=\"\
+        \"}\n    {protocol}{if:dst_port!=\"\"}_{dst_port}{endif}\n  {else}\n    {protocol}{if:dst_port!=\"\
+        \"}_{dst_port}{endif}\n  {endif}\n{else}\n  {protocol}{if:dst_port!=\"\"}_{dst_port}{endif}\n\
+        {endif}\n"
+      input.nat: natpolicy.dnat
+      output.nat: natpolicy.snat
+      natpolicy.snat.source_style: required
+      natpolicy.snat.destination_style: required
+      natpolicy.use_service_object: true
+      natpolicy.dnat.source_style: required
+      natpolicy.dnat.destination_style: required
+      dnat_object_type: NETWORK_OBJECT
+      snat_pool_type: NETWORK_OBJECT
+      natpolicy.name_template: '{VAR:ticket_number}_nat_{SEQ:id:5:1:1:MAIN}'
+      natpolicy.dnat.mip_as_address_object: true
+      securitypolicy.source_address_style: object
+      securitypolicy.destination_address_style: object
+      securitypolicy.address_style: object
+      securitypolicy.service_style: object
+      securitypolicy.reuse_address_object: true
+      securitypolicy.reuse_service_object: true
+      securitypolicy.enable: 'true'
+      securitypolicy.reuse_policy: true
+      securitypolicy.empty_zone_matches_any: false
+      action: permit
+- block:
+    device_name: HUAWEI-02
+    area:
+    - name: CoreZone
+      type: IPv4
+      interface: GigabitEthernet1/0/3
+    stub:
+    - type: IPv4
+      interfaces: GigabitEthernet1/0/0.1
+    - type: IPv4
+      interfaces: GigabitEthernet1/0/0.2
+    metadata:
+      policy_name_template: '{VAR:ticket_number}_policy_{SEQ:id:5:10000:1:MAIN}'
+      network_object_name_template: "{set:network.separator=\"_\"}\n{if:exist:policy_name==\"\
+        true\"}\n  {if:policy_name!=\"\"}\n    {policy_name}_{if:is_source==\"true\"\
+        }SRC{else}DST{endif}_\n            {if:type==\"range\"}{start}_{end}{else\
+        \ if:type==\"subnet\"}{cidr}{else}{ip}{endif}\n  {else}\n    {if:type==\"\
+        range\"}{start}_{end}\n    {else if:type==\"subnet\"}{cidr}{else}{ip}\n  \
+        \  {endif}\n  {endif}\n{else}\n  {if:type==\"range\"}{start}_{end}\n  {else\
+        \ if:type==\"subnet\"}{cidr}\n  {else}{ip}\n  {endif}\n{endif}\n"
+      mip_name_template: "{set:network.separator=\"_\"}\n{if:exist:policy_name==\"\
+        true\"}\n  {if:policy_name!=\"\"}\n    {policy_name}_{if:is_source==\"true\"\
+        }SRC{else}DST{endif}_\n            {if:type==\"range\"}{start}_{end}{else\
+        \ if:type==\"subnet\"}{cidr}{else}{ip}{endif}\n  {else}\n    {if:type==\"\
+        range\"}{start}_{end}\n    {else if:type==\"subnet\"}{cidr}{else}{ip}\n  \
+        \  {endif}\n  {endif}\n{else}\n  {if:type==\"range\"}{start}_{end}\n  {else\
+        \ if:type==\"subnet\"}{cidr}\n  {else}{ip}\n  {endif}\n{endif}      \n"
+      address_group_name_template: "{if:exist:policy_name==\"true\"}\n  {if:policy_name!=\"\
+        \"}\n    {policy_name}_{if:is_source==\"true\"}SRC{else}DST{endif}_group\n\
+        \  {else}\n    {if:is_source==\"true\"}SRC{else}DST{endif}_group\n  {endif}\n\
+        {else}\n  {if:exist:nat_name==\"true\"}\n    {if:nat_name!=\"\"}\n      {nat_name}_{if:is_source==\"\
+        true\"}SRC{else}DST{endif}_group\n    {else}\n      {if:is_source==\"true\"\
+        }SRC{else}DST{endif}_group\n    {endif}\n  {else}\n    {if:is_source==\"true\"\
+        }SRC{else}DST{endif}_group\n  {endif}\n{endif}\n"
+      service_group_name_template: "{if:exist:policy_name==\"true\"}\n  {if:policy_name!=\"\
+        \"}\n    {policy_name}_SRV_GROUP\n  {else}\n    {if:service.protocol!=\"\"\
+        }\n      {service.protocol:upper}_GROUP\n    {else}\n      SRV_GROUP\n   \
+        \ {endif}\n  {endif}\n{else}\n  {if:exist:nat_name==\"true\"}\n    {if:nat_name!=\"\
+        \"}\n      {nat_name}_SRV_GROUP\n    {else}\n      {if:service.protocol!=\"\
+        \"}\n        {service.protocol:upper}_GROUP\n      {else}\n        SRV_GROUP\n\
+        \      {endif}\n    {endif}\n  {else}\n    {if:service.protocol!=\"\"}\n \
+        \     {service.protocol:upper}_GROUP\n    {else}\n      SRV_GROUP\n    {endif}\n\
+        \  {endif}\n{endif}\n"
+      service_object_name_template: "{if:exist:policy_name==\"true\"}\n  {if:policy_name!=\"\
+        \"}\n    {protocol}{if:dst_port!=\"\"}_{dst_port}{endif}\n  {else}\n    {protocol}{if:dst_port!=\"\
+        \"}_{dst_port}{endif}\n  {endif}\n{else}\n  {protocol}{if:dst_port!=\"\"}_{dst_port}{endif}\n\
+        {endif}\n"
+      input.nat: natpolicy.dnat
+      output.nat: natpolicy.snat
+      natpolicy.snat.source_style: required
+      natpolicy.snat.destination_style: required
+      natpolicy.use_service_object: true
+      natpolicy.dnat.source_style: required
+      natpolicy.dnat.destination_style: required
+      dnat_object_type: NETWORK_OBJECT
+      snat_pool_type: NETWORK_OBJECT
+      natpolicy.name_template: '{VAR:ticket_number}_nat_{SEQ:id:5:1:1:MAIN}'
+      natpolicy.dnat.mip_as_address_object: true
+      securitypolicy.source_address_style: object
+      securitypolicy.destination_address_style: object
+      securitypolicy.address_style: object
+      securitypolicy.service_style: object
+      securitypolicy.reuse_address_object: true
+      securitypolicy.reuse_service_object: true
+      securitypolicy.enable: 'true'
+      securitypolicy.reuse_policy: true
+      securitypolicy.empty_zone_matches_any: false
+      action: permit
+- block:
+    device_name: SANGFOR_01
+    area:
+    - name: Internet
+      type: IPv4
+      interface: eth1
+    stub:
+    - type: IPv4
+      interfaces: eth0
+    - type: IPv4
+      interfaces: eth2
+    metadata:
+      policy_name_template: '{VAR:ticket_number}_policy_{SEQ:id:5:10000:1:MAIN}'
+      network_object_name_template: "{set:network.separator=\"_\"}\n{if:exist:policy_name==\"\
+        true\"}\n  {if:policy_name!=\"\"}\n    {policy_name}_{if:is_source==\"true\"\
+        }SRC{else}DST{endif}_\n            {if:type==\"range\"}{start}_{end}{else\
+        \ if:type==\"subnet\"}{cidr}{else}{ip}{endif}\n  {else}\n    {if:type==\"\
+        range\"}{start}_{end}\n    {else if:type==\"subnet\"}{cidr}{else}{ip}\n  \
+        \  {endif}\n  {endif}\n{else}\n  {if:type==\"range\"}{start}_{end}\n  {else\
+        \ if:type==\"subnet\"}{cidr}\n  {else}{ip}\n  {endif}\n{endif}\n"
+      mip_name_template: "{set:network.separator=\"_\"}\n{if:exist:policy_name==\"\
+        true\"}\n  {if:policy_name!=\"\"}\n    {policy_name}_{if:is_source==\"true\"\
+        }SRC{else}DST{endif}_\n            {if:type==\"range\"}{start}_{end}{else\
+        \ if:type==\"subnet\"}{cidr}{else}{ip}{endif}\n  {else}\n    {if:type==\"\
+        range\"}{start}_{end}\n    {else if:type==\"subnet\"}{cidr}{else}{ip}\n  \
+        \  {endif}\n  {endif}\n{else}\n  {if:type==\"range\"}{start}_{end}\n  {else\
+        \ if:type==\"subnet\"}{cidr}\n  {else}{ip}\n  {endif}\n{endif}      \n"
+      address_group_name_template: "{if:exist:policy_name==\"true\"}\n  {if:policy_name!=\"\
+        \"}\n    {policy_name}_{if:is_source==\"true\"}SRC{else}DST{endif}_group\n\
+        \  {else}\n    {if:is_source==\"true\"}SRC{else}DST{endif}_group\n  {endif}\n\
+        {else}\n  {if:exist:nat_name==\"true\"}\n    {if:nat_name!=\"\"}\n      {nat_name}_{if:is_source==\"\
+        true\"}SRC{else}DST{endif}_group\n    {else}\n      {if:is_source==\"true\"\
+        }SRC{else}DST{endif}_group\n    {endif}\n  {else}\n    {if:is_source==\"true\"\
+        }SRC{else}DST{endif}_group\n  {endif}\n{endif}\n"
+      service_group_name_template: "{if:exist:policy_name==\"true\"}\n  {if:policy_name!=\"\
+        \"}\n    {policy_name}_SRV_GROUP\n  {else}\n    {if:service.protocol!=\"\"\
+        }\n      {service.protocol:upper}_GROUP\n    {else}\n      SRV_GROUP\n   \
+        \ {endif}\n  {endif}\n{else}\n  {if:exist:nat_name==\"true\"}\n    {if:nat_name!=\"\
+        \"}\n      {nat_name}_SRV_GROUP\n    {else}\n      {if:service.protocol!=\"\
+        \"}\n        {service.protocol:upper}_GROUP\n      {else}\n        SRV_GROUP\n\
+        \      {endif}\n    {endif}\n  {else}\n    {if:service.protocol!=\"\"}\n \
+        \     {service.protocol:upper}_GROUP\n    {else}\n      SRV_GROUP\n    {endif}\n\
+        \  {endif}\n{endif}\n"
+      service_object_name_template: "{if:exist:policy_name==\"true\"}\n  {if:policy_name!=\"\
+        \"}\n    {protocol}{if:dst_port!=\"\"}_{dst_port}{endif}\n  {else}\n    {protocol}{if:dst_port!=\"\
+        \"}_{dst_port}{endif}\n  {endif}\n{else}\n  {protocol}{if:dst_port!=\"\"}_{dst_port}{endif}\n\
+        {endif}\n"
+      input.nat: natpolicy.dnat
+      output.nat: natpolicy.snat
+      dnat_object_type: NETWORK_OBJECT
+      snat_pool_type: NETWORK_OBJECT
+      natpolicy.name_template: '{VAR:ticket_number}_nat_{SEQ:id:5:1:1:MAIN}'
+      natpolicy.dnat.mip_as_address_object: true
+      securitypolicy.source_address_style: object
+      securitypolicy.destination_address_style: object
+      securitypolicy.address_style: object
+      securitypolicy.service_style: object
+      securitypolicy.reuse_address_object: true
+      securitypolicy.reuse_service_object: true
+      securitypolicy.enable: 'true'
+      securitypolicy.reuse_policy: true
+      securitypolicy.empty_zone_matches_any: false
+      action: permit
+transparentNodes:
+- code: transparent-sw-01
+  name: TransParentSW01
+  description: ''
+  type: switch
+  interfaces:
+  - name: vEth1
+    code: TransParentSW01_vEth1
+    PeerInterfaceCode: PT20250302000036
+  - name: vEth5
+    code: TransParentSW01_vEth5
+    PeerInterfaceCode: PT20250318000001
+attentions:
+- deviceCollect:
+    manufacturer: Cisco
+    platform: IOS
+    target:
+    - type: IsAlive
+      combinations:
+      - name: sshAliveCheck
+        collectMethod: SSH
+        stages:
+        - name: AliveCheck
+          method: sshAliveCheck
+    - type: NetworkDeviceVersion
+      combinations:
+      - name: sysVersion
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: sysVersion
+        - name: SnmpProcess
+          method: sysVersionProcess
+        - name: Transform
+          method: descriptionToVersion
+    - type: NetworkDeviceSerialTable
+      combinations:
+      - name: sysSerial
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: sysSerial
+        - name: Parse
+          method: SerialExtract
+    - type: NetworkDevicePorts
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+        - name: Join
+          method: snmpDevicePorts
+    - type: NeighborCdp
+      combinations:
+      - name: cdp
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpCdp
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpCdpProcess
+    - type: NeighborLldp
+      combinations:
+      - name: lldp
+        collectMethod: SSH
+        stages:
+        - name: Collect
+          method: sshLldp
+    - type: SwitchArpTable
+      combinations:
+      - name: arp
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpArp
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpArpProcess
+    - type: MacTable
+      combinations:
+      - name: macTable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpMacTable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpMacTableProcess
+    - type: SnmpIfEntry
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+    - type: SnmpIfHighSpeed
+      combinations:
+      - name: snmpIfHighSpeed
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+    - type: SnmpIpAddrEntry
+      combinations:
+      - name: snmpIpAddrEntry
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+    - type: IfTable
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+        - name: Join
+          method: snmpDevicePorts
+- deviceCollect:
+    manufacturer: Dptech
+    platform: FWNFV
+    target:
+    - type: IsAlive
+      combinations:
+      - name: sshAliveCheck
+        collectMethod: SSH
+        stages:
+        - name: AliveCheck
+          method: sshAliveCheck
+    - type: NetworkDeviceVersion
+      combinations:
+      - name: sysVersion
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: sysVersion
+          methodType: SNMP
+        - name: SnmpProcess
+          method: sysVersionProcess
+        - name: Transform
+          method: descriptionToVersion
+    - type: NetworkDevicePorts
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+        - name: Join
+          method: snmpDevicePorts
+    - type: SwitchArpTable
+      combinations:
+      - name: arp
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpArp
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpArpProcess
+    - type: SnmpIfEntry
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+    - type: SnmpIfHighSpeed
+      combinations:
+      - name: snmpIfHighSpeed
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+    - type: SnmpIpAddrEntry
+      combinations:
+      - name: snmpIpAddrEntry
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+    - type: IfTable
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+        - name: Join
+          method: snmpDevicePorts
+- deviceCollect:
+    manufacturer: Huawei
+    platform: USG
+    target:
+    - type: IsAlive
+      combinations:
+      - name: sshAliveCheck
+        collectMethod: SSH
+        stages:
+        - name: AliveCheck
+          method: sshAliveCheck
+    - type: NetworkDeviceVersion
+      combinations:
+      - name: sysVersion
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: sysVersion
+          methodType: SNMP
+        - name: SnmpProcess
+          method: sysVersionProcess
+        - name: Transform
+          method: descriptionToVersion
+    - type: NetworkDevicePorts
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+        - name: Join
+          method: snmpDevicePorts
+    - type: SwitchArpTable
+      combinations:
+      - name: arp
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpArp
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpArpProcess
+    - type: NeighborLldp
+      combinations:
+      - name: lldp
+        collectMethod: SSH
+        stages:
+        - name: Collect
+          method: sshLldp
+        - name: TextFSM
+          method: sshLldpTextFSM
+    - type: MacTable
+      combinations:
+      - name: macTable
+        collectMethod: SSH
+        stages:
+        - name: Collect
+          method: sshMacTable
+        - name: TextFSM
+          method: sshMacTableTextFSM
+    - type: SnmpIfEntry
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+    - type: SnmpIfHighSpeed
+      combinations:
+      - name: snmpIfHighSpeed
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+    - type: SnmpIpAddrEntry
+      combinations:
+      - name: snmpIpAddrEntry
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+    - type: IfTable
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+        - name: Join
+          method: snmpDevicePorts
+- deviceCollect:
+    manufacturer: Huawei
+    platform: HuaWei
+    target:
+    - type: IsAlive
+      combinations:
+      - name: sshAliveCheck
+        collectMethod: SSH
+        stages:
+        - name: AliveCheck
+          method: sshAliveCheck
+    - type: NetworkDeviceVersion
+      combinations:
+      - name: sysVersion
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: sysVersion
+          methodType: SNMP
+        - name: SnmpProcess
+          method: sysVersionProcess
+        - name: Transform
+          method: descriptionToVersion
+    - type: NetworkDevicePorts
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+        - name: Join
+          method: snmpDevicePorts
+    - type: SwitchArpTable
+      combinations:
+      - name: arp
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpArp
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpArpProcess
+    - type: NeighborLldp
+      combinations:
+      - name: lldp
+        collectMethod: SSH
+        stages:
+        - name: Collect
+          method: sshLldp
+        - name: TextFSM
+          method: sshLldpTextFSM
+    - type: MacTable
+      combinations:
+      - name: macTable
+        collectMethod: SSH
+        stages:
+        - name: Collect
+          method: sshMacTable
+        - name: TextFSM
+          method: sshMacTableTextFSM
+    - type: SnmpIfEntry
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+    - type: SnmpIfHighSpeed
+      combinations:
+      - name: snmpIfHighSpeed
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+    - type: SnmpIpAddrEntry
+      combinations:
+      - name: snmpIpAddrEntry
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+    - type: IfTable
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+        - name: Join
+          method: snmpDevicePorts
+- deviceCollect:
+    manufacturer: Huawei
+    platform: VRP
+    target:
+    - type: IsAlive
+      combinations:
+      - name: sshAliveCheck
+        collectMethod: SSH
+        stages:
+        - name: AliveCheck
+          method: sshAliveCheck
+    - type: NetworkDeviceVersion
+      combinations:
+      - name: sysVersion
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: sysVersion
+        - name: SnmpProcess
+          method: sysVersionProcess
+        - name: Transform
+          method: descriptionToVersion
+    - type: NetworkDevicePorts
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+        - name: SnmpProcess
+          method: snmpIftableProcess
+        - name: Collect
+          method: snmpIpAddrEntry
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+        - name: Collect
+          method: snmpIfHighSpeed
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+        - name: Join
+          method: snmpDevicePorts
+    - type: SwitchArpTable
+      combinations:
+      - name: arp
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpArp
+        - name: SnmpProcess
+          method: snmpArpProcess
+    - type: NeighborLldp
+      combinations:
+      - name: lldp
+        collectMethod: SSH
+        stages:
+        - name: Collect
+          method: sshLldp
+        - name: TextFSM
+          method: sshLldpTextFSM
+    - type: MACTABLE
+      combinations:
+      - name: macTable
+        collectMethod: SSH
+        stages:
+        - name: Collect
+          method: sshMacTable
+        - name: TextFSM
+          method: sshMacTableTextFSM
+    - type: SnmpIfEntry
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+        - name: SnmpProcess
+          method: snmpIftableProcess
+    - type: SnmpIfHighSpeed
+      combinations:
+      - name: snmpIfHighSpeed
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIfHighSpeed
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+    - type: SnmpIpAddrEntry
+      combinations:
+      - name: snmpIpAddrEntry
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIpAddrEntry
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+    - type: IfTable
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+        - name: SnmpProcess
+          method: snmpIftableProcess
+        - name: Collect
+          method: snmpIpAddrEntry
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+        - name: Collect
+          method: snmpIfHighSpeed
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+        - name: Join
+          method: snmpDevicePorts
+- deviceCollect:
+    manufacturer: H3C
+    platform: Comware
+    target:
+    - type: IsAlive
+      combinations:
+      - name: sshAliveCheck
+        collectMethod: SSH
+        stages:
+        - name: AliveCheck
+          method: sshAliveCheck
+    - type: NetworkDeviceVersion
+      combinations:
+      - name: sysVersion
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: sysVersion
+          methodType: SNMP
+        - name: SnmpProcess
+          method: sysVersionProcess
+        - name: Transform
+          method: descriptionToVersion
+    - type: NeighborLldp
+      combinations:
+      - name: lldp
+        collectMethod: SSH
+        stages:
+        - name: Collect
+          method: sshLldp
+        - name: TextFSM
+          method: sshLldpTextFSM
+    - type: NetworkDevicePorts
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+        - name: Join
+          method: snmpDevicePorts
+    - type: SwitchArpTable
+      combinations:
+      - name: arp
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpArp
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpArpProcess
+    - type: SnmpIfEntry
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+    - type: SnmpIfHighSpeed
+      combinations:
+      - name: snmpIfHighSpeed
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+    - type: SnmpIpAddrEntry
+      combinations:
+      - name: snmpIpAddrEntry
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+    - type: IfTable
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+        - name: Join
+          method: snmpDevicePorts
+- deviceCollect:
+    manufacturer: H3C
+    platform: SecPath
+    target:
+    - type: IsAlive
+      combinations:
+      - name: sshAliveCheck
+        collectMethod: SSH
+        stages:
+        - name: AliveCheck
+          method: sshAliveCheck
+    - type: NetworkDeviceVersion
+      combinations:
+      - name: sysVersion
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: sysVersion
+          methodType: SNMP
+        - name: SnmpProcess
+          method: sysVersionProcess
+        - name: Transform
+          method: descriptionToVersion
+    - type: NeighborLldp
+      combinations:
+      - name: lldp
+        collectMethod: SSH
+        stages:
+        - name: Collect
+          method: sshLldp
+        - name: TextFSM
+          method: sshLldpTextFSM
+    - type: NetworkDevicePorts
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+        - name: Join
+          method: snmpDevicePorts
+    - type: SwitchArpTable
+      combinations:
+      - name: arp
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpArp
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpArpProcess
+    - type: SnmpIfEntry
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+    - type: SnmpIfHighSpeed
+      combinations:
+      - name: snmpIfHighSpeed
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+    - type: SnmpIpAddrEntry
+      combinations:
+      - name: snmpIpAddrEntry
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+    - type: IfTable
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+        - name: Join
+          method: snmpDevicePorts
+- deviceCollect:
+    manufacturer: Sangfor
+    platform: SangforOS
+    target:
+    - type: IsAlive
+      combinations:
+      - name: sshAliveCheck
+        collectMethod: SSH
+        stages:
+        - name: AliveCheck
+          method: sshAliveCheck
+    - type: NetworkDeviceVersion
+      combinations:
+      - name: sysVersion
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: sysVersion
+          methodType: SNMP
+        - name: SnmpProcess
+          method: sysVersionProcess
+        - name: Transform
+          method: descriptionToVersion
+    - type: NeighborLldp
+      combinations:
+      - name: lldp
+        collectMethod: SSH
+        stages:
+        - name: Collect
+          method: sshLldp
+        - name: TextFSM
+          method: sshLldpTextFSM
+    - type: NetworkDevicePorts
+      combinations:
+      - name: snmpIftable
+        stages:
+        - name: Collect
+          method: sshShowInterface
+        - name: TextFSM
+          method: sshShowInterfaceFSM
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+        - name: Transform
+          method: sshShowInterfaceTransform
+        - name: Join
+          method: iftableJoinShowInterface
+        - name: Join
+          method: snmpDevicePorts
+    - type: SwitchArpTable
+      combinations:
+      - name: arp
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpArp
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpArpProcess
+    - type: SnmpIfEntry
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+    - type: SnmpIfHighSpeed
+      combinations:
+      - name: snmpIfHighSpeed
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+    - type: SnmpIpAddrEntry
+      combinations:
+      - name: snmpIpAddrEntry
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+    - type: IfTable
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: sshShowInterface
+        - name: TextFSM
+          method: sshShowInterfaceFSM
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+        - name: Transform
+          method: sshShowInterfaceTransform
+        - name: Join
+          method: iftableJoinShowInterface
+        - name: Join
+          method: snmpDevicePorts
+- deviceCollect:
+    manufacturer: Ruijie
+    platform: Ruijie
+    target:
+    - type: IsAlive
+      combinations:
+      - name: telnetAliveCheck
+        collectMethod: TELNET
+        stages:
+        - name: AliveCheck
+          method: telnetAliveCheck
+    - type: NetworkDeviceVersion
+      combinations:
+      - name: sysVersion
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: sysVersion
+          methodType: SNMP
+        - name: SnmpProcess
+          method: sysVersionProcess
+        - name: Collect
+          method: sysDescr
+          methodType: SNMP
+        - name: SnmpProcess
+          method: sysDescrProcess
+        - name: Transform
+          method: descriptionToVersion
+    - type: NeighborLldp
+      combinations:
+      - name: lldp
+        collectMethod: TELNET
+        stages:
+        - name: Collect
+          method: telnetLldp
+        - name: TextFSM
+          method: telnetLldpTextFSM
+        - name: Transform
+          method: lldpOutgoingTransform
+    - type: MacTable
+      combinations:
+      - name: macTable
+        collectMethod: TELNET
+        stages:
+        - name: Collect
+          method: telnetMacTable
+        - name: TextFSM
+          method: telnetMacTableTextFSM
+        - name: Transform
+          method: mactableNameTransform
+    - type: NetworkDevicePorts
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+        - name: Join
+          method: snmpDevicePorts
+    - type: SwitchArpTable
+      combinations:
+      - name: arp
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpArp
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpArpProcess
+    - type: SnmpIfEntry
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+    - type: SnmpIfHighSpeed
+      combinations:
+      - name: snmpIfHighSpeed
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+    - type: SnmpIpAddrEntry
+      combinations:
+      - name: snmpIpAddrEntry
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+    - type: IfTable
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+        - name: Join
+          method: snmpDevicePorts
+- deviceCollect:
+    manufacturer: server
+    target:
+    - type: IsAlive
+      combinations:
+      - collectMethod: SSH
+        stages:
+        - name: AliveCheck
+          method: sshAliveCheck
+    - type: NetworkDeviceVersion
+      combinations:
+      - collectMethod: SSH
+        stages:
+        - name: Collect
+          method: hostnameCollect
+        - name: Collect
+          method: versionCollect
+        - name: Collect
+          method: architectureCollect
+        - name: Collect
+          method: kernelCollect
+        - name: Parse
+          method: platformExtract
+        - name: Parse
+          method: versionExtract
+        - name: Transform
+          method: hostnamePlatformVersionTransform
+    - type: DeviceMeta
+      combinations:
+      - collectMethod: SSH
+        stages:
+        - name: Collect
+          method: interfaceCollect
+        - name: Transform
+          method: interfaceTransform
+- deviceCollect:
+    manufacturer: Inspur
+    platform: INOS
+    target:
+    - type: IsAlive
+      combinations:
+      - name: sshAliveCheck
+        collectMethod: SSH
+        stages:
+        - name: AliveCheck
+          method: sshAliveCheck
+    - type: NetworkDeviceVersion
+      combinations:
+      - name: sysVersion
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: sysVersion
+          methodType: SNMP
+        - name: SnmpProcess
+          method: sysVersionProcess
+        - name: Transform
+          method: descriptionToVersion
+    - type: NetworkDeviceSerialTable
+      combinations:
+      - name: sysSerial
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: sysSerial
+          methodType: SNMP
+        - name: Parse
+          method: SerialExtract
+    - type: NetworkDevicePorts
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+        - name: Join
+          method: snmpDevicePorts
+    - type: NeighborCdp
+      combinations:
+      - name: cdp
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpCdp
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpCdpProcess
+    - type: NeighborLldp
+      combinations:
+      - name: lldp
+        collectMethod: SSH
+        stages:
+        - name: Collect
+          method: sshLldp
+    - type: SwitchArpTable
+      combinations:
+      - name: arp
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpArp
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpArpProcess
+    - type: MacTable
+      combinations:
+      - name: macTable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpMacTable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpMacTableProcess
+    - type: SnmpIfEntry
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+    - type: SnmpIfHighSpeed
+      combinations:
+      - name: snmpIfHighSpeed
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+    - type: SnmpIpAddrEntry
+      combinations:
+      - name: snmpIpAddrEntry
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+    - type: IfTable
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+        - name: Join
+          method: snmpDevicePorts
+- deviceCollect:
+    manufacturer: Sangfor
+    platform: ANSHI
+    target:
+    - type: IsAlive
+      combinations:
+      - name: sshAliveCheck
+        collectMethod: SSH
+        stages:
+        - name: AliveCheck
+          method: sshAliveCheck
+    - type: NetworkDeviceVersion
+      combinations:
+      - name: sysVersion
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: sysVersion
+          methodType: SNMP
+        - name: SnmpProcess
+          method: sysVersionProcess
+        - name: Transform
+          method: descriptionToVersion
+    - type: NeighborLldp
+      combinations:
+      - name: lldp
+        collectMethod: SSH
+        stages:
+        - name: Collect
+          method: sshLldp
+        - name: TextFSM
+          method: sshLldpTextFSM
+    - type: NetworkDevicePorts
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+        - name: Join
+          method: snmpDevicePorts
+    - type: SwitchArpTable
+      combinations:
+      - name: arp
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpArp
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpArpProcess
+    - type: SnmpIfEntry
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+    - type: SnmpIfHighSpeed
+      combinations:
+      - name: snmpIfHighSpeed
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+    - type: SnmpIpAddrEntry
+      combinations:
+      - name: snmpIpAddrEntry
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+    - type: IfTable
+      combinations:
+      - name: snmpIftable
+        collectMethod: SNMP
+        stages:
+        - name: Collect
+          method: snmpIftable
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIftableProcess
+        - name: Collect
+          method: snmpIpAddrEntry
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIpAddrEntryProcess
+        - name: Collect
+          method: snmpIfHighSpeed
+          methodType: SNMP
+        - name: SnmpProcess
+          method: snmpIfHighSpeedProcess
+        - name: Join
+          method: snmpDevicePorts

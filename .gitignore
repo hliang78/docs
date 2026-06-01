@@ -1,0 +1,14 @@
+# OS and editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
+
+# Runtime/test evidence that should stay local
+openclaw-autodev/evidence/
+assets/device-v2-frontend-test-*/
+
+# Transient logs
+*.log

@@ -1,0 +1,26 @@
+j
+{
+  "name": "DC2 Profile Collection net-ruijie",
+  "enabled": 1,
+  "priority": 250,
+  "policy_id": "dc2p-default-profile-net-ruijie",
+  "jitter_sec": 0,
+  "scope_json": {
+    "all_devices": true,
+    "mib_tree_file": "/home/ubuntu/project/quick_env/init-data/mib_tree.json",
+    "collection_profile_ids": [
+      "net-ruijie"
+    ]
+  },
+  "scope_type": "all_devices",
+  "write_mode": "facts_only",
+  "contract_key": "ruijie_ruijie",
+  "interval_sec": 86400,
+  "max_concurrency": 1,
+  "dataset_keys_json": [
+    "snmp_sys_descr",
+    "snmp_if_table",
+    "cli_lldp_neighbors"
+  ],
+  "per_device_timeout_sec": 240
+}

@@ -6,8 +6,7 @@
 
 - 代码侧基线已可执行并已跑通
 - 真实数据执行当前延期，未来再做
-- 真实验收记录模板见 [ONEOPS_RCA_REAL_ACCEPTANCE_TEMPLATE.md](/home/jacky/project/OneOPS-ALL/docs/ONEOPS_RCA_REAL_ACCEPTANCE_TEMPLATE.md)
-- 下一阶段边界见 [ONEOPS_RCA_NEXT_STAGE_BOUNDARY.md](/home/jacky/project/OneOPS-ALL/docs/ONEOPS_RCA_NEXT_STAGE_BOUNDARY.md)
+- 历史验收模板、阶段边界等说明稿已删除，不再维护
 - RCA 动画 demo 位于 `OneOps/static/rca-demo/index.html`
 - 若 OneOps 服务已启动，可直接访问 `/static/rca-demo/index.html`
 - RCA 最小场景编辑器位于 `OneOps/static/rca-scenario/index.html`

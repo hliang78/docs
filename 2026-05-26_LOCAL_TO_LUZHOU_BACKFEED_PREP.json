@@ -1,0 +1,13 @@
+{
+  "nacos_main_replaced_sections": [
+    "device_collection2",
+    "attentions"
+  ],
+  "nacos_main_preserved_sections": [
+    "observationMIB",
+    "all other luzhou environment-specific keys"
+  ],
+  "candidate_engine_source": "local current full dataId",
+  "policy_count": 11,
+  "policy_mib_tree_file": "/home/ubuntu/project/quick_env/init-data/mib_tree.json"
+}

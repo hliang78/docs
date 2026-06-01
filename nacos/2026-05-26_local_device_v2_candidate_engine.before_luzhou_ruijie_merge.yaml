@@ -1,0 +1,288 @@
+prepared_fact_extractors:
+  - id: huawei_vrp_paren_model_version
+    from: prepared_facts
+    match:
+      prepared_fact_paths:
+        - identity.sys_descr
+      when_equals:
+        identity.vendor: huawei
+    regex: '(?i)\(([A-Z0-9-]+)\s+([A-Za-z0-9._-]+)\)'
+    write:
+      - path: hints.profile.model
+        group: 1
+      - path: hints.software.system_version
+        group: 2
+
+  - id: huawei_vrp_inline_model_version
+    from: prepared_facts
+    match:
+      prepared_fact_paths:
+        - identity.sys_descr
+      when_equals:
+        identity.vendor: huawei
+    regex: '(?i)version\s+[A-Za-z0-9._-]+\s+([A-Z]{2,}[A-Z0-9-]*)\s+([A-Za-z0-9._-]*R[A-Za-z0-9._-]+)'
+    write:
+      - path: hints.profile.model
+        group: 1
+      - path: hints.software.system_version
+        group: 2
+
+  - id: h3c_comware_model
+    from: prepared_facts
+    match:
+      prepared_fact_paths:
+        - identity.sys_descr
+      when_equals:
+        identity.vendor: h3c
+    regex: '(?i)\bH3C\s+((?:VSR|MSR|SR)[A-Z0-9-]+)\b'
+    write:
+      - path: hints.profile.model
+        group: 1
+
+  - id: cisco_ios_xe_version
+    from: prepared_facts
+    match:
+      prepared_fact_paths:
+        - identity.sys_descr
+      when_equals:
+        identity.vendor: cisco
+    regex: '(?i)Cisco\s+IOS\s+XE\s+Software,\s+Version\s+([0-9][A-Za-z0-9()._-]*)'
+    write:
+      - path: hints.software.system_version
+        group: 1
+
+  - id: cisco_ios_version
+    from: prepared_facts
+    match:
+      prepared_fact_paths:
+        - identity.sys_descr
+      when_equals:
+        identity.vendor: cisco
+    regex: '(?i)Cisco\s+IOS\s+Software,.*?\b(?:Experimental\s+)?Version\s+([0-9][^,\r\n]*?)(?:\s+Copyright|,|$)'
+    write:
+      - path: hints.software.system_version
+        group: 1
+
+  - id: cisco_vios_model
+    from: prepared_facts
+    match:
+      prepared_fact_paths:
+        - identity.sys_descr
+      when_equals:
+        identity.vendor: cisco
+    regex: '(?i)Cisco\s+IOS\s+Software,.*?\((vios_[A-Za-z0-9_-]+)\)'
+    write:
+      - path: hints.profile.model
+        group: 1
+
+fields:
+  hostname:
+    source_order:
+      - identity.hostname
+      - current.hostname
+    reject_values:
+      - localhost
+      - localhost.localdomain
+      - localhost.localdomain.localhost
+    store_mode: store_with_quality
+
+  sn:
+    source_order:
+      - [identity.serial_number, identity.sn, identity.serial]
+      - current.sn
+    store_mode: store_with_quality
+
+  catalog:
+    source_order:
+      - profile.model
+      - hints.profile.model
+      - current.model
+      - identity.sys_descr
+      - current.catalog
+    match_rules:
+      - path: hints.profile.model
+        when:
+          profile.manufacturer: huawei
+        prefix:
+          USG: FIREWALL
+          S5: SWITCH
+          NE: ROUTER
+          CE: SWITCH
+      - path: hints.profile.model
+        when:
+          profile.manufacturer: h3c
+        prefix:
+          VSR: ROUTER
+          MSR: ROUTER
+      - path: hints.profile.model
+        when:
+          profile.manufacturer: cisco
+        prefix:
+          WS-C: SWITCH
+          C92: SWITCH
+          C93: SWITCH
+          C94: SWITCH
+          C95: SWITCH
+          C96: SWITCH
+          N2K: SWITCH
+          N3K: SWITCH
+          N5K: SWITCH
+          N7K: SWITCH
+          N9K: SWITCH
+          ISR: ROUTER
+          ASR: ROUTER
+          ASA: FIREWALL
+      - path: profile.model
+        when:
+          profile.manufacturer: huawei
+        prefix:
+          USG: FIREWALL
+          S5: SWITCH
+          NE: ROUTER
+          CE: SWITCH
+      - path: profile.model
+        when:
+          profile.manufacturer: h3c
+        prefix:
+          VSR: ROUTER
+          MSR: ROUTER
+      - path: profile.model
+        when:
+          profile.manufacturer: cisco
+        prefix:
+          WS-C: SWITCH
+          C92: SWITCH
+          C93: SWITCH
+          C94: SWITCH
+          C95: SWITCH
+          C96: SWITCH
+          N2K: SWITCH
+          N3K: SWITCH
+          N5K: SWITCH
+          N7K: SWITCH
+          N9K: SWITCH
+          ISR: ROUTER
+          ASR: ROUTER
+          ASA: FIREWALL
+      - path: current.model
+        when:
+          profile.manufacturer: cisco
+        prefix:
+          WS-C: SWITCH
+          C92: SWITCH
+          C93: SWITCH
+          C94: SWITCH
+          C95: SWITCH
+          C96: SWITCH
+          N2K: SWITCH
+          N3K: SWITCH
+          N5K: SWITCH
+          N7K: SWITCH
+          N9K: SWITCH
+          ISR: ROUTER
+          ASR: ROUTER
+          ASA: FIREWALL
+      - path: identity.sys_descr
+        when:
+          identity.vendor: cisco
+        contains:
+          vios_l2 Software: SWITCH
+          vios_l3 Software: ROUTER
+          Catalyst: SWITCH
+          Nexus: SWITCH
+          Switch Software: SWITCH
+          Adaptive Security Appliance: FIREWALL
+          Cisco ASA: FIREWALL
+          ISR: ROUTER
+          ASR: ROUTER
+      - path: current.catalog
+        exact:
+          Network: NETWORK
+          NETWORK: NETWORK
+          Firewall: FIREWALL
+          FIREWALL: FIREWALL
+          Server: SERVER
+          SERVER: SERVER
+    store_mode: store_with_quality
+
+  model:
+    source_order:
+      - profile.model
+      - hints.profile.model
+      - current.model
+    reject_contains:
+      - whole frame
+      - vnic-
+    store_mode: store_with_quality
+
+  system_version:
+    source_order:
+      - profile.system_version
+      - software.version
+      - identity.os_version
+      - hints.software.system_version
+      - current.system_version
+    store_mode: store_with_quality
+
+  in_band_ip:
+    source_order:
+      - access.in_band_ip
+      - current.in_band_ip
+    store_mode: store_with_quality
+
+  platform:
+    source_order:
+      - profile.model
+      - hints.profile.model
+      - profile.platform
+      - identity.sys_descr
+      - current.platform
+    match_rules:
+      - path: hints.profile.model
+        when:
+          profile.manufacturer: cisco
+        prefix:
+          N2K: Nexus
+          N3K: Nexus
+          N5K: Nexus
+          N7K: Nexus
+          N9K: Nexus
+      - path: profile.model
+        when:
+          profile.manufacturer: cisco
+        prefix:
+          N2K: Nexus
+          N3K: Nexus
+          N5K: Nexus
+          N7K: Nexus
+          N9K: Nexus
+      - path: hints.profile.model
+        prefix:
+          USG: USG
+      - path: profile.model
+        prefix:
+          USG: USG
+      - path: identity.sys_descr
+        contains:
+          Versatile Routing Platform: VRP
+          VRP: VRP
+          AlmaLinux: AlmaLinux
+      - path: identity.sys_descr
+        when:
+          identity.vendor: cisco
+        contains:
+          Cisco IOS XE Software: IOS-XE
+          Cisco IOS Software: IOS
+          NX-OS: Nexus
+          Cisco Nexus: Nexus
+          Adaptive Security Appliance: ASA
+    store_mode: store_with_quality
+
+exceptions:
+  - name: usg-vrp-conflict-fix
+    when:
+      vendor_equals: huawei
+      model_contains: USG
+      sys_descr_contains: Versatile Routing Platform
+    override:
+      force_platform: USG

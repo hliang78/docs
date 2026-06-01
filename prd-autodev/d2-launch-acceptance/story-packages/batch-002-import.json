@@ -1,0 +1,188 @@
+{
+  "program": "d2-launch-acceptance",
+  "batch": "batch-002-import",
+  "title": "Device V2 DB-derived sample export and UI import acceptance",
+  "status": "reviewed",
+  "targetTaskIds": [
+    "d2-fe",
+    "d2-be"
+  ],
+  "releaseGate": "Publish after Batch 001 completes and the user confirms sample size, clone-code strategy, credential-ref-only rule, and cleanup boundary.",
+  "stories": [
+    {
+      "id": "D2LA-002A",
+      "title": "Read-only DB sample export for real Device V2 candidates",
+      "lanes": [
+        "d2-be"
+      ],
+      "status": "open",
+      "priority": 50,
+      "risk": "Medium",
+      "scope": "Use the approved read-only path to select 5 real Device V2 candidates, preferably 1 per device type, and write a redacted sample artifact for import preparation.",
+      "nonGoals": "Do not mutate DB records, do not export plaintext credentials, and do not start collection.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-be/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-fe/D2LA-IMPORT/**"
+      ],
+      "acceptance": [
+        "Writes `sample-set.json` with 5 selected devices and redacted credential refs only.",
+        "Writes `sample-selection.md` explaining selection criteria and exclusions.",
+        "Confirms no plaintext password/token/community/private key appears in artifacts."
+      ],
+      "validation": [
+        "No code validation required unless source files are changed."
+      ],
+      "evidenceArtifacts": [
+        "sample-set.json",
+        "sample-selection.md",
+        "redaction-checklist.md"
+      ]
+    },
+    {
+      "id": "D2LA-002B",
+      "title": "Generate DB-derived ingest Excel with cloned device codes",
+      "lanes": [
+        "d2-fe"
+      ],
+      "status": "open",
+      "priority": 48,
+      "risk": "Medium",
+      "scope": "Consume `sample-set.json`, generate an import xlsx using `D2LA_<orig_code>` cloned codes and `labels.d2la_orig_code` source mapping, and write a mapping report for the UI import story.",
+      "nonGoals": "Do not upload to the UI, do not modify records, and do not include plaintext secrets.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-fe/D2LA-IMPORT/**",
+        "/Users/huangliang/project/OneOPS-ALL/OneOPS-UI/scripts/**"
+      ],
+      "acceptance": [
+        "Writes a DB-derived xlsx artifact suitable for the ingest/import UI.",
+        "Writes `import-mapping.json` with original code to cloned code mapping and confirms `labels.d2la_orig_code` is present.",
+        "Records any unsupported template field before upload."
+      ],
+      "validation": [
+        "npm run typecheck:d2 if frontend scripts/source are changed."
+      ],
+      "evidenceArtifacts": [
+        "db-derived-import.xlsx",
+        "import-mapping.json",
+        "template-field-support.md"
+      ],
+      "dependsOn": [
+        "D2LA-002A"
+      ]
+    },
+    {
+      "id": "D2LA-002C",
+      "title": "Upload and validate DB-derived Excel through Device V2 ingest UI",
+      "lanes": [
+        "d2-fe"
+      ],
+      "status": "open",
+      "priority": 50,
+      "risk": "Medium",
+      "scope": "Upload the generated xlsx through the Device V2 入库工作台 and validate rows without doing broad follow-up work. Treat upload/validate as an acceptance item, including any intentionally incomplete rows.",
+      "nonGoals": "Do not start store, do not perform cleanup, and do not debug backend beyond recording the exact blocker.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-fe/D2LA-IMPORT/**"
+      ],
+      "acceptance": [
+        "Captures upload request/response and UI validation state.",
+        "Writes `upload-validation.json` and screenshots/text evidence.",
+        "If validation fails for intentionally incomplete rows, records row-level errors as expected validation evidence; if core cloned rows fail unexpectedly, stops."
+      ],
+      "validation": [
+        "No code validation required unless files are changed."
+      ],
+      "evidenceArtifacts": [
+        "upload-validation.json",
+        "upload-network.har.json or compact request-response JSON",
+        "upload-validation-screenshot.png",
+        "validation-row-errors.json"
+      ],
+      "dependsOn": [
+        "D2LA-002B"
+      ]
+    },
+    {
+      "id": "D2LA-002D",
+      "title": "Apply DB-derived import and hand off to management list",
+      "lanes": [
+        "d2-fe"
+      ],
+      "status": "open",
+      "priority": 50,
+      "risk": "Medium",
+      "scope": "Submit/apply only after upload/validate succeeds for intended rows, capture task/result rows, and verify management page handoff for cloned device codes.",
+      "nonGoals": "Do not start store and do not delete imported records.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-fe/D2LA-IMPORT/**"
+      ],
+      "acceptance": [
+        "Writes `import-task.json`, `import-result.json`, and `imported-codes.txt`.",
+        "Management handoff shows the cloned code(s) or records a precise blocker.",
+        "No original real-device code is overwritten unless explicitly approved."
+      ],
+      "validation": [
+        "No code validation required unless files are changed."
+      ],
+      "evidenceArtifacts": [
+        "import-task.json",
+        "import-result.json",
+        "imported-codes.txt",
+        "management-handoff.json",
+        "management-list-network.json"
+      ],
+      "dependsOn": [
+        "D2LA-002C"
+      ]
+    },
+    {
+      "id": "D2LA-002E",
+      "title": "Reconcile imported cloned records against source DB sample",
+      "lanes": [
+        "d2-fe",
+        "d2-be"
+      ],
+      "status": "open",
+      "priority": 48,
+      "risk": "Medium",
+      "scope": "Compare imported cloned records with the redacted source sample on key fields and write a compact reconciliation report for store phases.",
+      "nonGoals": "Do not edit records, do not start collection, and do not perform cleanup.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-fe/D2LA-IMPORT/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-be/**"
+      ],
+      "acceptance": [
+        "Writes `reconciliation.md` and `ready-for-store.json`.",
+        "Confirms cloned records preserve endpoint/protocol/credential-ref data needed for store readiness.",
+        "Classifies any mismatch as blocker, accepted difference, or follow-up."
+      ],
+      "validation": [
+        "If backend code is touched, allowed tests are `go test ./app/device/v2/...` and `go test ./app/device/v2/ingest/...`.",
+        "If validation depends on real DB/external collection infrastructure and fails for environment reasons, classify as `environment-blocked`."
+      ],
+      "evidenceArtifacts": [
+        "reconciliation.md",
+        "ready-for-store.json",
+        "source-vs-imported-fields.json"
+      ],
+      "dependsOn": [
+        "D2LA-002D"
+      ]
+    }
+  ],
+  "evidencePolicy": {
+    "root": "docs/openclaw-autodev/evidence/d2-fe/D2LA-IMPORT/",
+    "dryRunBeforeMutation": "DB sample export and Excel generation are preparatory dry-run phases. UI upload/validate is separate from apply. Apply is not allowed until validation evidence is written.",
+    "secretRule": "Artifacts may contain credential refs/roles/protocols/ports only; never plaintext passwords, tokens, community strings, or private keys."
+  },
+  "stopConditions": [
+    "sample-set.json would contain plaintext secrets",
+    "sample selection lacks credential refs or reachable endpoints",
+    "template mapping would overwrite original device codes or omit required clone mapping",
+    "upload/validate fails unexpectedly for core cloned rows",
+    "apply is requested before validation evidence exists",
+    "management handoff cannot find imported cloned codes",
+    "reconciliation finds unexplained endpoint/protocol/credential-ref mismatch"
+  ],
+  "executionMode": "dependency-chain"
+}

@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "templates": {
+    "safe-difference": {
+      "title": "Accept a read-only verified safe difference",
+      "description": "Use when evidence found a concrete field/value difference that has been manually reviewed as safe to accept, and no repair/write is desired.",
+      "body": [
+        "审批模板: safe-difference",
+        "Task: {{taskId}}",
+        "Story: {{storyId}} {{storyTitle}}",
+        "人工结论: 接受当前 story 证据中列出的具体差异为安全差异。",
+        "现场依据: {{details}}",
+        "允许范围: 仅允许更新当前 story 的证据、状态、handoff/shared note，并继续依赖链中的下一步。",
+        "禁止范围: 不允许修改原始数据、回填/清空字段、执行 DB 写入、删除非测试数据、改生产配置、改 auth/tenant/credential 逻辑、提交或推送。",
+        "证据要求: 下一轮必须记录被接受的差异、原始 evidence 路径、无明文凭据结论，以及未执行数据修改。",
+        "LastNext: {{next}}"
+      ]
+    },
+    "evidence-only": {
+      "title": "Approve an evidence-only/read-only continuation",
+      "description": "Use when the next turn should only gather or refine evidence without source/data writes.",
+      "body": [
+        "审批模板: evidence-only",
+        "Task: {{taskId}}",
+        "Story: {{storyId}} {{storyTitle}}",
+        "人工结论: 允许继续一个只读/证据补全 turn。",
+        "现场依据: {{details}}",
+        "允许范围: 只读检查、日志/证据汇总、当前 story evidence/status/shared note 更新。",
+        "禁止范围: 不允许产品代码修改、数据库写入、删除、外部集成调用、配置变更、依赖变更、提交或推送。",
+        "证据要求: 输出具体 evidence 文件，并说明每个结论来自哪个只读来源。",
+        "LastNext: {{next}}"
+      ]
+    },
+    "scoped-code-fix": {
+      "title": "Approve one minimal story-scoped code fix",
+      "description": "Use when a concrete code fix is approved inside the current story allowed paths and configured validation.",
+      "body": [
+        "审批模板: scoped-code-fix",
+        "Task: {{taskId}}",
+        "Story: {{storyId}} {{storyTitle}}",
+        "人工结论: 允许一个最小代码修复，仅限当前 story 指出的具体问题。",
+        "现场依据: {{details}}",
+        "允许范围: 仅当前 story 的 allowedPaths 内最小改动；必须运行配置的 validation 或记录精确阻塞。",
+        "禁止范围: 不允许扩大模块范围、改变 auth/tenant/credential/production config、迁移、依赖升级、提交、推送或顺手重构。",
+        "证据要求: 记录变更文件、测试结果、剩余风险；如果需要越界，立即 BLOCKED。",
+        "LastTests: {{tests}}",
+        "LastNext: {{next}}"
+      ]
+    },
+    "exact-fixture-cleanup": {
+      "title": "Approve cleanup of exact generated fixtures only",
+      "description": "Use when cleanup is approved only for exact generated test/clone records already captured in evidence.",
+      "body": [
+        "审批模板: exact-fixture-cleanup",
+        "Task: {{taskId}}",
+        "Story: {{storyId}} {{storyTitle}}",
+        "人工结论: 允许清理 evidence 中列出的精确测试/clone 记录。",
+        "现场依据: {{details}}",
+        "允许范围: 只允许按 exact code/id 删除已生成的测试 fixture/clone；保留 import batch/task/row evidence。",
+        "禁止范围: 不允许删除原始记录、通配删除、批量 purge、清空表、删除 import batch 历史、修改凭据/租户/生产配置。",
+        "证据要求: cleanup-report 必须列出每个 exact code/id 的删除结果和最终缺席验证；任何不确定立即 BLOCKED。",
+        "LastNext: {{next}}"
+      ]
+    },
+    "approved-narrower-sample": {
+      "title": "Approve a narrowed sample scope",
+      "description": "Use when the original wider sample remains partly blocked and a smaller evidence-backed sample is accepted.",
+      "body": [
+        "审批模板: approved-narrower-sample",
+        "Task: {{taskId}}",
+        "Story: {{storyId}} {{storyTitle}}",
+        "人工结论: 接受缩小后的样本范围继续当前链路。",
+        "现场依据: {{details}}",
+        "允许范围: 仅围绕已证据确认的样本继续验证/清理/报告；未确认样本保留为 follow-up，不得私自补全或伪造。",
+        "禁止范围: 不允许把缺失样本标记为通过，不允许默认/猜测平台、目录、机架、凭据或状态字段。",
+        "证据要求: 明确列出纳入样本、排除样本、排除原因，以及对最终 readiness 的影响。",
+        "LastNext: {{next}}"
+      ]
+    }
+  }
+}

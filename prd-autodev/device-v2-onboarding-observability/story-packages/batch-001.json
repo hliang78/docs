@@ -1,0 +1,109 @@
+{
+  "program": "device-v2-onboarding-observability",
+  "batch": "batch-001",
+  "title": "Device V2 minimal onboarding design contract",
+  "status": "draft",
+  "executionMode": "dependency-chain",
+  "targetTaskIds": ["d2-fe", "d2-be", "platform3"],
+  "stories": [
+    {
+      "id": "D2-ONBOARD-MIN-001",
+      "title": "Document single-device onboarding UI contract",
+      "status": "open",
+      "lanes": ["d2-fe"],
+      "scope": "Draft the Device V2 row UX for single-device continue onboarding, monitoring mode choice, monitoring/log summaries, and action evidence drawer.",
+      "nonGoals": ["Do not implement UI", "Do not add batch remote execution"],
+      "allowedPaths": [
+        "docs/prd-autodev/device-v2-onboarding-observability/**"
+      ],
+      "acceptance": [
+        "UI contract names single-device behavior.",
+        "Server monitoring choice agent/SNMP is captured.",
+        "Batch behavior is plan-only or per-device display.",
+        "The UI contract is written back into minimal-design.md and workstreams/01-frontend-pages.md."
+      ],
+      "validation": [
+        "rg -n \"继续纳管|agent / SNMP|批量\" docs/prd-autodev/device-v2-onboarding-observability"
+      ],
+      "notes": [
+        "Design-only story; keep draft until reviewed.",
+        "Primary artifact targets: docs/prd-autodev/device-v2-onboarding-observability/minimal-design.md and workstreams/01-frontend-pages.md."
+      ]
+    },
+    {
+      "id": "D2-ONBOARD-MIN-002",
+      "title": "Document onboarding action evidence contract",
+      "status": "open",
+      "dependsOn": ["D2-ONBOARD-MIN-001"],
+      "lanes": ["d2-be"],
+      "scope": "Define summary_json.onboarding actions, result values, retry filtering, and derived monitoring/log/status summaries.",
+      "nonGoals": ["No new database table", "No implementation"],
+      "allowedPaths": [
+        "docs/prd-autodev/device-v2-onboarding-observability/**"
+      ],
+      "acceptance": [
+        "Contract uses success/failed/unknown/skipped.",
+        "Retry only failed/unknown is documented.",
+        "No onboarding table is introduced.",
+        "The contract is written back into prd.md and workstreams/02-backend-api-contracts.md."
+      ],
+      "validation": [
+        "rg -n \"summary_json|success\\|failed\\|unknown\\|skipped|failed / unknown\" docs/prd-autodev/device-v2-onboarding-observability"
+      ],
+      "notes": [
+        "This is the backend source contract for later code.",
+        "Primary artifact targets: docs/prd-autodev/device-v2-onboarding-observability/prd.md and workstreams/02-backend-api-contracts.md."
+      ]
+    },
+    {
+      "id": "D2-ONBOARD-MIN-003",
+      "title": "Document area service and log strategy config",
+      "status": "open",
+      "dependsOn": ["D2-ONBOARD-MIN-002"],
+      "lanes": ["platform3", "d2-be"],
+      "scope": "Define config-file schemas for FunctionArea syslog/snmp_trap services and linux_system_default first_existing log files.",
+      "nonGoals": ["No database migration", "No real config path finalization"],
+      "allowedPaths": [
+        "docs/prd-autodev/device-v2-onboarding-observability/**"
+      ],
+      "acceptance": [
+        "FunctionArea syslog config includes agent_code/listen_ip/listen_port.",
+        "SNMP trap is marked template-required.",
+        "Linux system log strategy lists four default files and first_existing.",
+        "The schema proposal is written into minimal-design.md and workstreams/02-backend-api-contracts.md."
+      ],
+      "validation": [
+        "rg -n \"function_areas|linux_system_default|first_existing|snmp_trap\" docs/prd-autodev/device-v2-onboarding-observability"
+      ],
+      "notes": [
+        "Final file path remains a later decision.",
+        "Primary artifact targets: docs/prd-autodev/device-v2-onboarding-observability/minimal-design.md and workstreams/02-backend-api-contracts.md."
+      ]
+    },
+    {
+      "id": "D2-ONBOARD-MIN-004",
+      "title": "Document remote ensure template contract",
+      "status": "open",
+      "dependsOn": ["D2-ONBOARD-MIN-003"],
+      "lanes": ["platform3"],
+      "scope": "Define inspect/apply/save/verify template contract for network syslog target ensure and error mapping for timeout/save failure.",
+      "nonGoals": ["No vendor-complete command library", "No real remote execution"],
+      "allowedPaths": [
+        "docs/prd-autodev/device-v2-onboarding-observability/**"
+      ],
+      "acceptance": [
+        "Network syslog template includes save step.",
+        "Timeout maps to unknown or failed with retryable true.",
+        "Vendor differences stay in templates, not workflow.",
+        "The template contract is written into remote-access-minimal-strategy.md and workstreams/03-e2e-critical-flows.md."
+      ],
+      "validation": [
+        "rg -n \"inspect|apply|save|verify|retryable\" docs/prd-autodev/device-v2-onboarding-observability"
+      ],
+      "notes": [
+        "Template commands need human review before implementation.",
+        "Primary artifact targets: docs/prd-autodev/device-v2-onboarding-observability/remote-access-minimal-strategy.md and workstreams/03-e2e-critical-flows.md."
+      ]
+    }
+  ]
+}

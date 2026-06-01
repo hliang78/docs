@@ -1,0 +1,51 @@
+{
+  "profileId": "remote-apply-worker",
+  "description": "High-risk worker profile for explicit approved remote apply operations with tight target, command, and evidence boundaries.",
+  "supportedTaskKinds": [
+    "remote_apply"
+  ],
+  "supportedEnvironmentKinds": [
+    "remote_apply",
+    "local_workspace"
+  ],
+  "contextTolerance": {
+    "profile": "small",
+    "maxPromptTokensClass": "small",
+    "prefersCompiledContext": true,
+    "requiresWorkspaceSanitization": false
+  },
+  "actionCapabilities": {
+    "shellExec": true,
+    "fileEdit": true,
+    "browserInteract": false,
+    "dbReadonly": false,
+    "apiReadonly": true,
+    "remoteReadonly": true,
+    "remoteApply": true,
+    "serviceRestart": false,
+    "deleteFiles": false
+  },
+  "writeCapabilities": {
+    "maxFilesPerTurn": 4,
+    "supportsBroadRefactor": false,
+    "supportsCrossModuleChanges": false,
+    "supportsDocOnlyTurns": true
+  },
+  "verificationModel": {
+    "needsControllerVerifyOnDone": false,
+    "supportsTargetedValidation": true,
+    "supportsRealOperationValidation": true,
+    "trustSelfReportedDone": false
+  },
+  "coordinationModel": {
+    "supportsMultiStoryTurns": false,
+    "supportsMultiLaneCoordination": true,
+    "requiresExplicitJoinPolicy": true
+  },
+  "schedulingDefaults": {
+    "maxTurns": 1,
+    "maxMinutes": 20,
+    "timeoutSeconds": 1200,
+    "preferFreshSession": true
+  }
+}

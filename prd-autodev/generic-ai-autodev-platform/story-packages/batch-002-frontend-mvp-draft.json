@@ -1,0 +1,164 @@
+{
+  "program": "generic-ai-autodev-platform",
+  "batch": "batch-002-frontend-mvp-draft",
+  "title": "Frontend MVP implementation draft slices",
+  "status": "draft",
+  "executionMode": "dependency-chain",
+  "targetTaskIds": [],
+  "releaseGate": "Planning draft only. Do not publish, promote, create OpenClaw tasks, or start AI implementation until TODO-07 is completed, the final pre-code alignment explicitly approves implementation, and the frontend topic discussion freezes the first implementation slice.",
+  "stories": [
+    {
+      "id": "GAAP-FE-001",
+      "title": "Scaffold Program routes and workbench shell",
+      "status": "open",
+      "priority": 20,
+      "risk": "Low",
+      "lanes": [
+        "frontend"
+      ],
+      "scope": "Implement the first frontend shell slice for the generic AI autodev platform: `/programs`, `/programs/:programId`, the shared workbench header, and the left-center-right layout skeleton without AI assist, editing, publish, or runtime controls.",
+      "nonGoals": "Do not implement AI optimization, light edit drawers, OpenClaw controls, model/profile management, or any backend mutations.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/generic-ai-autodev/frontend-admin/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/generic-ai-autodev-platform/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/development/generic-ai-autodev-platform/**"
+      ],
+      "acceptance": [
+        "The route structure matches `/programs` and `/programs/:programId` with query-driven docs/batch mode switching.",
+        "The shell renders a stable header, navigation area, main content area, and decision rail placeholder.",
+        "No AI assist, light edit, publish, or runtime control affordance is included in this slice."
+      ],
+      "validation": [
+        "Final validation command is pending the frontend project root and toolchain freeze.",
+        "The implementation must stay aligned with `frontend-workbench-decision.md` and `frontend-page-structure.md`."
+      ],
+      "notes": [
+        "Draft only. The target frontend directory and toolchain are not frozen yet."
+      ]
+    },
+    {
+      "id": "GAAP-FE-002",
+      "title": "Build Program list page with filters, table, and summary rail",
+      "status": "open",
+      "priority": 30,
+      "risk": "Low",
+      "lanes": [
+        "frontend"
+      ],
+      "dependsOn": [
+        "GAAP-FE-001"
+      ],
+      "scope": "Implement the Program homepage using the approved shell: filter panel, program table, phase/status indicators, and summary rail based on read-only program overview data.",
+      "nonGoals": "Do not add create/edit/delete flows, model/profile entry points, or dashboard-style decorative metrics.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/generic-ai-autodev/frontend-admin/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/generic-ai-autodev-platform/**"
+      ],
+      "acceptance": [
+        "The page follows the `Filter Panel + Program Table + Summary Rail` structure.",
+        "Program rows expose current phase, docs status, batch status, readiness summary, and updated time.",
+        "The page is clearly read-only and operational, not a marketing or dashboard surface."
+      ],
+      "validation": [
+        "Final validation command is pending the frontend project root and toolchain freeze.",
+        "The page must reflect the P0 scenarios in `test-matrix.md`."
+      ]
+    },
+    {
+      "id": "GAAP-FE-003",
+      "title": "Implement Program workbench navigation tree and docs mode",
+      "status": "open",
+      "priority": 40,
+      "risk": "Low",
+      "lanes": [
+        "frontend"
+      ],
+      "dependsOn": [
+        "GAAP-FE-002"
+      ],
+      "scope": "Implement the Program workbench navigation tree, docs mode state sync, document meta bar, markdown viewer, pending items panel, and related batch links.",
+      "nonGoals": "Do not implement document editing, AI assist, or independent document sub-routes.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/generic-ai-autodev/frontend-admin/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/generic-ai-autodev-platform/**"
+      ],
+      "acceptance": [
+        "Docs mode renders document content, status, updatedAt, pending items, and related batch links.",
+        "Navigation between document types stays within the workbench route and preserves query state.",
+        "The implementation keeps the workbench as one product surface, not a set of disconnected document pages."
+      ],
+      "validation": [
+        "Final validation command is pending the frontend project root and toolchain freeze.",
+        "The implementation must stay aligned with `candidate-04-prototype-list.md` and `frontend-page-structure.md`."
+      ]
+    },
+    {
+      "id": "GAAP-FE-004",
+      "title": "Implement batch mode and decision rail",
+      "status": "open",
+      "priority": 50,
+      "risk": "Low",
+      "lanes": [
+        "frontend"
+      ],
+      "dependsOn": [
+        "GAAP-FE-003"
+      ],
+      "scope": "Implement batch mode, including batch meta bar, story table, stop conditions, publish blockers, and the right-side readiness decision rail with current phase, ready/not-ready, blockers, profile summary, incident summary, and next action.",
+      "nonGoals": "Do not add publish buttons, runtime control buttons, graph-based dependency visualization, or mutation actions.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/generic-ai-autodev/frontend-admin/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/generic-ai-autodev-platform/**"
+      ],
+      "acceptance": [
+        "Batch mode shows batch state, execution mode, release gate, story table, and stop conditions.",
+        "The decision rail makes blockers, profile/incident read-only summary, and next action visible without hiding uncertainty.",
+        "Story dependencies are rendered using table/text/tag patterns in the first slice, not a graph."
+      ],
+      "validation": [
+        "Final validation command is pending the frontend project root and toolchain freeze.",
+        "The implementation must reflect `ready/not-ready` and blocker semantics from `workstreams/03-e2e-critical-flows.md`."
+      ]
+    },
+    {
+      "id": "GAAP-FE-005",
+      "title": "Run planning-shell frontend smoke and evidence pass",
+      "status": "open",
+      "priority": 60,
+      "risk": "Low",
+      "lanes": [
+        "frontend",
+        "ct"
+      ],
+      "dependsOn": [
+        "GAAP-FE-004"
+      ],
+      "scope": "Run the first frontend smoke pass for the planning shell: Program homepage, Program workbench, docs mode, batch mode, and decision rail, and write compact evidence against the planning test matrix.",
+      "nonGoals": "Do not broaden into AI assist, light editing, OpenClaw publish, or backend runtime control validation.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/generic-ai-autodev/frontend-admin/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/generic-ai-autodev-platform/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/**"
+      ],
+      "acceptance": [
+        "The smoke scope covers the P0 frontend planning shell scenarios from `test-matrix.md`.",
+        "Evidence states whether the workbench keeps `program -> docs -> batch` as one stable flow.",
+        "Any blocker is recorded as a blocker, not hidden behind partial success language."
+      ],
+      "validation": [
+        "Final validation command is pending the frontend project root and toolchain freeze.",
+        "The smoke structure should be reusable later in `workstreams/05-regression-suite.md`."
+      ]
+    }
+  ],
+  "evidencePolicy": {
+    "root": "docs/prd-autodev/generic-ai-autodev-platform/evidence/",
+    "notes": "This package is only an implementation draft. It is not an approved automation batch and cannot be used to trigger OpenClaw or any AI worker."
+  },
+  "stopConditions": [
+    "the final pre-code alignment has not approved implementation",
+    "the frontend topic discussion has not frozen the first implementation slice",
+    "the frontend project root or toolchain is still unfrozen",
+    "someone attempts to attach targetTaskIds or publish this batch before final pre-code approval"
+  ]
+}

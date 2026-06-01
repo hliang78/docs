@@ -1,0 +1,135 @@
+{
+  "program": "device-v2-onboarding-observability",
+  "batch": "batch-009",
+  "title": "Repair the exact config-source blocker and rerun the single-device continue-onboarding path",
+  "status": "reviewed",
+  "executionMode": "dependency-chain",
+  "releaseGate": "True next PRD batch justified: the closure-stage validation question is already answered, and the owner wants the resident topic to continue. Use this batch only for the exact product repair and same-path rerun; do not reuse it for runtime/session repair or passive waiting.",
+  "targetTaskIds": [
+    "d2on"
+  ],
+  "stories": [
+    {
+      "id": "D2ON-026",
+      "title": "Repair the exact config-source blocker on single-device onboarding ensure",
+      "status": "open",
+      "priority": 250,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Fix the root cause of the live single-device continue-onboarding blocker `onboarding config source is required` on the same `plan -> ensure` path used by `DeviceV2ManagementRedesign.vue`. The repair must make `POST /device/v2/:code/onboarding/ensure` return a normal onboarding payload instead of `data=null` for the repaired path, without dropping the controller-backed evidence fields already surfaced by `GET /onboarding`.",
+      "nonGoals": [
+        "Do not close with docs-only or evidence-only edits.",
+        "Do not widen into batch onboarding or unrelated environment repair.",
+        "Do not hide a remaining contract blocker behind generic success wording."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/**",
+        "OneOPS-UI/src/views/device/**",
+        "OneOPS-UI/src/api/device/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "`docs/openclaw-autodev/evidence/d2on/D2ON-026.md` exists with `Verdict: done-with-code` or `Verdict: exact-contract-blocker`.",
+        "The repaired single-device `ensure` path no longer fails specifically because the config source is missing, or the blocker file names the exact remaining file/function/contract gap.",
+        "If the repair succeeds, the path still preserves or surfaces the exact onboarding evidence fields needed for the rerun: `actions`, `task_id`, `store_run_id`, `controller_stage`, `store_run_status`, `core_store_status`, and `manageable_status`."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/...",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-026.md",
+        "grep -Eq '^Verdict: (done-with-code|exact-contract-blocker)$' /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-026.md"
+      ],
+      "notes": [
+        "Must read first: docs/openclaw-autodev/evidence/d2on/D2ON-024.md, docs/openclaw-autodev/evidence/d2on/D2ON-025.md, and docs/development/device-v2-onboarding-observability/10-阶段结论-OneOPS_DeviceV2纳管观测_v0.1.md.",
+        "Keep the fix anchored to the same single-device continue-onboarding flow that already produced the exact blocker.",
+        "Not enough for DONE: changing only docs, changing only evidence wording, or rerunning without addressing the config-source contract."
+      ]
+    },
+    {
+      "id": "D2ON-027",
+      "title": "Rerun one exact single-device continue-onboarding probe after the repair",
+      "status": "open",
+      "dependsOn": [
+        "D2ON-026"
+      ],
+      "priority": 260,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "After `D2ON-026`, run exactly one bounded live probe on the same single-device `plan -> ensure -> GET /onboarding` path. Capture the exact `ensure` response and the returned controller-backed tuple without paraphrasing blocked or failed outcomes as success.",
+      "nonGoals": [
+        "Do not switch to batch onboarding.",
+        "Do not omit the exact ensure payload shape or the exact controller tuple.",
+        "Do not treat a stale previous GET result as the new rerun verdict."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/**",
+        "OneOPS-UI/src/views/device/**",
+        "OneOPS-UI/src/api/device/**",
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "`docs/openclaw-autodev/evidence/d2on/D2ON-027.md` exists with `Verdict: controller-trace` or `Verdict: exact-blocker`.",
+        "The evidence records the device code, request bodies, exact `ensure` response, and whether a `monitor_controller_stage` action was returned during the rerun path.",
+        "The evidence preserves the returned `controller_stage`, `store_run_status`, `core_store_status`, and `manageable_status` values explicitly for success, failed, blocked, or unknown outcomes."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/...",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-027.md",
+        "grep -Eq '^Verdict: (controller-trace|exact-blocker)$' /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-027.md"
+      ],
+      "notes": [
+        "Must read first: docs/openclaw-autodev/evidence/d2on/D2ON-024.md, docs/openclaw-autodev/evidence/d2on/D2ON-026.md, and the exact files changed by D2ON-026.",
+        "Prefer the same device code used in D2ON-024 when it is still valid; if not, record the exact replacement code and why it changed.",
+        "Not enough for DONE: a prose summary without the exact ensure payload and controller tuple."
+      ]
+    },
+    {
+      "id": "D2ON-028",
+      "title": "Update readiness after the repaired rerun with an explicit program verdict",
+      "status": "open",
+      "dependsOn": [
+        "D2ON-027"
+      ],
+      "priority": 270,
+      "risk": "Medium",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Update readiness and review only after `D2ON-027` yields the repaired rerun verdict. State explicitly whether the program is now high-quality complete with a successful product result, high-quality complete with an exact blocker, or still needs another execution repair round.",
+      "nonGoals": [
+        "Do not fall back to another passive keep-open note.",
+        "Do not claim monitor/log success without the rerun evidence.",
+        "Do not close the resident topic with STOP unless the owner explicitly asks for it."
+      ],
+      "allowedPaths": [
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "`docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md` and `docs/prd-autodev/device-v2-onboarding-observability/review.md` are updated from the rerun result.",
+        "`docs/openclaw-autodev/evidence/d2on/D2ON-028.md` exists with `ProgramVerdict: high-quality-complete` or `ProgramVerdict: further-execution-rework-needed`.",
+        "The next-step note explicitly says whether another execution repair batch is required."
+      ],
+      "validation": [
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/review.md",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-028.md",
+        "grep -Eq '^ProgramVerdict: (high-quality-complete|further-execution-rework-needed)$' /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-028.md"
+      ],
+      "notes": [
+        "Must read first: docs/openclaw-autodev/evidence/d2on/D2ON-027.md, docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md, and docs/prd-autodev/device-v2-onboarding-observability/review.md.",
+        "This story closes the new repair round honestly; it must not repeat the doc-only drift that forced batch-008.",
+        "If the rerun still returns an exact blocker, preserve the exact tuple and say whether that blocker justifies another repair round."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1550 @@
+{
+  "taskGroup": "d2v2",
+  "updatedAt": "2026-05-16T11:32:16.898Z",
+  "stories": [
+    {
+      "id": "D2V2-001",
+      "title": "Device V2 legacy bridge contract",
+      "status": "done",
+      "priority": 10,
+      "risk": "Medium",
+      "lanes": [
+        "d2v2"
+      ],
+      "scope": "Add or verify a single-device Device V2 to Device V1 bridge contract for operation entries. Return confirmed device_v1_code or explicit missing-field/sync error; reuse existing sync-to-v1 logic.",
+      "nonGoals": "Do not change old Device V1 behavior. Do not add migrations, dependencies, mock data, silent empty success, or production config changes.",
+      "acceptance": [
+        "Frontend can request bridge status/ensure for one V2 code.",
+        "Response includes confirmed V1 code or explicit blocker reason.",
+        "Missing V1 required fields fail loudly.",
+        "Existing sync-to-v1 behavior remains covered.",
+        "Evidence summary is written."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/api/**",
+        "OneOPS/app/device/v2/dto/**",
+        "OneOPS/app/device/v2/router/**",
+        "OneOPS/app/device/v2/service/**",
+        "docs/openclaw-autodev/evidence/d2v2/**"
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/..."
+      ],
+      "notes": [
+        "Existing sync-to-v1 already backfills device_v1_code and legacy_device_code.",
+        "No intelligent frontend parsing should be required after this story."
+      ],
+      "sourcePrd": {
+        "program": "d2v2",
+        "batch": "batch-001",
+        "package": "docs/prd-autodev/d2v2/story-packages/batch-001.json",
+        "executionMode": "dependency-chain",
+        "releaseGate": "User requested immediate delegation on 2026-05-15."
+      },
+      "updatedAt": "2026-05-15T11:22:25.936Z",
+      "lastTask": "d2v2",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "d2v2",
+        "control": "DONE",
+        "ticket": "D2V2-001 Device V2 legacy bridge contract",
+        "changed": "5 paths",
+        "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... — pass",
+        "next": "D2V2-002 frontend V1 code gate can consume bridge contract",
+        "at": "2026-05-15T11:22:25.936Z",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-001 Device V2 legacy bridge contract",
+          "changed": "5 paths",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... — pass",
+          "next": "D2V2-002 frontend V1 code gate can consume bridge contract",
+          "at": "2026-05-15T11:19:25.566Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-001 Device V2 legacy bridge contract",
+          "changed": "5 paths",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... — pass",
+          "next": "D2V2-002 frontend V1 code gate can consume bridge contract",
+          "at": "2026-05-15T11:19:26.175Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-001 Device V2 legacy bridge contract",
+          "changed": "5 paths",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... — pass",
+          "next": "D2V2-002 frontend V1 code gate can consume bridge contract",
+          "at": "2026-05-15T11:20:00.823Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-001 Device V2 legacy bridge contract",
+          "changed": "5 paths",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... — pass",
+          "next": "D2V2-002 frontend V1 code gate can consume bridge contract",
+          "at": "2026-05-15T11:20:10.755Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-001 Device V2 legacy bridge contract",
+          "changed": "5 paths",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... — pass",
+          "next": "D2V2-002 frontend V1 code gate can consume bridge contract",
+          "at": "2026-05-15T11:20:11.374Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-001 Device V2 legacy bridge contract",
+          "changed": "5 paths",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... — pass",
+          "next": "D2V2-002 frontend V1 code gate can consume bridge contract",
+          "at": "2026-05-15T11:20:19.295Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-001 Device V2 legacy bridge contract",
+          "changed": "5 paths",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... — pass",
+          "next": "D2V2-002 frontend V1 code gate can consume bridge contract",
+          "at": "2026-05-15T11:20:19.917Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-001 Device V2 legacy bridge contract",
+          "changed": "5 paths",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... — pass",
+          "next": "D2V2-002 frontend V1 code gate can consume bridge contract",
+          "at": "2026-05-15T11:20:35.907Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-001 Device V2 legacy bridge contract",
+          "changed": "5 paths",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... — pass",
+          "next": "D2V2-002 frontend V1 code gate can consume bridge contract",
+          "at": "2026-05-15T11:20:35.915Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-001 Device V2 legacy bridge contract",
+          "changed": "5 paths",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... — pass",
+          "next": "D2V2-002 frontend V1 code gate can consume bridge contract",
+          "at": "2026-05-15T11:20:35.922Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-001 Device V2 legacy bridge contract",
+          "changed": "5 paths",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... — pass",
+          "next": "D2V2-002 frontend V1 code gate can consume bridge contract",
+          "at": "2026-05-15T11:20:36.026Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-001 Device V2 legacy bridge contract",
+          "changed": "5 paths",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... — pass",
+          "next": "D2V2-002 frontend V1 code gate can consume bridge contract",
+          "at": "2026-05-15T11:20:45.563Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-001 Device V2 legacy bridge contract",
+          "changed": "5 paths",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... — pass",
+          "next": "D2V2-002 frontend V1 code gate can consume bridge contract",
+          "at": "2026-05-15T11:20:55.550Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-001 Device V2 legacy bridge contract",
+          "changed": "5 paths",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... — pass",
+          "next": "D2V2-002 frontend V1 code gate can consume bridge contract",
+          "at": "2026-05-15T11:20:56.381Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-001 Device V2 legacy bridge contract",
+          "changed": "5 paths",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... — pass",
+          "next": "D2V2-002 frontend V1 code gate can consume bridge contract",
+          "at": "2026-05-15T11:21:30.599Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-001 Device V2 legacy bridge contract",
+          "changed": "5 paths",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... — pass",
+          "next": "D2V2-002 frontend V1 code gate can consume bridge contract",
+          "at": "2026-05-15T11:21:40.977Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-001 Device V2 legacy bridge contract",
+          "changed": "5 paths",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... — pass",
+          "next": "D2V2-002 frontend V1 code gate can consume bridge contract",
+          "at": "2026-05-15T11:21:41.594Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-001 Device V2 legacy bridge contract",
+          "changed": "5 paths",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... — pass",
+          "next": "D2V2-002 frontend V1 code gate can consume bridge contract",
+          "at": "2026-05-15T11:22:15.627Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-001 Device V2 legacy bridge contract",
+          "changed": "5 paths",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... — pass",
+          "next": "D2V2-002 frontend V1 code gate can consume bridge contract",
+          "at": "2026-05-15T11:22:25.274Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-001 Device V2 legacy bridge contract",
+          "changed": "5 paths",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... — pass",
+          "next": "D2V2-002 frontend V1 code gate can consume bridge contract",
+          "at": "2026-05-15T11:22:25.936Z",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-15T19:16:48+0800"
+    },
+    {
+      "id": "D2V2-002",
+      "title": "Frontend V1 code gate",
+      "status": "done",
+      "priority": 20,
+      "risk": "Medium",
+      "lanes": [
+        "d2v2"
+      ],
+      "scope": "Add a centralized frontend gate on the Device V2 redesign page that obtains confirmed V1 code before any old operation entry runs. Show bridge errors directly and stop the action.",
+      "nonGoals": "Do not open terminal, monitoring, audit, or log views in this story. Do not infer V1 code from unrelated fields.",
+      "acceptance": [
+        "One shared gate function exists.",
+        "Gate uses backend bridge response.",
+        "Failure state is visible in UI.",
+        "No action continues after bridge failure.",
+        "Evidence summary is written."
+      ],
+      "allowedPaths": [
+        "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue",
+        "OneOPS-UI/src/views/device/device-v2-redesign/**",
+        "OneOPS-UI/src/api/device/device-v2.ts",
+        "docs/openclaw-autodev/evidence/d2v2/**"
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2"
+      ],
+      "notes": [
+        "Keep old inventory page behavior unchanged."
+      ],
+      "dependsOn": [
+        "D2V2-001"
+      ],
+      "sourcePrd": {
+        "program": "d2v2",
+        "batch": "batch-001",
+        "package": "docs/prd-autodev/d2v2/story-packages/batch-001.json",
+        "executionMode": "dependency-chain",
+        "releaseGate": "User requested immediate delegation on 2026-05-15."
+      },
+      "updatedAt": "2026-05-15T11:27:26.696Z",
+      "lastTask": "d2v2",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "d2v2",
+        "control": "DONE",
+        "ticket": "D2V2-002 Frontend V1 code gate",
+        "changed": "OneOPS-UI/src/api/device/device-v2.ts; OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-002-frontend-v1-code-gate.md",
+        "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+        "next": "D2V2-003 can wire gated legacy operation entries to old implementations",
+        "at": "2026-05-15T11:27:26.696Z",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-002 Frontend V1 code gate",
+          "changed": "OneOPS-UI/src/api/device/device-v2.ts; OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-002-frontend-v1-code-gate.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-003 can wire gated legacy operation entries to old implementations",
+          "at": "2026-05-15T11:26:42.233Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-002 Frontend V1 code gate",
+          "changed": "OneOPS-UI/src/api/device/device-v2.ts; OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-002-frontend-v1-code-gate.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-003 can wire gated legacy operation entries to old implementations",
+          "at": "2026-05-15T11:26:47.346Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-002 Frontend V1 code gate",
+          "changed": "OneOPS-UI/src/api/device/device-v2.ts; OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-002-frontend-v1-code-gate.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-003 can wire gated legacy operation entries to old implementations",
+          "at": "2026-05-15T11:26:47.358Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-002 Frontend V1 code gate",
+          "changed": "OneOPS-UI/src/api/device/device-v2.ts; OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-002-frontend-v1-code-gate.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-003 can wire gated legacy operation entries to old implementations",
+          "at": "2026-05-15T11:26:47.367Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-002 Frontend V1 code gate",
+          "changed": "OneOPS-UI/src/api/device/device-v2.ts; OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-002-frontend-v1-code-gate.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-003 can wire gated legacy operation entries to old implementations",
+          "at": "2026-05-15T11:26:47.484Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-002 Frontend V1 code gate",
+          "changed": "OneOPS-UI/src/api/device/device-v2.ts; OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-002-frontend-v1-code-gate.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-003 can wire gated legacy operation entries to old implementations",
+          "at": "2026-05-15T11:26:51.965Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-002 Frontend V1 code gate",
+          "changed": "OneOPS-UI/src/api/device/device-v2.ts; OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-002-frontend-v1-code-gate.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-003 can wire gated legacy operation entries to old implementations",
+          "at": "2026-05-15T11:26:52.563Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-002 Frontend V1 code gate",
+          "changed": "OneOPS-UI/src/api/device/device-v2.ts; OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-002-frontend-v1-code-gate.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-003 can wire gated legacy operation entries to old implementations",
+          "at": "2026-05-15T11:26:57.805Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-002 Frontend V1 code gate",
+          "changed": "OneOPS-UI/src/api/device/device-v2.ts; OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-002-frontend-v1-code-gate.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-003 can wire gated legacy operation entries to old implementations",
+          "at": "2026-05-15T11:26:57.815Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-002 Frontend V1 code gate",
+          "changed": "OneOPS-UI/src/api/device/device-v2.ts; OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-002-frontend-v1-code-gate.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-003 can wire gated legacy operation entries to old implementations",
+          "at": "2026-05-15T11:26:57.825Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-002 Frontend V1 code gate",
+          "changed": "OneOPS-UI/src/api/device/device-v2.ts; OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-002-frontend-v1-code-gate.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-003 can wire gated legacy operation entries to old implementations",
+          "at": "2026-05-15T11:26:57.930Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-002 Frontend V1 code gate",
+          "changed": "OneOPS-UI/src/api/device/device-v2.ts; OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-002-frontend-v1-code-gate.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-003 can wire gated legacy operation entries to old implementations",
+          "at": "2026-05-15T11:27:08.251Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-002 Frontend V1 code gate",
+          "changed": "OneOPS-UI/src/api/device/device-v2.ts; OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-002-frontend-v1-code-gate.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-003 can wire gated legacy operation entries to old implementations",
+          "at": "2026-05-15T11:27:08.261Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-002 Frontend V1 code gate",
+          "changed": "OneOPS-UI/src/api/device/device-v2.ts; OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-002-frontend-v1-code-gate.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-003 can wire gated legacy operation entries to old implementations",
+          "at": "2026-05-15T11:27:08.270Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-002 Frontend V1 code gate",
+          "changed": "OneOPS-UI/src/api/device/device-v2.ts; OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-002-frontend-v1-code-gate.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-003 can wire gated legacy operation entries to old implementations",
+          "at": "2026-05-15T11:27:08.374Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-002 Frontend V1 code gate",
+          "changed": "OneOPS-UI/src/api/device/device-v2.ts; OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-002-frontend-v1-code-gate.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-003 can wire gated legacy operation entries to old implementations",
+          "at": "2026-05-15T11:27:18.690Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-002 Frontend V1 code gate",
+          "changed": "OneOPS-UI/src/api/device/device-v2.ts; OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-002-frontend-v1-code-gate.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-003 can wire gated legacy operation entries to old implementations",
+          "at": "2026-05-15T11:27:18.700Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-002 Frontend V1 code gate",
+          "changed": "OneOPS-UI/src/api/device/device-v2.ts; OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-002-frontend-v1-code-gate.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-003 can wire gated legacy operation entries to old implementations",
+          "at": "2026-05-15T11:27:18.709Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-002 Frontend V1 code gate",
+          "changed": "OneOPS-UI/src/api/device/device-v2.ts; OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-002-frontend-v1-code-gate.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-003 can wire gated legacy operation entries to old implementations",
+          "at": "2026-05-15T11:27:18.830Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-002 Frontend V1 code gate",
+          "changed": "OneOPS-UI/src/api/device/device-v2.ts; OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-002-frontend-v1-code-gate.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-003 can wire gated legacy operation entries to old implementations",
+          "at": "2026-05-15T11:27:26.696Z",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-15T11:22:59.841Z"
+    },
+    {
+      "id": "D2V2-003",
+      "title": "Monitoring and WebShell entries",
+      "status": "done",
+      "priority": 30,
+      "risk": "Medium",
+      "lanes": [
+        "d2v2"
+      ],
+      "scope": "Add Device V2 row/detail entries for monitoring and WebShell. Use the gate V1 code, old TerminalFull route, and old Grafana dashboard lookup/variables.",
+      "nonGoals": "Do not migrate GPU, old out-band logs, or Loki logs. Do not change the old inventory page user path.",
+      "acceptance": [
+        "Monitoring entry uses confirmed V1 device facts.",
+        "WebShell opens TerminalFull with V1 hostCode.",
+        "Row and detail entry points are present.",
+        "Old inventory behavior is preserved.",
+        "Evidence summary is written."
+      ],
+      "allowedPaths": [
+        "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue",
+        "OneOPS-UI/src/views/device/device-v2-redesign/**",
+        "OneOPS-UI/src/api/device/device-v2.ts",
+        "OneOPS-UI/src/views/device/Inventory.vue",
+        "docs/openclaw-autodev/evidence/d2v2/**"
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2"
+      ],
+      "notes": [
+        "If old code is touched, keep changes extraction-only and behavior-preserving."
+      ],
+      "dependsOn": [
+        "D2V2-002"
+      ],
+      "sourcePrd": {
+        "program": "d2v2",
+        "batch": "batch-001",
+        "package": "docs/prd-autodev/d2v2/story-packages/batch-001.json",
+        "executionMode": "dependency-chain",
+        "releaseGate": "User requested immediate delegation on 2026-05-15."
+      },
+      "updatedAt": "2026-05-15T11:32:00.120Z",
+      "lastTask": "d2v2",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "d2v2",
+        "control": "DONE",
+        "ticket": "D2V2-003 Monitoring and WebShell entries",
+        "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-003-monitoring-webshell-entries.md",
+        "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+        "next": "D2V2-004 can wire 操作审计 with confirmed V1 code",
+        "at": "2026-05-15T11:32:00.120Z",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-003 Monitoring and WebShell entries",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-003-monitoring-webshell-entries.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-004 can wire 操作审计 with confirmed V1 code",
+          "at": "2026-05-15T11:31:16.082Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-003 Monitoring and WebShell entries",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-003-monitoring-webshell-entries.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-004 can wire 操作审计 with confirmed V1 code",
+          "at": "2026-05-15T11:31:18.950Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-003 Monitoring and WebShell entries",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-003-monitoring-webshell-entries.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-004 can wire 操作审计 with confirmed V1 code",
+          "at": "2026-05-15T11:31:18.959Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-003 Monitoring and WebShell entries",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-003-monitoring-webshell-entries.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-004 can wire 操作审计 with confirmed V1 code",
+          "at": "2026-05-15T11:31:18.967Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-003 Monitoring and WebShell entries",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-003-monitoring-webshell-entries.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-004 can wire 操作审计 with confirmed V1 code",
+          "at": "2026-05-15T11:31:19.072Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-003 Monitoring and WebShell entries",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-003-monitoring-webshell-entries.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-004 can wire 操作审计 with confirmed V1 code",
+          "at": "2026-05-15T11:31:29.392Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-003 Monitoring and WebShell entries",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-003-monitoring-webshell-entries.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-004 can wire 操作审计 with confirmed V1 code",
+          "at": "2026-05-15T11:31:29.402Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-003 Monitoring and WebShell entries",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-003-monitoring-webshell-entries.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-004 can wire 操作审计 with confirmed V1 code",
+          "at": "2026-05-15T11:31:29.410Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-003 Monitoring and WebShell entries",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-003-monitoring-webshell-entries.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-004 can wire 操作审计 with confirmed V1 code",
+          "at": "2026-05-15T11:31:29.510Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-003 Monitoring and WebShell entries",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-003-monitoring-webshell-entries.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-004 can wire 操作审计 with confirmed V1 code",
+          "at": "2026-05-15T11:31:39.821Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-003 Monitoring and WebShell entries",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-003-monitoring-webshell-entries.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-004 can wire 操作审计 with confirmed V1 code",
+          "at": "2026-05-15T11:31:39.830Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-003 Monitoring and WebShell entries",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-003-monitoring-webshell-entries.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-004 can wire 操作审计 with confirmed V1 code",
+          "at": "2026-05-15T11:31:39.838Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-003 Monitoring and WebShell entries",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-003-monitoring-webshell-entries.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-004 can wire 操作审计 with confirmed V1 code",
+          "at": "2026-05-15T11:31:39.938Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-003 Monitoring and WebShell entries",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-003-monitoring-webshell-entries.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-004 can wire 操作审计 with confirmed V1 code",
+          "at": "2026-05-15T11:31:50.160Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-003 Monitoring and WebShell entries",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-003-monitoring-webshell-entries.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-004 can wire 操作审计 with confirmed V1 code",
+          "at": "2026-05-15T11:31:50.271Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-003 Monitoring and WebShell entries",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-003-monitoring-webshell-entries.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-004 can wire 操作审计 with confirmed V1 code",
+          "at": "2026-05-15T11:31:50.280Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-003 Monitoring and WebShell entries",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-003-monitoring-webshell-entries.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-004 can wire 操作审计 with confirmed V1 code",
+          "at": "2026-05-15T11:31:50.288Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-003 Monitoring and WebShell entries",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-003-monitoring-webshell-entries.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-004 can wire 操作审计 with confirmed V1 code",
+          "at": "2026-05-15T11:31:50.397Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-003 Monitoring and WebShell entries",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-003-monitoring-webshell-entries.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-004 can wire 操作审计 with confirmed V1 code",
+          "at": "2026-05-15T11:31:59.516Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-003 Monitoring and WebShell entries",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-003-monitoring-webshell-entries.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-004 can wire 操作审计 with confirmed V1 code",
+          "at": "2026-05-15T11:32:00.120Z",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-15T11:27:29.158Z"
+    },
+    {
+      "id": "D2V2-004",
+      "title": "Operation audit entry",
+      "status": "done",
+      "priority": 40,
+      "risk": "Medium",
+      "lanes": [
+        "d2v2"
+      ],
+      "scope": "Add Device V2 operation audit entry using confirmed V1 code. Reuse terminal record list/replay/download behavior and expose empty/error states without silent defaults.",
+      "nonGoals": "Do not change terminal record backend semantics. Do not invent audit records or return fake empty success.",
+      "acceptance": [
+        "Audit query uses V1 instance_code.",
+        "Replay/download reuse old implementation.",
+        "Empty and error states are distinguishable.",
+        "Old audit tab behavior is preserved.",
+        "Evidence summary is written."
+      ],
+      "allowedPaths": [
+        "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue",
+        "OneOPS-UI/src/views/device/device-v2-redesign/**",
+        "OneOPS-UI/src/api/device/device-v2.ts",
+        "OneOPS-UI/src/views/device/Inventory.vue",
+        "docs/openclaw-autodev/evidence/d2v2/**"
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2"
+      ],
+      "notes": [
+        "Do not rename user-facing 安全审计 unless the surrounding V2 copy clearly uses 操作审计."
+      ],
+      "dependsOn": [
+        "D2V2-002"
+      ],
+      "sourcePrd": {
+        "program": "d2v2",
+        "batch": "batch-001",
+        "package": "docs/prd-autodev/d2v2/story-packages/batch-001.json",
+        "executionMode": "dependency-chain",
+        "releaseGate": "User requested immediate delegation on 2026-05-15."
+      },
+      "updatedAt": "2026-05-15T11:36:01.167Z",
+      "lastTask": "d2v2",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "d2v2",
+        "control": "DONE",
+        "ticket": "D2V2-004 Operation audit entry",
+        "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-004-operation-audit-entry.md",
+        "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+        "next": "D2V2-005 can proceed if available",
+        "at": "2026-05-15T11:36:01.167Z",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-004 Operation audit entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-004-operation-audit-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-005 can proceed if available",
+          "at": "2026-05-15T11:35:19.345Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-004 Operation audit entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-004-operation-audit-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-005 can proceed if available",
+          "at": "2026-05-15T11:35:19.444Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-004 Operation audit entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-004-operation-audit-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-005 can proceed if available",
+          "at": "2026-05-15T11:35:29.785Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-004 Operation audit entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-004-operation-audit-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-005 can proceed if available",
+          "at": "2026-05-15T11:35:29.797Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-004 Operation audit entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-004-operation-audit-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-005 can proceed if available",
+          "at": "2026-05-15T11:35:29.807Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-004 Operation audit entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-004-operation-audit-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-005 can proceed if available",
+          "at": "2026-05-15T11:35:29.918Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-004 Operation audit entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-004-operation-audit-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-005 can proceed if available",
+          "at": "2026-05-15T11:35:30.342Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-004 Operation audit entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-004-operation-audit-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-005 can proceed if available",
+          "at": "2026-05-15T11:35:39.606Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-004 Operation audit entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-004-operation-audit-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-005 can proceed if available",
+          "at": "2026-05-15T11:35:40.220Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-004 Operation audit entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-004-operation-audit-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-005 can proceed if available",
+          "at": "2026-05-15T11:35:40.253Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-004 Operation audit entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-004-operation-audit-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-005 can proceed if available",
+          "at": "2026-05-15T11:35:40.264Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-004 Operation audit entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-004-operation-audit-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-005 can proceed if available",
+          "at": "2026-05-15T11:35:40.273Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-004 Operation audit entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-004-operation-audit-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-005 can proceed if available",
+          "at": "2026-05-15T11:35:40.386Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-004 Operation audit entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-004-operation-audit-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-005 can proceed if available",
+          "at": "2026-05-15T11:35:50.714Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-004 Operation audit entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-004-operation-audit-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-005 can proceed if available",
+          "at": "2026-05-15T11:35:50.725Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-004 Operation audit entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-004-operation-audit-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-005 can proceed if available",
+          "at": "2026-05-15T11:35:50.734Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-004 Operation audit entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-004-operation-audit-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-005 can proceed if available",
+          "at": "2026-05-15T11:35:50.835Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-004 Operation audit entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-004-operation-audit-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-005 can proceed if available",
+          "at": "2026-05-15T11:36:01.146Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-004 Operation audit entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-004-operation-audit-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-005 can proceed if available",
+          "at": "2026-05-15T11:36:01.157Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-004 Operation audit entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-004-operation-audit-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-005 can proceed if available",
+          "at": "2026-05-15T11:36:01.167Z",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-15T11:32:00.722Z"
+    },
+    {
+      "id": "D2V2-005",
+      "title": "Loki log placeholder entry",
+      "status": "done",
+      "priority": 50,
+      "risk": "Low",
+      "lanes": [
+        "d2v2"
+      ],
+      "scope": "Add a Device V2 日志 entry that clearly states Loki query details are pending user confirmation. Do not issue any Loki request or show old out-band logs.",
+      "nonGoals": "Do not implement Loki queries, log type selectors, or old out-band log migration.",
+      "acceptance": [
+        "Entry label is 日志.",
+        "Pending contract items are shown.",
+        "No Loki network request is made.",
+        "Old 带外日志 is not reused.",
+        "Evidence summary is written."
+      ],
+      "allowedPaths": [
+        "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue",
+        "OneOPS-UI/src/views/device/device-v2-redesign/**",
+        "docs/openclaw-autodev/evidence/d2v2/**"
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2"
+      ],
+      "notes": [
+        "List pending contract: log type, label, time range, permission, API."
+      ],
+      "dependsOn": [
+        "D2V2-002"
+      ],
+      "sourcePrd": {
+        "program": "d2v2",
+        "batch": "batch-001",
+        "package": "docs/prd-autodev/d2v2/story-packages/batch-001.json",
+        "executionMode": "dependency-chain",
+        "releaseGate": "User requested immediate delegation on 2026-05-15."
+      },
+      "updatedAt": "2026-05-15T11:43:33.122Z",
+      "lastTask": "d2v2",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "d2v2",
+        "control": "DONE",
+        "ticket": "D2V2-005 Loki log placeholder entry",
+        "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-005-loki-log-placeholder-entry.md",
+        "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+        "next": "D2V2-006 can proceed if available",
+        "at": "2026-05-15T11:43:33.122Z",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-005 Loki log placeholder entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-005-loki-log-placeholder-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-006 can proceed if available",
+          "at": "2026-05-15T11:42:49.921Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-005 Loki log placeholder entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-005-loki-log-placeholder-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-006 can proceed if available",
+          "at": "2026-05-15T11:42:58.481Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-005 Loki log placeholder entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-005-loki-log-placeholder-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-006 can proceed if available",
+          "at": "2026-05-15T11:42:59.096Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-005 Loki log placeholder entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-005-loki-log-placeholder-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-006 can proceed if available",
+          "at": "2026-05-15T11:43:00.277Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-005 Loki log placeholder entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-005-loki-log-placeholder-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-006 can proceed if available",
+          "at": "2026-05-15T11:43:00.289Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-005 Loki log placeholder entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-005-loki-log-placeholder-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-006 can proceed if available",
+          "at": "2026-05-15T11:43:00.301Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-005 Loki log placeholder entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-005-loki-log-placeholder-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-006 can proceed if available",
+          "at": "2026-05-15T11:43:00.408Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-005 Loki log placeholder entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-005-loki-log-placeholder-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-006 can proceed if available",
+          "at": "2026-05-15T11:43:10.763Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-005 Loki log placeholder entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-005-loki-log-placeholder-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-006 can proceed if available",
+          "at": "2026-05-15T11:43:10.775Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-005 Loki log placeholder entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-005-loki-log-placeholder-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-006 can proceed if available",
+          "at": "2026-05-15T11:43:10.786Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-005 Loki log placeholder entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-005-loki-log-placeholder-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-006 can proceed if available",
+          "at": "2026-05-15T11:43:10.890Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-005 Loki log placeholder entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-005-loki-log-placeholder-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-006 can proceed if available",
+          "at": "2026-05-15T11:43:21.218Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-005 Loki log placeholder entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-005-loki-log-placeholder-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-006 can proceed if available",
+          "at": "2026-05-15T11:43:21.230Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-005 Loki log placeholder entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-005-loki-log-placeholder-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-006 can proceed if available",
+          "at": "2026-05-15T11:43:21.241Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-005 Loki log placeholder entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-005-loki-log-placeholder-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-006 can proceed if available",
+          "at": "2026-05-15T11:43:21.347Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-005 Loki log placeholder entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-005-loki-log-placeholder-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-006 can proceed if available",
+          "at": "2026-05-15T11:43:31.709Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-005 Loki log placeholder entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-005-loki-log-placeholder-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-006 can proceed if available",
+          "at": "2026-05-15T11:43:31.721Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-005 Loki log placeholder entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-005-loki-log-placeholder-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-006 can proceed if available",
+          "at": "2026-05-15T11:43:31.734Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-005 Loki log placeholder entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-005-loki-log-placeholder-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-006 can proceed if available",
+          "at": "2026-05-15T11:43:31.845Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-005 Loki log placeholder entry",
+          "changed": "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue; docs/openclaw-autodev/evidence/d2v2/D2V2-005-loki-log-placeholder-entry.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2 — pass",
+          "next": "D2V2-006 can proceed if available",
+          "at": "2026-05-15T11:43:33.122Z",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-15T11:36:01.273Z"
+    },
+    {
+      "id": "D2V2-006",
+      "title": "Device V2 operations evidence",
+      "status": "blocked",
+      "priority": 60,
+      "risk": "Medium",
+      "lanes": [
+        "d2v2"
+      ],
+      "scope": "Run focused FE/BE validation and browser checks for Device V2 operation entries. Record real pass evidence or exact blockers under the d2v2 evidence directory.",
+      "nonGoals": "Do not broaden scope to unrelated D2 pages. Do not use screenshots, HTTP 200, or typecheck alone as success.",
+      "acceptance": [
+        "Go and FE validation results are recorded.",
+        "Browser evidence covers row/detail entries.",
+        "Old inventory regression check is recorded.",
+        "Any blocker is precise and actionable.",
+        "Batch summary is updated."
+      ],
+      "allowedPaths": [
+        "docs/openclaw-autodev/evidence/d2v2/**",
+        "docs/prd-autodev/d2v2/evidence/**"
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/...",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "Browser validation on http://127.0.0.1:3001/#/device/device-v2-management-redesign"
+      ],
+      "notes": [
+        "Login credentials: admin/admin@123.",
+        "If the app is served on another Vite port, record the observed port."
+      ],
+      "dependsOn": [
+        "D2V2-003",
+        "D2V2-004",
+        "D2V2-005"
+      ],
+      "sourcePrd": {
+        "program": "d2v2",
+        "batch": "batch-001",
+        "package": "docs/prd-autodev/d2v2/story-packages/batch-001.json",
+        "executionMode": "dependency-chain",
+        "releaseGate": "User requested immediate delegation on 2026-05-15."
+      },
+      "updatedAt": "2026-05-16T11:32:16.898Z",
+      "lastTask": "d2v2",
+      "lastControl": "BLOCKED",
+      "lastReport": {
+        "taskId": "d2v2",
+        "control": "BLOCKED",
+        "ticket": "report-transition-failed",
+        "changed": "unknown",
+        "tests": "not run",
+        "next": "Blocker: state manager could not classify last report",
+        "at": "2026-05-16T11:32:16.898Z",
+        "transitionReason": "blocked"
+      },
+      "events": [
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-006 Device V2 operations evidence",
+          "changed": "4 evidence/summary paths",
+          "tests": "go test ./app/device/v2/... — pass; npm run typecheck:d2 — pass",
+          "next": "Confirm Loki contract and run full synced-device click-through when available",
+          "at": "2026-05-16T08:24:06.143Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-006 Device V2 operations evidence",
+          "changed": "4 evidence/summary paths",
+          "tests": "go test ./app/device/v2/... — pass; npm run typecheck:d2 — pass",
+          "next": "Confirm Loki contract and run full synced-device click-through when available",
+          "at": "2026-05-16T08:24:39.751Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-006 Device V2 operations evidence",
+          "changed": "4 evidence/summary paths",
+          "tests": "go test ./app/device/v2/... — pass; npm run typecheck:d2 — pass",
+          "next": "Confirm Loki contract and run full synced-device click-through when available",
+          "at": "2026-05-16T08:24:48.610Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-006 Device V2 operations evidence",
+          "changed": "4 evidence/summary paths",
+          "tests": "go test ./app/device/v2/... — pass; npm run typecheck:d2 — pass",
+          "next": "Confirm Loki contract and run full synced-device click-through when available",
+          "at": "2026-05-16T08:24:49.215Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-006 Device V2 operations evidence",
+          "changed": "4 evidence/summary paths",
+          "tests": "go test ./app/device/v2/... — pass; npm run typecheck:d2 — pass",
+          "next": "Confirm Loki contract and run full synced-device click-through when available",
+          "at": "2026-05-16T08:25:22.995Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-006 Device V2 operations evidence",
+          "changed": "4 evidence/summary paths",
+          "tests": "go test ./app/device/v2/... — pass; npm run typecheck:d2 — pass",
+          "next": "Confirm Loki contract and run full synced-device click-through when available",
+          "at": "2026-05-16T08:25:31.707Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-006 Device V2 operations evidence",
+          "changed": "4 evidence/summary paths",
+          "tests": "go test ./app/device/v2/... — pass; npm run typecheck:d2 — pass",
+          "next": "Confirm Loki contract and run full synced-device click-through when available",
+          "at": "2026-05-16T08:25:32.217Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-006 Device V2 operations evidence",
+          "changed": "4 evidence/summary paths",
+          "tests": "go test ./app/device/v2/... — pass; npm run typecheck:d2 — pass",
+          "next": "Confirm Loki contract and run full synced-device click-through when available",
+          "at": "2026-05-16T08:26:06.874Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-006 Device V2 operations evidence",
+          "changed": "4 evidence/summary paths",
+          "tests": "go test ./app/device/v2/... — pass; npm run typecheck:d2 — pass",
+          "next": "Confirm Loki contract and run full synced-device click-through when available",
+          "at": "2026-05-16T08:26:15.733Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-006 Device V2 operations evidence",
+          "changed": "4 evidence/summary paths",
+          "tests": "go test ./app/device/v2/... — pass; npm run typecheck:d2 — pass",
+          "next": "Confirm Loki contract and run full synced-device click-through when available",
+          "at": "2026-05-16T08:26:16.271Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-006 Device V2 operations evidence",
+          "changed": "4 evidence/summary paths",
+          "tests": "go test ./app/device/v2/... — pass; npm run typecheck:d2 — pass",
+          "next": "Confirm Loki contract and run full synced-device click-through when available",
+          "at": "2026-05-16T08:26:49.854Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-006 Device V2 operations evidence",
+          "changed": "4 evidence/summary paths",
+          "tests": "go test ./app/device/v2/... — pass; npm run typecheck:d2 — pass",
+          "next": "Confirm Loki contract and run full synced-device click-through when available",
+          "at": "2026-05-16T08:26:58.364Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-006 Device V2 operations evidence",
+          "changed": "4 evidence/summary paths",
+          "tests": "go test ./app/device/v2/... — pass; npm run typecheck:d2 — pass",
+          "next": "Confirm Loki contract and run full synced-device click-through when available",
+          "at": "2026-05-16T08:26:58.872Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-006 Device V2 operations evidence",
+          "changed": "4 evidence/summary paths",
+          "tests": "go test ./app/device/v2/... — pass; npm run typecheck:d2 — pass",
+          "next": "Confirm Loki contract and run full synced-device click-through when available",
+          "at": "2026-05-16T08:27:32.361Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-006 Device V2 operations evidence",
+          "changed": "4 evidence/summary paths",
+          "tests": "go test ./app/device/v2/... — pass; npm run typecheck:d2 — pass",
+          "next": "Confirm Loki contract and run full synced-device click-through when available",
+          "at": "2026-05-16T08:27:40.921Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-006 Device V2 operations evidence",
+          "changed": "4 evidence/summary paths",
+          "tests": "go test ./app/device/v2/... — pass; npm run typecheck:d2 — pass",
+          "next": "Confirm Loki contract and run full synced-device click-through when available",
+          "at": "2026-05-16T08:27:41.434Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-006 Device V2 operations evidence",
+          "changed": "4 evidence/summary paths",
+          "tests": "go test ./app/device/v2/... — pass; npm run typecheck:d2 — pass",
+          "next": "Confirm Loki contract and run full synced-device click-through when available",
+          "at": "2026-05-16T08:28:15.160Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-006 Device V2 operations evidence",
+          "changed": "4 evidence/summary paths",
+          "tests": "go test ./app/device/v2/... — pass; npm run typecheck:d2 — pass",
+          "next": "Confirm Loki contract and run full synced-device click-through when available",
+          "at": "2026-05-16T08:28:23.646Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "DONE",
+          "ticket": "D2V2-006 Device V2 operations evidence",
+          "changed": "4 evidence/summary paths",
+          "tests": "go test ./app/device/v2/... — pass; npm run typecheck:d2 — pass",
+          "next": "Confirm Loki contract and run full synced-device click-through when available",
+          "at": "2026-05-16T08:28:24.153Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "d2v2",
+          "control": "BLOCKED",
+          "ticket": "report-transition-failed",
+          "changed": "unknown",
+          "tests": "not run",
+          "next": "Blocker: state manager could not classify last report",
+          "at": "2026-05-16T11:32:16.898Z",
+          "transitionReason": "blocked"
+        }
+      ]
+    }
+  ]
+}

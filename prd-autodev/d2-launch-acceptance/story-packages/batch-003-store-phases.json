@@ -1,0 +1,330 @@
+{
+  "program": "d2-launch-acceptance",
+  "batch": "batch-003-store-phases",
+  "title": "Device V2 real collection acceptance fine-grained store phases",
+  "status": "reviewed",
+  "targetTaskIds": [
+    "d2-fe",
+    "d2-be"
+  ],
+  "releaseGate": "Publish only after Batch 002 has produced a confirmed DB-derived imported sample set and the user approves controller-detect based real collection.",
+  "sharedInputs": [
+    "docs/openclaw-autodev/evidence/d2-fe/D2LA-IMPORT/sample-set.json",
+    "docs/openclaw-autodev/evidence/d2-fe/D2LA-IMPORT/imported-codes.txt"
+  ],
+  "granularityRule": "Single-device store is proven first with one device and one phase per story. After that, dedicated parallel stories may process all 5 confirmed cloned devices, still split into start, polling, and classification phases. Collection protocol is selected by controller detect; stories must not force SNMP/SSH/WinRM/DC2.",
+  "stories": [
+    {
+      "id": "D2LA-003A",
+      "title": "Store readiness gate for one DB-derived imported device",
+      "lanes": [
+        "d2-fe"
+      ],
+      "status": "open",
+      "priority": 50,
+      "risk": "Medium",
+      "scope": "For one imported D2LA device code, open the management UI or call the existing readiness endpoint, verify whether store/start is allowed, confirm credential refs and access_points are ready for controller detect, and write a compact readiness artifact for the next story.",
+      "nonGoals": "Do not start store, do not retry, do not analyze observations, and do not process multiple unrelated devices.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-fe/**"
+      ],
+      "acceptance": [
+        "Evidence includes the selected device code, original code mapping, endpoint/access_points/credential-ref presence, detect readiness, and readiness response.",
+        "Writes `readiness.json` with pass/block status and the exact next device code.",
+        "If blocked, classifies missing credential ref, missing endpoint, UI/API error, permission issue, or unknown blocker."
+      ],
+      "validation": [
+        "No code validation required unless files are changed."
+      ],
+      "handoffFiles": {
+        "inputs": [
+          "sample-set.json",
+          "imported-codes.txt",
+          "ready-for-store.json"
+        ],
+        "outputs": [
+          "readiness.json",
+          "readiness-network.json"
+        ]
+      }
+    },
+    {
+      "id": "D2LA-003B",
+      "title": "Store start for one readiness-passed device",
+      "lanes": [
+        "d2-fe"
+      ],
+      "status": "open",
+      "priority": 50,
+      "risk": "Medium",
+      "scope": "Consume `readiness.json`, trigger store/start for exactly one readiness-passed D2LA device from the management UI when possible, and persist the returned task_id for follow-up stories. Collection protocol is selected by controller detect.",
+      "nonGoals": "Do not poll observations deeply, do not retry, and do not run cleanup.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-fe/**"
+      ],
+      "acceptance": [
+        "Store/start request and response are captured with secrets redacted, and the evidence notes whether UI or same-session API was used.",
+        "Writes `store-task-id.txt` and `store-start.json`.",
+        "If no task_id is returned, records the exact API/UI blocker and stops."
+      ],
+      "validation": [
+        "No code validation required unless files are changed."
+      ],
+      "handoffFiles": {
+        "inputs": [
+          "readiness.json"
+        ],
+        "outputs": [
+          "store-start.json",
+          "store-task-id.txt"
+        ]
+      },
+      "dependsOn": [
+        "D2LA-003A"
+      ]
+    },
+    {
+      "id": "D2LA-003C",
+      "title": "Store task summary and runs polling for one task",
+      "lanes": [
+        "d2-fe"
+      ],
+      "status": "open",
+      "priority": 48,
+      "risk": "Medium",
+      "scope": "Consume `store-task-id.txt`, load task summary and runs only, and record whether the task is completed, pending, failed, or too long-running for this turn.",
+      "nonGoals": "Do not trigger retry, do not inspect observations/DC2, and do not restart collection.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-fe/**"
+      ],
+      "acceptance": [
+        "Writes `store-summary.json` and `store-runs.json`.",
+        "If the task is still pending near the time budget, writes current status and exits with a clear next polling step.",
+        "If failed, records failure stage/message without broad debugging."
+      ],
+      "validation": [
+        "No code validation required unless files are changed."
+      ],
+      "handoffFiles": {
+        "inputs": [
+          "store-task-id.txt"
+        ],
+        "outputs": [
+          "store-summary.json",
+          "store-runs.json",
+          "task-polling-note.md"
+        ]
+      },
+      "dependsOn": [
+        "D2LA-003B"
+      ]
+    },
+    {
+      "id": "D2LA-003D",
+      "title": "Store observations and latest DC2 evidence classification",
+      "lanes": [
+        "d2-fe",
+        "d2-be"
+      ],
+      "status": "open",
+      "priority": 50,
+      "risk": "Medium",
+      "scope": "Consume task summary/runs artifacts, load observations and latest DC2 for the same task/device, and classify whether real collection evidence is present.",
+      "nonGoals": "Do not start or retry store, do not edit devices, and do not do broad backend repairs.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-fe/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-be/**"
+      ],
+      "acceptance": [
+        "Writes `store-observations.json`, `latest-dc2.json`, and `collection-classification.md`.",
+        "Classification is one of: real-observations-present, dc2-present, business-empty, credential-blocked, network-blocked, backend-contract-blocked, environment-blocked, unknown.",
+        "If evidence is empty, explains the next smallest follow-up story instead of expanding scope."
+      ],
+      "validation": [
+        "No code validation required unless files are changed."
+      ],
+      "handoffFiles": {
+        "inputs": [
+          "store-summary.json",
+          "store-runs.json",
+          "ready-for-store.json"
+        ],
+        "outputs": [
+          "store-observations.json",
+          "latest-dc2.json",
+          "collection-classification.md"
+        ]
+      },
+      "dependsOn": [
+        "D2LA-003C"
+      ]
+    },
+    {
+      "id": "D2LA-003E",
+      "title": "Collection plans and retry decision for one store task",
+      "lanes": [
+        "d2-fe"
+      ],
+      "status": "open",
+      "priority": 42,
+      "risk": "Low",
+      "scope": "Consume prior store artifacts, load collection plans, and decide whether retry is warranted. Only execute retry if the prior evidence clearly supports it and approval boundaries allow it.",
+      "nonGoals": "Do not perform final launch reporting, do not delete devices, and do not retry multiple tasks.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-fe/**"
+      ],
+      "acceptance": [
+        "Writes `collection-plans.json` and `retry-decision.md`.",
+        "If retry is executed, writes `retry-task-id.txt` and the next story must poll it separately.",
+        "If retry is not executed, records why retry is unnecessary, unsafe, or blocked."
+      ],
+      "validation": [
+        "No code validation required unless files are changed."
+      ],
+      "handoffFiles": {
+        "inputs": [
+          "store-summary.json",
+          "store-runs.json",
+          "store-observations.json",
+          "latest-dc2.json",
+          "collection-classification.md"
+        ],
+        "outputs": [
+          "collection-plans.json",
+          "retry-decision.md",
+          "retry-task-id.txt only if retry is executed"
+        ]
+      },
+      "dependsOn": [
+        "D2LA-003D"
+      ]
+    },
+    {
+      "id": "D2LA-003F",
+      "title": "Parallel store start for five DB-derived imported devices",
+      "lanes": [
+        "d2-fe",
+        "d2-be"
+      ],
+      "status": "open",
+      "priority": 48,
+      "risk": "Medium",
+      "scope": "After the single-device store path is proven, consume the confirmed sample set and start store collection for all 5 cloned devices. Use controller detect; do not force protocols.",
+      "nonGoals": "Do not poll deeply, do not classify observations, and do not retry in this story.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-fe/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-be/**"
+      ],
+      "acceptance": [
+        "Writes `parallel-store-start.json` with per-device start result and task_id when available.",
+        "Records any per-device blocker without stopping unrelated device starts unless the environment is globally blocked.",
+        "All evidence redacts secrets and only records credential refs."
+      ],
+      "validation": [
+        "No code validation required unless files are changed."
+      ],
+      "handoffFiles": {
+        "inputs": [
+          "sample-set.json",
+          "ready-for-store.json",
+          "collection-classification.md"
+        ],
+        "outputs": [
+          "parallel-store-start.json"
+        ]
+      },
+      "dependsOn": [
+        "D2LA-003E"
+      ]
+    },
+    {
+      "id": "D2LA-003G",
+      "title": "Parallel store task polling for five devices",
+      "lanes": [
+        "d2-fe",
+        "d2-be"
+      ],
+      "status": "open",
+      "priority": 46,
+      "risk": "Medium",
+      "scope": "Consume `parallel-store-start.json`, poll task summary/runs for the 5 started tasks within the time budget, and persist compact per-task status.",
+      "nonGoals": "Do not retry, do not do broad debugging, and do not perform final launch reporting.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-fe/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-be/**"
+      ],
+      "acceptance": [
+        "Writes `parallel-store-status.json` with task status and run summary for each device.",
+        "If tasks remain pending, writes next polling step instead of expanding scope.",
+        "Classifies global environment blockage separately from per-device blockage."
+      ],
+      "validation": [
+        "No code validation required unless files are changed."
+      ],
+      "handoffFiles": {
+        "inputs": [
+          "parallel-store-start.json"
+        ],
+        "outputs": [
+          "parallel-store-status.json"
+        ]
+      },
+      "dependsOn": [
+        "D2LA-003F"
+      ]
+    },
+    {
+      "id": "D2LA-003H",
+      "title": "Parallel collection evidence classification for five devices",
+      "lanes": [
+        "d2-fe",
+        "d2-be"
+      ],
+      "status": "open",
+      "priority": 50,
+      "risk": "Medium",
+      "scope": "Consume `parallel-store-status.json`, load observations/latest DC2 where available, and classify collection evidence for all 5 cloned devices.",
+      "nonGoals": "Do not start new store tasks, do not retry, and do not edit or delete devices.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-fe/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-be/**"
+      ],
+      "acceptance": [
+        "Writes `parallel-collection-classification.md` and compact JSON evidence for observations/DC2.",
+        "Each device is classified as real-observations-present, dc2-present, business-empty, credential-blocked, network-blocked, backend-contract-blocked, environment-blocked, or unknown.",
+        "Provides the smallest next follow-up story for any unknown or blocked result."
+      ],
+      "validation": [
+        "No code validation required unless files are changed."
+      ],
+      "handoffFiles": {
+        "inputs": [
+          "parallel-store-status.json"
+        ],
+        "outputs": [
+          "parallel-collection-classification.md",
+          "parallel-observations.json",
+          "parallel-latest-dc2.json"
+        ]
+      },
+      "dependsOn": [
+        "D2LA-003G"
+      ]
+    }
+  ],
+  "handoffPolicy": {
+    "root": "docs/openclaw-autodev/evidence/d2-fe/D2LA-STORE/<device-code>/",
+    "rule": "Each story consumes only the previous compact artifacts and writes the next compact handoff. Do not combine readiness, start, polling, observation/DC2 classification, plans, retry decision, and retry execution in one worker turn.",
+    "fallbackHealthGate": "npm run smoke:d2-real-ops or D2P2 local fixture smoke may be run only to prove local harness health; it is not real-device proof."
+  },
+  "stopConditions": [
+    "missing credential refs or access_points needed by controller detect",
+    "selected cloned device endpoint is unreachable or readiness blocks collection",
+    "store/start does not return a task_id",
+    "task remains pending/long-running near worker budget; persist status and stop",
+    "observations/latest DC2 are empty without a business-empty classification",
+    "retry would hide credential/network/backend blockers or requires human approval",
+    "any action would touch an original non-D2LA device or perform destructive cleanup"
+  ],
+  "executionMode": "dependency-chain"
+}

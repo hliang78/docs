@@ -1,0 +1,143 @@
+{
+  "program": "device-v2-onboarding-observability",
+  "batch": "batch-008",
+  "title": "Rework the drifted execute-path batch with machine-checkable completion markers",
+  "status": "reviewed",
+  "executionMode": "dependency-chain",
+  "targetTaskIds": [
+    "d2on"
+  ],
+  "stories": [
+    {
+      "id": "D2ON-023",
+      "title": "Pin the onboarding contract to one exact controller-stage/result payload",
+      "status": "open",
+      "priority": 220,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Narrow the rework to one exact contract path only. In `OneOPS/app/device/v2/api/device_v2_onboarding_api.go`, the single-device onboarding response for `GET /device/v2/:code/onboarding` and `POST /device/v2/:code/onboarding/ensure` must always expose one `monitor_controller_stage` action whose evidence carries the exact controller-backed fields already implied by the code path: `controller_backed`, `controller_stage`, `store_run_status`, `core_store_status`, `manageable_status`, `task_id`, and `store_run_id`. In `OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue`, the continue-onboarding result area must read and visibly present that same controller stage/result combination instead of falling back to generic message-only wording. If one of those exact fields cannot be produced or surfaced, return BLOCKED with the exact file/function/missing-field blocker rather than a broad summary.",
+      "nonGoals": [
+        "Do not close the story with docs-only or evidence-only edits.",
+        "Do not widen scope beyond `device_v2_onboarding_api.go`, `device-v2.ts`, and the continue-onboarding UI presentation in `DeviceV2ManagementRedesign.vue` unless the exact contract path forces it.",
+        "Do not fabricate controller success when `controller_stage` or the controller-backed result fields are absent or empty."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/**",
+        "OneOPS-UI/src/views/device/**",
+        "OneOPS-UI/src/api/device/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "The onboarding API returns at least one `monitor_controller_stage` action whose evidence includes `controller_backed`, `controller_stage`, `store_run_status`, `core_store_status`, `manageable_status`, `task_id`, and `store_run_id` whenever a latest onboarding run exists.",
+        "The continue-onboarding UI visibly renders the exact controller stage/result combination from that action instead of reducing the result to generic success/blocker copy alone.",
+        "A durable evidence file `docs/openclaw-autodev/evidence/d2on/D2ON-023.md` is written with `Verdict: done-with-code` on DONE, or with `Verdict: exact-contract-blocker` plus the exact `file`, `function`, and `missing field` when BLOCKED."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/...",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-023.md",
+        "grep -Eq '^Verdict: (done-with-code|exact-contract-blocker)$' /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-023.md"
+      ],
+      "notes": [
+        "Rework target: D2ON-020 drifted into doc-only completion and must not be treated as a valid completion pattern.",
+        "Must read first: docs/openclaw-autodev/evidence/d2on/D2ON-018.md, docs/prd-autodev/device-v2-onboarding-observability/story-packages/batch-007.json, OneOPS/app/device/v2/api/device_v2_onboarding_api.go, OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue.",
+        "Exact backend anchor: `buildControllerBackedMonitoringAction` and `onboardingResponse` in `device_v2_onboarding_api.go`.",
+        "Exact frontend anchor: `runOnboardingEnsure`, `onboardingActionControllerStage`, and `onboardingActionStoreResult` in `DeviceV2ManagementRedesign.vue`.",
+        "If blocked, the evidence file must spell the blocker as `file=<path>`, `function=<name>`, `missing=<field or UI slot>`.",
+        "Not enough for DONE: changing only docs, changing only evidence wording, or saying the next story can do the real work."
+      ]
+    },
+    {
+      "id": "D2ON-024",
+      "title": "Probe one exact continue-onboarding entrypoint and capture the returned stage verdict",
+      "status": "open",
+      "dependsOn": [
+        "D2ON-023"
+      ],
+      "priority": 230,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "After D2ON-023 lands, use exactly one entrypoint for the live probe: the single-device continue-onboarding flow that calls `planDeviceV2OnboardingReq` and then `ensureDeviceV2OnboardingReq` from `DeviceV2ManagementRedesign.vue`. A DONE result is valid only if `docs/openclaw-autodev/evidence/d2on/D2ON-024.md` records the exact device code, monitor mode if any, whether the returned action was `monitor_controller_stage`, and the exact returned values for `controller_stage`, `store_run_status`, `core_store_status`, and `manageable_status`, or an exact blocker naming which one was missing. Do not close on a generic statement that real execution evidence is unavailable.",
+      "nonGoals": [
+        "Do not perform batch onboarding execution.",
+        "Do not hide the exact stage fields behind generic success/failure wording.",
+        "Do not treat local contract persistence as the real execution result."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/**",
+        "OneOPS-UI/src/views/device/**",
+        "OneOPS-UI/src/api/device/**",
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "A durable evidence file `docs/openclaw-autodev/evidence/d2on/D2ON-024.md` records the exact request path `plan -> ensure`, device code, monitor mode, and the returned `monitor_controller_stage` action payload or exact absence.",
+        "The evidence file must contain `Verdict: controller-trace` or `Verdict: exact-blocker`.",
+        "Any retryable, failed, blocked, or unknown outcome is preserved explicitly with the exact returned `controller_stage`, `store_run_status`, `core_store_status`, and `manageable_status` values rather than rewritten as success."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/...",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-024.md",
+        "grep -Eq '^Verdict: (controller-trace|exact-blocker)$' /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-024.md"
+      ],
+      "notes": [
+        "Rework target: D2ON-021 again drifted into doc-only completion and did not yield a controller-backed trace or exact blocker.",
+        "Must read first: docs/openclaw-autodev/evidence/d2on/D2ON-018.md, docs/openclaw-autodev/evidence/d2on/D2ON-023.md, and the exact code/evidence touched by D2ON-023.",
+        "The evidence should quote the exact payload fields returned from the onboarding API, not only a prose conclusion.",
+        "Not enough for DONE: repeating that real execution evidence is unavailable without naming the exact stage and blocker."
+      ]
+    },
+    {
+      "id": "D2ON-025",
+      "title": "Rework readiness with an explicit program verdict after the real execution result",
+      "status": "open",
+      "dependsOn": [
+        "D2ON-024"
+      ],
+      "priority": 240,
+      "risk": "Medium",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Update readiness and review only after D2ON-024 produces a machine-checkable real execution verdict. The readiness result must explicitly state whether the bounded task is now high-quality complete or whether another execution rework is required. Do not close on another passive wait note.",
+      "nonGoals": [
+        "Do not close the whole program unless the real execution result truly justifies it.",
+        "Do not restate old passive waiting language.",
+        "Do not skip the explicit quality verdict."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/**",
+        "OneOPS-UI/src/views/device/**",
+        "OneOPS-UI/src/api/device/**",
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "final-readiness.md and review.md are updated from the new real execution result rather than from passive waiting.",
+        "A durable evidence file `docs/openclaw-autodev/evidence/d2on/D2ON-025.md` is written with `ProgramVerdict: high-quality-complete` or `ProgramVerdict: further-execution-rework-needed`.",
+        "The next-step note explicitly states whether another execution rework batch is required."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/...",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/review.md",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-025.md",
+        "grep -Eq '^ProgramVerdict: (high-quality-complete|further-execution-rework-needed)$' /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-025.md"
+      ],
+      "notes": [
+        "Rework target: D2ON-022 closed the batch without a trustworthy quality verdict on the real execution task.",
+        "Must read first: docs/openclaw-autodev/evidence/d2on/D2ON-024.md, docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md, docs/prd-autodev/device-v2-onboarding-observability/review.md.",
+        "Not enough for DONE: another passive wait conclusion or another formal completion note that does not classify the real task quality."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "program": "d2-launch-acceptance",
+  "batch": "batch-001-backend-contract-addendum",
+  "title": "Device V2 backend contract gate addendum",
+  "status": "draft",
+  "targetTaskIds": ["d2-be"],
+  "releaseGate": "Use if Batch 001 needs a separate backend-focused turn instead of folding contract work into D2LA-001.",
+  "stories": [
+    {
+      "id": "D2LA-001B",
+      "title": "Backend contract snapshot and test gate for DB-derived acceptance",
+      "lanes": ["d2-be"],
+      "status": "open",
+      "priority": 48,
+      "risk": "Medium",
+      "scope": "Produce a Device V2 backend contract snapshot for DB-derived import and store acceptance, run approved backend tests, and make only small Device V2 scoped fixes if concrete contract gaps appear.",
+      "nonGoals": "Do not change migrations, production config, credential-system implementation, auth, tenant logic, or broad external integrations.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/OneOPS/app/device/v2/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-be/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/d2-launch-acceptance/**"
+      ],
+      "acceptance": [
+        "Writes `backend-contract-snapshot.md` with routes, DTO fields, import fields, store evidence APIs, error semantics, and useful API example responses.",
+        "Runs `go test ./app/device/v2/...` and `go test ./app/device/v2/ingest/...`, or records `environment-blocked` with exact reason.",
+        "Any backend fix stays inside Device V2 paths and is tied to a concrete acceptance blocker.",
+        "No plaintext credential material appears in evidence."
+      ],
+      "validation": [
+        "go test ./app/device/v2/...",
+        "go test ./app/device/v2/ingest/..."
+      ],
+      "notes": [
+        "If tests require unavailable real DB or external collection infrastructure, stop with `environment-blocked`; do not broaden into environment repair in this story."
+      ]
+    }
+  ]
+}

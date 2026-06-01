@@ -1,0 +1,390 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://oneops.local/openclaw-autodev/story-execution-pack-schema.json",
+  "title": "OpenClaw Story Execution Pack",
+  "type": "object",
+  "required": [
+    "taskId",
+    "workerProfileId",
+    "taskKind",
+    "environmentKind",
+    "projectRoot",
+    "sourceOfTruth",
+    "currentStory",
+    "contextPack",
+    "actionPolicy",
+    "runtimePolicy",
+    "verificationPolicy",
+    "outputContract",
+    "evidenceContract",
+    "recoveryPolicy"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "taskId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "workerProfileId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "taskKind": {
+      "type": "string",
+      "enum": [
+        "code_patch",
+        "product_implementation",
+        "validation_only",
+        "browser_verification",
+        "doc_fact_extraction",
+        "readonly_discovery",
+        "remote_readonly",
+        "remote_apply",
+        "coordination_only"
+      ]
+    },
+    "environmentKind": {
+      "type": "string",
+      "enum": [
+        "local_workspace",
+        "copied_workspace",
+        "local_runtime",
+        "browser_localhost",
+        "browser_test_env",
+        "db_readonly",
+        "api_readonly",
+        "remote_readonly",
+        "remote_apply"
+      ]
+    },
+    "projectRoot": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceOfTruth": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "currentStory": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "status",
+        "scope",
+        "acceptance",
+        "validation"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": ["open", "in_progress", "blocked", "approval", "done"]
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "nonGoals": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "allowedPaths": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "acceptance": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "validation": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "dependsOn": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "contextPack": {
+      "type": "object",
+      "required": [
+        "mustRead",
+        "optionalRead",
+        "forbiddenRead",
+        "readBudgetRules"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "mustRead": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "optionalRead": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "forbiddenRead": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "readBudgetRules": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "actionPolicy": {
+      "type": "object",
+      "required": [
+        "allowedWrites",
+        "allowedActions",
+        "deniedActions"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "allowedWrites": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "deniedActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "approvalProfilesAllowed": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "runtimePolicy": {
+      "type": "object",
+      "required": [
+        "maxTurns",
+        "maxMinutes",
+        "timeoutSeconds",
+        "patchMaxFiles"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "precheckCommands": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "maxTurns": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "maxMinutes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "timeoutSeconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "patchMaxFiles": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "workspaceIsolated": {
+          "type": "boolean"
+        }
+      }
+    },
+    "verificationPolicy": {
+      "type": "object",
+      "required": [
+        "workerValidationCommands",
+        "controllerVerifyOnDone",
+        "successCriteria"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "workerValidationCommands": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "controllerVerifyOnDone": {
+          "type": "boolean"
+        },
+        "controllerVerifyCommand": {
+          "type": "string"
+        },
+        "successCriteria": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "blockedClasses": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "automation.model_runtime",
+              "automation.controller_or_story",
+              "automation.health_check",
+              "environment.runtime",
+              "business.authorization",
+              "business.optimization",
+              "unknown.blocked"
+            ]
+          }
+        }
+      }
+    },
+    "outputContract": {
+      "type": "object",
+      "required": [
+        "requiresFooter",
+        "footerFields"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "requiresFooter": {
+          "type": "boolean"
+        },
+        "footerFields": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [
+              "LoopControl",
+              "Task",
+              "Status",
+              "Ticket",
+              "Changed",
+              "Tests",
+              "Next"
+            ]
+          }
+        },
+        "maxReportLines": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "evidenceContract": {
+      "type": "object",
+      "required": [
+        "required",
+        "summaryPathTemplate"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "summaryPathTemplate": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requiredClaimFields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "recoveryPolicy": {
+      "type": "object",
+      "required": [
+        "maxRepairAttempts",
+        "controllerValidationFailedRequiresEvidenceRead"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "maxRepairAttempts": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "controllerValidationFailedRequiresEvidenceRead": {
+          "type": "boolean"
+        },
+        "retryAllowedForClasses": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "automation.model_runtime",
+              "automation.health_check",
+              "environment.runtime"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "program": "oneops-engineering-docs-standardization",
+  "batch": "batch-002-device-v2-engineering-docs",
+  "title": "Device V2 入库与设备管理工程文档",
+  "status": "superseded",
+  "supersededBy": "batch-003-device-v2-code-fact-standard-docs",
+  "supersededReason": "本批是上一版较粗的工程文档初稿方式，未按 docs/development-doc-templates/01-07、方向包、深度代码事实提取和代码事实来源清单规则生成；后续以 batch-003 及 story-generation-guide.md 为准。",
+  "executionMode": "dependency-chain",
+  "targetTaskIds": [
+    "dev-docs"
+  ],
+  "releaseGate": "用户确认首批工程化文档方向为 Device V2 入库和 Device V2 设备管理；本批只生成中文工程文档初稿与 evidence，不确认产品需求、架构决策、API 契约、数据模型、权限或验收标准。",
+  "stories": [
+    {
+      "id": "DEV-DOCS-002A",
+      "status": "cancelled",
+      "lanes": [
+        "dev-docs"
+      ],
+      "title": "建立 Device V2 工程文档结构索引",
+      "priority": 40,
+      "risk": "Low",
+      "scope": "在 docs/development/device-v2/ 下建立中文工程文档入口，定义入库与设备管理两个方向的文档结构、状态门禁、来源材料和待人工确认清单。",
+      "nonGoals": "不确认任何业务规则、API path、DTO、数据库字段、权限模型、fixture、验收口径；不修改产品代码和既有 D2 PRD。",
+      "allowedPaths": [
+        "docs/development/device-v2/**",
+        "docs/openclaw-autodev/evidence/dev-docs/**"
+      ],
+      "acceptance": [
+        "生成 docs/development/device-v2/README.md。",
+        "README 明确文档状态为 blocked-human-confirmation。",
+        "README 分出入库和设备管理两个方向。",
+        "README 列出来源材料和待人工确认清单。"
+      ],
+      "validation": [
+        "test -f docs/development/device-v2/README.md",
+        "rg -n \"blocked-human-confirmation|Device V2 入库|Device V2 设备管理|待人工确认\" docs/development/device-v2/README.md",
+        "git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs"
+      ],
+      "notes": [
+        "来源 PRD: docs/prd-autodev/oneops-engineering-docs-standardization/prd.md",
+        "业务材料: docs/prd-autodev/d2-launch-acceptance/**, docs/openclaw-autodev/shared-d2.md"
+      ]
+    },
+    {
+      "id": "DEV-DOCS-002B",
+      "status": "cancelled",
+      "dependsOn": [
+        "DEV-DOCS-002A"
+      ],
+      "lanes": [
+        "dev-docs"
+      ],
+      "title": "编写 Device V2 入库工程文档初稿",
+      "priority": 45,
+      "risk": "Low",
+      "scope": "基于现有 D2 PRD、验收 evidence 和 shared-d2，编写 Device V2 入库方向中文工程文档初稿，描述流程、证据、风险和占位，保持不可直接执行状态。",
+      "nonGoals": "不新增或确认接口契约、字段类型、数据库模型、权限、真实 fixture、采集策略或验收结论；不改产品代码。",
+      "allowedPaths": [
+        "docs/development/device-v2/**",
+        "docs/openclaw-autodev/evidence/dev-docs/**"
+      ],
+      "acceptance": [
+        "生成 docs/development/device-v2/ingest.md。",
+        "文档主体为中文。",
+        "未确认内容使用待人工确认或待补充占位。",
+        "文档明确不能直接作为开发或验收依据。"
+      ],
+      "validation": [
+        "test -f docs/development/device-v2/ingest.md",
+        "rg -n \"blocked-human-confirmation|待人工确认|不可直接|入库\" docs/development/device-v2/ingest.md",
+        "git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs"
+      ],
+      "notes": [
+        "重点方向: Device V2 入库工作台、Excel/import batch、upload/validate/apply、handoff。",
+        "只做工程文档初稿，不把 D2 验收结论提升为正式设计。"
+      ]
+    },
+    {
+      "id": "DEV-DOCS-002C",
+      "status": "cancelled",
+      "dependsOn": [
+        "DEV-DOCS-002B"
+      ],
+      "lanes": [
+        "dev-docs"
+      ],
+      "title": "编写 Device V2 设备管理工程文档初稿",
+      "priority": 50,
+      "risk": "Low",
+      "scope": "基于现有 D2 PRD、验收 evidence 和 shared-d2，编写 Device V2 设备管理方向中文工程文档初稿，覆盖清册、详情、编辑、删除或保留、采集证据和人工占位。",
+      "nonGoals": "不确认清册字段、权限、删除策略、采集协议、生产操作、验收通过标准；不修改产品代码和自动化运行配置之外的文件。",
+      "allowedPaths": [
+        "docs/development/device-v2/**",
+        "docs/openclaw-autodev/evidence/dev-docs/**"
+      ],
+      "acceptance": [
+        "生成 docs/development/device-v2/management.md。",
+        "README 链接入库和设备管理文档。",
+        "设备管理文档保留人工确认占位。",
+        "生成本批 evidence summary。"
+      ],
+      "validation": [
+        "test -f docs/development/device-v2/management.md",
+        "rg -n \"blocked-human-confirmation|待人工确认|设备管理|清册\" docs/development/device-v2/management.md",
+        "test -f docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+        "git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs"
+      ],
+      "notes": [
+        "重点方向: 设备 V2 清册管理、详情/编辑/删除或保留、store/start、task evidence。",
+        "最终文档必须中文优先，英文只保留给必要标识和状态词。"
+      ]
+    }
+  ]
+}

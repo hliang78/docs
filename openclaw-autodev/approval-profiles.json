@@ -1,0 +1,164 @@
+{
+  "version": 1,
+  "profiles": {
+    "discovery-readonly": {
+      "title": "Read-only discovery using task-approved targets",
+      "risk": "medium",
+      "description": "Allow a task to use its already documented/approved test targets for read-only DB/API and remote discovery.",
+      "requiresTarget": false,
+      "expiresHours": 12,
+      "allowed": [
+        "Use task-documented approved test targets for read-only discovery.",
+        "Run read-only database/API checks and remote inspection commands needed by the active story.",
+        "Use runtime-only credentials/tokens supplied outside repository files."
+      ],
+      "denied": [
+        "No configuration-changing remote commands, database writes, schema changes, deletes, production mutations, or batch apply.",
+        "No scanning unrelated hosts or expanding beyond task-documented targets.",
+        "No persistence of credentials, tokens, cookies, SNMP communities, private keys, passwords, or raw secret-bearing output."
+      ],
+      "evidenceRequired": [
+        "Record approved targets used, read-only command/query/API intent, redacted result summary, and no-configuration-change statement."
+      ]
+    },
+    "readonly-db-api": {
+      "title": "Read-only database and backend API testing",
+      "risk": "low",
+      "description": "Allow read-only test database access and backend API calls with runtime-only credentials/tokens.",
+      "requiresTarget": false,
+      "expiresHours": 24,
+      "allowed": [
+        "Read-only queries against explicitly authorized test databases.",
+        "Backend API calls against test/local environments using runtime-provided authorization headers.",
+        "Evidence may record query intent, target environment, response shape, and redacted summaries."
+      ],
+      "denied": [
+        "No database writes, schema changes, migrations, deletes, or production data mutation.",
+        "No persistence of database passwords, API tokens, headers, raw credential fields, or secret-bearing payloads in code, docs, config, logs, or evidence.",
+        "No use of test credentials as product defaults."
+      ],
+      "evidenceRequired": [
+        "Record whether access was read-only, which non-secret target was used, and the redaction boundary."
+      ]
+    },
+    "frontend-test": {
+      "title": "Frontend visual testing",
+      "risk": "low",
+      "description": "Allow Chrome DevTools driven frontend login, navigation, screenshots, and visual verification.",
+      "requiresTarget": false,
+      "expiresHours": 24,
+      "allowed": [
+        "Use Chrome DevTools/browser tooling to log in with authorized test accounts.",
+        "Navigate local/test frontend pages, capture screenshots, inspect DOM/network, and verify visual behavior.",
+        "Restart or refresh local frontend dev server if the story validation requires it."
+      ],
+      "denied": [
+        "No production account use unless explicitly included in the approval target.",
+        "No storage of passwords, cookies, tokens, or session secrets in repository files or evidence.",
+        "No global frontend style/API behavior changes outside the active task allowed paths."
+      ],
+      "evidenceRequired": [
+        "Record tested URL, browser validation summary, and screenshot/evidence paths when relevant."
+      ]
+    },
+    "backend-restart": {
+      "title": "Backend runtime restart for testing",
+      "risk": "medium",
+      "description": "Allow taking over and restarting the local/test backend runtime for validation.",
+      "requiresTarget": false,
+      "expiresHours": 12,
+      "allowed": [
+        "Stop stale local/test backend processes owned by the workspace validation flow.",
+        "Start or restart the configured backend runtime for the active task.",
+        "Run health checks and configured validation after restart."
+      ],
+      "denied": [
+        "No production deployment, production process restart, or service-manager changes.",
+        "No destructive cleanup, data reset, migration, dependency upgrade, commit, or push.",
+        "No masking startup errors with fallback/mock responses."
+      ],
+      "evidenceRequired": [
+        "Record restart command, process/port summary, health result, and any logs used for diagnosis."
+      ]
+    },
+    "remote-readonly": {
+      "title": "Remote read-only discovery",
+      "risk": "medium",
+      "description": "Allow remote login to explicitly targeted servers/network devices for read-only discovery.",
+      "requiresTarget": true,
+      "expiresHours": 12,
+      "allowed": [
+        "Remote login to the approved target only.",
+        "Run read-only inspection commands for logs, OS/platform clues, current network-device config display, and command-family discovery.",
+        "Use runtime-only SSH/API/device credentials supplied outside repository files."
+      ],
+      "denied": [
+        "No configuration-changing commands, saves, commits, reloads, service restarts, package installs, file edits, or target data deletion.",
+        "No brute force, credential guessing, or scanning unrelated hosts.",
+        "No persistence of credentials, tokens, SNMP communities, private keys, cookies, or raw secret-bearing output."
+      ],
+      "evidenceRequired": [
+        "Record target, read-only commands, exit status, redacted output summary, and explicit no-configuration-change statement."
+      ]
+    },
+    "controller-remote-readonly": {
+      "title": "Controller remote API read-only verification",
+      "risk": "medium",
+      "description": "Allow a task to call controller-provided remote access APIs for read-only verification on one explicit target.",
+      "requiresTarget": true,
+      "expiresHours": 12,
+      "allowed": [
+        "Call controller /api/v1/remote/run or session APIs for approved read-only verification against the approved server, network device, SNMP, or WinRM target.",
+        "Use runtime-only credentials or tokens supplied outside repository files.",
+        "Record redacted request intent, target, result status, and verification summary."
+      ],
+      "denied": [
+        "No configuration-changing commands, save/commit/reload, broad batch scope, guessed commands, or target expansion beyond the approved scope.",
+        "No persistence of controller auth tokens, SSH passwords, private keys, SNMP communities, WinRM passwords, cookies, or raw secret-bearing output.",
+        "No treating controller/API/remote failures as success."
+      ],
+      "evidenceRequired": [
+        "Record target, controller endpoint, read-only command intent, response status, redacted output summary, and explicit no-configuration-change statement."
+      ]
+    },
+    "network-apply-syslog": {
+      "title": "Network-device syslog configuration apply",
+      "risk": "high",
+      "description": "Allow applying syslog target configuration to one explicitly approved network device.",
+      "requiresTarget": true,
+      "expiresHours": 4,
+      "allowed": [
+        "Apply explicit reviewed syslog configuration commands to the approved network-device target.",
+        "Use the configured network-device execution library/protocol for the active task.",
+        "Verify resulting configuration with read-only display/show commands."
+      ],
+      "denied": [
+        "No wildcard device scope or batch apply.",
+        "No guessed vendor commands, inferred listener address, or unreviewed template.",
+        "No SNMP trap apply, save/reboot, unrelated config changes, rollback, commit/push, or production route changes unless separately approved."
+      ],
+      "evidenceRequired": [
+        "Record approved target, rendered commands with secrets redacted, precheck, apply result, verification output, and rollback/restore note if applicable."
+      ]
+    },
+    "server-apply-via-controller": {
+      "title": "Server remote apply through controller API",
+      "risk": "high",
+      "description": "Allow server remote configuration only through controller-provided APIs for one explicit target/scope.",
+      "requiresTarget": true,
+      "expiresHours": 4,
+      "allowed": [
+        "Call controller-provided APIs to perform approved server remote configuration for the approved target.",
+        "Record controller request intent, response result, and verification evidence with secrets redacted."
+      ],
+      "denied": [
+        "No direct business-path SSH bypass for server apply.",
+        "No guessed commands, broad batch execution, production config changes, raw credential persistence, dependency changes, commit, or push.",
+        "No treating controller failure as success."
+      ],
+      "evidenceRequired": [
+        "Record target, controller API endpoint, request intent, response status, and failure details if any."
+      ]
+    }
+  }
+}

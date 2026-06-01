@@ -1,0 +1,270 @@
+{
+  "program": "device-v2-onboarding-observability",
+  "batch": "batch-013",
+  "title": "Validate observed data in Prometheus and Loki",
+  "status": "reviewed",
+  "executionMode": "dependency-chain",
+  "releaseGate": "Owner upgraded scope after batch-012: metrics must be queryable in Prometheus; server local logs, server syslog logs, network syslog logs, and network SNMP trap logs must be queryable in Loki or recorded as exact blockers.",
+  "targetTaskIds": [
+    "d2on"
+  ],
+  "stories": [
+    {
+      "id": "D2ON-049",
+      "title": "Prepare Prometheus and Loki query tooling",
+      "status": "done",
+      "priority": 410,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Add reusable Prometheus/Loki query APIs to oneops_test_tool so observed-data validation can use stable local endpoints instead of ad hoc curl commands.",
+      "nonGoals": [
+        "Do not change OneOPS onboarding behavior in this story.",
+        "Do not assert data-plane success just because query tooling works.",
+        "Do not store credentials or large raw logs in evidence."
+      ],
+      "allowedPaths": [
+        "OneOPS/cmd/oneops_test_tool/**",
+        "docs/openclaw-autodev/evidence/d2on/**",
+        "docs/prd-autodev/device-v2-onboarding-observability/**"
+      ],
+      "acceptance": [
+        "oneops_test_tool exposes Prometheus instant/range/metrics query APIs.",
+        "oneops_test_tool exposes Loki labels/range query APIs.",
+        "Responses include backend endpoint, upstream status, result type, hit count, and stream count where applicable.",
+        "Live checks against Prometheus and Loki endpoints are recorded."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./cmd/oneops_test_tool",
+        "curl -sS 'http://127.0.0.1:19091/api/v1/observability/prometheus/query?query=up'",
+        "curl -sS -X POST http://127.0.0.1:19091/api/v1/observability/loki/query_range -H 'Content-Type: application/json' -d '{\"query\":\"{__name=~\\\"tail|syslog|snmp_trap\\\"}\",\"since\":\"30m\",\"limit\":5}'"
+      ],
+      "notes": [
+        "Live Prometheus endpoint: http://192.168.0.164:9090.",
+        "Live Loki endpoint: http://192.168.0.164:3100."
+      ]
+    },
+    {
+      "id": "D2ON-050",
+      "title": "Define observed-data evidence contract",
+      "status": "done",
+      "dependsOn": [
+        "D2ON-049"
+      ],
+      "priority": 420,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Define the observed-data onboarding evidence keys and query catalog for Prometheus metrics plus Loki server local logs, server syslog, network syslog, and SNMP trap. The contract must distinguish success, pending/no_samples, blocked, and query_failed.",
+      "nonGoals": [
+        "Do not claim observed-data success without a query hit.",
+        "Do not introduce a new onboarding DAG.",
+        "Do not persist full raw log payloads."
+      ],
+      "allowedPaths": [
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**",
+        "OneOPS/app/device/v2/api/**",
+        "OneOPS/app/device/v2/model/**"
+      ],
+      "acceptance": [
+        "Evidence keys are named explicitly: metric_observed, server_local_log_observed, server_syslog_observed, network_syslog_observed, snmp_trap_observed.",
+        "Each key records query backend, endpoint, query summary, window, hit_count, stream_count, sample summary, and blocker.",
+        "No-sample results are preserved as pending/no_samples, not success.",
+        "Focused tests or contract examples cover success and no-samples outcomes."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/api"
+      ],
+      "notes": [
+        "Use D2ON-049 query-tool response shape as the evidence input contract."
+      ]
+    },
+    {
+      "id": "D2ON-051",
+      "title": "Validate Prometheus metrics for ready devices",
+      "status": "done",
+      "dependsOn": [
+        "D2ON-050"
+      ],
+      "priority": 430,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Use oneops_test_tool Prometheus APIs to verify metric samples for selected ready devices. Prefer known ready network devices with ping/SNMP metrics and record exact queries and hit counts.",
+      "nonGoals": [
+        "Do not run broad fleet validation.",
+        "Do not treat metric-name presence as device-specific success.",
+        "Do not change monitoring templates unless a precise blocker requires it."
+      ],
+      "allowedPaths": [
+        "docs/openclaw-autodev/evidence/d2on/**",
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "OneOPS/app/device/v2/api/**"
+      ],
+      "acceptance": [
+        "At least one selected ready device has a Prometheus query result or exact no-samples/blocker evidence.",
+        "Evidence records PromQL, endpoint, window, hit_count, and selected device identity.",
+        "If labels do not map to device_code, the label mismatch is recorded explicitly."
+      ],
+      "validation": [
+        "GET /api/v1/observability/prometheus/metrics",
+        "GET|POST /api/v1/observability/prometheus/query or query_range"
+      ],
+      "notes": [
+        "Prometheus metric names currently include ping_result_code and snmp_interface_ifOperStatus."
+      ]
+    },
+    {
+      "id": "D2ON-052",
+      "title": "Validate server local and server syslog logs in Loki",
+      "status": "done",
+      "dependsOn": [
+        "D2ON-050"
+      ],
+      "priority": 440,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Use oneops_test_tool Loki range queries to validate server local log and server syslog samples for a bounded server device. Record hits or exact blockers separately for local-file/tail and syslog paths.",
+      "nonGoals": [
+        "Do not claim server local logs from server syslog samples.",
+        "Do not dump large raw log bodies into evidence.",
+        "Do not require alert generation."
+      ],
+      "allowedPaths": [
+        "docs/openclaw-autodev/evidence/d2on/**",
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "OneOPS/app/platform/**",
+        "OneOPS/app/device/v2/api/**"
+      ],
+      "acceptance": [
+        "server_local_log_observed and server_syslog_observed are recorded separately.",
+        "Each Loki query records endpoint, LogQL, window, hit_count, stream_count, and sample summary or exact no-samples blocker.",
+        "If the collector has no samples, evidence points to the listener/task/config stage that should be repaired next."
+      ],
+      "validation": [
+        "POST /api/v1/observability/loki/query_range"
+      ],
+      "notes": [
+        "Known server syslog delivery device from prior scope: DVC8B7374049C21.",
+        "D2ON-052 closed with server_syslog_observed=queryable and server_local_log_observed=blocked: tail task is converged/running with grok and name_override=tail, but no Loki tail series appears and remote agent file upload/download is not implemented for a safe local probe line."
+      ]
+    },
+    {
+      "id": "D2ON-053",
+      "title": "Validate network syslog logs in Loki",
+      "status": "done",
+      "dependsOn": [
+        "D2ON-050"
+      ],
+      "priority": 450,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Use oneops_test_tool Loki range queries to validate network-device syslog samples for a bounded ready H3C/Comware device. Record hits or exact blockers without reopening the configuration/readback closure.",
+      "nonGoals": [
+        "Do not rerun broad batch onboarding.",
+        "Do not assume syslog target configured means Loki data arrived.",
+        "Do not validate every network vendor."
+      ],
+      "allowedPaths": [
+        "docs/openclaw-autodev/evidence/d2on/**",
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "OneOPS/app/device/v2/api/**"
+      ],
+      "acceptance": [
+        "network_syslog_observed records the Loki query result for a selected ready network device.",
+        "Evidence includes device code, IP, listener endpoint, LogQL, window, hit_count, stream_count, and sample summary or exact blocker.",
+        "No-samples outcome is not reported as success."
+      ],
+      "validation": [
+        "POST /api/v1/observability/loki/query_range"
+      ],
+      "notes": [
+        "Preferred network probe device: DVCD25E1C13D3C3 / 172.32.2.14.",
+        "D2ON-053 closed with network_syslog_observed=no_samples: target configuration/readback is successful and Loki has server syslog samples, but no source/hostname/message match for 172.32.2.14 / R11 appears in the bounded query window."
+      ]
+    },
+    {
+      "id": "D2ON-054",
+      "title": "Validate network SNMP trap logs in Loki",
+      "status": "done",
+      "dependsOn": [
+        "D2ON-050",
+        "D2ON-053"
+      ],
+      "priority": 460,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Use oneops_test_tool Loki range queries to validate SNMP trap samples from the H3C/Comware trap target path. If no trap is naturally emitted, record exact no-samples evidence and the next bounded generation strategy.",
+      "nonGoals": [
+        "Do not claim trap data-plane closure from target readback alone.",
+        "Do not send unsafe disruptive trap-generating commands.",
+        "Do not require alert/RCA validation."
+      ],
+      "allowedPaths": [
+        "docs/openclaw-autodev/evidence/d2on/**",
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "OneOPS/app/device/v2/api/**"
+      ],
+      "acceptance": [
+        "snmp_trap_observed records a Loki query result for trap samples or exact no-samples blocker.",
+        "Evidence includes managed trap listener identity, endpoint, LogQL, window, hit_count, stream_count, and sample summary if present.",
+        "If a synthetic or device-triggered trap is needed, the strategy is documented before execution."
+      ],
+      "validation": [
+        "POST /api/v1/observability/loki/query_range"
+      ],
+      "notes": [
+        "D2ON-048 configured trap target for DVCD25E1C13D3C3 to 192.168.100.6:162.",
+        "D2ON-054 closed with snmp_trap_observed=no_samples: trap target configuration/readback is successful, but no Loki snmp_trap stream or trap/SNMP syslog fallback sample appears in the bounded 6h query window."
+      ]
+    },
+    {
+      "id": "D2ON-055",
+      "title": "Close observed-data readiness",
+      "status": "done",
+      "dependsOn": [
+        "D2ON-051",
+        "D2ON-052",
+        "D2ON-053",
+        "D2ON-054"
+      ],
+      "priority": 470,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Summarize observed-data closure for batch-013. Mark each category as queryable, pending/no_samples, blocked, or failed, and update readiness/review without reopening batch-012.",
+      "nonGoals": [
+        "Do not hide partial data-plane results behind one aggregate success.",
+        "Do not claim alert/RCA closure.",
+        "Do not broaden to every device."
+      ],
+      "allowedPaths": [
+        "docs/openclaw-autodev/evidence/d2on/**",
+        "docs/prd-autodev/device-v2-onboarding-observability/**"
+      ],
+      "acceptance": [
+        "Final readiness lists metrics, server local logs, server syslog, network syslog, and SNMP trap outcomes separately.",
+        "Each outcome links to machine-checkable evidence.",
+        "Open blockers are exact and actionable."
+      ],
+      "validation": [
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-055.md"
+      ],
+      "notes": [
+        "This is the closure gate for the upgraded scope, not a code-only story.",
+        "D2ON-055 closes batch-013 as observed-data readiness with exact blockers: metrics and server syslog are queryable; server local tail is blocked; network syslog and SNMP trap are no_samples after successful device-side readback."
+      ]
+    }
+  ]
+}

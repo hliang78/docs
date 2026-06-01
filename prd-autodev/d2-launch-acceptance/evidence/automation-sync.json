@@ -1,0 +1,476 @@
+{
+  "topic": "d2-launch-acceptance",
+  "taskGroup": "d2",
+  "storyFile": "docs/openclaw-autodev/stories/d2.json",
+  "generatedAt": "2026-05-15T12:17:14+0800",
+  "publish": {
+    "mode": "report-only",
+    "appended": [],
+    "skippedExisting": [],
+    "skippedDraft": []
+  },
+  "totals": {
+    "allPackageStories": 28,
+    "reviewedPackageStories": 27,
+    "missingStories": 0,
+    "activeStories": 1,
+    "doneStories": 26,
+    "draftMissingStories": 1
+  },
+  "closureState": "automation-linked-in-progress",
+  "readiness": {
+    "file": "/Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/d2-launch-acceptance/evidence/final-readiness.md",
+    "state": "present",
+    "reason": "final readiness document has no obvious pending marker"
+  },
+  "dependencyErrors": [],
+  "storyAudit": {
+    "errors": [
+      "batch-001-backend-contract-addendum.json:D2LA-001B: allowedPath is outside configured lane writes: /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/d2-launch-acceptance/**",
+      "batch-001.json:D2LA-001: allowedPath is outside configured lane writes: /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/d2-launch-acceptance/**",
+      "batch-001.json:D2LA-002: allowedPath is outside configured lane writes: /Users/huangliang/project/OneOPS-ALL/OneOPS-UI/src/views/cmdb/**",
+      "batch-001.json:D2LA-003: allowedPath is outside configured lane writes: /Users/huangliang/project/OneOPS-ALL/OneOPS-UI/scripts/d2-real-operation-smoke.cjs"
+    ],
+    "warnings": [
+      "backend-small-slices.json:D2LA-BE-SLICE-002: story should name a concrete evidence/report artifact for the worker to produce or update",
+      "backend-small-slices.json:D2LA-BE-SLICE-003: story should name a concrete evidence/report artifact for the worker to produce or update",
+      "batch-001.json:D2LA-001: broad allowedPath should be narrowed before publishing: /Users/huangliang/project/OneOPS-ALL/OneOPS/app/device/**",
+      "batch-001.json:D2LA-001: conditional validation should be paired with a deterministic evidence check or explicit blocker rule",
+      "batch-001.json:D2LA-002: broad allowedPath should be narrowed before publishing: /Users/huangliang/project/OneOPS-ALL/OneOPS-UI/scripts/**",
+      "batch-001.json:D2LA-002: story should name a concrete evidence/report artifact for the worker to produce or update",
+      "batch-001.json:D2LA-002: conditional validation should be paired with a deterministic evidence check or explicit blocker rule",
+      "batch-001.json:D2LA-003: conditional validation should be paired with a deterministic evidence check or explicit blocker rule",
+      "batch-002-import.json:D2LA-002A: conditional validation should be paired with a deterministic evidence check or explicit blocker rule",
+      "batch-002-import.json:D2LA-002B: broad allowedPath should be narrowed before publishing: /Users/huangliang/project/OneOPS-ALL/OneOPS-UI/scripts/**",
+      "batch-002-import.json:D2LA-002C: conditional validation should be paired with a deterministic evidence check or explicit blocker rule",
+      "batch-002-import.json:D2LA-002D: story should name a concrete evidence/report artifact for the worker to produce or update",
+      "batch-002-import.json:D2LA-002D: conditional validation should be paired with a deterministic evidence check or explicit blocker rule",
+      "batch-002-import.json:D2LA-002E: story should name a concrete evidence/report artifact for the worker to produce or update",
+      "batch-002-import.json:D2LA-002E: conditional validation should be paired with a deterministic evidence check or explicit blocker rule",
+      "batch-003-store-phases.json:D2LA-003A: conditional validation should be paired with a deterministic evidence check or explicit blocker rule",
+      "batch-003-store-phases.json:D2LA-003B: conditional validation should be paired with a deterministic evidence check or explicit blocker rule",
+      "batch-003-store-phases.json:D2LA-003C: story should name a concrete evidence/report artifact for the worker to produce or update",
+      "batch-003-store-phases.json:D2LA-003C: conditional validation should be paired with a deterministic evidence check or explicit blocker rule",
+      "batch-003-store-phases.json:D2LA-003D: conditional validation should be paired with a deterministic evidence check or explicit blocker rule",
+      "batch-003-store-phases.json:D2LA-003E: conditional validation should be paired with a deterministic evidence check or explicit blocker rule",
+      "batch-003-store-phases.json:D2LA-003F: title/scope uses broad delivery language; verify it is one narrow worker turn",
+      "batch-003-store-phases.json:D2LA-003F: conditional validation should be paired with a deterministic evidence check or explicit blocker rule",
+      "batch-003-store-phases.json:D2LA-003G: story should name a concrete evidence/report artifact for the worker to produce or update",
+      "batch-003-store-phases.json:D2LA-003G: conditional validation should be paired with a deterministic evidence check or explicit blocker rule",
+      "batch-003-store-phases.json:D2LA-003H: title/scope uses broad delivery language; verify it is one narrow worker turn",
+      "batch-003-store-phases.json:D2LA-003H: conditional validation should be paired with a deterministic evidence check or explicit blocker rule",
+      "batch-004-lifecycle-cleanup.json:D2LA-004A: conditional validation should be paired with a deterministic evidence check or explicit blocker rule",
+      "batch-004-lifecycle-cleanup.json:D2LA-004B: conditional validation should be paired with a deterministic evidence check or explicit blocker rule",
+      "batch-004-lifecycle-cleanup.json:D2LA-004C: title/scope uses broad delivery language; verify it is one narrow worker turn",
+      "batch-004-lifecycle-cleanup.json:D2LA-004C: conditional validation should be paired with a deterministic evidence check or explicit blocker rule",
+      "batch-004-lifecycle-cleanup.json:D2LA-004D: conditional validation should be paired with a deterministic evidence check or explicit blocker rule",
+      "batch-005-readiness-report.json:D2LA-005B: story should name a concrete evidence/report artifact for the worker to produce or update"
+    ]
+  },
+  "packages": [
+    {
+      "package": "backend-small-slices.json",
+      "batch": "backend-small-slices",
+      "title": "Device V2 backend launch acceptance small slices",
+      "status": "reviewed",
+      "publishable": true,
+      "executionMode": "",
+      "releaseGate": "",
+      "total": 4,
+      "done": 4,
+      "active": 0,
+      "missing": [],
+      "queueStatuses": {
+        "done": 4
+      },
+      "rows": [
+        {
+          "id": "D2LA-BE-SLICE-001",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-be"
+          ]
+        },
+        {
+          "id": "D2LA-BE-SLICE-002",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-be"
+          ]
+        },
+        {
+          "id": "D2LA-BE-SLICE-003",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-be"
+          ]
+        },
+        {
+          "id": "D2LA-BE-SLICE-004",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-be"
+          ]
+        }
+      ]
+    },
+    {
+      "package": "batch-001-backend-contract-addendum.json",
+      "batch": "batch-001-backend-contract-addendum",
+      "title": "Device V2 backend contract gate addendum",
+      "status": "draft",
+      "publishable": false,
+      "executionMode": "",
+      "releaseGate": "Use if Batch 001 needs a separate backend-focused turn instead of folding contract work into D2LA-001.",
+      "total": 1,
+      "done": 0,
+      "active": 0,
+      "missing": [
+        "D2LA-001B"
+      ],
+      "queueStatuses": {
+        "missing": 1
+      },
+      "rows": [
+        {
+          "id": "D2LA-001B",
+          "packageStatus": "open",
+          "queueStatus": "missing",
+          "inQueue": false,
+          "lanes": [
+            "d2-be"
+          ]
+        }
+      ]
+    },
+    {
+      "package": "batch-001.json",
+      "batch": "batch-001",
+      "title": "Device V2 DB-derived real-device launch acceptance preparation",
+      "status": "reviewed",
+      "publishable": true,
+      "executionMode": "",
+      "releaseGate": "User confirms DB-derived sample scope, credential redaction boundary, clone/update strategy, collection protocols, and cleanup policy.",
+      "total": 3,
+      "done": 3,
+      "active": 0,
+      "missing": [],
+      "queueStatuses": {
+        "done": 3
+      },
+      "rows": [
+        {
+          "id": "D2LA-001",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-be"
+          ]
+        },
+        {
+          "id": "D2LA-002",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-fe"
+          ]
+        },
+        {
+          "id": "D2LA-003",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-fe"
+          ]
+        }
+      ]
+    },
+    {
+      "package": "batch-002-import.json",
+      "batch": "batch-002-import",
+      "title": "Device V2 DB-derived sample export and UI import acceptance",
+      "status": "reviewed",
+      "publishable": true,
+      "executionMode": "dependency-chain",
+      "releaseGate": "Publish after Batch 001 completes and the user confirms sample size, clone-code strategy, credential-ref-only rule, and cleanup boundary.",
+      "total": 5,
+      "done": 5,
+      "active": 0,
+      "missing": [],
+      "queueStatuses": {
+        "done": 5
+      },
+      "rows": [
+        {
+          "id": "D2LA-002A",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-be"
+          ]
+        },
+        {
+          "id": "D2LA-002B",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-fe"
+          ]
+        },
+        {
+          "id": "D2LA-002C",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-fe"
+          ]
+        },
+        {
+          "id": "D2LA-002D",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-fe"
+          ]
+        },
+        {
+          "id": "D2LA-002E",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-fe",
+            "d2-be"
+          ]
+        }
+      ]
+    },
+    {
+      "package": "batch-003-store-phases.json",
+      "batch": "batch-003-store-phases",
+      "title": "Device V2 real collection acceptance fine-grained store phases",
+      "status": "reviewed",
+      "publishable": true,
+      "executionMode": "dependency-chain",
+      "releaseGate": "Publish only after Batch 002 has produced a confirmed DB-derived imported sample set and the user approves controller-detect based real collection.",
+      "total": 8,
+      "done": 8,
+      "active": 0,
+      "missing": [],
+      "queueStatuses": {
+        "done": 8
+      },
+      "rows": [
+        {
+          "id": "D2LA-003A",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-fe"
+          ]
+        },
+        {
+          "id": "D2LA-003B",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-fe"
+          ]
+        },
+        {
+          "id": "D2LA-003C",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-fe"
+          ]
+        },
+        {
+          "id": "D2LA-003D",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-fe",
+            "d2-be"
+          ]
+        },
+        {
+          "id": "D2LA-003E",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-fe"
+          ]
+        },
+        {
+          "id": "D2LA-003F",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-fe",
+            "d2-be"
+          ]
+        },
+        {
+          "id": "D2LA-003G",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-fe",
+            "d2-be"
+          ]
+        },
+        {
+          "id": "D2LA-003H",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-fe",
+            "d2-be"
+          ]
+        }
+      ]
+    },
+    {
+      "package": "batch-004-lifecycle-cleanup.json",
+      "batch": "batch-004-lifecycle-cleanup",
+      "title": "Device V2 management lifecycle, safety, and cleanup acceptance",
+      "status": "reviewed",
+      "publishable": true,
+      "executionMode": "dependency-chain",
+      "releaseGate": "Publish after DB-derived import is complete. User confirmed clean teardown: delete all cloned D2LA records, never delete originals, and do not purge import batches.",
+      "total": 4,
+      "done": 4,
+      "active": 0,
+      "missing": [],
+      "queueStatuses": {
+        "done": 4
+      },
+      "rows": [
+        {
+          "id": "D2LA-004A",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-fe"
+          ]
+        },
+        {
+          "id": "D2LA-004B",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-be"
+          ]
+        },
+        {
+          "id": "D2LA-004C",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-fe"
+          ]
+        },
+        {
+          "id": "D2LA-004D",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-fe",
+            "d2-be"
+          ]
+        }
+      ]
+    },
+    {
+      "package": "batch-005-readiness-report.json",
+      "batch": "batch-005-readiness-report",
+      "title": "Device V2 launch readiness decision report",
+      "status": "reviewed",
+      "publishable": true,
+      "executionMode": "dependency-chain",
+      "releaseGate": "Publish after Batches 001-004 have completed, or after their blockers are accepted as sufficient launch evidence. P0 may be ACCEPTED RISK only with explicit human acceptance.",
+      "total": 2,
+      "done": 2,
+      "active": 0,
+      "missing": [],
+      "queueStatuses": {
+        "done": 2
+      },
+      "rows": [
+        {
+          "id": "D2LA-005A",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-fe"
+          ]
+        },
+        {
+          "id": "D2LA-005B",
+          "packageStatus": "open",
+          "queueStatus": "done",
+          "inQueue": true,
+          "lanes": [
+            "d2-fe"
+          ]
+        }
+      ]
+    },
+    {
+      "package": "batch-006-device-v2-ingest-management-rerun.json",
+      "batch": "batch-006-device-v2-ingest-management-rerun",
+      "title": "Device V2 入库与管理模块真实执行回归",
+      "status": "reviewed",
+      "publishable": true,
+      "executionMode": "single-rerun",
+      "releaseGate": "上一轮 dev-docs 自动化已归档后，本批次用于把自动化执行焦点切回 Device V2 入库与管理模块。该批次只补充一轮真实执行回归，不替代 Batch 005 的最终上线结论。",
+      "total": 1,
+      "done": 0,
+      "active": 1,
+      "missing": [],
+      "queueStatuses": {
+        "open": 1
+      },
+      "rows": [
+        {
+          "id": "D2LA-006A",
+          "packageStatus": "open",
+          "queueStatus": "open",
+          "inQueue": true,
+          "lanes": [
+            "d2-fe"
+          ]
+        }
+      ]
+    }
+  ]
+}

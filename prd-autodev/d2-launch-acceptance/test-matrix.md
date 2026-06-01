@@ -1,0 +1,40 @@
+# Device V2 上线验收 Test Matrix
+
+UpdatedAt: 2026-05-14T13:25:00+0800
+Status: draft-db-derived-real-device
+
+| Area | Surface/API | Scenario | Role/Data | Expected | Evidence | Lane | Priority | Status |
+|---|---|---|---|---|---|---|---:|---|
+| DB sample | DB/API read-only | select real Device V2 candidates | current Device V2 data | 3-5 candidates with code/name/platform/status/access point/credential refs; exclusions explained | redacted sample report | d2-be/d2-fe | P0 | Need launch evidence |
+| Credential refs | DB/API read-only | export credential relationship only | credential refs, no secrets | refs/roles/protocols/ports present; no plaintext password/token/community/private key in artifacts | redaction checklist | d2-be/d2-fe | P0 | Need launch evidence |
+| Excel generation | ingest template mapping | build DB-derived import xlsx | `D2LA_<orig_code>` cloned sample | xlsx matches import template; original code mapping retained in `labels.d2la_orig_code` | xlsx artifact + mapping report | d2-fe | P0 | Need launch evidence |
+| Login | UI | admin login | `admin/admin@123` local or target env admin | 登录成功，token 可用于后续 API | page + network | d2-fe | P0 | Existing smoke covered, rerun for launch |
+| Import upload | Device V2 入库工作台 + `POST /device/v2/ingest/tasks/upload` | upload DB-derived xlsx through UI | cloned sample rows + optional incomplete rows | task created; upload result and validation issues are explicit | xlsx artifact + network + task detail | d2-fe | P0 | Confirmed WS2 |
+| Import validate | Device V2 入库工作台 | validate DB-derived xlsx before apply | cloned sample rows + optional incomplete rows | valid rows pass; incomplete rows produce actionable validation messages | page + network + row errors | d2-fe | P0 | Confirmed WS2 |
+| Import apply | Ingest page + `POST /device/v2/ingest/tasks` | apply only after validation | validated cloned sample rows | execution rows show created/updated result and handoff works | page + task JSON | d2-fe | P0 | Confirmed WS2 |
+| Import batch | Import Batch panel + `/import/batches` | create/upload/validate/apply/retry | valid DB-derived rows + optional invalid control row | lifecycle states visible; invalid row failure explainable | network + batch summary/records | d2-fe | P0 | Need launch evidence |
+| Handoff | Ingest -> Management | open management by codes/task_id/keyword | cloned sample code | management focuses imported device or records precise blocker | URL + list network | d2-fe | P0 | Need launch evidence |
+| Management list | `GET /api/v1/device/v2/list` | list/search with exact cloned code | `D2LA_*` | 返回真实 list/total，无 console severe error | network + text + screenshot | d2-fe | P0 | Need launch evidence |
+| Field reconciliation | API + DB sample | compare imported rows with original sample | cloned sample + orig mapping | key fields match expected mapping; intentional differences recorded | comparison table | d2-fe/d2-be | P0 | Need launch evidence |
+| Edit | UI + `PUT /device/v2/:code` | update name/status/metadata on clone | cloned sample only | detail reload shows persisted change; original sample unaffected | network + before/after text | d2-fe | P0 | Need launch evidence |
+| Store readiness | `GET /device/v2/:code/store-readiness` | check readiness before store/start | 1 cloned sample first | UI shows credential refs/access_points ready for controller detect, or precise blocker; writes compact readiness artifact | network + decision rail + `readiness.json` | d2-fe | P0 | Confirmed WS4 |
+| Store start | UI + `POST /device/v2/store/start` | start real collection only | 1 readiness-passed cloned sample | task_id returned, evidence drawer opens, `task_id` persisted for next story; collection protocol is detect-driven | network + task detail + `store-task-id.txt` | d2-fe/d2-be | P0 | Confirmed WS4 |
+| Store task summary | `/tasks/:taskId/summary` | poll/load summary only | one persisted task_id | summary is real or explicit pending/error state; no observation analysis in this story | network + drawer text + `store-summary.json` | d2-fe | P0 | Separate story |
+| Runs | `/tasks/:taskId/runs` | load runs only | one persisted task_id | run rows returned or explicit empty/error state; writes runs artifact | network + drawer table + `store-runs.json` | d2-fe/d2-be | P0 | Separate story |
+| Observations | `/tasks/:taskId/observations` | verify collection facts only | one persisted task_id | real observations prove collection, or blocker classifies why absent | network + observation rows + classification | d2-fe/d2-be | P0 | Separate story |
+| Latest DC2 | `/:code/last-store-collection-dc2` | verify DC2 evidence only | one cloned device code | `found:true` for real collection or accepted empty state | network + drawer text + `latest-dc2.json` | d2-fe/d2-be | P0 | Separate story |
+| Collection plans | `/tasks/:taskId/collection-plans` | verify planned actions only | one persisted task_id | plans returned or explicit empty state | network + drawer table + `collection-plans.json` | d2-fe | P1 | Separate story |
+| Store retry decision | summary/runs/observations | classify whether retry is needed | one failed/pending task_id | retry/no-retry decision is justified before calling retry | compact decision note | d2-fe/d2-be | P1 | Separate story |
+| Store retry execution | UI + `POST /store/retry` | retry previous task only after decision | one approved previous task id | retry task visible, no fake success, new task_id persisted | network + drawer + `retry-task-id.txt` | d2-fe | P1 | Separate story |
+| Parallel collection start | UI/API + store/start | start 5-device parallel collection after single-device pass | confirmed 5 cloned samples | 5 task ids or precise per-device blocker; no broad debugging | `parallel-store-start.json` | d2-fe/d2-be | P0 | After single-device pass |
+| Parallel collection classification | task evidence APIs | classify 5-device collection outcomes | 5 task ids | each device classified as pass/blocker/accepted empty; summary is compact | `parallel-collection-classification.md` | d2-fe/d2-be | P0 | After parallel start |
+| Delete cleanup | UI + `DELETE /device/v2/:code` | delete all cloned samples | exact `D2LA_*` codes | list exact-code absent for every clone; deletion blockers are explicit | network + after list | d2-fe | P0 | Confirmed WS5 |
+| Original record safety | API/DB | verify original DB sample unchanged | orig code | original record still present and key fields unchanged unless same-code update approved | before/after snapshot | d2-be/d2-fe | P0 | Need launch evidence |
+| Import Batch retention | Import Batch evidence | keep import batch records | batch_id/task_id | batch evidence remains available; no purge is executed | batch summary/records links | d2-fe | P0 | Confirmed WS5 |
+| Backend test gate | Go tests | D2 package tests | local backend source | tests pass | logs | d2-be | P0 | Existing pass, rerun |
+| Permissions | target operator role | non-admin or intended role | TBD | allowed actions match launch policy | screenshot + network | d2-fe | P1 | Need role decision |
+| Error states | invalid import row / bad credential ref / unreachable IP | negative cases | intentionally invalid data | user sees actionable error, no silent success | page + network body | d2-fe/d2-be | P0 | Need batch |
+| Cleanup report | Evidence | cloned device cleanup and batch retention | generated codes/batches | all `D2LA_*` devices deleted; import batches retained | summary file | d2-fe | P0 | Confirmed WS5 |
+| Evidence index | Report | map P0/P1 matrix to evidence | all batch evidence | every P0/P1 item is PASS/BLOCKED/NOT RUN/ACCEPTED RISK | `evidence-index.md` | d2-fe | P0 | Confirmed WS6 |
+| Page readiness | Report | separate page conclusions | 入库工作台 + 清册管理 | each page has PASS/BLOCKED/ACCEPTED RISK and reasons | `launch-readiness-report.md` | d2-fe | P0 | Confirmed WS6 |
+| Launch action lists | Report | before/after launch action lists | final evidence | includes must-fix-before-launch and post-launch-watch-list | readiness report | d2-fe | P0 | Confirmed WS6 |

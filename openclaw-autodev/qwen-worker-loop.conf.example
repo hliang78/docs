@@ -1,0 +1,28 @@
+# Copy and adapt into docs/openclaw-autodev/loops/<task-id>.conf when you want
+# a local qwen worker for one bounded OpenClaw loop.
+
+TASK_ID="example-qwen-task"
+AGENT_ID="example-qwen-task"
+ENABLED="0"
+PROJECT_ROOT="/Users/huangliang/project/OneOPS-ALL/<project>"
+CHARTER_DOC="/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/qwen-worker-profile.md"
+RUNTIME_DOC="/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/runtime-template.md"
+CONTEXT_DOCS=$'/absolute/path/to/current-context.md\n/absolute/path/to/current-story.md'
+EVIDENCE_DIR="/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/example-qwen-task"
+VALIDATION_COMMAND=$'python3 -m unittest -q'
+ALLOWED_WRITES=$'<project local path>/**\n/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/example-qwen-task/**'
+HARNESS_PROFILE="qwen-worker"
+HARNESS_CONTRACT_DOC="/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/qwen-worker-profile.md"
+PATCH_MAX_FILES="3"
+CONTROLLER_VERIFY_ON_DONE="1"
+CONTROLLER_VERIFY_COMMAND=$'python3 -m unittest -q'
+AGENT_MODEL="ollama/qwen3.6:latest"
+PROVIDER_PROBE_MODEL="ollama/qwen3.6:latest"
+THINKING="off"
+MAX_TURNS="1"
+MAX_MINUTES="25"
+TIMEOUT_SECONDS="1500"
+DAEMON_SLEEP_SECONDS="60"
+CONTINUE_AFTER_DONE="0"
+EXTRA_RULES=$'Keep scope story-local. Do not add dependencies, delete files, commit, push, or write outside allowed paths. If validation fails after one targeted repair, return BLOCKED.'
+READ_BUDGET_RULES=$'- Start from current story and handoff.\n- Use rg before opening files.\n- Read only targeted snippets and keep source reads compact.\n- Do not broaden from one bounded ticket into adjacent cleanup.'

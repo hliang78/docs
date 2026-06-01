@@ -1,0 +1,207 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://oneops.local/openclaw-autodev/worker-capability-schema.json",
+  "title": "OpenClaw Worker Capability Profile",
+  "type": "object",
+  "required": [
+    "profileId",
+    "description",
+    "supportedTaskKinds",
+    "supportedEnvironmentKinds",
+    "contextTolerance",
+    "actionCapabilities",
+    "writeCapabilities",
+    "verificationModel",
+    "schedulingDefaults"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "profileId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "supportedTaskKinds": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": [
+          "code_patch",
+          "product_implementation",
+          "validation_only",
+          "browser_verification",
+          "doc_fact_extraction",
+          "readonly_discovery",
+          "remote_readonly",
+          "remote_apply",
+          "coordination_only"
+        ]
+      }
+    },
+    "supportedEnvironmentKinds": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": [
+          "local_workspace",
+          "copied_workspace",
+          "local_runtime",
+          "browser_localhost",
+          "browser_test_env",
+          "db_readonly",
+          "api_readonly",
+          "remote_readonly",
+          "remote_apply"
+        ]
+      }
+    },
+    "contextTolerance": {
+      "type": "object",
+      "required": [
+        "profile",
+        "maxPromptTokensClass",
+        "prefersCompiledContext",
+        "requiresWorkspaceSanitization"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "profile": {
+          "type": "string",
+          "enum": ["small", "medium", "large"]
+        },
+        "maxPromptTokensClass": {
+          "type": "string",
+          "enum": ["tiny", "small", "medium", "large"]
+        },
+        "prefersCompiledContext": {
+          "type": "boolean"
+        },
+        "requiresWorkspaceSanitization": {
+          "type": "boolean"
+        }
+      }
+    },
+    "actionCapabilities": {
+      "type": "object",
+      "required": [
+        "shellExec",
+        "fileEdit",
+        "browserInteract",
+        "dbReadonly",
+        "apiReadonly",
+        "remoteReadonly",
+        "remoteApply",
+        "serviceRestart",
+        "deleteFiles"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "shellExec": { "type": "boolean" },
+        "fileEdit": { "type": "boolean" },
+        "browserInteract": { "type": "boolean" },
+        "dbReadonly": { "type": "boolean" },
+        "apiReadonly": { "type": "boolean" },
+        "remoteReadonly": { "type": "boolean" },
+        "remoteApply": { "type": "boolean" },
+        "serviceRestart": { "type": "boolean" },
+        "deleteFiles": { "type": "boolean" }
+      }
+    },
+    "writeCapabilities": {
+      "type": "object",
+      "required": [
+        "maxFilesPerTurn",
+        "supportsBroadRefactor",
+        "supportsCrossModuleChanges",
+        "supportsDocOnlyTurns"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "maxFilesPerTurn": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "supportsBroadRefactor": {
+          "type": "boolean"
+        },
+        "supportsCrossModuleChanges": {
+          "type": "boolean"
+        },
+        "supportsDocOnlyTurns": {
+          "type": "boolean"
+        }
+      }
+    },
+    "verificationModel": {
+      "type": "object",
+      "required": [
+        "needsControllerVerifyOnDone",
+        "supportsTargetedValidation",
+        "supportsRealOperationValidation",
+        "trustSelfReportedDone"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "needsControllerVerifyOnDone": {
+          "type": "boolean"
+        },
+        "supportsTargetedValidation": {
+          "type": "boolean"
+        },
+        "supportsRealOperationValidation": {
+          "type": "boolean"
+        },
+        "trustSelfReportedDone": {
+          "type": "boolean"
+        }
+      }
+    },
+    "coordinationModel": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "supportsMultiStoryTurns": {
+          "type": "boolean"
+        },
+        "supportsMultiLaneCoordination": {
+          "type": "boolean"
+        },
+        "requiresExplicitJoinPolicy": {
+          "type": "boolean"
+        }
+      }
+    },
+    "schedulingDefaults": {
+      "type": "object",
+      "required": [
+        "maxTurns",
+        "maxMinutes",
+        "timeoutSeconds",
+        "preferFreshSession"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "maxTurns": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "maxMinutes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "timeoutSeconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "preferFreshSession": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

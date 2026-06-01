@@ -1,0 +1,121 @@
+{
+  "program": "d2-launch-acceptance",
+  "batch": "batch-004-lifecycle-cleanup",
+  "title": "Device V2 management lifecycle, safety, and cleanup acceptance",
+  "status": "reviewed",
+  "targetTaskIds": [
+    "d2-fe",
+    "d2-be"
+  ],
+  "releaseGate": "Publish after DB-derived import is complete. User confirmed clean teardown: delete all cloned D2LA records, never delete originals, and do not purge import batches.",
+  "stories": [
+    {
+      "id": "D2LA-004A",
+      "title": "Edit one imported cloned Device V2 record and verify persistence",
+      "lanes": [
+        "d2-fe"
+      ],
+      "status": "open",
+      "priority": 45,
+      "risk": "Medium",
+      "scope": "Edit one `D2LA_*` cloned record in management UI, reload detail/list, and verify the change persisted without touching the original source record. Prefer low-risk fields such as name, labels, metadata, and status.",
+      "nonGoals": "Do not delete records, do not start collection, and do not edit original real-device records.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-fe/D2LA-LIFECYCLE/**"
+      ],
+      "acceptance": [
+        "Captures before/after UI and network evidence.",
+        "Writes `edit-verify.json` with changed fields.",
+        "Records original-code safety check requirement for D2LA-004B."
+      ],
+      "validation": [
+        "No code validation required unless files are changed."
+      ],
+      "dependsOn": [
+        "D2LA-003H"
+      ]
+    },
+    {
+      "id": "D2LA-004B",
+      "title": "Verify original DB sample records remain safe",
+      "lanes": [
+        "d2-be"
+      ],
+      "status": "open",
+      "priority": 48,
+      "risk": "Medium",
+      "scope": "Compare original DB sample records against the pre-import sample snapshot and verify no unintended mutation occurred.",
+      "nonGoals": "Do not repair data, do not delete records, and do not expose secrets.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-be/**"
+      ],
+      "acceptance": [
+        "Writes `original-safety-check.md`.",
+        "Any difference is classified as expected, accepted, blocker, or requires manual review.",
+        "Confirms no plaintext credentials in evidence."
+      ],
+      "validation": [
+        "No code validation required unless files are changed."
+      ],
+      "dependsOn": [
+        "D2LA-004A"
+      ]
+    },
+    {
+      "id": "D2LA-004C",
+      "title": "Delete all imported cloned records and retain import batch evidence",
+      "lanes": [
+        "d2-fe"
+      ],
+      "status": "open",
+      "priority": 45,
+      "risk": "Medium",
+      "scope": "Execute the approved cleanup policy for `D2LA_*` cloned records: exact-code delete every cloned device after evidence is captured, while retaining import batch evidence.",
+      "nonGoals": "Do not delete original real-device records and do not purge import batches.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-fe/D2LA-LIFECYCLE/**"
+      ],
+      "acceptance": [
+        "Writes `cleanup-report.md` with every cloned code and final deletion status.",
+        "Verifies every exact cloned code is absent from management list after deletion.",
+        "Confirms import batch/task/row evidence is retained and no purge was executed.",
+        "If any clone cannot be deleted, records the exact blocker and leaves it as cleanup-blocked."
+      ],
+      "validation": [
+        "No code validation required unless files are changed."
+      ],
+      "dependsOn": [
+        "D2LA-004B"
+      ]
+    },
+    {
+      "id": "D2LA-004D",
+      "title": "Capture negative/error and permission launch blockers",
+      "lanes": [
+        "d2-fe",
+        "d2-be"
+      ],
+      "status": "open",
+      "priority": 38,
+      "risk": "Low",
+      "scope": "Summarize any invalid import row, bad credential-ref, unreachable endpoint, permission, or cleanup blocker found during Batches 002-004.",
+      "nonGoals": "Do not add broad new negative tests unless already prepared by the matrix.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-fe/D2LA-LIFECYCLE/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-be/**"
+      ],
+      "acceptance": [
+        "Writes `error-permission-blockers.md`.",
+        "Each blocker is linked to evidence and marked P0/P1/P2.",
+        "No blocker is silently converted to pass."
+      ],
+      "validation": [
+        "No code validation required unless files are changed."
+      ],
+      "dependsOn": [
+        "D2LA-004C"
+      ]
+    }
+  ],
+  "executionMode": "dependency-chain"
+}

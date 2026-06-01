@@ -1,0 +1,38 @@
+{
+  "updatedAt": "2026-05-16T22:30:00+0800",
+  "stories": [
+    {
+      "id": "D2ON-001-SMOKE",
+      "title": "Single-device onboarding evidence contract smoke",
+      "status": "open",
+      "priority": 10,
+      "risk": "Medium",
+      "lanes": [
+        "d2on-glm-smoke"
+      ],
+      "scope": "Implement the minimal Device V2 onboarding evidence contract for one device. Store action results under device_v2_store_run.summary_json.onboarding.actions, add strict typed helpers for monitor/log onboarding actions, and add local config-file definitions for area syslog service and Linux system-log first_existing paths.",
+      "nonGoals": "Do not add a new orchestration state table, workflow engine, migrations, global API semantics, global styles, dependency upgrades, fallback defaults, or mock/pseudo success. Do not modify the formal d2on story queue as part of this smoke run.",
+      "acceptance": [
+        "Onboarding actions are typed and include category, target, method, status, timestamp, operator/action evidence, and explicit error detail when failed or unknown.",
+        "Retry planning skips success actions and selects only failed or unknown ensure actions.",
+        "Missing or invalid onboarding config fails loudly with a concrete error; no silent defaults are introduced.",
+        "Linux system-log strategy is represented as first_existing for /var/log/syslog, /var/log/auth.log, /var/log/messages, and /var/log/secure.",
+        "Relevant development documents under docs/development/device-v2-onboarding-observability/ are updated when needed.",
+        "Focused backend tests cover action merge, retry selection, and invalid config behavior.",
+        "Evidence summary is written to docs/openclaw-autodev/evidence/d2on-glm-smoke/D2ON-001-SMOKE.md."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on-glm-smoke/**"
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/..."
+      ],
+      "notes": [
+        "Use the PRD as authority; do not infer syslog/SNMP trap area-service semantics beyond the explicit config contract.",
+        "This story exists only to evaluate glm behavior under the existing execution-pack mechanism."
+      ]
+    }
+  ]
+}

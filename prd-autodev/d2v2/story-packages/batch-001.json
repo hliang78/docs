@@ -1,0 +1,194 @@
+{
+  "program": "d2v2",
+  "batch": "batch-001",
+  "title": "V1 bridge and old-operation entries",
+  "status": "reviewed",
+  "executionMode": "dependency-chain",
+  "targetTaskIds": ["d2v2"],
+  "releaseGate": "User requested immediate delegation on 2026-05-15.",
+  "stories": [
+    {
+      "id": "D2V2-001",
+      "title": "Device V2 legacy bridge contract",
+      "status": "open",
+      "priority": 10,
+      "risk": "Medium",
+      "lanes": ["d2v2"],
+      "scope": "Add or verify a single-device Device V2 to Device V1 bridge contract for operation entries. Return confirmed device_v1_code or explicit missing-field/sync error; reuse existing sync-to-v1 logic.",
+      "nonGoals": "Do not change old Device V1 behavior. Do not add migrations, dependencies, mock data, silent empty success, or production config changes.",
+      "allowedPaths": [
+        "OneOPS/app/device/v2/api/**",
+        "OneOPS/app/device/v2/dto/**",
+        "OneOPS/app/device/v2/router/**",
+        "OneOPS/app/device/v2/service/**",
+        "docs/openclaw-autodev/evidence/d2v2/**"
+      ],
+      "acceptance": [
+        "Frontend can request bridge status/ensure for one V2 code.",
+        "Response includes confirmed V1 code or explicit blocker reason.",
+        "Missing V1 required fields fail loudly.",
+        "Existing sync-to-v1 behavior remains covered.",
+        "Evidence summary is written."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/..."
+      ],
+      "notes": [
+        "Existing sync-to-v1 already backfills device_v1_code and legacy_device_code.",
+        "No intelligent frontend parsing should be required after this story."
+      ]
+    },
+    {
+      "id": "D2V2-002",
+      "title": "Frontend V1 code gate",
+      "status": "open",
+      "priority": 20,
+      "risk": "Medium",
+      "lanes": ["d2v2"],
+      "dependsOn": ["D2V2-001"],
+      "scope": "Add a centralized frontend gate on the Device V2 redesign page that obtains confirmed V1 code before any old operation entry runs. Show bridge errors directly and stop the action.",
+      "nonGoals": "Do not open terminal, monitoring, audit, or log views in this story. Do not infer V1 code from unrelated fields.",
+      "allowedPaths": [
+        "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue",
+        "OneOPS-UI/src/views/device/device-v2-redesign/**",
+        "OneOPS-UI/src/api/device/device-v2.ts",
+        "docs/openclaw-autodev/evidence/d2v2/**"
+      ],
+      "acceptance": [
+        "One shared gate function exists.",
+        "Gate uses backend bridge response.",
+        "Failure state is visible in UI.",
+        "No action continues after bridge failure.",
+        "Evidence summary is written."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2"
+      ],
+      "notes": [
+        "Keep old inventory page behavior unchanged."
+      ]
+    },
+    {
+      "id": "D2V2-003",
+      "title": "Monitoring and WebShell entries",
+      "status": "open",
+      "priority": 30,
+      "risk": "Medium",
+      "lanes": ["d2v2"],
+      "dependsOn": ["D2V2-002"],
+      "scope": "Add Device V2 row/detail entries for monitoring and WebShell. Use the gate V1 code, old TerminalFull route, and old Grafana dashboard lookup/variables.",
+      "nonGoals": "Do not migrate GPU, old out-band logs, or Loki logs. Do not change the old inventory page user path.",
+      "allowedPaths": [
+        "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue",
+        "OneOPS-UI/src/views/device/device-v2-redesign/**",
+        "OneOPS-UI/src/api/device/device-v2.ts",
+        "OneOPS-UI/src/views/device/Inventory.vue",
+        "docs/openclaw-autodev/evidence/d2v2/**"
+      ],
+      "acceptance": [
+        "Monitoring entry uses confirmed V1 device facts.",
+        "WebShell opens TerminalFull with V1 hostCode.",
+        "Row and detail entry points are present.",
+        "Old inventory behavior is preserved.",
+        "Evidence summary is written."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2"
+      ],
+      "notes": [
+        "If old code is touched, keep changes extraction-only and behavior-preserving."
+      ]
+    },
+    {
+      "id": "D2V2-004",
+      "title": "Operation audit entry",
+      "status": "open",
+      "priority": 40,
+      "risk": "Medium",
+      "lanes": ["d2v2"],
+      "dependsOn": ["D2V2-002"],
+      "scope": "Add Device V2 operation audit entry using confirmed V1 code. Reuse terminal record list/replay/download behavior and expose empty/error states without silent defaults.",
+      "nonGoals": "Do not change terminal record backend semantics. Do not invent audit records or return fake empty success.",
+      "allowedPaths": [
+        "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue",
+        "OneOPS-UI/src/views/device/device-v2-redesign/**",
+        "OneOPS-UI/src/api/device/device-v2.ts",
+        "OneOPS-UI/src/views/device/Inventory.vue",
+        "docs/openclaw-autodev/evidence/d2v2/**"
+      ],
+      "acceptance": [
+        "Audit query uses V1 instance_code.",
+        "Replay/download reuse old implementation.",
+        "Empty and error states are distinguishable.",
+        "Old audit tab behavior is preserved.",
+        "Evidence summary is written."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2"
+      ],
+      "notes": [
+        "Do not rename user-facing 安全审计 unless the surrounding V2 copy clearly uses 操作审计."
+      ]
+    },
+    {
+      "id": "D2V2-005",
+      "title": "Loki log placeholder entry",
+      "status": "open",
+      "priority": 50,
+      "risk": "Low",
+      "lanes": ["d2v2"],
+      "dependsOn": ["D2V2-002"],
+      "scope": "Add a Device V2 日志 entry that clearly states Loki query details are pending user confirmation. Do not issue any Loki request or show old out-band logs.",
+      "nonGoals": "Do not implement Loki queries, log type selectors, or old out-band log migration.",
+      "allowedPaths": [
+        "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue",
+        "OneOPS-UI/src/views/device/device-v2-redesign/**",
+        "docs/openclaw-autodev/evidence/d2v2/**"
+      ],
+      "acceptance": [
+        "Entry label is 日志.",
+        "Pending contract items are shown.",
+        "No Loki network request is made.",
+        "Old 带外日志 is not reused.",
+        "Evidence summary is written."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2"
+      ],
+      "notes": [
+        "List pending contract: log type, label, time range, permission, API."
+      ]
+    },
+    {
+      "id": "D2V2-006",
+      "title": "Device V2 operations evidence",
+      "status": "open",
+      "priority": 60,
+      "risk": "Medium",
+      "lanes": ["d2v2"],
+      "dependsOn": ["D2V2-003", "D2V2-004", "D2V2-005"],
+      "scope": "Run focused FE/BE validation and browser checks for Device V2 operation entries. Record real pass evidence or exact blockers under the d2v2 evidence directory.",
+      "nonGoals": "Do not broaden scope to unrelated D2 pages. Do not use screenshots, HTTP 200, or typecheck alone as success.",
+      "allowedPaths": [
+        "docs/openclaw-autodev/evidence/d2v2/**",
+        "docs/prd-autodev/d2v2/evidence/**"
+      ],
+      "acceptance": [
+        "Go and FE validation results are recorded.",
+        "Browser evidence covers row/detail entries.",
+        "Old inventory regression check is recorded.",
+        "Any blocker is precise and actionable.",
+        "Batch summary is updated."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/...",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "Browser validation on http://127.0.0.1:3001/#/device/device-v2-management-redesign"
+      ],
+      "notes": [
+        "Login credentials: admin/admin@123.",
+        "If the app is served on another Vite port, record the observed port."
+      ]
+    }
+  ]
+}

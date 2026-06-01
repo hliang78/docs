@@ -1,0 +1,114 @@
+{
+  "program": "device-v2-onboarding-observability",
+  "batch": "batch-005",
+  "title": "Drive the single-device execute path with bounded real evidence",
+  "status": "reviewed",
+  "executionMode": "dependency-chain",
+  "targetTaskIds": ["d2on"],
+  "stories": [
+    {
+      "id": "D2ON-014",
+      "title": "Make network/log ensure outcomes honest through template/apply/save stages",
+      "status": "open",
+      "priority": 130,
+      "risk": "High",
+      "lanes": ["d2on"],
+      "scope": "Refine the single-device onboarding ensure path so network/log onboarding no longer stops at a success-leaning dispatch summary. When syslog template selection, remote apply, or save cannot be completed through a concrete contract, the stored onboarding actions must preserve blocked, failed, or unknown outcomes with exact reasons instead of collapsing back to optimistic success wording.",
+      "nonGoals": [
+        "Do not add batch execution.",
+        "Do not implement full SNMP trap delivery.",
+        "Do not guess remote success when template/apply/save evidence is missing."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "Single-device onboarding evidence keeps non-success detail through network/log ensure stages instead of reverting to generic success wording.",
+        "Template-required, apply-failed, save-failed, and similar missing-contract states remain explicit in onboarding action evidence.",
+        "Backend tests cover at least one network/log non-success path beyond the already-fixed synthetic syslog success default."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/...",
+        "rg -n \"template_required|save_failed|apply_failed|blocked\" /Users/huangliang/project/OneOPS-ALL/OneOPS/app/device/v2"
+      ],
+      "notes": [
+        "This is the owner-directed continuation of the honest execute-path mainline, not a closure-only validation batch.",
+        "Keep the contract single-device only; batch execution remains out of scope."
+      ]
+    },
+    {
+      "id": "D2ON-015",
+      "title": "Run a bounded single-device continue-onboarding probe and capture durable evidence",
+      "status": "open",
+      "dependsOn": ["D2ON-014"],
+      "priority": 140,
+      "risk": "High",
+      "lanes": ["d2on"],
+      "scope": "Use the authorized single-device continue-onboarding path to run one bounded execute probe, then record durable evidence of the actual monitor/log action outcomes or the exact concrete blocker. The evidence must distinguish local contract/test validation from any real side-effectful onboarding execution and must not hide partial or blocked results behind a generic success summary.",
+      "nonGoals": [
+        "Do not perform batch onboarding execution.",
+        "Do not claim real remote success without durable evidence.",
+        "Do not reopen browser-only validation as the main task."
+      ],
+      "allowedPaths": [
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**",
+        "OneOPS/app/device/v2/**",
+        "OneOPS-UI/src/views/device/**",
+        "OneOPS-UI/src/api/device/**"
+      ],
+      "acceptance": [
+        "A durable evidence summary is written for one bounded single-device execute probe.",
+        "The evidence clearly states whether the probe reached real monitor/log action execution or stopped at a concrete blocker.",
+        "Any non-success, retryable, blocked, or unknown outcome from the probe is preserved explicitly in the evidence."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/...",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-015.md"
+      ],
+      "notes": [
+        "If the bounded probe exposes a concrete runtime blocker, record it honestly and stop there; do not fabricate success to keep the loop moving."
+      ]
+    },
+    {
+      "id": "D2ON-016",
+      "title": "Carry the bounded execute-probe result into durable readiness evidence",
+      "status": "open",
+      "dependsOn": ["D2ON-015"],
+      "priority": 150,
+      "risk": "Medium",
+      "lanes": ["d2on"],
+      "scope": "After the bounded execute probe, update the durable readiness and review evidence so the next loop handoff is driven by real single-device execute results rather than stale browser-only conclusions. If the probe uncovers one final frontend/backend honesty mismatch within the allowed paths, fix it before writing the evidence summary; otherwise document the exact remaining blocker and next continuation rule.",
+      "nonGoals": [
+        "Do not close the overall program unless the execute-path evidence truly supports closure.",
+        "Do not create another browser-only micro round."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/**",
+        "OneOPS-UI/src/views/device/**",
+        "OneOPS-UI/src/api/device/**",
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "final-readiness.md and review.md reflect the bounded execute-probe result rather than the old browser-only gap framing.",
+        "If a concrete frontend/backend honesty mismatch remains inside allowed paths, it is fixed and validated before the evidence summary is finalized.",
+        "The next-step note clearly says whether the loop should continue with another execution batch or whether closure is finally justified."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/...",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/review.md"
+      ],
+      "notes": [
+        "This story is the execution-side close-out for batch-005; it should leave the next loop handoff driven by real execute-path evidence."
+      ]
+    }
+  ]
+}

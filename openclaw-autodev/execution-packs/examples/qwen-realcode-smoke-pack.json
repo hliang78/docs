@@ -1,0 +1,127 @@
+{
+  "taskId": "qwen-realcode-smoke",
+  "workerProfileId": "qwen-local-patch-worker",
+  "taskKind": "code_patch",
+  "environmentKind": "copied_workspace",
+  "projectRoot": "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/qwen-harness-realcode/20260516-160221/workspace",
+  "sourceOfTruth": [
+    "docs/openclaw-autodev/evidence/qwen-harness-realcode/20260516-160221/story.json",
+    "docs/openclaw-autodev/state/qwen-realcode-smoke/handoff.md",
+    "docs/openclaw-autodev/qwen-worker-profile.md"
+  ],
+  "currentStory": {
+    "id": "QWEN-REALCODE-001",
+    "title": "Restore invalid done without evidence classification in report transition logic",
+    "status": "done",
+    "scope": "Fix the controlled regression in scripts/openclaw/lib/report.mjs so transitionFromReport rejects DONE without evidence again. Modify only report.mjs and verify with the copied openclaw-lib node test.",
+    "nonGoals": [
+      "Do not modify tests.",
+      "Do not read or validate same-named repo files outside ProjectRoot.",
+      "Do not broaden into unrelated library cleanup."
+    ],
+    "allowedPaths": [
+      "scripts/openclaw/lib/report.mjs",
+      "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/qwen-harness-realcode/20260516-160221/**"
+    ],
+    "acceptance": [
+      "node --test scripts/openclaw/test/openclaw-lib.test.mjs passes",
+      "Only scripts/openclaw/lib/report.mjs changes in the workspace"
+    ],
+    "validation": [
+      "node --test scripts/openclaw/test/openclaw-lib.test.mjs"
+    ]
+  },
+  "contextPack": {
+    "mustRead": [
+      "docs/openclaw-autodev/evidence/qwen-harness-realcode/20260516-160221/story.json",
+      "docs/openclaw-autodev/state/qwen-realcode-smoke/handoff.md",
+      "docs/openclaw-autodev/qwen-worker-profile.md"
+    ],
+    "optionalRead": [
+      "docs/openclaw-autodev/state/qwen-realcode-smoke/20260516-161901-turn-1-controller-verify.log"
+    ],
+    "forbiddenRead": [
+      "/Users/huangliang/project/OneOPS-ALL/scripts/openclaw/lib/report.mjs",
+      "workspace/BOOTSTRAP.md"
+    ],
+    "readBudgetRules": [
+      "Start from current story and handoff.",
+      "Use rg before opening files.",
+      "Read only targeted snippets needed for report transition logic and the failing test."
+    ]
+  },
+  "actionPolicy": {
+    "allowedWrites": [
+      "scripts/openclaw/lib/report.mjs",
+      "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/qwen-harness-realcode/20260516-160221/**"
+    ],
+    "allowedActions": [
+      "shell.exec",
+      "file.edit",
+      "targeted.validation"
+    ],
+    "deniedActions": [
+      "test.edit",
+      "repo-wide.read",
+      "dependency.change",
+      "delete.file",
+      "commit.push"
+    ],
+    "approvalProfilesAllowed": []
+  },
+  "runtimePolicy": {
+    "precheckCommands": [],
+    "maxTurns": 1,
+    "maxMinutes": 20,
+    "timeoutSeconds": 1200,
+    "patchMaxFiles": 1,
+    "workspaceIsolated": true
+  },
+  "verificationPolicy": {
+    "workerValidationCommands": [
+      "node --test scripts/openclaw/test/openclaw-lib.test.mjs"
+    ],
+    "controllerVerifyOnDone": true,
+    "controllerVerifyCommand": "node --test scripts/openclaw/test/openclaw-lib.test.mjs",
+    "successCriteria": [
+      "Targeted copied-workspace test passes.",
+      "Controller verify also passes.",
+      "No file outside allowed writes changed."
+    ],
+    "blockedClasses": [
+      "automation.controller_or_story",
+      "automation.model_runtime",
+      "environment.runtime"
+    ]
+  },
+  "outputContract": {
+    "requiresFooter": true,
+    "footerFields": [
+      "LoopControl",
+      "Task",
+      "Status",
+      "Ticket",
+      "Changed",
+      "Tests",
+      "Next"
+    ],
+    "maxReportLines": 8
+  },
+  "evidenceContract": {
+    "required": true,
+    "summaryPathTemplate": "docs/openclaw-autodev/evidence/qwen-harness-realcode/20260516-160221/verification-summary.md",
+    "requiredClaimFields": [
+      "claim",
+      "sourceRefs",
+      "resultSummary",
+      "residualRisk"
+    ]
+  },
+  "recoveryPolicy": {
+    "maxRepairAttempts": 1,
+    "controllerValidationFailedRequiresEvidenceRead": true,
+    "retryAllowedForClasses": [
+      "automation.model_runtime"
+    ]
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "program": "device-v2-onboarding-observability",
+  "batch": "batch-006",
+  "title": "Drive the real single-device execute path instead of waiting on passive evidence",
+  "status": "reviewed",
+  "executionMode": "dependency-chain",
+  "targetTaskIds": [
+    "d2on"
+  ],
+  "stories": [
+    {
+      "id": "D2ON-017",
+      "title": "Connect one bounded monitor/log onboarding path to a real controller-backed execution result",
+      "status": "open",
+      "priority": 160,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Take one exact single-device continue-onboarding monitor/log path that is still stopping at local-only contract evidence, and make the backend/frontend contract carry a real controller-backed execution result or an exact stage-specific blocker instead of a passive local-only summary. Keep the change bounded to one execution path and preserve honest non-success outcomes.",
+      "nonGoals": [
+        "Do not add batch execution.",
+        "Do not reopen browser-only validation as the main task.",
+        "Do not fabricate remote success when the controller or remote step did not actually run."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/**",
+        "OneOPS-UI/src/views/device/**",
+        "OneOPS-UI/src/api/device/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "One bounded single-device monitor/log onboarding path now reports a real controller-backed execution result or an exact stage-specific blocker, not just local evidence persistence.",
+        "The resulting onboarding action evidence preserves success, failed, blocked, retryable, or unknown outcomes honestly for that path.",
+        "Focused backend or frontend validation covers the changed execution path."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/...",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2"
+      ],
+      "notes": [
+        "This story exists because batch-005 completed without landing real single-device execute evidence, so the next batch must resume implementation rather than waiting passively."
+      ]
+    },
+    {
+      "id": "D2ON-018",
+      "title": "Run one real single-device continue-onboarding execution and capture durable monitor/log evidence",
+      "status": "open",
+      "dependsOn": [
+        "D2ON-017"
+      ],
+      "priority": 170,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Use the repaired bounded continue-onboarding path to run one real single-device execution attempt and capture durable evidence of the actual monitor/log result or the exact concrete blocker returned by the controller-backed path. Keep the evidence explicit about what truly executed and what remained blocked.",
+      "nonGoals": [
+        "Do not perform batch onboarding execution.",
+        "Do not downgrade a real execution blocker into local-only success wording.",
+        "Do not widen scope beyond one bounded single-device execution attempt."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/**",
+        "OneOPS-UI/src/views/device/**",
+        "OneOPS-UI/src/api/device/**",
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "A durable evidence summary is written for one real single-device execution attempt.",
+        "The evidence states whether the path reached a controller-backed monitor/log execution result or stopped at an exact blocker.",
+        "Any non-success, retryable, blocked, or unknown outcome from that execution attempt is preserved explicitly."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/...",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-018.md"
+      ],
+      "notes": [
+        "If the real execution still cannot proceed, the blocker must come from the controller-backed path itself, not from passive local-only evidence handling."
+      ]
+    },
+    {
+      "id": "D2ON-019",
+      "title": "Carry the real execution result into readiness and decide whether another execution batch is needed",
+      "status": "open",
+      "dependsOn": [
+        "D2ON-018"
+      ],
+      "priority": 180,
+      "risk": "Medium",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Update the durable readiness and review artifacts so the next PRD handoff is driven by the new real execution result instead of the old passive-wait conclusion. If one final honesty mismatch remains inside the allowed paths, fix it before closing the story; otherwise record the exact next execution or PRD boundary decision.",
+      "nonGoals": [
+        "Do not close the whole program unless the new execution result really justifies it.",
+        "Do not reintroduce browser-only closure language."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/**",
+        "OneOPS-UI/src/views/device/**",
+        "OneOPS-UI/src/api/device/**",
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "final-readiness.md and review.md reflect the new real execution result rather than passive waiting on batch-005.",
+        "If a concrete frontend/backend honesty mismatch remains inside allowed paths, it is fixed and validated before the readiness update is finalized.",
+        "The next-step note clearly says whether another execution batch is needed or whether PRD scope should change."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/...",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/review.md"
+      ],
+      "notes": [
+        "This story is the execution-side close-out for batch-006 and should remove the current passive-wait drift between d2on-prd and d2on."
+      ]
+    }
+  ]
+}

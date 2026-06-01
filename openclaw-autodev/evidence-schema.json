@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://oneops.local/openclaw-autodev/evidence-schema.json",
+  "title": "OpenClaw Evidence Claim",
+  "type": "object",
+  "required": [
+    "evidenceId",
+    "taskId",
+    "storyId",
+    "claimType",
+    "claim",
+    "sourceKind",
+    "sourceRefs",
+    "resultSummary",
+    "redactionBoundary",
+    "residualRisk"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "evidenceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "taskId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "storyId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claimType": {
+      "type": "string",
+      "enum": [
+        "code_change",
+        "test_result",
+        "browser_verification",
+        "readonly_discovery",
+        "remote_readonly",
+        "remote_apply",
+        "doc_fact",
+        "approval_decision",
+        "blocker_record"
+      ]
+    },
+    "claim": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceKind": {
+      "type": "string",
+      "enum": [
+        "command",
+        "test_log",
+        "browser",
+        "db_query",
+        "api_response",
+        "remote_command",
+        "source_code",
+        "controller_verify",
+        "human_approval"
+      ]
+    },
+    "sourceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "command": {
+      "type": "string"
+    },
+    "target": {
+      "type": "string"
+    },
+    "resultSummary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "redactionBoundary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "noMutationStatement": {
+      "type": "string"
+    },
+    "residualRisk": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

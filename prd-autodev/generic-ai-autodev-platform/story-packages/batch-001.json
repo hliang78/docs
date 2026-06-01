@@ -1,0 +1,104 @@
+{
+  "program": "generic-ai-autodev-platform",
+  "batch": "batch-001",
+  "title": "Pre-code contract freeze and implementation slicing",
+  "status": "draft",
+  "executionMode": "dependency-chain",
+  "targetTaskIds": [],
+  "releaseGate": "Do not publish before the user confirms the frontend workbench shape, the first code slice boundary, the new program root implementation layout, and the initial OpenClaw task split.",
+  "stories": [
+    {
+      "id": "GAAP-PLAN-001",
+      "title": "Freeze MVP frontend workbench information architecture",
+      "status": "open",
+      "priority": 20,
+      "risk": "Low",
+      "lanes": [
+        "planner"
+      ],
+      "scope": "Normalize the first-phase frontend workbench definition into one durable discussion pack covering Program 首页, Program 工作台, 文档阅读面板, Batch 审核面板, navigation mode, readiness view, and the exact boundary of `只读 + 审阅 + 状态推进`.",
+      "nonGoals": "Do not start frontend implementation, do not add model/profile management to the first batch, and do not decide visual style details that belong to the later frontend design discussion.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/generic-ai-autodev-platform/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/development/generic-ai-autodev-platform/**"
+      ],
+      "acceptance": [
+        "Frontend workbench pages, panels, states, and unresolved decisions are written in durable docs.",
+        "The pack clearly states whether batch-001 code scope excludes `AI 优化` and `轻量编辑`.",
+        "The pack can be used directly in the next human frontend discussion without needing conversation memory."
+      ],
+      "validation": [
+        "rg -n \"Program 工作台|Batch 审核面板|只读 \\+ 审阅 \\+ 状态推进\" /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/generic-ai-autodev-platform /Users/huangliang/project/OneOPS-ALL/docs/development/generic-ai-autodev-platform"
+      ],
+      "notes": [
+        "This is the final planning normalization story before frontend implementation slicing."
+      ]
+    },
+    {
+      "id": "GAAP-PLAN-002",
+      "title": "Freeze planning, control, and execution boundary contracts",
+      "status": "open",
+      "priority": 30,
+      "risk": "Low",
+      "lanes": [
+        "planner"
+      ],
+      "dependsOn": [
+        "GAAP-PLAN-001"
+      ],
+      "scope": "Consolidate the durable boundary between planning plane, control plane, and `dagengine` execution kernel, including candidate lane responsibility, batch readiness gate, and the minimum contract that must exist before any OpenClaw task is created.",
+      "nonGoals": "Do not create runtime loop configs, do not publish stories, and do not turn candidate objects into code schemas yet.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/generic-ai-autodev-platform/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/development/generic-ai-autodev-platform/**"
+      ],
+      "acceptance": [
+        "Planning/control/execution responsibilities are explicit and non-overlapping.",
+        "Candidate lane usage and publish-ready gate are documented in a way that can be reviewed before code.",
+        "The docs state exactly why `targetTaskIds` remain empty in this draft batch."
+      ],
+      "validation": [
+        "jq empty /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/generic-ai-autodev-platform/story-packages/batch-001.json",
+        "rg -n \"planner|frontend|backend|ct|OpenClaw\" /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/generic-ai-autodev-platform"
+      ]
+    },
+    {
+      "id": "GAAP-PLAN-003",
+      "title": "Normalize template rollout and pre-code gate documents",
+      "status": "open",
+      "priority": 40,
+      "risk": "Low",
+      "lanes": [
+        "planner"
+      ],
+      "dependsOn": [
+        "GAAP-PLAN-002"
+      ],
+      "scope": "Make sure the `01-07` candidate standard documents, template rollout mapping, review note, and final-readiness note are internally consistent and ready for the pre-code human alignment session.",
+      "nonGoals": "Do not expand into `08-10`, and do not add implementation assumptions that the current docs cannot support.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/generic-ai-autodev-platform/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/development/generic-ai-autodev-platform/**"
+      ],
+      "acceptance": [
+        "`candidate-01` to `candidate-07` exist and remain `blocked-human-confirmation`.",
+        "`template-rollout-mapping.md`, `review.md`, and `evidence/final-readiness.md` no longer contain planning placeholders.",
+        "Residual risks and required human confirmations are explicit."
+      ],
+      "validation": [
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/generic-ai-autodev-platform/template-rollout-mapping.md",
+        "rg -n \"TBD\" /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/generic-ai-autodev-platform/evidence/final-readiness.md /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/generic-ai-autodev-platform/review.md /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/generic-ai-autodev-platform/evidence/batch-001-summary.md"
+      ]
+    }
+  ],
+  "evidencePolicy": {
+    "root": "docs/prd-autodev/generic-ai-autodev-platform/evidence/",
+    "notes": "This batch is a pre-code planning batch. Evidence means durable planning artifacts, not runtime execution output."
+  },
+  "stopConditions": [
+    "frontend workbench shape is still ambiguous after the next human discussion",
+    "the first code slice still mixes read-only work with AI optimization or full editing without explicit approval",
+    "the implementation root and validation baseline for generic-ai-autodev remain undefined",
+    "someone tries to create or enable OpenClaw tasks before the draft batch is reviewed"
+  ]
+}

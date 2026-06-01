@@ -1,0 +1,104 @@
+{
+  "program": "d2-launch-acceptance",
+  "batch": "backend-small-slices",
+  "title": "Device V2 backend launch acceptance small slices",
+  "status": "reviewed",
+  "targetTaskIds": ["d2-be"],
+  "purpose": "Use these small backend slices instead of broad backend stories whenever d2-be blocks on prompt timeout or context size.",
+  "rules": [
+    "One story must do exactly one backend phase.",
+    "Do not combine DB sample export, contract snapshot, Go tests, and backend fixes in one story.",
+    "If a command depends on real DB or external controller infrastructure and does not return promptly, write environment-blocked and stop.",
+    "Do not wait for long AI/model responses; write compact evidence and finish the runtime report."
+  ],
+  "stories": [
+    {
+      "id": "D2LA-BE-SLICE-001",
+      "title": "Backend Device V2 route and DTO snapshot only",
+      "lanes": ["d2-be"],
+      "status": "open",
+      "priority": 41,
+      "risk": "Low",
+      "scope": "Read backend route/model/DTO files and write a compact route/field snapshot for Device V2 list/detail/import/ingest/store evidence APIs.",
+      "nonGoals": "Do not query DB, do not run Go tests, do not edit code, and do not inspect frontend files.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/OneOPS/app/device/v2/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-be/**"
+      ],
+      "acceptance": [
+        "Writes a compact `backend-route-dto-snapshot.md`.",
+        "Includes only file references and field names needed by launch acceptance.",
+        "No plaintext credential material appears."
+      ],
+      "validation": [
+        "Docs-only; no command required."
+      ]
+    },
+    {
+      "id": "D2LA-BE-SLICE-002",
+      "title": "Read-only Device V2 DB sample query only",
+      "lanes": ["d2-be"],
+      "status": "open",
+      "priority": 42,
+      "risk": "Medium",
+      "scope": "Run only the approved read-only DB/API sample inspection for 5 real Device V2 candidates and write redacted candidate output.",
+      "nonGoals": "Do not run Go tests, do not edit code, do not write Excel, do not start collection, and do not resolve credential refs to secrets.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-be/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-fe/D2LA-IMPORT/**"
+      ],
+      "acceptance": [
+        "Writes `sample-set-redacted.md` or updates `sample-set.json` with secret-free fields only.",
+        "Selects 5 candidates, preferably 1 per type, or records exclusions.",
+        "If DB/API access is unavailable, records environment-blocked and stops."
+      ],
+      "validation": [
+        "Read-only query/API call only."
+      ]
+    },
+    {
+      "id": "D2LA-BE-SLICE-003",
+      "title": "Device V2 Go test gate only",
+      "lanes": ["d2-be"],
+      "status": "open",
+      "priority": 43,
+      "risk": "Low",
+      "scope": "Run only the approved Device V2 backend Go tests and write a compact test log summary.",
+      "nonGoals": "Do not query DB, do not inspect broad code, do not edit code unless a follow-up fix story is separately assigned.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-be/**"
+      ],
+      "acceptance": [
+        "Runs `go test ./app/device/v2/...` and `go test ./app/device/v2/ingest/...`.",
+        "Writes pass/fail summary and log paths.",
+        "If failure is environment-driven, records environment-blocked and stops."
+      ],
+      "validation": [
+        "go test ./app/device/v2/...",
+        "go test ./app/device/v2/ingest/..."
+      ]
+    },
+    {
+      "id": "D2LA-BE-SLICE-004",
+      "title": "One concrete Device V2 backend contract fix only",
+      "lanes": ["d2-be"],
+      "status": "open",
+      "priority": 44,
+      "risk": "Medium",
+      "scope": "Fix exactly one confirmed Device V2 backend contract gap from prior evidence, then run the narrow relevant test.",
+      "nonGoals": "Do not do opportunistic refactors, migrations, production config changes, credential-system changes, or broad external integration work.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/OneOPS/app/device/v2/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-be/**"
+      ],
+      "acceptance": [
+        "Names the single contract gap being fixed.",
+        "Changes stay inside Device V2 backend paths.",
+        "Runs the narrow relevant Go test or records exact blocker."
+      ],
+      "validation": [
+        "Relevant `go test ./app/device/v2/...` package command."
+      ]
+    }
+  ]
+}

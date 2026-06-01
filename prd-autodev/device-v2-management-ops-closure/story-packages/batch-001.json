@@ -1,0 +1,171 @@
+{
+  "program": "device-v2-management-ops-closure",
+  "batch": "batch-001",
+  "title": "动作闭环与编辑体验第一批",
+  "status": "reviewed",
+  "executionMode": "dependency-chain",
+  "targetTaskIds": ["d2-fe"],
+  "stories": [
+    {
+      "id": "D2FE-DVM-001",
+      "title": "收敛设备管理页主阅读语义",
+      "lanes": ["d2-fe"],
+      "status": "open",
+      "priority": 90,
+      "risk": "Low",
+      "scope": "调整左侧分组候选项、列表次信息、详情事实块的名称/编码展示优先级，并清理零值时间与无意义占位信息，确保正式页默认以业务语义为主阅读信息。",
+      "nonGoals": "不做大规模视觉美化，不改左侧分组的后端聚合模式。",
+      "allowedPaths": [
+        "OneOps-UI/src/views/device/DeviceV2ManagementGrouped.vue"
+      ],
+      "acceptance": [
+        "分组候选项不再以编码型文案作为主展示。",
+        "列表与详情的类型、位置、平台优先展示名称或业务语义。",
+        "最近更新时间不再显示 0001-01-01 08:05 之类零值时间。"
+      ],
+      "validation": [
+        "npx eslint src/views/device/DeviceV2ManagementGrouped.vue --ext .vue,.ts --fix"
+      ],
+      "notes": [
+        "PRD: docs/prd-autodev/device-v2-management-ops-closure/prd.md",
+        "需要产出整改后页面截图。"
+      ]
+    },
+    {
+      "id": "D2FE-DVM-002",
+      "title": "补右侧详情动作复核摘要",
+      "lanes": ["d2-fe"],
+      "status": "open",
+      "dependsOn": ["D2FE-DVM-001"],
+      "priority": 95,
+      "risk": "Medium",
+      "scope": "让右侧详情围绕监控未下发设备提供简明复核，承接采集和监控动作后的成功、失败、状态说明与当前上下文保持。",
+      "nonGoals": "不把旧工作台整套任务结果直接搬进右栏，不默认展开大量技术明细。",
+      "allowedPaths": [
+        "OneOps-UI/src/views/device/DeviceV2ManagementGrouped.vue"
+      ],
+      "acceptance": [
+        "详情右栏能显示当前监控状态、最近采集结论、监控失败原因摘要。",
+        "执行采集或监控后，右栏摘要能在当前设备上下文中更新。",
+        "动作完成后不丢失当前分组、搜索和已选设备上下文。"
+      ],
+      "validation": [
+        "npx eslint src/views/device/DeviceV2ManagementGrouped.vue --ext .vue,.ts --fix"
+      ],
+      "notes": [
+        "PRD: docs/prd-autodev/device-v2-management-ops-closure/prd.md",
+        "优先复用现有 process_result 与 monitor_push_error 字段。",
+        "实现时需要与并发动作状态表达保持一致，不要让右栏和列表状态打架。"
+      ]
+    },
+    {
+      "id": "D2FE-DVM-003",
+      "title": "增加最后一次采集详细数据查看",
+      "lanes": ["d2-fe"],
+      "status": "open",
+      "dependsOn": ["D2FE-DVM-002"],
+      "priority": 93,
+      "risk": "Medium",
+      "scope": "在设备详情中为存在采集记录的设备提供最后一次采集详细数据查看入口，并使用独立查看层展示 task summary、process result、runs、observations、collection plans 与最近一次 DC2 关联信息。",
+      "nonGoals": "不新增设备创建流程，不默认在右栏常驻展示全部采集原始数据。",
+      "allowedPaths": [
+        "OneOps-UI/src/views/device/DeviceV2ManagementGrouped.vue",
+        "OneOps-UI/src/api/device/device-v2.ts"
+      ],
+      "acceptance": [
+        "有最近采集记录的设备在详情中出现查看入口。",
+        "打开后能看到最后一次采集的关键明细数据。",
+        "无采集记录设备不出现误导性入口。"
+      ],
+      "validation": [
+        "npx eslint src/views/device/DeviceV2ManagementGrouped.vue src/api/device/device-v2.ts --ext .vue,.ts --fix"
+      ],
+      "notes": [
+        "PRD: docs/prd-autodev/device-v2-management-ops-closure/prd.md",
+        "优先复用 last-store-collection-dc2、task summary、runs、observations、collection plans。",
+        "监控不要伪造 task detail，优先基于 sync-to-v1 批量结果和设备回写状态承接。"
+      ]
+    },
+    {
+      "id": "D2FE-DVM-004",
+      "title": "补单设备高级采集入口",
+      "lanes": ["d2-fe"],
+      "status": "open",
+      "dependsOn": ["D2FE-DVM-003"],
+      "priority": 91,
+      "risk": "Medium",
+      "scope": "保持默认采集入口轻量，同时为单设备场景补受控的高级采集入口，用于缺少接入目标、缺少凭证或用户主动选择高级参数时覆盖采集目标、凭证和采集方式。",
+      "nonGoals": "不恢复旧页整块大工作台式采集表单，不为批量采集提供统一凭证覆盖。",
+      "allowedPaths": [
+        "OneOps-UI/src/views/device/DeviceV2ManagementGrouped.vue",
+        "OneOps-UI/src/api/device/device-v2.ts"
+      ],
+      "acceptance": [
+        "单设备默认仍可快速采集。",
+        "缺少接入目标或凭证时，页面存在明确的高级采集参数入口。",
+        "批量采集继续只使用设备已保存的接入信息。"
+      ],
+      "validation": [
+        "npx eslint src/views/device/DeviceV2ManagementGrouped.vue src/api/device/device-v2.ts --ext .vue,.ts --fix"
+      ],
+      "notes": [
+        "PRD: docs/prd-autodev/device-v2-management-ops-closure/prd.md",
+        "参数范围以旧页已验证有效的 host、SNMP、SSH、DC2 baseline 为上限，不继续膨胀。"
+      ]
+    },
+    {
+      "id": "D2FE-DVM-005",
+      "title": "补并发动作状态控制",
+      "lanes": ["d2-fe"],
+      "status": "open",
+      "dependsOn": ["D2FE-DVM-002"],
+      "priority": 96,
+      "risk": "Medium",
+      "scope": "补齐采集 / 监控并发触发时的设备级状态表达、重复触发控制和结果归属展示，并区分 V1 同步失败与监控推送失败。",
+      "nonGoals": "不伪造监控 task 详情，不把所有动作都塞进同一个全局 notice 语义。",
+      "allowedPaths": [
+        "OneOps-UI/src/views/device/DeviceV2ManagementGrouped.vue",
+        "OneOps-UI/src/api/device/device-v2.ts"
+      ],
+      "acceptance": [
+        "同一设备的重复采集或重复监控推送具备明确拦截或进行中提示。",
+        "并发存在采集与监控动作时，列表、右栏和结果提示的归属一致。",
+        "监控失败时能区分 V1 同步失败与监控推送失败。"
+      ],
+      "validation": [
+        "npx eslint src/views/device/DeviceV2ManagementGrouped.vue src/api/device/device-v2.ts --ext .vue,.ts --fix"
+      ],
+      "notes": [
+        "PRD: docs/prd-autodev/device-v2-management-ops-closure/prd.md",
+        "优先基于 sync-to-v1 批量结果、monitor_push_status/error 与 process_result 承接。"
+      ]
+    },
+    {
+      "id": "D2FE-DVM-006",
+      "title": "重构设备编辑弹窗布局",
+      "lanes": ["d2-fe"],
+      "status": "open",
+      "dependsOn": ["D2FE-DVM-001"],
+      "priority": 94,
+      "risk": "Low",
+      "scope": "加宽编辑弹窗，重组字段分区，提升下拉优先级，并把推荐维护字段与高级扩展信息做更清晰的层级组织，降低高频编辑的阅读和填写负担。",
+      "nonGoals": "不做新增设备入口，不重写 SchemaForm 的通用渲染协议。",
+      "allowedPaths": [
+        "OneOps-UI/src/views/device/DeviceV2ManagementGrouped.vue",
+        "OneOps-UI/src/components/schema-driven/SchemaForm.vue"
+      ],
+      "acceptance": [
+        "编辑弹窗宽度与首屏信息密度明显改善。",
+        "平台、类别、位置归属等优先使用可搜索下拉。",
+        "用户能明显区分推荐维护字段与高级扩展数据。"
+      ],
+      "validation": [
+        "npx eslint src/views/device/DeviceV2ManagementGrouped.vue src/components/schema-driven/SchemaForm.vue --ext .vue,.ts --fix"
+      ],
+      "notes": [
+        "PRD: docs/prd-autodev/device-v2-management-ops-closure/prd.md",
+        "需要产出编辑弹窗重构前后截图。"
+      ]
+    }
+  ]
+}

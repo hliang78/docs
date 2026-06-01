@@ -1,0 +1,38 @@
+{
+  "program": "oneops-engineering-docs-standardization",
+  "batch": "batch-001",
+  "title": "Development documentation governance gates",
+  "status": "reviewed",
+  "targetTaskIds": [
+    "dev-docs"
+  ],
+  "stories": [
+    {
+      "id": "DEV-DOCS-001",
+      "status": "done",
+      "lanes": [
+        "dev-docs"
+      ],
+      "title": "Verify human-confirmation gates for standardized engineering docs",
+      "scope": "Verify that standardized engineering docs remain blocked until human completion and confirmation.",
+      "allowedPaths": [
+        "docs/development/**",
+        "docs/openclaw-autodev/evidence/dev-docs/**"
+      ],
+      "acceptance": [
+        "Documentation standard defines blocked-human-confirmation.",
+        "Templates default to blocked-human-confirmation.",
+        "API and testing standards include usage gates.",
+        "Evidence lists remaining manual confirmation work."
+      ],
+      "validation": [
+        "git diff --check -- docs/development docs/openclaw-autodev/evidence/dev-docs",
+        "rg -n \"blocked-human-confirmation|文档状态门禁|使用门禁|待人工确认\" docs/development",
+        "jq empty docs/openclaw-autodev/stories/dev-docs.json"
+      ],
+      "evidence": [
+        "docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-001-human-confirmation-gates.md"
+      ]
+    }
+  ]
+}

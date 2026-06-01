@@ -1,0 +1,55 @@
+{
+  "program": "d2-launch-acceptance",
+  "batch": "batch-006-device-v2-ingest-management-rerun",
+  "title": "Device V2 入库与管理模块真实执行回归",
+  "status": "reviewed",
+  "targetTaskIds": [
+    "d2-fe"
+  ],
+  "releaseGate": "上一轮 dev-docs 自动化已归档后，本批次用于把自动化执行焦点切回 Device V2 入库与管理模块。该批次只补充一轮真实执行回归，不替代 Batch 005 的最终上线结论。",
+  "stories": [
+    {
+      "id": "D2LA-006A",
+      "title": "Device V2 入库与管理模块真实执行回归",
+      "lanes": [
+        "d2-fe"
+      ],
+      "status": "open",
+      "priority": 55,
+      "risk": "Low",
+      "dependsOn": [
+        "D2LA-005B"
+      ],
+      "scope": "围绕 Device V2 入库和管理功能模块执行一轮真实操作回归：确认入库入口、导入/入库流程、管理列表、详情/编辑/删除或安全清理、入库后管理联动仍可用。优先复用既有 D2 real-operation harness 和 ONEOPS_GATE/DB-derived cloned fixture；如发现真实缺口，做最小修复并记录 evidence。",
+      "nonGoals": "不要修改 OneOPS 后端代码；不要修改非 Device V2 范围的路由、菜单、权限或旧代码行为；不要使用 mock/fallback/HTTP 200/page title 代替真实业务证据；不要触碰非测试 fixture 或生产数据；不要发布/提交代码。",
+      "allowedPaths": [
+        "src/views/device/**",
+        "src/api/device/**",
+        "scripts/d2-*.cjs",
+        "docs/device-v2-ui-autodev/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-fe/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/d2-launch-acceptance/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/shared-d2.md",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/context/d2-phase2-real-operability.md"
+      ],
+      "acceptance": [
+        "生成中文 evidence summary，说明入库模块和管理模块分别执行了哪些真实操作。",
+        "Evidence 至少覆盖入库/导入入口、管理列表可见性、入库后管理联动、一个管理操作结果或明确 BLOCKED 原因。",
+        "若执行浏览器或脚本验证，记录命令、fixture、关键响应/截图/JSON 路径，并验证业务状态而不仅是 HTTP 200。",
+        "如发现缺口，只在 allowedPaths 内做最小修复；无法安全判断时以 BLOCKED/APPROVAL 收尾并列出人工问题。",
+        "Configured validation passes or blocker command/output is recorded."
+      ],
+      "validation": [
+        "npm run typecheck:d2",
+        "/Users/huangliang/project/OneOPS-ALL/scripts/openclaw-d2-runtime.sh ensure-backend",
+        "Evidence summary exists under docs/openclaw-autodev/evidence/d2-fe/D2LA-006A/"
+      ],
+      "notes": [
+        "本轮用户要求清除上一轮 dev-docs 自动化结果后，切换到 Device V2 入库和管理功能模块执行。",
+        "输出 evidence 应中文为主，英文仅保留必要技术标识。",
+        "本 story 已同步追加到 docs/openclaw-autodev/stories/d2.json；本 package 用于修复中断造成的 PRD 侧追踪缺口。"
+      ]
+    }
+  ],
+  "executionMode": "single-rerun"
+}

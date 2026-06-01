@@ -1,0 +1,262 @@
+{
+  "taskGroup": "d2on-prd",
+  "updatedAt": "2026-05-17T20:40:16+0800",
+  "stories": [
+    {
+      "id": "D2ON-PRD-CYCLE-001",
+      "title": "Review the completed d2on batch and prepare the next PRD cycle",
+      "status": "blocked",
+      "priority": 40,
+      "risk": "Medium",
+      "lanes": [
+        "d2on-prd"
+      ],
+      "scope": "Read the latest planning brief under docs/prd-autodev/device-v2-onboarding-observability/evidence/cycle-briefs/, then update the PRD program artifacts for the next bounded iteration. If the large goal is still unfinished, decide first whether the evidence changes program scope or only execution-side repair. Create or revise one next batch JSON package under story-packages/ only when a true next PRD batch is justified, or when the program is already in final closure stage and one small validation task is the most efficient way to decide close/continue/stop. If the current reviewed batch is complete but no new batch is yet justified, record the keep-loop-open decision explicitly in final-readiness.md and review.md instead of silently closing the topic.",
+      "nonGoals": "Do not modify product code, do not publish directly to docs/openclaw-autodev/stories/d2on.json, do not silently close the program while residual gaps remain, and do not create repeated micro batches for runtime repair, Chrome/DevTools setup, gateway token recovery, or lone reruns that belong in execution handling.",
+      "allowedPaths": [
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on-prd/**"
+      ],
+      "acceptance": [
+        "The latest cycle brief and referenced evidence files are read before changing the PRD program artifacts.",
+        "At least one of program-plan.md, test-matrix.md, review.md, final-readiness.md, or a next batch JSON package is updated to reflect the latest completed batch.",
+        "If work remains, exactly one bounded next batch is created or revised under story-packages/ only when the evidence justifies a true PRD-level next batch or one final-stage efficient validation gate.",
+        "If no immediate new batch is justified, final-readiness.md and review.md explicitly keep the resident loop open instead of closing the topic with STOP.",
+        "If the next batch is safe to execute without another planning round, it is marked reviewed; otherwise it remains draft with an explicit blocker or review reason.",
+        "A planner evidence summary is written under docs/openclaw-autodev/evidence/d2on-prd/ describing the decision for the next cycle."
+      ],
+      "validation": [
+        "jq empty /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/stories/d2on-prd.json",
+        "find /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/story-packages -maxdepth 1 -name \"*.json\" -print0 | xargs -0 -n1 jq empty",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/program-plan.md",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/review.md",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md"
+      ],
+      "notes": [
+        "Planner is triggered by docs/prd-autodev/device-v2-onboarding-observability/cycle-control.json via scripts/prd-program-cycle.mjs.",
+        "Before drafting any tiny validation batch, explicitly check whether the topic is already in final closure stage and whether that tiny batch is more efficient than leaving the work in execution/repair handling.",
+        "The business owner explicitly wants d2on and d2on-prd to keep looping. Do not create docs/prd-autodev/device-v2-onboarding-observability/STOP unless they explicitly ask to stop this resident topic.",
+        "Do not rewrite an already-published reviewed batch in place. If the next execution scope changes, create a new batch file instead of mutating the published one.",
+        "Write the planner summary into docs/openclaw-autodev/evidence/d2on-prd/."
+      ],
+      "repeat": true,
+      "updatedAt": "2026-05-17T20:40:16+0800",
+      "lastTask": "d2on-prd",
+      "lastControl": "BLOCKED",
+      "lastReport": {
+        "taskId": "d2on-prd",
+        "control": "BLOCKED",
+        "ticket": "D2ON-PRD-CYCLE-001 reviewed `batch-010` source-of-truth mismatch",
+        "changed": "`docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md`, `docs/prd-autodev/device-v2-onboarding-observability/review.md`, `docs/openclaw-autodev/evidence/d2on-prd/20260517-203455-cycle-001-summary.md`",
+        "tests": "`read` read-back of updated readiness/review/summary docs + `exec stat` on `batch-010.json`, `automation-sync.json`, `cycle-status.md`, and `current-story.json` — blocker (`batch-010.json` changed after controller snapshots and no longer matches them)",
+        "next": "Blocker: restore `docs/prd-autodev/device-v2-onboarding-observability/story-packages/batch-010.json` to match `automation-sync.{json,md}` / `cycle-status.md`, or republish fresh authoritative controller snapshots that include the rewritten reviewed batch.",
+        "at": "2026-05-17T20:40:16+0800",
+        "transitionReason": "blocked"
+      },
+      "events": [
+        {
+          "taskId": "d2on-prd",
+          "control": "CONTINUE",
+          "ticket": "worker-turn-budget-reached",
+          "changed": "none",
+          "tests": "not run",
+          "next": "continue current story in next bounded worker turn",
+          "at": "2026-05-17T19:45:13+0800",
+          "transitionReason": "budget-needs-next-turn"
+        },
+        {
+          "taskId": "d2on-prd",
+          "control": "CONTINUE",
+          "ticket": "D2ON-PRD-CYCLE-001 publish reviewed batch-010 for remaining log_forward blocker",
+          "changed": "7 files",
+          "tests": "`read` read-back of `batch-010.json`, `cycle-status.md`, `final-readiness.md`, `review.md`, `program-plan.md`, `test-matrix.md`, and planner summary — pass",
+          "next": "execution lane runs reviewed `batch-010` (`D2ON-029/030/031`)",
+          "at": "2026-05-17T11:45:31.773Z",
+          "transitionReason": "continue"
+        },
+        {
+          "taskId": "d2on-prd",
+          "control": "CONTINUE",
+          "ticket": "D2ON-PRD-CYCLE-001 keep reviewed batch-010 active and defer batch-011",
+          "changed": "`docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md`, `docs/prd-autodev/device-v2-onboarding-observability/review.md`, `docs/openclaw-autodev/evidence/d2on-prd/20260517-195359-cycle-001-summary.md`",
+          "tests": "`read` read-back of `docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md`, `docs/prd-autodev/device-v2-onboarding-observability/review.md`, `docs/prd-autodev/device-v2-onboarding-observability/story-packages/batch-010.json`, and `docs/openclaw-autodev/evidence/d2on-prd/20260517-195359-cycle-001-summary.md` — pass",
+          "next": "execution lane resolves `D2ON-029` inside reviewed `batch-010`, then reruns `D2ON-030/031` before any new PRD batch decision",
+          "at": "2026-05-17T11:56:50.270Z",
+          "transitionReason": "continue"
+        },
+        {
+          "taskId": "d2on-prd",
+          "control": "CONTINUE",
+          "ticket": "worker-turn-budget-reached",
+          "changed": "none",
+          "tests": "not run",
+          "next": "continue current story in next bounded worker turn",
+          "at": "2026-05-17T19:56:51+0800",
+          "transitionReason": "budget-needs-next-turn"
+        },
+        {
+          "taskId": "d2on-prd",
+          "control": "CONTINUE",
+          "ticket": "D2ON-PRD-CYCLE-001 keep reviewed batch-010 active and defer batch-011",
+          "changed": "`docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md`, `docs/prd-autodev/device-v2-onboarding-observability/review.md`, `docs/openclaw-autodev/evidence/d2on-prd/20260517-195359-cycle-001-summary.md`",
+          "tests": "`read` read-back of `docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md`, `docs/prd-autodev/device-v2-onboarding-observability/review.md`, `docs/prd-autodev/device-v2-onboarding-observability/story-packages/batch-010.json`, and `docs/openclaw-autodev/evidence/d2on-prd/20260517-195359-cycle-001-summary.md` — pass",
+          "next": "execution lane resolves `D2ON-029` inside reviewed `batch-010`, then reruns `D2ON-030/031` before any new PRD batch decision",
+          "at": "2026-05-17T11:57:21.265Z",
+          "transitionReason": "continue"
+        },
+        {
+          "taskId": "d2on-prd",
+          "control": "CONTINUE",
+          "ticket": "worker-turn-budget-reached",
+          "changed": "none",
+          "tests": "not run",
+          "next": "continue current story in next bounded worker turn",
+          "at": "2026-05-17T20:19:23+0800",
+          "transitionReason": "budget-needs-next-turn"
+        },
+        {
+          "taskId": "d2on-prd",
+          "control": "CONTINUE",
+          "ticket": "D2ON-PRD-CYCLE-001 keep reviewed batch-010 active and defer batch-011",
+          "changed": "`docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md`, `docs/prd-autodev/device-v2-onboarding-observability/review.md`, `docs/openclaw-autodev/evidence/d2on-prd/20260517-195359-cycle-001-summary.md`",
+          "tests": "`read` read-back of `docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md`, `docs/prd-autodev/device-v2-onboarding-observability/review.md`, `docs/prd-autodev/device-v2-onboarding-observability/story-packages/batch-010.json`, and `docs/openclaw-autodev/evidence/d2on-prd/20260517-195359-cycle-001-summary.md` — pass",
+          "next": "execution lane resolves `D2ON-029` inside reviewed `batch-010`, then reruns `D2ON-030/031` before any new PRD batch decision",
+          "at": "2026-05-17T12:19:23.920Z",
+          "transitionReason": "continue"
+        },
+        {
+          "taskId": "d2on-prd",
+          "control": "CONTINUE",
+          "ticket": "D2ON-PRD-CYCLE-001 keep reviewed batch-010 active and defer batch-011",
+          "changed": "`docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md`, `docs/prd-autodev/device-v2-onboarding-observability/review.md`, `docs/openclaw-autodev/evidence/d2on-prd/20260517-202012-cycle-001-summary.md`",
+          "tests": "`read` read-back of `docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md`, `docs/prd-autodev/device-v2-onboarding-observability/review.md`, and `docs/openclaw-autodev/evidence/d2on-prd/20260517-202012-cycle-001-summary.md` — pass",
+          "next": "execution lane finishes `D2ON-030` on the repaired path, then `D2ON-031` closes readiness from that rerun truth",
+          "at": "2026-05-17T20:25:01+0800",
+          "transitionReason": "continue"
+        },
+        {
+          "taskId": "d2on-prd",
+          "control": "CONTINUE",
+          "ticket": "worker-turn-budget-reached",
+          "changed": "none",
+          "tests": "not run",
+          "next": "continue current story in next bounded worker turn",
+          "at": "2026-05-17T20:25:01+0800",
+          "transitionReason": "budget-needs-next-turn"
+        },
+        {
+          "taskId": "d2on-prd",
+          "control": "CONTINUE",
+          "ticket": "D2ON-PRD-CYCLE-001 keep reviewed batch-010 active and defer batch-011",
+          "changed": "`docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md`, `docs/prd-autodev/device-v2-onboarding-observability/review.md`, `docs/openclaw-autodev/evidence/d2on-prd/20260517-202012-cycle-001-summary.md`",
+          "tests": "`read` read-back of `docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md`, `docs/prd-autodev/device-v2-onboarding-observability/review.md`, and `docs/openclaw-autodev/evidence/d2on-prd/20260517-202012-cycle-001-summary.md` — pass",
+          "next": "execution lane finishes `D2ON-030` on the repaired path, then `D2ON-031` closes readiness from that rerun truth",
+          "at": "2026-05-17T12:25:09.494Z",
+          "transitionReason": "continue"
+        },
+        {
+          "taskId": "d2on-prd",
+          "control": "CONTINUE",
+          "ticket": "D2ON-PRD-CYCLE-001 keep reviewed batch-010 active and defer batch-011",
+          "changed": "`docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md`, `docs/prd-autodev/device-v2-onboarding-observability/review.md`, `docs/openclaw-autodev/evidence/d2on-prd/20260517-202721-cycle-001-summary.md`",
+          "tests": "`read` read-back of updated `final-readiness.md`, `review.md`, and `20260517-202721-cycle-001-summary.md` — pass",
+          "next": "execution lane finishes `D2ON-030`, then `D2ON-031` closes readiness from that rerun truth",
+          "at": "2026-05-17T20:28:48+0800",
+          "transitionReason": "continue"
+        },
+        {
+          "taskId": "d2on-prd",
+          "control": "CONTINUE",
+          "ticket": "worker-turn-budget-reached",
+          "changed": "none",
+          "tests": "not run",
+          "next": "continue current story in next bounded worker turn",
+          "at": "2026-05-17T20:28:48+0800",
+          "transitionReason": "budget-needs-next-turn"
+        },
+        {
+          "taskId": "d2on-prd",
+          "control": "CONTINUE",
+          "ticket": "D2ON-PRD-CYCLE-001 keep reviewed batch-010 active and defer batch-011",
+          "changed": "`docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md`, `docs/prd-autodev/device-v2-onboarding-observability/review.md`, `docs/openclaw-autodev/evidence/d2on-prd/20260517-202721-cycle-001-summary.md`",
+          "tests": "`read` read-back of updated `final-readiness.md`, `review.md`, and `20260517-202721-cycle-001-summary.md` — pass",
+          "next": "execution lane finishes `D2ON-030`, then `D2ON-031` closes readiness from that rerun truth",
+          "at": "2026-05-17T12:29:02.311Z",
+          "transitionReason": "continue"
+        },
+        {
+          "taskId": "d2on-prd",
+          "control": "CONTINUE",
+          "ticket": "D2ON-PRD-CYCLE-001 keep reviewed batch-010 active and defer batch-011",
+          "changed": "`docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md`, `docs/prd-autodev/device-v2-onboarding-observability/review.md`, `docs/openclaw-autodev/evidence/d2on-prd/20260517-202913-cycle-001-summary.md`",
+          "tests": "`read` read-back of updated `final-readiness.md`, `review.md`, and `20260517-202913-cycle-001-summary.md` — pass",
+          "next": "execution lane finishes `D2ON-030`, then `D2ON-031` closes readiness from that rerun truth",
+          "at": "2026-05-17T20:31:38+0800",
+          "transitionReason": "continue"
+        },
+        {
+          "taskId": "d2on-prd",
+          "control": "CONTINUE",
+          "ticket": "worker-turn-budget-reached",
+          "changed": "none",
+          "tests": "not run",
+          "next": "continue current story in next bounded worker turn",
+          "at": "2026-05-17T20:31:38+0800",
+          "transitionReason": "budget-needs-next-turn"
+        },
+        {
+          "taskId": "d2on-prd",
+          "control": "CONTINUE",
+          "ticket": "D2ON-PRD-CYCLE-001 keep reviewed batch-010 active and defer batch-011",
+          "changed": "`docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md`, `docs/prd-autodev/device-v2-onboarding-observability/review.md`, `docs/openclaw-autodev/evidence/d2on-prd/20260517-202913-cycle-001-summary.md`",
+          "tests": "`read` read-back of updated `final-readiness.md`, `review.md`, and `20260517-202913-cycle-001-summary.md` — pass",
+          "next": "execution lane finishes `D2ON-030`, then `D2ON-031` closes readiness from that rerun truth",
+          "at": "2026-05-17T12:31:39.310Z",
+          "transitionReason": "continue"
+        },
+        {
+          "taskId": "d2on-prd",
+          "control": "CONTINUE",
+          "ticket": "D2ON-PRD-CYCLE-001 keep reviewed batch-010 active and defer batch-011",
+          "changed": "`docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md`, `docs/prd-autodev/device-v2-onboarding-observability/review.md`, `docs/openclaw-autodev/evidence/d2on-prd/20260517-203227-cycle-001-summary.md`",
+          "tests": "`read` read-back of `docs/prd-autodev/device-v2-onboarding-observability/story-packages/batch-010.json`, updated `final-readiness.md`, updated `review.md`, and `20260517-203227-cycle-001-summary.md` — pass",
+          "next": "execution lane finishes `D2ON-030`, then `D2ON-031` closes readiness from that rerun truth",
+          "at": "2026-05-17T20:34:42+0800",
+          "transitionReason": "continue"
+        },
+        {
+          "taskId": "d2on-prd",
+          "control": "CONTINUE",
+          "ticket": "worker-turn-budget-reached",
+          "changed": "none",
+          "tests": "not run",
+          "next": "continue current story in next bounded worker turn",
+          "at": "2026-05-17T20:34:42+0800",
+          "transitionReason": "budget-needs-next-turn"
+        },
+        {
+          "taskId": "d2on-prd",
+          "control": "CONTINUE",
+          "ticket": "D2ON-PRD-CYCLE-001 keep reviewed batch-010 active and defer batch-011",
+          "changed": "`docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md`, `docs/prd-autodev/device-v2-onboarding-observability/review.md`, `docs/openclaw-autodev/evidence/d2on-prd/20260517-203227-cycle-001-summary.md`",
+          "tests": "`read` read-back of `docs/prd-autodev/device-v2-onboarding-observability/story-packages/batch-010.json`, updated `final-readiness.md`, updated `review.md`, and `20260517-203227-cycle-001-summary.md` — pass",
+          "next": "execution lane finishes `D2ON-030`, then `D2ON-031` closes readiness from that rerun truth",
+          "at": "2026-05-17T12:34:43.365Z",
+          "transitionReason": "continue"
+        },
+        {
+          "taskId": "d2on-prd",
+          "control": "BLOCKED",
+          "ticket": "D2ON-PRD-CYCLE-001 reviewed `batch-010` source-of-truth mismatch",
+          "changed": "`docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md`, `docs/prd-autodev/device-v2-onboarding-observability/review.md`, `docs/openclaw-autodev/evidence/d2on-prd/20260517-203455-cycle-001-summary.md`",
+          "tests": "`read` read-back of updated readiness/review/summary docs + `exec stat` on `batch-010.json`, `automation-sync.json`, `cycle-status.md`, and `current-story.json` — blocker (`batch-010.json` changed after controller snapshots and no longer matches them)",
+          "next": "Blocker: restore `docs/prd-autodev/device-v2-onboarding-observability/story-packages/batch-010.json` to match `automation-sync.{json,md}` / `cycle-status.md`, or republish fresh authoritative controller snapshots that include the rewritten reviewed batch.",
+          "at": "2026-05-17T20:40:16+0800",
+          "transitionReason": "blocked"
+        }
+      ],
+      "completedCount": 1,
+      "lastCompletedAt": "2026-05-17T04:24:54.059Z"
+    }
+  ]
+}

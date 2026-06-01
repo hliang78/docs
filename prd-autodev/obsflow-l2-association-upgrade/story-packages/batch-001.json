@@ -1,0 +1,9 @@
+{
+  "program": "obsflow-l2-association-upgrade",
+  "batch": "batch-001",
+  "title": "First reviewed slice",
+  "status": "draft",
+  "targetTaskIds": [],
+  "releaseGate": "User confirmation required before publishing.",
+  "stories": []
+}

@@ -1,0 +1,20 @@
+{
+  "topic": "device-v2-onboarding-observability",
+  "taskGroup": "d2on",
+  "updatedAt": "2026-05-18T16:42:00.000Z",
+  "closureState": "successful-product-closure-current-repair-scope",
+  "nextAction": "none",
+  "reason": "The post-D2ON-057 bounded repair scope is now closed. Current runtime evidence shows explicit Device V2 monitoring onboarding invoked the V1 sync and monitor push path, Prometheus metrics are queryable for DVCD25E1C13D3C3, and both network syslog plus network SNMP trap are queryable in Loki for 172.32.2.14.",
+  "activeReviewedBatch": null,
+  "lastCompletedReviewedBatch": "batch-013",
+  "lastTriggeredBatch": "batch-007",
+  "lastTrigger": {
+    "at": "2026-05-17T08:17:18.614Z",
+    "batch": "batch-007",
+    "status": "success",
+    "reason": "planner command completed",
+    "exitCode": 0,
+    "briefFile": "/Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/evidence/cycle-briefs/batch-007-planning-brief.md",
+    "logFile": "/Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/evidence/cycle-logs/2026-05-17T08-16-16-947Z-batch-007.log"
+  }
+}

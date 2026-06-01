@@ -1,0 +1,53 @@
+{
+  "profileId": "product-implementation-worker",
+  "description": "Bounded local product-implementation worker for story-scoped backend or frontend code changes with targeted validation and explicit runtime boundaries.",
+  "supportedTaskKinds": [
+    "product_implementation"
+  ],
+  "supportedEnvironmentKinds": [
+    "local_workspace",
+    "local_runtime",
+    "browser_localhost",
+    "browser_test_env"
+  ],
+  "contextTolerance": {
+    "profile": "small",
+    "maxPromptTokensClass": "small",
+    "prefersCompiledContext": true,
+    "requiresWorkspaceSanitization": false
+  },
+  "actionCapabilities": {
+    "shellExec": true,
+    "fileEdit": true,
+    "browserInteract": true,
+    "dbReadonly": false,
+    "apiReadonly": false,
+    "remoteReadonly": false,
+    "remoteApply": false,
+    "serviceRestart": true,
+    "deleteFiles": false
+  },
+  "writeCapabilities": {
+    "maxFilesPerTurn": 6,
+    "supportsBroadRefactor": false,
+    "supportsCrossModuleChanges": true,
+    "supportsDocOnlyTurns": true
+  },
+  "verificationModel": {
+    "needsControllerVerifyOnDone": true,
+    "supportsTargetedValidation": true,
+    "supportsRealOperationValidation": true,
+    "trustSelfReportedDone": false
+  },
+  "coordinationModel": {
+    "supportsMultiStoryTurns": false,
+    "supportsMultiLaneCoordination": false,
+    "requiresExplicitJoinPolicy": true
+  },
+  "schedulingDefaults": {
+    "maxTurns": 1,
+    "maxMinutes": 40,
+    "timeoutSeconds": 2400,
+    "preferFreshSession": true
+  }
+}

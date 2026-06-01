@@ -231,6 +231,10 @@
 - 这类场景还要并排看 `platform_metric_asset_instance`；如果 runtime 已恢复成 `running/stale`，但 metric asset 仍全部停在 `planned`，就更不能把它误判成“本轮采集已稳定恢复”。
 - `REAL-071` 之后要把这两层现象拆开看：如果 `unknown` 窗口结束后出现的是“晚于本轮重放完成时间”的新 `last_updated`，那说明 agent 旧状态回写问题已经被压住；这时若 `platform_metric_asset_instance` 仍继续停在 `planned`，优先怀疑的是“snapshot / observed metric 同步没触发”，而不是 agent 又读回了旧样本。
 - `REAL-072` 之后这个判断口径还要再更新一层：如果 `store/start` 完成后 `platform_monitoring_v2_agent_task_snapshot.synced_at` 已经推进到本轮完成时间附近，且 `platform_metric_asset_instance` 已从 `planned` 收敛成 `observed/stale`，就说明自动 snapshot 同步已经生效；这时单条 `/runtime` 仍然 `unknown`，优先追的是 agent input 首轮采集时序，而不是平台又漏调了 `sync-agent-snapshot`。
+- `REAL-073` 之后还要再拆一层：如果 burst apply 期间发生了多次 `ReplaceAllInputs()`，要警惕“旧 generation 的 gather 还在继续白跑，最终代 gather 被排到很后面”。修复后，像 `ping` 这类更早轮到的 input，应该能在本轮 fresh 时间戳出现后更快脱离 `unknown`；若仍长时间不动，再去怀疑它自己的采集位置或耗时。
+- `REAL-074` 之后解读 `last_updated / last_gather_at` 也要注意区分“input 自己真正完成的时间”和“整轮循环起点时间”。如果 later input 明显比 earlier input 晚很多才从 `unknown` 变成 `running`，但两者却共享同一个更早时间戳，那更像是时间戳口径 bug；修复后，这两条时间应该能自然拉开。
+- `REAL-075` 之后还要补一层判断：如果 agent 日志能证明 `snmp` 比 `ping` 更早收到 apply，但它仍明显更晚才从 `unknown` 变成 `running`，就不要再默认是“后续无关 replace 把它 priority 覆盖掉了”。priority carry-over 修完后，这类窗口更可能是 `snmp` 自己这一轮 gather 的真实耗时。
+- `REAL-076` 之后这个判断口径还要再细一层：如果 debug 日志显示 `snmp` 自己真正的 gather duration 只有几秒，但它距离 apply 很久之后才开始，那优先怀疑的是“旧 priority backlog 抢在当前 replay 前面”，而不是 SNMP 插件本身慢。修掉这层后，`snmp` 的完成时间应该会收敛到接近 `ping + snmp` 自身耗时的量级，而不是继续卡在几十秒甚至一分钟以上。
 
 ### 11. 阻断后“没刷新 agent 任务”也是正式验收项
 

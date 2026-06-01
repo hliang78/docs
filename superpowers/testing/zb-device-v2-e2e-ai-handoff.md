@@ -319,12 +319,92 @@ cd /home/jacky/project/OneOPS-ALL/quick_env
   - `snapshot / metric asset` 自动同步已经恢复
   - 剩余 open gap 是 agent input runtime 状态本身为什么还会短时间保持 `unknown`
 
+- 最新进展：`ReplaceAllInputs()` burst apply 时“旧代 gather 白跑到底，把最终代挤到后面”这一层也已经补上
+  - 代码侧给 agent 的 `gatherMetrics()` 抽了有序快照执行器，并在进入下一条 input 前检查 generation；若中途发生 replace，就提前终止旧代循环，让挂起的最新一代 gather 尽快启动
+  - 红灯测试：`TestReplaceAllInputs_StopsStaleGatherCycleSoLatestInputsCanRunPromptly`
+  - 回归：`go test ./pkg/ops/metrics -count=1`
+  - 真实回放 `task_id=entv2_1780303994867650312`
+  - 本轮 `store/start` 在 `2026-06-01 16:53:26 +08:00` 完成后：
+    - `t+20=16:53:46` 时，`ping` 已提前收敛为 `running`
+    - `last_updated=2026-06-01T16:53:35+08:00`，已晚于本轮完成时间
+    - `snmp` 仍保持 `unknown`
+    - 到 `t+100=16:55:07` 时，`snmp` 才回到 `running`
+    - `GET /api/v1/device/v2/DVCE1EE3F7D394C` 也同步回到 `runtime_health=healthy`
+  - 这说明现在的剩余窗口主要只和“这个 input 实际何时轮到自己开始/完成采集”有关，而不是旧代 gather 还在白跑几分钟
+
+- 最新进展：later input 的 `last_updated / last_gather_at` 时间戳也已经改成按各自完成时刻回写
+  - 红灯测试：`TestGatherMetricsSnapshot_RecordsPerInputTimestampInsteadOfWholeCycleStart`
+  - 回归：`go test ./pkg/ops/metrics -count=1`
+  - 真实回放 `task_id=entv2_1780304230109079297`
+  - 本轮里：
+    - `ping` 在 `t+20=16:57:41` 返回 `running / last_updated=2026-06-01T16:57:30+08:00`
+    - `snmp` 到 `t+80=16:58:42` 才返回 `running / last_updated=2026-06-01T16:58:40+08:00`
+    - 设备级 detail 也同步显示 `runtime_health.last_updated=2026-06-01T16:58:40+08:00`
+  - 这说明 later input 不会再沿用整轮循环起点时间，后续判断“到底是哪条 input 何时真正收敛”会更可靠
+
+- 最新进展：较早更新的 input priority 现在会跨后续无关 replace 继续保留，不再只看“最后一轮变化的是谁”
+  - 红灯测试：`TestReplaceAllInputs_KeepsEarlierUpdatedInputPrioritizedAcrossLaterUnrelatedReplace`
+  - collector 现在会维护“当前 generation 里尚未完成首轮采集的 pending priority inputs”，后续 processor/output/别的 input replace 会把这批名字一起带到最新 generation
+  - 回归：`go test ./pkg/ops/metrics -count=1`
+  - 真实回放 `task_id=entv2_1780305330979015003`
+  - 本轮 agent 日志已明确看到下发顺序是 `snmp -> processor -> output -> ping`
+  - 运行态观测里：
+    - `t0=17:15:53` 时，`ping` 已返回 `running / last_updated=2026-06-01T17:15:51+08:00`
+    - 同时 `snmp` 仍是 `unknown`
+    - `t+20=17:16:13`、`t+40=17:16:33`、`t+60=17:16:53` 时，`snmp` 仍持续 `unknown`
+    - 到 `t+80=17:17:13` 时，`snmp` 才返回 `running / last_updated=2026-06-01T17:16:59+08:00`
+    - 设备级 `GET /api/v1/device/v2/DVCE1EE3F7D394C` 也在同一时刻从 `runtime_health=unknown` 回到 `healthy`
+  - 这条结果很关键：既然本轮 `snmp` 比 `ping` 更早收到 apply，但最终仍要到 `t+80` 才收敛，就说明“较早更新 input 被后续 replace 挤掉优先级”这一层虽然真实存在、也已经被代码修住，但现在现场剩余窗口更像是 `snmp` 自身 gather 完成得晚
+
+- 最新进展：打开 agent `debug` 时长日志后，已经确认 `snmp` 本身并不慢，真正拖窗口的是“旧 priority backlog 抢在当前 replay 前面”
+  - 为了不碰正常配置，额外加了一份临时调试配置 [agent.debug.yaml](/home/jacky/project/OneOPS-ALL/ctrlhub/controller/agent/configs/agent.debug.yaml)
+  - 调试日志里第一次量到的现场事实是：
+    - `task_id=entv2_1780305742791739710`
+    - `collect_agent-001_snmp-passthrough_172_32_2_15_161` 在 `17:22:35.366` 收到 apply
+    - 但真正的 `Gathered metrics from input` 到 `17:23:49.994` 才出现，`duration=3.853281921s`
+    - 也就是说它不是自己跑了 70 多秒，而是晚了 70 多秒才轮到自己开始
+  - 随后又从同一份 debug 日志确认，排在它前面的主要是一长串旧的 `ping-basic_*` gather；这批 backlog 来自 agent 重启后恢复的持久化任务，而我们当时的 pending priority 实现会把“当前 replay 的新变更”和“旧 backlog”一起按名字重排
+  - 针对这层又补了红灯测试：`TestReplaceAllInputs_PrioritizesCurrentBurstAheadOfOlderPendingBacklog`
+  - collector 现在除了 pending set 之外，还会维护 pending priority 的执行顺序：当前 burst 里的新变更放前面，旧 backlog 放后面
+  - 回归：`go test ./pkg/ops/metrics -count=1`
+  - 带着修复和 debug 配置再次重启现场 agent，并在“恢复 41 条持久化任务后、老 backlog 仍在扫”的最差场景下重放：
+    - `task_id=entv2_1780306024767573333`
+    - `snmp` 在 `17:27:17.262` 收到 apply
+    - `ping` 在 `17:27:19.868` 完成首轮 gather，`duration=2.051671712s`
+    - `snmp` 在 `17:27:23.830` 完成首轮 gather，`duration=3.962464057s`
+    - 对应 runtime 已在 `last_updated=17:27:19` 与 `17:27:23` 收敛为 `running`
+  - 这轮说明真正卡住我们的不是 `snmp` 插件耗时，而是 priority 排队策略；压掉这层后，`snmp` 首轮窗口已经从之前约 `80s` 收敛到接近 `ping + snmp` 自身耗时的 `6~7s`
+
 继续追时要同时看：
 - 单条 `/runtime`
 - `platform_metric_asset_instance`
 - agent 日志
 - 是否刚重放、刚重启、刚 snapshot
 - `last_updated / last_gather_at` 是否早于本轮 `store/start` 完成时间
+
+当前更准确的结论：
+- `monitor push -> snapshot / metric asset` 自动同步已经恢复
+- 旧代 input status 回写当前代，已经修掉
+- burst replace 把最终代 gather 挤到很后面，这一层也已经修掉
+- later input 复用整轮起点时间戳，这一层也已经修掉
+- 较早更新 input 会被后续无关 replace 挤掉 priority，这一层也已经修掉
+- 旧 priority backlog 会抢在当前 replay 前面，这一层也已经修掉
+- 仍然可能存在的短暂 `unknown`，现在更像是 `ping/snmp` 自身真实 gather 耗时之和，而不再像前面几层 priority/并发/时间戳 bug
+- 下一步如果还要继续压时间，重点已经不是“会不会排不到前面”，而是看值不值得把 `ping` 和 `snmp` 两条真正并行化，或者让同设备的 `snmp` 比 `ping` 先跑
+
+### 9.1.1 Telegraf 式容量重构计划
+
+为了让后续 AI 能直接继续，不再只停留在 finding/修 bug 层面，本轮已经把面向“大量 SNMP 任务”的正式重构方案落到了：
+
+- [2026-06-01-agent-telegraf-style-input-scheduler.md](/home/jacky/project/OneOPS-ALL/docs/superpowers/plans/2026-06-01-agent-telegraf-style-input-scheduler.md)
+- 辅助说明：[zb-agent-telegraf-scale-refactor-notes.md](/home/jacky/project/OneOPS-ALL/docs/superpowers/testing/zb-agent-telegraf-scale-refactor-notes.md)
+
+这份计划的边界很重要：
+
+- 目标是先把当前 agent 从“全局串行 sweep”改成“每个 input 独立 runner + overrun skip + bounded SNMP concurrency”
+- 先不做“把多个 OneOps SNMP 任务合并成一个多-agent SNMP input”的语义级 batching；那会是下一份独立计划
+
+下一位 AI 如果继续开发，建议默认按计划里的 Task 1 -> Task 6 顺序走，而不是重新在旧的 global priority queue 上继续打补丁
 
 ### 9.2 通用 SNMP 策略对 `VSR1000` 的内容覆盖
 

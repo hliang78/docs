@@ -1,0 +1,260 @@
+{
+  "program": "device-v2-onboarding-observability",
+  "batch": "batch-010",
+  "title": "Land the exact syslog listener contract/page chain before resuming the same single-device onboarding rerun",
+  "status": "reviewed",
+  "executionMode": "dependency-chain",
+  "releaseGate": "Owner-confirmed scope correction: `D2ON-029` removed the old config-source blocker, but the same live path now exposes `runtime syslog contract is missing; configured dispatch details are recorded only`. Before rerunning `D2ON-030`, finish a narrow syslog listener contract/page/wiring chain inside the same reviewed batch. Do not split this into a new batch, and do not resume the rerun until that chain is done.",
+  "targetTaskIds": [
+    "d2on"
+  ],
+  "stories": [
+    {
+      "id": "D2ON-029",
+      "title": "Repair the remaining log_forward config-source blocker on the single-device ensure path",
+      "status": "done",
+      "priority": 280,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Fix only the remaining `log_forward` failure `onboarding config source is required` on the same single-device `plan -> ensure` path used by `DeviceV2ManagementRedesign.vue`. Preserve the repaired normal onboarding payload shape from `D2ON-027`, and do not drop or rewrite the controller-backed monitoring tuple while removing the extra config-source failure.",
+      "nonGoals": [
+        "Do not close with docs-only or evidence-only edits.",
+        "Do not widen into batch onboarding, token/session recovery, or unrelated environment repair.",
+        "Do not hide a remaining product-path blocker behind generic success wording."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/**",
+        "OneOPS-UI/src/views/device/**",
+        "OneOPS-UI/src/api/device/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "`docs/openclaw-autodev/evidence/d2on/D2ON-029.md` exists with `Verdict: done-with-code` or `Verdict: exact-contract-blocker`.",
+        "The repaired single-device `ensure` path no longer fails specifically because the config source is missing, or the blocker file names the exact remaining file/function/contract gap.",
+        "If the repair succeeds, the same path still preserves the onboarding evidence fields needed for the rerun: `actions`, `task_id`, `store_run_id`, `controller_stage`, `store_run_status`, `core_store_status`, and `manageable_status`."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/...",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-029.md",
+        "grep -Eq '^Verdict: (done-with-code|exact-contract-blocker)$' /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-029.md"
+      ],
+      "notes": [
+        "Must read first: docs/openclaw-autodev/evidence/d2on/D2ON-027.md, docs/openclaw-autodev/evidence/d2on/D2ON-028.md, and docs/development/device-v2-onboarding-observability/10-阶段结论-OneOPS_DeviceV2纳管观测_v0.1.md.",
+        "Keep the fix anchored to the same single-device continue-onboarding flow that already produced the exact blocker.",
+        "Not enough for DONE: changing only docs, changing only evidence wording, or rerunning without addressing the remaining config-source contract."
+      ]
+    },
+    {
+      "id": "D2ON-029A",
+      "title": "Wrap area listener service contract on top of remote_syslog/log_forward_plan",
+      "status": "done",
+      "dependsOn": [
+        "D2ON-029"
+      ],
+      "priority": 283,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Create the exact platform-side contract for area listener services that the new independent management page and the later onboarding rerun can both consume. Reuse the existing `remote_syslog` / `log_forward_plan` persistence and publish chain, but surface explicit listener service types for `server_syslog_listener`, `network_syslog_listener`, and `snmp_trap_listener` instead of leaving onboarding to a generic runtime placeholder.",
+      "nonGoals": [
+        "Do not build a second publish engine.",
+        "Do not widen into device-side syslog target or SNMP trap target remote configuration.",
+        "Do not hide missing platform mappings behind fallback success."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/platform/**",
+        "OneOPS-UI/src/api/platform/**",
+        "OneOPS-UI/src/typings/platform/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "`docs/openclaw-autodev/evidence/d2on/D2ON-029A.md` exists with `Verdict: done-with-contract` or `Verdict: exact-contract-blocker`.",
+        "The code exposes exact listener service types for `server_syslog_listener`, `network_syslog_listener`, and `snmp_trap_listener`, and each type maps back to the existing publish model or fails with an exact adapter gap.",
+        "The contract makes it explicit that `snmp_trap` in this round is listener-only, not device-side trap target delivery."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform/...",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-029A.md",
+        "grep -Eq '^Verdict: (done-with-contract|exact-contract-blocker)$' /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-029A.md"
+      ],
+      "notes": [
+        "Must read first: docs/openclaw-autodev/evidence/d2on/D2ON-029.md and docs/prd-autodev/device-v2-onboarding-observability/workstreams/07-independent-listener-management-page.md.",
+        "This story is the explicit owner-approved insertion before `D2ON-030`; do not continue the rerun until this contract exists."
+      ]
+    },
+    {
+      "id": "D2ON-029B",
+      "title": "Build the independent area syslog/snmp trap listener management page",
+      "status": "done",
+      "dependsOn": [
+        "D2ON-029A"
+      ],
+      "priority": 286,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Implement the independent platform page for area listener service management. The page must let operators choose FunctionArea and agent, then manage `server_syslog_listener`, `network_syslog_listener`, and `snmp_trap_listener` while reusing the existing `remote_syslog` / `log_forward_plan` apply chain and its dry-run/preflight/apply/remove operations.",
+      "nonGoals": [
+        "Do not route this work back through the Device V2 row action UI.",
+        "Do not create a separate publish path outside the existing platform apply chain.",
+        "Do not add device-side SNMP trap target management."
+      ],
+      "allowedPaths": [
+        "OneOPS-UI/src/views/platform/**",
+        "OneOPS-UI/src/router/**",
+        "OneOPS-UI/src/api/platform/**",
+        "OneOPS-UI/src/typings/platform/**",
+        "OneOPS/app/platform/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "`docs/openclaw-autodev/evidence/d2on/D2ON-029B.md` exists with `Verdict: done-with-page` or `Verdict: exact-contract-blocker`.",
+        "A dedicated platform entry exists for area listener management, separate from the Device V2 onboarding surface.",
+        "The page distinguishes `server_syslog_listener` vs `network_syslog_listener` through form semantics/defaults while keeping the backend publish model reused.",
+        "The page includes `snmp_trap_listener` as listener-only scope for this round."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-029B.md",
+        "grep -Eq '^Verdict: (done-with-page|exact-contract-blocker)$' /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-029B.md"
+      ],
+      "notes": [
+        "Must read first: `D2ON-029A` output and the current `OneOPS-UI/src/views/platform/LogForwardPlanManagement.vue` implementation.",
+        "Keep the UI bold but consistent with the existing platform patterns; the user confirmed this is an independent management page, not a hidden wrapper inside onboarding."
+      ]
+    },
+    {
+      "id": "D2ON-029C",
+      "title": "Wire single-device onboarding syslog listener resolution to the managed listener contract",
+      "status": "done",
+      "dependsOn": [
+        "D2ON-029B"
+      ],
+      "priority": 288,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Update the single-device onboarding `log_forward` path so it resolves syslog listener state from the new managed listener-service contract instead of returning the generic placeholder `runtime syslog contract is missing; configured dispatch details are recorded only` whenever an area listener can now be determined exactly. Preserve the honest blocked/unknown result when the listener service is actually absent or incomplete.",
+      "nonGoals": [
+        "Do not paraphrase an absent listener-service record as success.",
+        "Do not widen into unrelated monitoring identity-conflict repair.",
+        "Do not implement device-side trap target delivery."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/**",
+        "OneOPS/app/platform/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "`docs/openclaw-autodev/evidence/d2on/D2ON-029C.md` exists with `Verdict: done-with-wiring` or `Verdict: exact-contract-blocker`.",
+        "When an exact area listener service exists, the onboarding `log_forward` action no longer falls back to the old generic runtime syslog placeholder.",
+        "If no exact listener service exists, the action still returns an honest exact reason tied to the missing listener-service record or incomplete service contract.",
+        "The same path still preserves `actions`, `task_id`, `store_run_id`, `controller_stage`, `store_run_status`, `core_store_status`, and `manageable_status` for the later rerun."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... ./app/platform/...",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-029C.md",
+        "grep -Eq '^Verdict: (done-with-wiring|exact-contract-blocker)$' /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-029C.md"
+      ],
+      "notes": [
+        "Must read first: `D2ON-029.md`, `D2ON-029A.md`, and `D2ON-029B.md`.",
+        "This is the last inserted prerequisite before `D2ON-030`; do not restart the rerun until this story is done."
+      ]
+    },
+    {
+      "id": "D2ON-030",
+      "title": "Rerun one exact single-device continue-onboarding probe after the log_forward repair",
+      "status": "open",
+      "dependsOn": [
+        "D2ON-029C"
+      ],
+      "priority": 290,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "After the inserted syslog listener contract/page/wiring chain (`D2ON-029A/B/C`), run exactly one bounded live probe on the same single-device `plan -> ensure -> GET /onboarding` path. Capture the exact `ensure` response and whether `log_forward` is now backed by the new listener contract, while preserving the exact controller-backed tuple without paraphrasing blocked or failed outcomes as success.",
+      "nonGoals": [
+        "Do not switch to batch onboarding.",
+        "Do not omit the exact ensure payload shape, the exact log_forward result, or the exact controller tuple.",
+        "Do not treat a stale previous GET result as the new rerun verdict."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/**",
+        "OneOPS-UI/src/views/device/**",
+        "OneOPS-UI/src/api/device/**",
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "`docs/openclaw-autodev/evidence/d2on/D2ON-030.md` exists with `Verdict: controller-trace` or `Verdict: exact-blocker`.",
+        "The evidence records the device code, request bodies, exact `ensure` response, whether `log_forward` still fails, and whether a `monitor_controller_stage` action was returned during the rerun path.",
+        "The evidence preserves the returned `controller_stage`, `store_run_status`, `core_store_status`, and `manageable_status` values explicitly for success, failed, blocked, or unknown outcomes."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/...",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-030.md",
+        "grep -Eq '^Verdict: (controller-trace|exact-blocker)$' /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-030.md"
+      ],
+      "notes": [
+        "Must read first: docs/openclaw-autodev/evidence/d2on/D2ON-027.md, docs/openclaw-autodev/evidence/d2on/D2ON-029.md, docs/openclaw-autodev/evidence/d2on/D2ON-029A.md, docs/openclaw-autodev/evidence/d2on/D2ON-029B.md, docs/openclaw-autodev/evidence/d2on/D2ON-029C.md, and the exact files changed by that chain.",
+        "Prefer the same device code used in D2ON-024 and D2ON-027 when it is still valid; if not, record the exact replacement code and why it changed.",
+        "Not enough for DONE: a prose summary without the exact ensure payload, exact log_forward result, and controller tuple.",
+        "This story was deliberately reopened behind the syslog listener development chain; do not run it early."
+      ]
+    },
+    {
+      "id": "D2ON-031",
+      "title": "Update readiness after the post-log_forward rerun with an explicit program verdict",
+      "status": "open",
+      "dependsOn": [
+        "D2ON-030"
+      ],
+      "priority": 300,
+      "risk": "Medium",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Update readiness and review only after `D2ON-030` yields the post-repair rerun verdict. State explicitly whether the program is now high-quality complete with a successful product result, high-quality complete with an exact blocker, or still needs another execution repair round.",
+      "nonGoals": [
+        "Do not fall back to another passive keep-open note.",
+        "Do not claim monitor/log success without the rerun evidence.",
+        "Do not close the resident topic with STOP unless the owner explicitly asks for it."
+      ],
+      "allowedPaths": [
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "`docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md` and `docs/prd-autodev/device-v2-onboarding-observability/review.md` are updated from the rerun result.",
+        "`docs/openclaw-autodev/evidence/d2on/D2ON-031.md` exists with `ProgramVerdict: high-quality-complete` or `ProgramVerdict: further-execution-rework-needed`.",
+        "The next-step note explicitly says whether another execution repair batch is required."
+      ],
+      "validation": [
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/review.md",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-031.md",
+        "grep -Eq '^ProgramVerdict: (high-quality-complete|further-execution-rework-needed)$' /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-031.md"
+      ],
+      "notes": [
+        "Must read first: docs/openclaw-autodev/evidence/d2on/D2ON-030.md, docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md, and docs/prd-autodev/device-v2-onboarding-observability/review.md.",
+        "This story closes the next repair round honestly; it must not repeat the doc-only drift that forced batch-008.",
+        "If the rerun still returns an exact blocker, preserve the exact tuple and say whether that blocker justifies another repair round."
+      ]
+    }
+  ]
+}

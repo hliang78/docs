@@ -1,0 +1,111 @@
+{
+  "program": "device-v2-onboarding-observability",
+  "batch": "batch-004",
+  "title": "Make single-device onboarding execution honest",
+  "status": "reviewed",
+  "executionMode": "dependency-chain",
+  "targetTaskIds": ["d2on"],
+  "stories": [
+    {
+      "id": "D2ON-010",
+      "title": "Make EnsureOnboarding emit honest monitor/log action results",
+      "status": "open",
+      "priority": 100,
+      "risk": "High",
+      "lanes": ["d2on"],
+      "scope": "Refactor the backend single-device onboarding ensure path so it no longer fabricates a one-line syslog success. The ensure result must describe both monitor and log onboarding actions when applicable, respect explicit server monitor mode requirements, and record failed/unknown/blocked evidence when a real execution contract or template is missing instead of silently returning success.",
+      "nonGoals": [
+        "Do not add batch execution.",
+        "Do not implement full SNMP trap delivery.",
+        "Do not guess remote success when the backend lacks a concrete contract."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "EnsureOnboarding no longer returns a hardcoded syslog success as the default happy path.",
+        "The response and stored onboarding summary can include both monitor and log actions when the device requires them.",
+        "Server monitor mode requirements remain explicit and affect the ensured action set instead of being ignored after planning.",
+        "When a concrete runtime contract is missing, the stored onboarding action records failed, unknown, or blocked evidence with an explicit reason instead of fabricated success.",
+        "Backend tests cover at least one honest non-success execution path and one server-monitor-mode-sensitive path."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/...",
+        "rg -n \"NewLogAction\\(code, string\\(model.OnboardingMethodSyslog\\), string\\(model.OnboardingActionSuccess\\)\" /Users/huangliang/project/OneOPS-ALL/OneOPS/app/device/v2"
+      ],
+      "notes": [
+        "Current gap anchor: DeviceV2API.EnsureOnboarding still synthesizes a log success action and does not make the monitor side honest.",
+        "Use the existing onboarding action/evidence contract instead of inventing a new persistence model."
+      ]
+    },
+    {
+      "id": "D2ON-011",
+      "title": "Show non-success onboarding evidence clearly in DeviceV2ManagementRedesign",
+      "status": "open",
+      "dependsOn": ["D2ON-010"],
+      "priority": 110,
+      "risk": "Medium",
+      "lanes": ["d2on"],
+      "scope": "Harden the redesign execute flow so the actual start/ensure path does not feel like generic success when the backend reports failed, unknown, blocked, or retryable actions. The UI should surface backend action evidence, keep explicit monitor-mode requirements visible, and avoid unconditional success messaging after ensure returns non-success action states.",
+      "nonGoals": [
+        "Do not redesign unrelated Device V2 panels.",
+        "Do not add batch execution UX.",
+        "Do not hide backend action details behind a generic success toast."
+      ],
+      "allowedPaths": [
+        "OneOPS-UI/src/views/device/**",
+        "OneOPS-UI/src/api/device/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "The redesign execute flow does not show a generic success-only outcome when onboarding actions contain failed, unknown, or blocked items.",
+        "Retryable and non-success actions are surfaced from backend evidence after ensure returns.",
+        "Server monitor mode requirements remain explicit on the execute path and are not lost between plan and ensure.",
+        "The UI keeps the single-device-only rule and still renders backend action evidence directly."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "rg -n \"继续纳管已提交|failed_actions|blocked_actions|retryable_actions\" /Users/huangliang/project/OneOPS-ALL/OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue /Users/huangliang/project/OneOPS-ALL/OneOPS-UI/src/api/device/device-v2.ts"
+      ],
+      "notes": [
+        "Current gap anchor: the execute path always raises a success toast once ensure returns, even though the backend evidence model already distinguishes non-success states."
+      ]
+    },
+    {
+      "id": "D2ON-012",
+      "title": "Capture honest execute-path evidence for the next round",
+      "status": "open",
+      "dependsOn": ["D2ON-011"],
+      "priority": 120,
+      "risk": "Medium",
+      "lanes": ["d2on"],
+      "scope": "Run the intended bounded validation for the honest execute path and write durable evidence for this next round. Validate the backend/frontend contract changes with tests and, when safe within the current local environment, capture the resulting onboarding evidence or a precise blocker without pretending the execution side is already fully closed.",
+      "nonGoals": [
+        "Do not broaden into a platform-wide template rollout.",
+        "Do not claim real remote onboarding success without durable evidence."
+      ],
+      "allowedPaths": [
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "A durable evidence summary is written for the honest execute-path round.",
+        "final-readiness.md and review.md reflect whether the new round reduced the real execute-path gap or exposed a concrete remaining blocker.",
+        "The evidence clearly distinguishes local contract/test validation from any real side-effectful onboarding execution."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/...",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/review.md"
+      ],
+      "notes": [
+        "This story is the bounded validation/evidence close-out for batch-004, not a claim that the whole onboarding domain is complete."
+      ]
+    }
+  ]
+}

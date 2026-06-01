@@ -1,0 +1,87 @@
+{
+  "topic": "oneops-poc-concern-autotest",
+  "taskGroup": "poc-ct",
+  "storyFile": "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/stories/poc-ct.json",
+  "generatedAt": "2026-05-15T09:47:36+0800",
+  "publish": {
+    "mode": "report-only",
+    "appended": [],
+    "skippedExisting": [],
+    "skippedDraft": []
+  },
+  "totals": {
+    "allPackageStories": 4,
+    "reviewedPackageStories": 4,
+    "missingStories": 0,
+    "activeStories": 4,
+    "doneStories": 0,
+    "draftMissingStories": 0
+  },
+  "closureState": "automation-linked-in-progress",
+  "readiness": {
+    "file": "/Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/oneops-poc-concern-autotest/evidence/final-readiness.md",
+    "state": "pending",
+    "reason": "final readiness still contains pending markers"
+  },
+  "dependencyErrors": [],
+  "storyAudit": {
+    "errors": [],
+    "warnings": []
+  },
+  "packages": [
+    {
+      "package": "batch-001.json",
+      "batch": "batch-001",
+      "title": "WS-01 flow mapping and high-harm weak-point exploration",
+      "status": "reviewed",
+      "publishable": true,
+      "executionMode": "dependency-chain",
+      "releaseGate": "Supersedes the earlier reviewed batch-001 package. User redirected the program on 2026-05-15 to exploration-driven testing and then asked to operate it in automation with Weixin command support. This batch is reviewed for the dedicated poc-ct loop only.",
+      "total": 4,
+      "done": 0,
+      "active": 4,
+      "missing": [],
+      "queueStatuses": {
+        "open": 4
+      },
+      "rows": [
+        {
+          "id": "OPOC-EXP-001",
+          "packageStatus": "open",
+          "queueStatus": "open",
+          "inQueue": true,
+          "lanes": [
+            "poc-ct"
+          ]
+        },
+        {
+          "id": "OPOC-EXP-002",
+          "packageStatus": "open",
+          "queueStatus": "open",
+          "inQueue": true,
+          "lanes": [
+            "poc-ct"
+          ]
+        },
+        {
+          "id": "OPOC-EXP-003",
+          "packageStatus": "open",
+          "queueStatus": "open",
+          "inQueue": true,
+          "lanes": [
+            "poc-ct"
+          ]
+        },
+        {
+          "id": "OPOC-EXP-004",
+          "packageStatus": "open",
+          "queueStatus": "open",
+          "inQueue": true,
+          "lanes": [
+            "poc-ct"
+          ]
+        }
+      ]
+    }
+  ]
+}

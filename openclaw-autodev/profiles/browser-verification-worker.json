@@ -1,0 +1,52 @@
+{
+  "profileId": "browser-verification-worker",
+  "description": "Worker for bounded browser validation against local or test frontends with screenshot, DOM, network, and interaction evidence.",
+  "supportedTaskKinds": [
+    "browser_verification"
+  ],
+  "supportedEnvironmentKinds": [
+    "browser_localhost",
+    "browser_test_env",
+    "local_runtime"
+  ],
+  "contextTolerance": {
+    "profile": "small",
+    "maxPromptTokensClass": "small",
+    "prefersCompiledContext": true,
+    "requiresWorkspaceSanitization": false
+  },
+  "actionCapabilities": {
+    "shellExec": true,
+    "fileEdit": true,
+    "browserInteract": true,
+    "dbReadonly": false,
+    "apiReadonly": false,
+    "remoteReadonly": false,
+    "remoteApply": false,
+    "serviceRestart": true,
+    "deleteFiles": false
+  },
+  "writeCapabilities": {
+    "maxFilesPerTurn": 5,
+    "supportsBroadRefactor": false,
+    "supportsCrossModuleChanges": false,
+    "supportsDocOnlyTurns": true
+  },
+  "verificationModel": {
+    "needsControllerVerifyOnDone": false,
+    "supportsTargetedValidation": true,
+    "supportsRealOperationValidation": true,
+    "trustSelfReportedDone": false
+  },
+  "coordinationModel": {
+    "supportsMultiStoryTurns": false,
+    "supportsMultiLaneCoordination": true,
+    "requiresExplicitJoinPolicy": true
+  },
+  "schedulingDefaults": {
+    "maxTurns": 1,
+    "maxMinutes": 30,
+    "timeoutSeconds": 1800,
+    "preferFreshSession": true
+  }
+}

@@ -1,0 +1,33 @@
+# Copy this file to docs/openclaw-autodev/loops/<task-id>.conf.
+# The filename and TASK_ID must match.
+
+TASK_ID="example-task"
+AGENT_ID="example-task"
+ENABLED="0"
+PROJECT_ROOT="/Users/huangliang/project/OneOPS-ALL/<project>"
+CHARTER_DOC="$PROJECT_ROOT/docs/<project>/AI_DEV_AUTOMATION.md"
+RUNTIME_DOC="/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/runtime-template.md"
+CHECKLIST_DOC=""
+BACKLOG_DOC=""
+COORDINATION_DOC=""
+SHARED_DOCS=""
+EVIDENCE_DIR="/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/example-task"
+VALIDATION_COMMAND="<project validation command>"
+ALLOWED_WRITES=$'<project allowed path>/**\n/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/example-task/**'
+HARNESS_PROFILE="${HARNESS_PROFILE:-default}"
+HARNESS_CONTRACT_DOC=""
+PATCH_MAX_FILES="${PATCH_MAX_FILES:-3}"
+CONTROLLER_VERIFY_ON_DONE="${CONTROLLER_VERIFY_ON_DONE:-0}"
+CONTROLLER_VERIFY_COMMAND="${CONTROLLER_VERIFY_COMMAND:-$VALIDATION_COMMAND}"
+AGENT_MODEL="${AGENT_MODEL:-openai-codex/gpt-5.5}"
+AGENT_PROFILE="${AGENT_PROFILE:-}"
+PROVIDER_PROBE_MODEL="${PROVIDER_PROBE_MODEL:-$AGENT_MODEL}"
+RUNTIME_ENV_FILE=""
+RUNTIME_ENV_FILES=""
+MAX_TURNS="${MAX_TURNS:-1}"
+MAX_MINUTES="${MAX_MINUTES:-25}"
+TIMEOUT_SECONDS="${TIMEOUT_SECONDS:-1500}"
+THINKING="${THINKING:-medium}"
+DAEMON_SLEEP_SECONDS="${DAEMON_SLEEP_SECONDS:-60}"
+CONTINUE_AFTER_DONE="${CONTINUE_AFTER_DONE:-0}"
+EXTRA_RULES=$'Stay within the allowed writes. Do not commit, push, add dependencies, or modify production configuration without approval.'

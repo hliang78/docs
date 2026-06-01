@@ -1,0 +1,51 @@
+{
+  "profileId": "shell-validation-worker",
+  "description": "Non-model shell worker for bounded validation, evidence writing, and issue-note generation.",
+  "supportedTaskKinds": [
+    "validation_only"
+  ],
+  "supportedEnvironmentKinds": [
+    "local_workspace",
+    "local_runtime"
+  ],
+  "contextTolerance": {
+    "profile": "small",
+    "maxPromptTokensClass": "tiny",
+    "prefersCompiledContext": true,
+    "requiresWorkspaceSanitization": false
+  },
+  "actionCapabilities": {
+    "shellExec": true,
+    "fileEdit": true,
+    "browserInteract": false,
+    "dbReadonly": false,
+    "apiReadonly": false,
+    "remoteReadonly": false,
+    "remoteApply": false,
+    "serviceRestart": false,
+    "deleteFiles": false
+  },
+  "writeCapabilities": {
+    "maxFilesPerTurn": 20,
+    "supportsBroadRefactor": false,
+    "supportsCrossModuleChanges": false,
+    "supportsDocOnlyTurns": true
+  },
+  "verificationModel": {
+    "needsControllerVerifyOnDone": false,
+    "supportsTargetedValidation": true,
+    "supportsRealOperationValidation": false,
+    "trustSelfReportedDone": false
+  },
+  "coordinationModel": {
+    "supportsMultiStoryTurns": false,
+    "supportsMultiLaneCoordination": false,
+    "requiresExplicitJoinPolicy": false
+  },
+  "schedulingDefaults": {
+    "maxTurns": 1,
+    "maxMinutes": 10,
+    "timeoutSeconds": 600,
+    "preferFreshSession": false
+  }
+}

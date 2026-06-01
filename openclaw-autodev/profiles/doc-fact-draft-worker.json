@@ -1,0 +1,51 @@
+{
+  "profileId": "doc-fact-draft-worker",
+  "description": "Document-generation worker that extracts code facts into draft documents while keeping fact, inference, and human-confirmation boundaries explicit.",
+  "supportedTaskKinds": [
+    "doc_fact_extraction",
+    "coordination_only"
+  ],
+  "supportedEnvironmentKinds": [
+    "local_workspace"
+  ],
+  "contextTolerance": {
+    "profile": "medium",
+    "maxPromptTokensClass": "medium",
+    "prefersCompiledContext": true,
+    "requiresWorkspaceSanitization": false
+  },
+  "actionCapabilities": {
+    "shellExec": true,
+    "fileEdit": true,
+    "browserInteract": false,
+    "dbReadonly": false,
+    "apiReadonly": false,
+    "remoteReadonly": false,
+    "remoteApply": false,
+    "serviceRestart": false,
+    "deleteFiles": false
+  },
+  "writeCapabilities": {
+    "maxFilesPerTurn": 8,
+    "supportsBroadRefactor": false,
+    "supportsCrossModuleChanges": false,
+    "supportsDocOnlyTurns": true
+  },
+  "verificationModel": {
+    "needsControllerVerifyOnDone": false,
+    "supportsTargetedValidation": true,
+    "supportsRealOperationValidation": false,
+    "trustSelfReportedDone": false
+  },
+  "coordinationModel": {
+    "supportsMultiStoryTurns": false,
+    "supportsMultiLaneCoordination": true,
+    "requiresExplicitJoinPolicy": true
+  },
+  "schedulingDefaults": {
+    "maxTurns": 1,
+    "maxMinutes": 25,
+    "timeoutSeconds": 1500,
+    "preferFreshSession": true
+  }
+}

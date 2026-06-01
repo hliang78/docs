@@ -1,0 +1,8 @@
+{
+  "enabled": true,
+  "taskGroup": "d2on",
+  "publishReviewed": true,
+  "storyFile": "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/stories/d2on.json",
+  "plannerCommand": "/Users/huangliang/project/OneOPS-ALL/scripts/openclaw-agent-loop.sh start d2on-prd",
+  "stopFile": "/Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/STOP"
+}

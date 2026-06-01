@@ -1,0 +1,1776 @@
+{
+  "taskGroup": "dev-docs",
+  "updatedAt": "2026-05-15T18:36:14+0800",
+  "stories": [
+    {
+      "id": "DEV-DOCS-002A",
+      "title": "建立 Device V2 工程文档结构索引",
+      "status": "done",
+      "priority": 40,
+      "risk": "Low",
+      "lanes": [
+        "dev-docs"
+      ],
+      "scope": "在 docs/development/device-v2/ 下建立中文工程文档入口，定义入库与设备管理两个方向的文档结构、状态门禁、来源材料和待人工确认清单。",
+      "nonGoals": "不确认任何业务规则、API path、DTO、数据库字段、权限模型、fixture、验收口径；不修改产品代码和既有 D2 PRD。",
+      "acceptance": [
+        "生成 docs/development/device-v2/README.md。",
+        "README 明确文档状态为 blocked-human-confirmation。",
+        "README 分出入库和设备管理两个方向。",
+        "README 列出来源材料和待人工确认清单。"
+      ],
+      "allowedPaths": [
+        "docs/development/device-v2/**",
+        "docs/openclaw-autodev/evidence/dev-docs/**"
+      ],
+      "validation": [
+        "test -f docs/development/device-v2/README.md",
+        "rg -n \"blocked-human-confirmation|Device V2 入库|Device V2 设备管理|待人工确认\" docs/development/device-v2/README.md",
+        "git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs"
+      ],
+      "notes": [
+        "来源 PRD: docs/prd-autodev/oneops-engineering-docs-standardization/prd.md",
+        "业务材料: docs/prd-autodev/d2-launch-acceptance/**, docs/openclaw-autodev/shared-d2.md"
+      ],
+      "sourcePrd": {
+        "program": "oneops-engineering-docs-standardization",
+        "batch": "batch-002-device-v2-engineering-docs",
+        "package": "docs/prd-autodev/oneops-engineering-docs-standardization/story-packages/batch-002-device-v2-engineering-docs.json",
+        "executionMode": "dependency-chain",
+        "releaseGate": "用户确认首批工程化文档方向为 Device V2 入库和 Device V2 设备管理；本批只生成中文工程文档初稿与 evidence，不确认产品需求、架构决策、API 契约、数据模型、权限或验收标准。"
+      },
+      "updatedAt": "2026-05-15T05:26:14.823Z",
+      "lastTask": "dev-docs",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "dev-docs",
+        "control": "DONE",
+        "ticket": "DEV-DOCS-002A 建立 Device V2 工程文档结构索引",
+        "changed": "docs/development/device-v2/README.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002A-device-v2-index.md",
+        "tests": "test/rg + git diff --check + jq empty pass",
+        "next": "Blocker/Approval: 人工确认后才能拆分或提升 Device V2 工程文档状态",
+        "at": "2026-05-15T05:26:14.823Z",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002A 建立 Device V2 工程文档结构索引",
+          "changed": "docs/development/device-v2/README.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002A-device-v2-index.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能拆分或提升 Device V2 工程文档状态",
+          "at": "2026-05-15T05:23:50.077Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002A 建立 Device V2 工程文档结构索引",
+          "changed": "docs/development/device-v2/README.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002A-device-v2-index.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能拆分或提升 Device V2 工程文档状态",
+          "at": "2026-05-15T05:23:55.200Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002A 建立 Device V2 工程文档结构索引",
+          "changed": "docs/development/device-v2/README.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002A-device-v2-index.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能拆分或提升 Device V2 工程文档状态",
+          "at": "2026-05-15T05:23:55.891Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002A 建立 Device V2 工程文档结构索引",
+          "changed": "docs/development/device-v2/README.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002A-device-v2-index.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能拆分或提升 Device V2 工程文档状态",
+          "at": "2026-05-15T05:24:01.584Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002A 建立 Device V2 工程文档结构索引",
+          "changed": "docs/development/device-v2/README.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002A-device-v2-index.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能拆分或提升 Device V2 工程文档状态",
+          "at": "2026-05-15T05:24:02.269Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002A 建立 Device V2 工程文档结构索引",
+          "changed": "docs/development/device-v2/README.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002A-device-v2-index.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能拆分或提升 Device V2 工程文档状态",
+          "at": "2026-05-15T05:24:28.947Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002A 建立 Device V2 工程文档结构索引",
+          "changed": "docs/development/device-v2/README.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002A-device-v2-index.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能拆分或提升 Device V2 工程文档状态",
+          "at": "2026-05-15T05:24:28.955Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002A 建立 Device V2 工程文档结构索引",
+          "changed": "docs/development/device-v2/README.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002A-device-v2-index.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能拆分或提升 Device V2 工程文档状态",
+          "at": "2026-05-15T05:24:28.961Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002A 建立 Device V2 工程文档结构索引",
+          "changed": "docs/development/device-v2/README.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002A-device-v2-index.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能拆分或提升 Device V2 工程文档状态",
+          "at": "2026-05-15T05:24:29.076Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002A 建立 Device V2 工程文档结构索引",
+          "changed": "docs/development/device-v2/README.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002A-device-v2-index.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能拆分或提升 Device V2 工程文档状态",
+          "at": "2026-05-15T05:24:36.293Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002A 建立 Device V2 工程文档结构索引",
+          "changed": "docs/development/device-v2/README.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002A-device-v2-index.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能拆分或提升 Device V2 工程文档状态",
+          "at": "2026-05-15T05:24:45.721Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002A 建立 Device V2 工程文档结构索引",
+          "changed": "docs/development/device-v2/README.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002A-device-v2-index.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能拆分或提升 Device V2 工程文档状态",
+          "at": "2026-05-15T05:24:46.369Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002A 建立 Device V2 工程文档结构索引",
+          "changed": "docs/development/device-v2/README.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002A-device-v2-index.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能拆分或提升 Device V2 工程文档状态",
+          "at": "2026-05-15T05:25:20.254Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002A 建立 Device V2 工程文档结构索引",
+          "changed": "docs/development/device-v2/README.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002A-device-v2-index.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能拆分或提升 Device V2 工程文档状态",
+          "at": "2026-05-15T05:25:29.813Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002A 建立 Device V2 工程文档结构索引",
+          "changed": "docs/development/device-v2/README.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002A-device-v2-index.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能拆分或提升 Device V2 工程文档状态",
+          "at": "2026-05-15T05:25:30.454Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002A 建立 Device V2 工程文档结构索引",
+          "changed": "docs/development/device-v2/README.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002A-device-v2-index.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能拆分或提升 Device V2 工程文档状态",
+          "at": "2026-05-15T05:26:04.412Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002A 建立 Device V2 工程文档结构索引",
+          "changed": "docs/development/device-v2/README.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002A-device-v2-index.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能拆分或提升 Device V2 工程文档状态",
+          "at": "2026-05-15T05:26:14.097Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002A 建立 Device V2 工程文档结构索引",
+          "changed": "docs/development/device-v2/README.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002A-device-v2-index.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能拆分或提升 Device V2 工程文档状态",
+          "at": "2026-05-15T05:26:14.823Z",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-15T05:23:50.077Z"
+    },
+    {
+      "id": "DEV-DOCS-002B",
+      "title": "编写 Device V2 入库工程文档初稿",
+      "status": "done",
+      "priority": 45,
+      "risk": "Low",
+      "lanes": [
+        "dev-docs"
+      ],
+      "scope": "基于现有 D2 PRD、验收 evidence 和 shared-d2，编写 Device V2 入库方向中文工程文档初稿，描述流程、证据、风险和占位，保持不可直接执行状态。",
+      "nonGoals": "不新增或确认接口契约、字段类型、数据库模型、权限、真实 fixture、采集策略或验收结论；不改 docs/prompts 或产品代码。",
+      "acceptance": [
+        "生成 docs/development/device-v2/ingest.md。",
+        "文档主体为中文。",
+        "未确认内容使用待人工确认或待补充占位。",
+        "文档明确不能直接作为开发或验收依据。"
+      ],
+      "allowedPaths": [
+        "docs/development/device-v2/**",
+        "docs/openclaw-autodev/evidence/dev-docs/**"
+      ],
+      "validation": [
+        "test -f docs/development/device-v2/ingest.md",
+        "rg -n \"blocked-human-confirmation|待人工确认|不可直接|入库\" docs/development/device-v2/ingest.md",
+        "git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs"
+      ],
+      "notes": [
+        "重点方向: Device V2 入库工作台、Excel/import batch、upload/validate/apply、handoff。",
+        "只做工程文档初稿，不把 D2 验收结论提升为正式设计。"
+      ],
+      "dependsOn": [
+        "DEV-DOCS-002A"
+      ],
+      "sourcePrd": {
+        "program": "oneops-engineering-docs-standardization",
+        "batch": "batch-002-device-v2-engineering-docs",
+        "package": "docs/prd-autodev/oneops-engineering-docs-standardization/story-packages/batch-002-device-v2-engineering-docs.json",
+        "executionMode": "dependency-chain",
+        "releaseGate": "用户确认首批工程化文档方向为 Device V2 入库和 Device V2 设备管理；本批只生成中文工程文档初稿与 evidence，不确认产品需求、架构决策、API 契约、数据模型、权限或验收标准。"
+      },
+      "updatedAt": "2026-05-15T05:34:28.700Z",
+      "lastTask": "dev-docs",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "dev-docs",
+        "control": "DONE",
+        "ticket": "DEV-DOCS-002B Device V2 入库工程文档初稿",
+        "changed": "docs/development/device-v2/ingest.md",
+        "tests": "`test -f docs/development/device-v2/ingest.md` pass; `rg -n \"blocked-human-confirmation|待人工确认|不可直接\" docs/development/device-v2` pass; `git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs` pass; `jq empty docs/openclaw-autodev/stories/dev-docs.json` pass",
+        "next": "No eligible work remains for this story without expanding scope into follow-up docs or human confirmation.",
+        "at": "2026-05-15T05:34:28.700Z",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002B Device V2 入库工程文档初稿",
+          "changed": "docs/development/device-v2/ingest.md",
+          "tests": "`test -f docs/development/device-v2/ingest.md` pass; `rg -n \"blocked-human-confirmation|待人工确认|不可直接\" docs/development/device-v2` pass; `git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs` pass; `jq empty docs/openclaw-autodev/stories/dev-docs.json` pass",
+          "next": "No eligible work remains for this story without expanding scope into follow-up docs or human confirmation.",
+          "at": "2026-05-15T05:30:47.842Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002B Device V2 入库工程文档初稿",
+          "changed": "docs/development/device-v2/ingest.md",
+          "tests": "`test -f docs/development/device-v2/ingest.md` pass; `rg -n \"blocked-human-confirmation|待人工确认|不可直接\" docs/development/device-v2` pass; `git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs` pass; `jq empty docs/openclaw-autodev/stories/dev-docs.json` pass",
+          "next": "No eligible work remains for this story without expanding scope into follow-up docs or human confirmation.",
+          "at": "2026-05-15T05:30:47.851Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002B Device V2 入库工程文档初稿",
+          "changed": "docs/development/device-v2/ingest.md",
+          "tests": "`test -f docs/development/device-v2/ingest.md` pass; `rg -n \"blocked-human-confirmation|待人工确认|不可直接\" docs/development/device-v2` pass; `git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs` pass; `jq empty docs/openclaw-autodev/stories/dev-docs.json` pass",
+          "next": "No eligible work remains for this story without expanding scope into follow-up docs or human confirmation.",
+          "at": "2026-05-15T05:30:47.964Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002B Device V2 入库工程文档初稿",
+          "changed": "docs/development/device-v2/ingest.md",
+          "tests": "`test -f docs/development/device-v2/ingest.md` pass; `rg -n \"blocked-human-confirmation|待人工确认|不可直接\" docs/development/device-v2` pass; `git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs` pass; `jq empty docs/openclaw-autodev/stories/dev-docs.json` pass",
+          "next": "No eligible work remains for this story without expanding scope into follow-up docs or human confirmation.",
+          "at": "2026-05-15T05:30:54.361Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002B Device V2 入库工程文档初稿",
+          "changed": "docs/development/device-v2/ingest.md",
+          "tests": "`test -f docs/development/device-v2/ingest.md` pass; `rg -n \"blocked-human-confirmation|待人工确认|不可直接\" docs/development/device-v2` pass; `git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs` pass; `jq empty docs/openclaw-autodev/stories/dev-docs.json` pass",
+          "next": "No eligible work remains for this story without expanding scope into follow-up docs or human confirmation.",
+          "at": "2026-05-15T05:31:16.058Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002B Device V2 入库工程文档初稿",
+          "changed": "docs/development/device-v2/ingest.md",
+          "tests": "`test -f docs/development/device-v2/ingest.md` pass; `rg -n \"blocked-human-confirmation|待人工确认|不可直接\" docs/development/device-v2` pass; `git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs` pass; `jq empty docs/openclaw-autodev/stories/dev-docs.json` pass",
+          "next": "No eligible work remains for this story without expanding scope into follow-up docs or human confirmation.",
+          "at": "2026-05-15T05:31:24.425Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002B Device V2 入库工程文档初稿",
+          "changed": "docs/development/device-v2/ingest.md",
+          "tests": "`test -f docs/development/device-v2/ingest.md` pass; `rg -n \"blocked-human-confirmation|待人工确认|不可直接\" docs/development/device-v2` pass; `git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs` pass; `jq empty docs/openclaw-autodev/stories/dev-docs.json` pass",
+          "next": "No eligible work remains for this story without expanding scope into follow-up docs or human confirmation.",
+          "at": "2026-05-15T05:31:27.441Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002B Device V2 入库工程文档初稿",
+          "changed": "docs/development/device-v2/ingest.md",
+          "tests": "`test -f docs/development/device-v2/ingest.md` pass; `rg -n \"blocked-human-confirmation|待人工确认|不可直接\" docs/development/device-v2` pass; `git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs` pass; `jq empty docs/openclaw-autodev/stories/dev-docs.json` pass",
+          "next": "No eligible work remains for this story without expanding scope into follow-up docs or human confirmation.",
+          "at": "2026-05-15T05:31:28.116Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002B Device V2 入库工程文档初稿",
+          "changed": "docs/development/device-v2/ingest.md",
+          "tests": "`test -f docs/development/device-v2/ingest.md` pass; `rg -n \"blocked-human-confirmation|待人工确认|不可直接\" docs/development/device-v2` pass; `git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs` pass; `jq empty docs/openclaw-autodev/stories/dev-docs.json` pass",
+          "next": "No eligible work remains for this story without expanding scope into follow-up docs or human confirmation.",
+          "at": "2026-05-15T05:32:03.596Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002B Device V2 入库工程文档初稿",
+          "changed": "docs/development/device-v2/ingest.md",
+          "tests": "`test -f docs/development/device-v2/ingest.md` pass; `rg -n \"blocked-human-confirmation|待人工确认|不可直接\" docs/development/device-v2` pass; `git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs` pass; `jq empty docs/openclaw-autodev/stories/dev-docs.json` pass",
+          "next": "No eligible work remains for this story without expanding scope into follow-up docs or human confirmation.",
+          "at": "2026-05-15T05:32:14.061Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002B Device V2 入库工程文档初稿",
+          "changed": "docs/development/device-v2/ingest.md",
+          "tests": "`test -f docs/development/device-v2/ingest.md` pass; `rg -n \"blocked-human-confirmation|待人工确认|不可直接\" docs/development/device-v2` pass; `git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs` pass; `jq empty docs/openclaw-autodev/stories/dev-docs.json` pass",
+          "next": "No eligible work remains for this story without expanding scope into follow-up docs or human confirmation.",
+          "at": "2026-05-15T05:32:14.746Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002B Device V2 入库工程文档初稿",
+          "changed": "docs/development/device-v2/ingest.md",
+          "tests": "`test -f docs/development/device-v2/ingest.md` pass; `rg -n \"blocked-human-confirmation|待人工确认|不可直接\" docs/development/device-v2` pass; `git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs` pass; `jq empty docs/openclaw-autodev/stories/dev-docs.json` pass",
+          "next": "No eligible work remains for this story without expanding scope into follow-up docs or human confirmation.",
+          "at": "2026-05-15T05:32:48.773Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002B Device V2 入库工程文档初稿",
+          "changed": "docs/development/device-v2/ingest.md",
+          "tests": "`test -f docs/development/device-v2/ingest.md` pass; `rg -n \"blocked-human-confirmation|待人工确认|不可直接\" docs/development/device-v2` pass; `git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs` pass; `jq empty docs/openclaw-autodev/stories/dev-docs.json` pass",
+          "next": "No eligible work remains for this story without expanding scope into follow-up docs or human confirmation.",
+          "at": "2026-05-15T05:32:58.670Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002B Device V2 入库工程文档初稿",
+          "changed": "docs/development/device-v2/ingest.md",
+          "tests": "`test -f docs/development/device-v2/ingest.md` pass; `rg -n \"blocked-human-confirmation|待人工确认|不可直接\" docs/development/device-v2` pass; `git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs` pass; `jq empty docs/openclaw-autodev/stories/dev-docs.json` pass",
+          "next": "No eligible work remains for this story without expanding scope into follow-up docs or human confirmation.",
+          "at": "2026-05-15T05:32:59.344Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002B Device V2 入库工程文档初稿",
+          "changed": "docs/development/device-v2/ingest.md",
+          "tests": "`test -f docs/development/device-v2/ingest.md` pass; `rg -n \"blocked-human-confirmation|待人工确认|不可直接\" docs/development/device-v2` pass; `git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs` pass; `jq empty docs/openclaw-autodev/stories/dev-docs.json` pass",
+          "next": "No eligible work remains for this story without expanding scope into follow-up docs or human confirmation.",
+          "at": "2026-05-15T05:33:33.527Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002B Device V2 入库工程文档初稿",
+          "changed": "docs/development/device-v2/ingest.md",
+          "tests": "`test -f docs/development/device-v2/ingest.md` pass; `rg -n \"blocked-human-confirmation|待人工确认|不可直接\" docs/development/device-v2` pass; `git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs` pass; `jq empty docs/openclaw-autodev/stories/dev-docs.json` pass",
+          "next": "No eligible work remains for this story without expanding scope into follow-up docs or human confirmation.",
+          "at": "2026-05-15T05:33:43.819Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002B Device V2 入库工程文档初稿",
+          "changed": "docs/development/device-v2/ingest.md",
+          "tests": "`test -f docs/development/device-v2/ingest.md` pass; `rg -n \"blocked-human-confirmation|待人工确认|不可直接\" docs/development/device-v2` pass; `git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs` pass; `jq empty docs/openclaw-autodev/stories/dev-docs.json` pass",
+          "next": "No eligible work remains for this story without expanding scope into follow-up docs or human confirmation.",
+          "at": "2026-05-15T05:33:44.494Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002B Device V2 入库工程文档初稿",
+          "changed": "docs/development/device-v2/ingest.md",
+          "tests": "`test -f docs/development/device-v2/ingest.md` pass; `rg -n \"blocked-human-confirmation|待人工确认|不可直接\" docs/development/device-v2` pass; `git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs` pass; `jq empty docs/openclaw-autodev/stories/dev-docs.json` pass",
+          "next": "No eligible work remains for this story without expanding scope into follow-up docs or human confirmation.",
+          "at": "2026-05-15T05:34:18.543Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002B Device V2 入库工程文档初稿",
+          "changed": "docs/development/device-v2/ingest.md",
+          "tests": "`test -f docs/development/device-v2/ingest.md` pass; `rg -n \"blocked-human-confirmation|待人工确认|不可直接\" docs/development/device-v2` pass; `git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs` pass; `jq empty docs/openclaw-autodev/stories/dev-docs.json` pass",
+          "next": "No eligible work remains for this story without expanding scope into follow-up docs or human confirmation.",
+          "at": "2026-05-15T05:34:28.034Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002B Device V2 入库工程文档初稿",
+          "changed": "docs/development/device-v2/ingest.md",
+          "tests": "`test -f docs/development/device-v2/ingest.md` pass; `rg -n \"blocked-human-confirmation|待人工确认|不可直接\" docs/development/device-v2` pass; `git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs` pass; `jq empty docs/openclaw-autodev/stories/dev-docs.json` pass",
+          "next": "No eligible work remains for this story without expanding scope into follow-up docs or human confirmation.",
+          "at": "2026-05-15T05:34:28.700Z",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-15T13:30:37+0800"
+    },
+    {
+      "id": "DEV-DOCS-002C",
+      "title": "编写 Device V2 设备管理工程文档初稿",
+      "status": "done",
+      "priority": 50,
+      "risk": "Low",
+      "lanes": [
+        "dev-docs"
+      ],
+      "scope": "基于现有 D2 PRD、验收 evidence 和 shared-d2，编写 Device V2 设备管理方向中文工程文档初稿，覆盖清册、详情、编辑、删除或保留、采集证据和人工占位。",
+      "nonGoals": "不确认清册字段、权限、删除策略、采集协议、生产操作、验收通过标准；不修改产品代码和自动化运行配置之外的文件。",
+      "acceptance": [
+        "生成 docs/development/device-v2/management.md。",
+        "README 链接入库和设备管理文档。",
+        "设备管理文档保留人工确认占位。",
+        "生成本批 evidence summary。"
+      ],
+      "allowedPaths": [
+        "docs/development/device-v2/**",
+        "docs/openclaw-autodev/evidence/dev-docs/**"
+      ],
+      "validation": [
+        "test -f docs/development/device-v2/management.md",
+        "rg -n \"blocked-human-confirmation|待人工确认|设备管理|清册\" docs/development/device-v2/management.md",
+        "test -f docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+        "git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs"
+      ],
+      "notes": [
+        "重点方向: 设备 V2 清册管理、详情/编辑/删除或保留、store/start、task evidence。",
+        "最终文档必须中文优先，英文只保留给必要标识和状态词。"
+      ],
+      "dependsOn": [
+        "DEV-DOCS-002B"
+      ],
+      "sourcePrd": {
+        "program": "oneops-engineering-docs-standardization",
+        "batch": "batch-002-device-v2-engineering-docs",
+        "package": "docs/prd-autodev/oneops-engineering-docs-standardization/story-packages/batch-002-device-v2-engineering-docs.json",
+        "executionMode": "dependency-chain",
+        "releaseGate": "用户确认首批工程化文档方向为 Device V2 入库和 Device V2 设备管理；本批只生成中文工程文档初稿与 evidence，不确认产品需求、架构决策、API 契约、数据模型、权限或验收标准。"
+      },
+      "updatedAt": "2026-05-15T10:04:02.536Z",
+      "lastTask": "dev-docs",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "dev-docs",
+        "control": "DONE",
+        "ticket": "DEV-DOCS-002C Device V2 设备管理工程文档初稿",
+        "changed": "docs/development/device-v2/management.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+        "tests": "git diff --check/rg/jq validation pass",
+        "next": "Blocker/Approval: 需人工确认后才能提升文档状态或拆分后续管理子文档",
+        "at": "2026-05-15T10:04:02.536Z",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002C Device V2 设备管理工程文档初稿",
+          "changed": "docs/development/device-v2/management.md; docs/development/device-v2/README.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+          "tests": "`test -f ... && rg ... && test -f ... && git diff --check ... && rg ... && jq empty ...` pass",
+          "next": "Blocker/Approval: 需人工确认后才能提升文档状态或拆分后续管理子文档",
+          "at": "2026-05-15T09:59:39.458Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002C Device V2 设备管理工程文档初稿",
+          "changed": "docs/development/device-v2/management.md; docs/development/device-v2/README.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+          "tests": "`test -f ... && rg ... && test -f ... && git diff --check ... && rg ... && jq empty ...` pass",
+          "next": "Blocker/Approval: 需人工确认后才能提升文档状态或拆分后续管理子文档",
+          "at": "2026-05-15T09:59:40.043Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002C Device V2 设备管理工程文档初稿",
+          "changed": "docs/development/device-v2/management.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+          "tests": "git diff --check/rg/jq validation pass",
+          "next": "Blocker/Approval: 需人工确认后才能提升文档状态或拆分后续管理子文档",
+          "at": "2026-05-15T10:00:13.711Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002C Device V2 设备管理工程文档初稿",
+          "changed": "docs/development/device-v2/management.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+          "tests": "git diff --check/rg/jq validation pass",
+          "next": "Blocker/Approval: 需人工确认后才能提升文档状态或拆分后续管理子文档",
+          "at": "2026-05-15T10:00:24.737Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002C Device V2 设备管理工程文档初稿",
+          "changed": "docs/development/device-v2/management.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+          "tests": "git diff --check/rg/jq validation pass",
+          "next": "Blocker/Approval: 需人工确认后才能提升文档状态或拆分后续管理子文档",
+          "at": "2026-05-15T10:00:25.350Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002C Device V2 设备管理工程文档初稿",
+          "changed": "docs/development/device-v2/management.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+          "tests": "git diff --check/rg/jq validation pass",
+          "next": "Blocker/Approval: 需人工确认后才能提升文档状态或拆分后续管理子文档",
+          "at": "2026-05-15T10:00:39.751Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002C Device V2 设备管理工程文档初稿",
+          "changed": "docs/development/device-v2/management.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+          "tests": "git diff --check/rg/jq validation pass",
+          "next": "Blocker/Approval: 需人工确认后才能提升文档状态或拆分后续管理子文档",
+          "at": "2026-05-15T10:00:59.385Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002C Device V2 设备管理工程文档初稿",
+          "changed": "docs/development/device-v2/management.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+          "tests": "git diff --check/rg/jq validation pass",
+          "next": "Blocker/Approval: 需人工确认后才能提升文档状态或拆分后续管理子文档",
+          "at": "2026-05-15T10:01:08.849Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002C Device V2 设备管理工程文档初稿",
+          "changed": "docs/development/device-v2/management.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+          "tests": "git diff --check/rg/jq validation pass",
+          "next": "Blocker/Approval: 需人工确认后才能提升文档状态或拆分后续管理子文档",
+          "at": "2026-05-15T10:01:09.432Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002C Device V2 设备管理工程文档初稿",
+          "changed": "docs/development/device-v2/management.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+          "tests": "git diff --check/rg/jq validation pass",
+          "next": "Blocker/Approval: 需人工确认后才能提升文档状态或拆分后续管理子文档",
+          "at": "2026-05-15T10:01:47.222Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002C Device V2 设备管理工程文档初稿",
+          "changed": "docs/development/device-v2/management.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+          "tests": "git diff --check/rg/jq validation pass",
+          "next": "Blocker/Approval: 需人工确认后才能提升文档状态或拆分后续管理子文档",
+          "at": "2026-05-15T10:01:56.603Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002C Device V2 设备管理工程文档初稿",
+          "changed": "docs/development/device-v2/management.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+          "tests": "git diff --check/rg/jq validation pass",
+          "next": "Blocker/Approval: 需人工确认后才能提升文档状态或拆分后续管理子文档",
+          "at": "2026-05-15T10:01:57.222Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002C Device V2 设备管理工程文档初稿",
+          "changed": "docs/development/device-v2/management.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+          "tests": "git diff --check/rg/jq validation pass",
+          "next": "Blocker/Approval: 需人工确认后才能提升文档状态或拆分后续管理子文档",
+          "at": "2026-05-15T10:02:24.355Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002C Device V2 设备管理工程文档初稿",
+          "changed": "docs/development/device-v2/management.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+          "tests": "git diff --check/rg/jq validation pass",
+          "next": "Blocker/Approval: 需人工确认后才能提升文档状态或拆分后续管理子文档",
+          "at": "2026-05-15T10:02:31.027Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002C Device V2 设备管理工程文档初稿",
+          "changed": "docs/development/device-v2/management.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+          "tests": "git diff --check/rg/jq validation pass",
+          "next": "Blocker/Approval: 需人工确认后才能提升文档状态或拆分后续管理子文档",
+          "at": "2026-05-15T10:02:40.827Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002C Device V2 设备管理工程文档初稿",
+          "changed": "docs/development/device-v2/management.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+          "tests": "git diff --check/rg/jq validation pass",
+          "next": "Blocker/Approval: 需人工确认后才能提升文档状态或拆分后续管理子文档",
+          "at": "2026-05-15T10:02:41.411Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002C Device V2 设备管理工程文档初稿",
+          "changed": "docs/development/device-v2/management.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+          "tests": "git diff --check/rg/jq validation pass",
+          "next": "Blocker/Approval: 需人工确认后才能提升文档状态或拆分后续管理子文档",
+          "at": "2026-05-15T10:03:16.939Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002C Device V2 设备管理工程文档初稿",
+          "changed": "docs/development/device-v2/management.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+          "tests": "git diff --check/rg/jq validation pass",
+          "next": "Blocker/Approval: 需人工确认后才能提升文档状态或拆分后续管理子文档",
+          "at": "2026-05-15T10:03:28.059Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002C Device V2 设备管理工程文档初稿",
+          "changed": "docs/development/device-v2/management.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+          "tests": "git diff --check/rg/jq validation pass",
+          "next": "Blocker/Approval: 需人工确认后才能提升文档状态或拆分后续管理子文档",
+          "at": "2026-05-15T10:03:28.646Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-002C Device V2 设备管理工程文档初稿",
+          "changed": "docs/development/device-v2/management.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-002-device-v2-engineering-docs.md",
+          "tests": "git diff --check/rg/jq validation pass",
+          "next": "Blocker/Approval: 需人工确认后才能提升文档状态或拆分后续管理子文档",
+          "at": "2026-05-15T10:04:02.536Z",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-15T05:34:51.337Z"
+    },
+    {
+      "id": "DEV-DOCS-003A",
+      "title": "生成 Device V2 需求与功能候选文档",
+      "status": "done",
+      "priority": 40,
+      "risk": "Low",
+      "lanes": [
+        "dev-docs"
+      ],
+      "scope": "按 01-02 模板，阅读 Device V2 route、handler、DTO、model、service、前端 wrapper、页面和 evidence，生成需求与功能候选文档并记录代码事实来源清单。",
+      "nonGoals": "不生成测试文档，不确认业务范围、优先级、验收标准或上线范围。",
+      "acceptance": [
+        "生成 candidate-01-requirements-summary.md。",
+        "生成 candidate-02-function-list.md。",
+        "两份文档保留模板章节并含 blocked-human-confirmation。",
+        "未确认内容保留待确认占位。",
+        "文档或 evidence 包含代码事实来源清单。"
+      ],
+      "allowedPaths": [
+        "docs/development/device-v2/**",
+        "docs/openclaw-autodev/evidence/dev-docs/**"
+      ],
+      "validation": [
+        "test -f docs/development/device-v2/candidate-01-requirements-summary.md",
+        "test -f docs/development/device-v2/candidate-02-function-list.md",
+        "rg -n \"【需求概要】|【功能清单】|blocked-human-confirmation|待确认\" docs/development/device-v2/candidate-01-requirements-summary.md docs/development/device-v2/candidate-02-function-list.md",
+        "rg -n \"代码事实来源清单|已读取关键文件|源码路径\" docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs",
+        "git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs"
+      ],
+      "sourcePrd": {
+        "program": "oneops-engineering-docs-standardization",
+        "batch": "batch-003-device-v2-code-fact-standard-docs",
+        "package": "docs/prd-autodev/oneops-engineering-docs-standardization/story-packages/batch-003-device-v2-code-fact-standard-docs.json",
+        "executionMode": "dependency-chain",
+        "releaseGate": "本批仅用于按 docs/development-doc-templates/01-07 反向生成 Device V2 候选标准文档；不生成 08-11；不得确认产品需求、架构决策、API 契约、数据库字段语义、权限或验收标准。"
+      },
+      "updatedAt": "2026-05-15T10:23:58.296Z",
+      "lastTask": "dev-docs",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "dev-docs",
+        "control": "DONE",
+        "ticket": "DEV-DOCS-003A 生成 Device V2 需求与功能候选文档",
+        "changed": "docs/development/device-v2/candidate-01-requirements-summary.md; docs/development/device-v2/candidate-02-function-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003A-device-v2-01-02-code-facts.md",
+        "tests": "test/rg + git diff --check + jq empty pass",
+        "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+        "at": "2026-05-15T10:23:58.296Z",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003A 生成 Device V2 需求与功能候选文档",
+          "changed": "docs/development/device-v2/candidate-01-requirements-summary.md; docs/development/device-v2/candidate-02-function-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003A-device-v2-01-02-code-facts.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:19:35.385Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003A 生成 Device V2 需求与功能候选文档",
+          "changed": "docs/development/device-v2/candidate-01-requirements-summary.md; docs/development/device-v2/candidate-02-function-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003A-device-v2-01-02-code-facts.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:19:35.960Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003A 生成 Device V2 需求与功能候选文档",
+          "changed": "docs/development/device-v2/candidate-01-requirements-summary.md; docs/development/device-v2/candidate-02-function-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003A-device-v2-01-02-code-facts.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:20:09.726Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003A 生成 Device V2 需求与功能候选文档",
+          "changed": "docs/development/device-v2/candidate-01-requirements-summary.md; docs/development/device-v2/candidate-02-function-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003A-device-v2-01-02-code-facts.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:20:18.846Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003A 生成 Device V2 需求与功能候选文档",
+          "changed": "docs/development/device-v2/candidate-01-requirements-summary.md; docs/development/device-v2/candidate-02-function-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003A-device-v2-01-02-code-facts.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:20:19.427Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003A 生成 Device V2 需求与功能候选文档",
+          "changed": "docs/development/device-v2/candidate-01-requirements-summary.md; docs/development/device-v2/candidate-02-function-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003A-device-v2-01-02-code-facts.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:20:53.221Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003A 生成 Device V2 需求与功能候选文档",
+          "changed": "docs/development/device-v2/candidate-01-requirements-summary.md; docs/development/device-v2/candidate-02-function-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003A-device-v2-01-02-code-facts.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:21:02.442Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003A 生成 Device V2 需求与功能候选文档",
+          "changed": "docs/development/device-v2/candidate-01-requirements-summary.md; docs/development/device-v2/candidate-02-function-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003A-device-v2-01-02-code-facts.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:21:03.025Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003A 生成 Device V2 需求与功能候选文档",
+          "changed": "docs/development/device-v2/candidate-01-requirements-summary.md; docs/development/device-v2/candidate-02-function-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003A-device-v2-01-02-code-facts.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:21:36.928Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003A 生成 Device V2 需求与功能候选文档",
+          "changed": "docs/development/device-v2/candidate-01-requirements-summary.md; docs/development/device-v2/candidate-02-function-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003A-device-v2-01-02-code-facts.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:21:46.133Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003A 生成 Device V2 需求与功能候选文档",
+          "changed": "docs/development/device-v2/candidate-01-requirements-summary.md; docs/development/device-v2/candidate-02-function-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003A-device-v2-01-02-code-facts.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:21:46.730Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003A 生成 Device V2 需求与功能候选文档",
+          "changed": "docs/development/device-v2/candidate-01-requirements-summary.md; docs/development/device-v2/candidate-02-function-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003A-device-v2-01-02-code-facts.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:22:20.393Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003A 生成 Device V2 需求与功能候选文档",
+          "changed": "docs/development/device-v2/candidate-01-requirements-summary.md; docs/development/device-v2/candidate-02-function-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003A-device-v2-01-02-code-facts.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:22:29.761Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003A 生成 Device V2 需求与功能候选文档",
+          "changed": "docs/development/device-v2/candidate-01-requirements-summary.md; docs/development/device-v2/candidate-02-function-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003A-device-v2-01-02-code-facts.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:22:30.343Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003A 生成 Device V2 需求与功能候选文档",
+          "changed": "docs/development/device-v2/candidate-01-requirements-summary.md; docs/development/device-v2/candidate-02-function-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003A-device-v2-01-02-code-facts.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:23:04.204Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003A 生成 Device V2 需求与功能候选文档",
+          "changed": "docs/development/device-v2/candidate-01-requirements-summary.md; docs/development/device-v2/candidate-02-function-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003A-device-v2-01-02-code-facts.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:23:13.774Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003A 生成 Device V2 需求与功能候选文档",
+          "changed": "docs/development/device-v2/candidate-01-requirements-summary.md; docs/development/device-v2/candidate-02-function-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003A-device-v2-01-02-code-facts.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:23:14.385Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003A 生成 Device V2 需求与功能候选文档",
+          "changed": "docs/development/device-v2/candidate-01-requirements-summary.md; docs/development/device-v2/candidate-02-function-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003A-device-v2-01-02-code-facts.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:23:48.282Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003A 生成 Device V2 需求与功能候选文档",
+          "changed": "docs/development/device-v2/candidate-01-requirements-summary.md; docs/development/device-v2/candidate-02-function-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003A-device-v2-01-02-code-facts.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:23:57.706Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003A 生成 Device V2 需求与功能候选文档",
+          "changed": "docs/development/device-v2/candidate-01-requirements-summary.md; docs/development/device-v2/candidate-02-function-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003A-device-v2-01-02-code-facts.md",
+          "tests": "test/rg + git diff --check + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:23:58.296Z",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-15T18:17:34+0800"
+    },
+    {
+      "id": "DEV-DOCS-003B",
+      "title": "生成 Device V2 实体与原型候选文档",
+      "status": "done",
+      "priority": 45,
+      "risk": "Low",
+      "lanes": [
+        "dev-docs"
+      ],
+      "scope": "按 03-04 模板，阅读真实 model/DTO、service、DAO/GORM、前端路由、页面和组件，生成实体与原型候选文档并记录代码事实来源清单。",
+      "nonGoals": "不设计新实体，不确认页面最终交互，不生成测试或代码审查文档。",
+      "acceptance": [
+        "生成 candidate-03-entity-attribute-list.md。",
+        "生成 candidate-04-prototype-list.md。",
+        "实体字段来自源码路径，页面来自真实前端路由和页面。",
+        "业务含义不确定处保留待确认。",
+        "文档或 evidence 包含代码事实来源清单。"
+      ],
+      "allowedPaths": [
+        "docs/development/device-v2/**",
+        "docs/openclaw-autodev/evidence/dev-docs/**"
+      ],
+      "validation": [
+        "test -f docs/development/device-v2/candidate-03-entity-attribute-list.md",
+        "test -f docs/development/device-v2/candidate-04-prototype-list.md",
+        "rg -n \"【实体属性清单】|【原型清单】|DeviceV2|DeviceV2Management|待确认\" docs/development/device-v2/candidate-03-entity-attribute-list.md docs/development/device-v2/candidate-04-prototype-list.md",
+        "rg -n \"代码事实来源清单|已读取关键文件|源码路径\" docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs",
+        "git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs"
+      ],
+      "dependsOn": [
+        "DEV-DOCS-003A"
+      ],
+      "sourcePrd": {
+        "program": "oneops-engineering-docs-standardization",
+        "batch": "batch-003-device-v2-code-fact-standard-docs",
+        "package": "docs/prd-autodev/oneops-engineering-docs-standardization/story-packages/batch-003-device-v2-code-fact-standard-docs.json",
+        "executionMode": "dependency-chain",
+        "releaseGate": "本批仅用于按 docs/development-doc-templates/01-07 反向生成 Device V2 候选标准文档；不生成 08-11；不得确认产品需求、架构决策、API 契约、数据库字段语义、权限或验收标准。"
+      },
+      "updatedAt": "2026-05-15T10:29:00.789Z",
+      "lastTask": "dev-docs",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "dev-docs",
+        "control": "DONE",
+        "ticket": "DEV-DOCS-003B Device V2 03-04 候选文档",
+        "changed": "docs/development/device-v2/candidate-03-entity-attribute-list.md; docs/development/device-v2/candidate-04-prototype-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003B-device-v2-03-04-code-facts.md",
+        "tests": "git diff --check + rg checks + jq empty pass",
+        "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+        "at": "2026-05-15T10:29:00.789Z",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003B Device V2 03-04 候选文档",
+          "changed": "docs/development/device-v2/candidate-03-entity-attribute-list.md; docs/development/device-v2/candidate-04-prototype-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003B-device-v2-03-04-code-facts.md",
+          "tests": "git diff --check + rg checks + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:24:43.307Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003B Device V2 03-04 候选文档",
+          "changed": "docs/development/device-v2/candidate-03-entity-attribute-list.md; docs/development/device-v2/candidate-04-prototype-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003B-device-v2-03-04-code-facts.md",
+          "tests": "git diff --check + rg checks + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:24:43.919Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003B Device V2 03-04 候选文档",
+          "changed": "docs/development/device-v2/candidate-03-entity-attribute-list.md; docs/development/device-v2/candidate-04-prototype-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003B-device-v2-03-04-code-facts.md",
+          "tests": "git diff --check + rg checks + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:25:17.752Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003B Device V2 03-04 候选文档",
+          "changed": "docs/development/device-v2/candidate-03-entity-attribute-list.md; docs/development/device-v2/candidate-04-prototype-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003B-device-v2-03-04-code-facts.md",
+          "tests": "git diff --check + rg checks + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:25:27.337Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003B Device V2 03-04 候选文档",
+          "changed": "docs/development/device-v2/candidate-03-entity-attribute-list.md; docs/development/device-v2/candidate-04-prototype-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003B-device-v2-03-04-code-facts.md",
+          "tests": "git diff --check + rg checks + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:25:27.949Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003B Device V2 03-04 候选文档",
+          "changed": "docs/development/device-v2/candidate-03-entity-attribute-list.md; docs/development/device-v2/candidate-04-prototype-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003B-device-v2-03-04-code-facts.md",
+          "tests": "git diff --check + rg checks + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:26:01.748Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003B Device V2 03-04 候选文档",
+          "changed": "docs/development/device-v2/candidate-03-entity-attribute-list.md; docs/development/device-v2/candidate-04-prototype-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003B-device-v2-03-04-code-facts.md",
+          "tests": "git diff --check + rg checks + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:26:11.189Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003B Device V2 03-04 候选文档",
+          "changed": "docs/development/device-v2/candidate-03-entity-attribute-list.md; docs/development/device-v2/candidate-04-prototype-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003B-device-v2-03-04-code-facts.md",
+          "tests": "git diff --check + rg checks + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:26:11.772Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003B Device V2 03-04 候选文档",
+          "changed": "docs/development/device-v2/candidate-03-entity-attribute-list.md; docs/development/device-v2/candidate-04-prototype-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003B-device-v2-03-04-code-facts.md",
+          "tests": "git diff --check + rg checks + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:26:45.595Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003B Device V2 03-04 候选文档",
+          "changed": "docs/development/device-v2/candidate-03-entity-attribute-list.md; docs/development/device-v2/candidate-04-prototype-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003B-device-v2-03-04-code-facts.md",
+          "tests": "git diff --check + rg checks + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:26:55.706Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003B Device V2 03-04 候选文档",
+          "changed": "docs/development/device-v2/candidate-03-entity-attribute-list.md; docs/development/device-v2/candidate-04-prototype-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003B-device-v2-03-04-code-facts.md",
+          "tests": "git diff --check + rg checks + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:26:58.381Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003B Device V2 03-04 候选文档",
+          "changed": "docs/development/device-v2/candidate-03-entity-attribute-list.md; docs/development/device-v2/candidate-04-prototype-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003B-device-v2-03-04-code-facts.md",
+          "tests": "git diff --check + rg checks + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:27:32.485Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003B Device V2 03-04 候选文档",
+          "changed": "docs/development/device-v2/candidate-03-entity-attribute-list.md; docs/development/device-v2/candidate-04-prototype-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003B-device-v2-03-04-code-facts.md",
+          "tests": "git diff --check + rg checks + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:27:41.943Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003B Device V2 03-04 候选文档",
+          "changed": "docs/development/device-v2/candidate-03-entity-attribute-list.md; docs/development/device-v2/candidate-04-prototype-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003B-device-v2-03-04-code-facts.md",
+          "tests": "git diff --check + rg checks + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:27:42.533Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003B Device V2 03-04 候选文档",
+          "changed": "docs/development/device-v2/candidate-03-entity-attribute-list.md; docs/development/device-v2/candidate-04-prototype-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003B-device-v2-03-04-code-facts.md",
+          "tests": "git diff --check + rg checks + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:28:16.765Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003B Device V2 03-04 候选文档",
+          "changed": "docs/development/device-v2/candidate-03-entity-attribute-list.md; docs/development/device-v2/candidate-04-prototype-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003B-device-v2-03-04-code-facts.md",
+          "tests": "git diff --check + rg checks + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:28:26.201Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003B Device V2 03-04 候选文档",
+          "changed": "docs/development/device-v2/candidate-03-entity-attribute-list.md; docs/development/device-v2/candidate-04-prototype-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003B-device-v2-03-04-code-facts.md",
+          "tests": "git diff --check + rg checks + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:28:26.819Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003B Device V2 03-04 候选文档",
+          "changed": "docs/development/device-v2/candidate-03-entity-attribute-list.md; docs/development/device-v2/candidate-04-prototype-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003B-device-v2-03-04-code-facts.md",
+          "tests": "git diff --check + rg checks + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:28:49.100Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003B Device V2 03-04 候选文档",
+          "changed": "docs/development/device-v2/candidate-03-entity-attribute-list.md; docs/development/device-v2/candidate-04-prototype-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003B-device-v2-03-04-code-facts.md",
+          "tests": "git diff --check + rg checks + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:28:49.693Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003B Device V2 03-04 候选文档",
+          "changed": "docs/development/device-v2/candidate-03-entity-attribute-list.md; docs/development/device-v2/candidate-04-prototype-list.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003B-device-v2-03-04-code-facts.md",
+          "tests": "git diff --check + rg checks + jq empty pass",
+          "next": "Blocker/Approval: 人工确认后才能提升候选文档状态或作为开发/验收依据",
+          "at": "2026-05-15T10:29:00.789Z",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-15T10:24:32.129Z"
+    },
+    {
+      "id": "DEV-DOCS-003C",
+      "title": "生成 Device V2 数据库与接口候选文档",
+      "status": "done",
+      "priority": 50,
+      "risk": "Medium",
+      "lanes": [
+        "dev-docs"
+      ],
+      "scope": "按 05-06 模板，阅读 GORM model/TableName、DAO/GORM、router、handler、DTO、service 和前端 wrapper，生成数据库与接口候选文档并记录代码事实来源清单。",
+      "nonGoals": "不设计新表或新接口，不确认字段语义、权限、错误码、验收标准。",
+      "acceptance": [
+        "生成 candidate-05-database-design.md。",
+        "生成 candidate-06-api-documentation.md。",
+        "数据库文档包含真实表名和字段。",
+        "接口文档包含真实 method/path/handler 和前端 wrapper。",
+        "文档或 evidence 包含代码事实来源清单。"
+      ],
+      "allowedPaths": [
+        "docs/development/device-v2/**",
+        "docs/openclaw-autodev/evidence/dev-docs/**"
+      ],
+      "validation": [
+        "test -f docs/development/device-v2/candidate-05-database-design.md",
+        "test -f docs/development/device-v2/candidate-06-api-documentation.md",
+        "rg -n \"【数据库设计】|platform_devices_v2|device_v2_import_batch|【接口文档】|/device/v2|DeviceV2API\" docs/development/device-v2/candidate-05-database-design.md docs/development/device-v2/candidate-06-api-documentation.md",
+        "rg -n \"代码事实来源清单|已读取关键文件|源码路径\" docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs",
+        "git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs"
+      ],
+      "dependsOn": [
+        "DEV-DOCS-003B"
+      ],
+      "sourcePrd": {
+        "program": "oneops-engineering-docs-standardization",
+        "batch": "batch-003-device-v2-code-fact-standard-docs",
+        "package": "docs/prd-autodev/oneops-engineering-docs-standardization/story-packages/batch-003-device-v2-code-fact-standard-docs.json",
+        "executionMode": "dependency-chain",
+        "releaseGate": "本批仅用于按 docs/development-doc-templates/01-07 反向生成 Device V2 候选标准文档；不生成 08-11；不得确认产品需求、架构决策、API 契约、数据库字段语义、权限或验收标准。"
+      },
+      "updatedAt": "2026-05-15T10:41:06.151Z",
+      "lastTask": "dev-docs",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "dev-docs",
+        "control": "DONE",
+        "ticket": "DEV-DOCS-003C 生成 Device V2 数据库与接口候选文档",
+        "changed": "docs/development/device-v2/candidate-05-database-design.md; docs/development/device-v2/candidate-06-api-documentation.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003C-device-v2-05-06-code-facts.md",
+        "tests": "validation rg/test/git diff --check/jq empty pass",
+        "next": "Blocker/Approval: 等待人工确认候选数据库/API 文档，不再自动提升状态",
+        "at": "2026-05-15T10:41:06.151Z",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003C 生成 Device V2 数据库与接口候选文档",
+          "changed": "docs/development/device-v2/candidate-05-database-design.md; docs/development/device-v2/candidate-06-api-documentation.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003C-device-v2-05-06-code-facts.md",
+          "tests": "validation rg/test/git diff --check/jq empty pass",
+          "next": "Blocker/Approval: 等待人工确认候选数据库/API 文档，不再自动提升状态",
+          "at": "2026-05-15T10:37:17.758Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003C 生成 Device V2 数据库与接口候选文档",
+          "changed": "docs/development/device-v2/candidate-05-database-design.md; docs/development/device-v2/candidate-06-api-documentation.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003C-device-v2-05-06-code-facts.md",
+          "tests": "validation rg/test/git diff --check/jq empty pass",
+          "next": "Blocker/Approval: 等待人工确认候选数据库/API 文档，不再自动提升状态",
+          "at": "2026-05-15T10:37:18.358Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003C 生成 Device V2 数据库与接口候选文档",
+          "changed": "docs/development/device-v2/candidate-05-database-design.md; docs/development/device-v2/candidate-06-api-documentation.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003C-device-v2-05-06-code-facts.md",
+          "tests": "validation rg/test/git diff --check/jq empty pass",
+          "next": "Blocker/Approval: 等待人工确认候选数据库/API 文档，不再自动提升状态",
+          "at": "2026-05-15T10:37:48.872Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003C 生成 Device V2 数据库与接口候选文档",
+          "changed": "docs/development/device-v2/candidate-05-database-design.md; docs/development/device-v2/candidate-06-api-documentation.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003C-device-v2-05-06-code-facts.md",
+          "tests": "validation rg/test/git diff --check/jq empty pass",
+          "next": "Blocker/Approval: 等待人工确认候选数据库/API 文档，不再自动提升状态",
+          "at": "2026-05-15T10:37:49.502Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003C 生成 Device V2 数据库与接口候选文档",
+          "changed": "docs/development/device-v2/candidate-05-database-design.md; docs/development/device-v2/candidate-06-api-documentation.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003C-device-v2-05-06-code-facts.md",
+          "tests": "validation rg/test/git diff --check/jq empty pass",
+          "next": "Blocker/Approval: 等待人工确认候选数据库/API 文档，不再自动提升状态",
+          "at": "2026-05-15T10:37:52.127Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003C 生成 Device V2 数据库与接口候选文档",
+          "changed": "docs/development/device-v2/candidate-05-database-design.md; docs/development/device-v2/candidate-06-api-documentation.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003C-device-v2-05-06-code-facts.md",
+          "tests": "validation rg/test/git diff --check/jq empty pass",
+          "next": "Blocker/Approval: 等待人工确认候选数据库/API 文档，不再自动提升状态",
+          "at": "2026-05-15T10:38:03.351Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003C 生成 Device V2 数据库与接口候选文档",
+          "changed": "docs/development/device-v2/candidate-05-database-design.md; docs/development/device-v2/candidate-06-api-documentation.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003C-device-v2-05-06-code-facts.md",
+          "tests": "validation rg/test/git diff --check/jq empty pass",
+          "next": "Blocker/Approval: 等待人工确认候选数据库/API 文档，不再自动提升状态",
+          "at": "2026-05-15T10:38:03.942Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003C 生成 Device V2 数据库与接口候选文档",
+          "changed": "docs/development/device-v2/candidate-05-database-design.md; docs/development/device-v2/candidate-06-api-documentation.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003C-device-v2-05-06-code-facts.md",
+          "tests": "validation rg/test/git diff --check/jq empty pass",
+          "next": "Blocker/Approval: 等待人工确认候选数据库/API 文档，不再自动提升状态",
+          "at": "2026-05-15T10:38:10.957Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003C 生成 Device V2 数据库与接口候选文档",
+          "changed": "docs/development/device-v2/candidate-05-database-design.md; docs/development/device-v2/candidate-06-api-documentation.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003C-device-v2-05-06-code-facts.md",
+          "tests": "validation rg/test/git diff --check/jq empty pass",
+          "next": "Blocker/Approval: 等待人工确认候选数据库/API 文档，不再自动提升状态",
+          "at": "2026-05-15T10:38:37.861Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003C 生成 Device V2 数据库与接口候选文档",
+          "changed": "docs/development/device-v2/candidate-05-database-design.md; docs/development/device-v2/candidate-06-api-documentation.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003C-device-v2-05-06-code-facts.md",
+          "tests": "validation rg/test/git diff --check/jq empty pass",
+          "next": "Blocker/Approval: 等待人工确认候选数据库/API 文档，不再自动提升状态",
+          "at": "2026-05-15T10:38:48.088Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003C 生成 Device V2 数据库与接口候选文档",
+          "changed": "docs/development/device-v2/candidate-05-database-design.md; docs/development/device-v2/candidate-06-api-documentation.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003C-device-v2-05-06-code-facts.md",
+          "tests": "validation rg/test/git diff --check/jq empty pass",
+          "next": "Blocker/Approval: 等待人工确认候选数据库/API 文档，不再自动提升状态",
+          "at": "2026-05-15T10:38:48.847Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003C 生成 Device V2 数据库与接口候选文档",
+          "changed": "docs/development/device-v2/candidate-05-database-design.md; docs/development/device-v2/candidate-06-api-documentation.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003C-device-v2-05-06-code-facts.md",
+          "tests": "validation rg/test/git diff --check/jq empty pass",
+          "next": "Blocker/Approval: 等待人工确认候选数据库/API 文档，不再自动提升状态",
+          "at": "2026-05-15T10:39:23.046Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003C 生成 Device V2 数据库与接口候选文档",
+          "changed": "docs/development/device-v2/candidate-05-database-design.md; docs/development/device-v2/candidate-06-api-documentation.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003C-device-v2-05-06-code-facts.md",
+          "tests": "validation rg/test/git diff --check/jq empty pass",
+          "next": "Blocker/Approval: 等待人工确认候选数据库/API 文档，不再自动提升状态",
+          "at": "2026-05-15T10:39:32.827Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003C 生成 Device V2 数据库与接口候选文档",
+          "changed": "docs/development/device-v2/candidate-05-database-design.md; docs/development/device-v2/candidate-06-api-documentation.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003C-device-v2-05-06-code-facts.md",
+          "tests": "validation rg/test/git diff --check/jq empty pass",
+          "next": "Blocker/Approval: 等待人工确认候选数据库/API 文档，不再自动提升状态",
+          "at": "2026-05-15T10:39:33.421Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003C 生成 Device V2 数据库与接口候选文档",
+          "changed": "docs/development/device-v2/candidate-05-database-design.md; docs/development/device-v2/candidate-06-api-documentation.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003C-device-v2-05-06-code-facts.md",
+          "tests": "validation rg/test/git diff --check/jq empty pass",
+          "next": "Blocker/Approval: 等待人工确认候选数据库/API 文档，不再自动提升状态",
+          "at": "2026-05-15T10:40:07.924Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003C 生成 Device V2 数据库与接口候选文档",
+          "changed": "docs/development/device-v2/candidate-05-database-design.md; docs/development/device-v2/candidate-06-api-documentation.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003C-device-v2-05-06-code-facts.md",
+          "tests": "validation rg/test/git diff --check/jq empty pass",
+          "next": "Blocker/Approval: 等待人工确认候选数据库/API 文档，不再自动提升状态",
+          "at": "2026-05-15T10:40:20.182Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003C 生成 Device V2 数据库与接口候选文档",
+          "changed": "docs/development/device-v2/candidate-05-database-design.md; docs/development/device-v2/candidate-06-api-documentation.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003C-device-v2-05-06-code-facts.md",
+          "tests": "validation rg/test/git diff --check/jq empty pass",
+          "next": "Blocker/Approval: 等待人工确认候选数据库/API 文档，不再自动提升状态",
+          "at": "2026-05-15T10:40:20.780Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003C 生成 Device V2 数据库与接口候选文档",
+          "changed": "docs/development/device-v2/candidate-05-database-design.md; docs/development/device-v2/candidate-06-api-documentation.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003C-device-v2-05-06-code-facts.md",
+          "tests": "validation rg/test/git diff --check/jq empty pass",
+          "next": "Blocker/Approval: 等待人工确认候选数据库/API 文档，不再自动提升状态",
+          "at": "2026-05-15T10:40:55.296Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003C 生成 Device V2 数据库与接口候选文档",
+          "changed": "docs/development/device-v2/candidate-05-database-design.md; docs/development/device-v2/candidate-06-api-documentation.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003C-device-v2-05-06-code-facts.md",
+          "tests": "validation rg/test/git diff --check/jq empty pass",
+          "next": "Blocker/Approval: 等待人工确认候选数据库/API 文档，不再自动提升状态",
+          "at": "2026-05-15T10:41:05.551Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003C 生成 Device V2 数据库与接口候选文档",
+          "changed": "docs/development/device-v2/candidate-05-database-design.md; docs/development/device-v2/candidate-06-api-documentation.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003C-device-v2-05-06-code-facts.md",
+          "tests": "validation rg/test/git diff --check/jq empty pass",
+          "next": "Blocker/Approval: 等待人工确认候选数据库/API 文档，不再自动提升状态",
+          "at": "2026-05-15T10:41:06.151Z",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-15T18:36:14+0800"
+    },
+    {
+      "id": "DEV-DOCS-003D",
+      "title": "生成 Device V2 后端开发设计候选文档",
+      "status": "done",
+      "priority": 55,
+      "risk": "Medium",
+      "lanes": [
+        "dev-docs"
+      ],
+      "scope": "按 07 模板，阅读 Go/Gin/GORM 真实目录、router/API/service/model/DTO/DAO/GORM 调用链，生成后端设计候选文档并更新 README。",
+      "nonGoals": "不按 Java/Spring 模板伪造实现，不生成 08-11 文档，不确认新开发任务。",
+      "acceptance": [
+        "生成 candidate-07-backend-development-design.md。",
+        "README 链接 candidate-01 到 candidate-07。",
+        "文档明确当前真实技术栈为 Go/Gin/GORM。",
+        "未确认事务、权限、缓存、异常口径保留待确认。",
+        "文档或 evidence 包含代码事实来源清单。"
+      ],
+      "allowedPaths": [
+        "docs/development/device-v2/**",
+        "docs/openclaw-autodev/evidence/dev-docs/**"
+      ],
+      "validation": [
+        "test -f docs/development/device-v2/candidate-07-backend-development-design.md",
+        "rg -n \"【后端开发设计】|Go / Gin / GORM|DeviceV2API|router|service|model|blocked-human-confirmation\" docs/development/device-v2/candidate-07-backend-development-design.md",
+        "rg -n \"candidate-01-requirements-summary|candidate-02-function-list|candidate-03-entity-attribute-list|candidate-04-prototype-list|candidate-05-database-design|candidate-06-api-documentation|candidate-07-backend-development-design\" docs/development/device-v2/README.md",
+        "rg -n \"代码事实来源清单|已读取关键文件|源码路径\" docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs",
+        "git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs"
+      ],
+      "dependsOn": [
+        "DEV-DOCS-003C"
+      ],
+      "sourcePrd": {
+        "program": "oneops-engineering-docs-standardization",
+        "batch": "batch-003-device-v2-code-fact-standard-docs",
+        "package": "docs/prd-autodev/oneops-engineering-docs-standardization/story-packages/batch-003-device-v2-code-fact-standard-docs.json",
+        "executionMode": "dependency-chain",
+        "releaseGate": "本批仅用于按 docs/development-doc-templates/01-07 反向生成 Device V2 候选标准文档；不生成 08-11；不得确认产品需求、架构决策、API 契约、数据库字段语义、权限或验收标准。"
+      },
+      "updatedAt": "2026-05-16T08:28:24.222Z",
+      "lastTask": "dev-docs",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "dev-docs",
+        "control": "DONE",
+        "ticket": "DEV-DOCS-003D Device V2 后端开发设计候选稿",
+        "changed": "docs/development/device-v2/candidate-07-backend-development-design.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003D-device-v2-07-code-facts.md",
+        "tests": "git diff --check / rg gates / jq empty — pass",
+        "next": "Blocker/Approval: 等待人工确认 01-07 候选文档，不自动提升状态",
+        "at": "2026-05-16T08:28:24.222Z",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003D Device V2 后端开发设计候选稿",
+          "changed": "docs/development/device-v2/candidate-07-backend-development-design.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003D-device-v2-07-code-facts.md",
+          "tests": "git diff --check / rg gates / jq empty — pass",
+          "next": "Blocker/Approval: 等待人工确认 01-07 候选文档，不自动提升状态",
+          "at": "2026-05-16T08:24:05.621Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003D Device V2 后端开发设计候选稿",
+          "changed": "docs/development/device-v2/candidate-07-backend-development-design.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003D-device-v2-07-code-facts.md",
+          "tests": "git diff --check / rg gates / jq empty — pass",
+          "next": "Blocker/Approval: 等待人工确认 01-07 候选文档，不自动提升状态",
+          "at": "2026-05-16T08:24:06.216Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003D Device V2 后端开发设计候选稿",
+          "changed": "docs/development/device-v2/candidate-07-backend-development-design.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003D-device-v2-07-code-facts.md",
+          "tests": "git diff --check / rg gates / jq empty — pass",
+          "next": "Blocker/Approval: 等待人工确认 01-07 候选文档，不自动提升状态",
+          "at": "2026-05-16T08:24:39.764Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003D Device V2 后端开发设计候选稿",
+          "changed": "docs/development/device-v2/candidate-07-backend-development-design.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003D-device-v2-07-code-facts.md",
+          "tests": "git diff --check / rg gates / jq empty — pass",
+          "next": "Blocker/Approval: 等待人工确认 01-07 候选文档，不自动提升状态",
+          "at": "2026-05-16T08:24:48.622Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003D Device V2 后端开发设计候选稿",
+          "changed": "docs/development/device-v2/candidate-07-backend-development-design.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003D-device-v2-07-code-facts.md",
+          "tests": "git diff --check / rg gates / jq empty — pass",
+          "next": "Blocker/Approval: 等待人工确认 01-07 候选文档，不自动提升状态",
+          "at": "2026-05-16T08:24:49.289Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003D Device V2 后端开发设计候选稿",
+          "changed": "docs/development/device-v2/candidate-07-backend-development-design.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003D-device-v2-07-code-facts.md",
+          "tests": "git diff --check / rg gates / jq empty — pass",
+          "next": "Blocker/Approval: 等待人工确认 01-07 候选文档，不自动提升状态",
+          "at": "2026-05-16T08:25:23.008Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003D Device V2 后端开发设计候选稿",
+          "changed": "docs/development/device-v2/candidate-07-backend-development-design.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003D-device-v2-07-code-facts.md",
+          "tests": "git diff --check / rg gates / jq empty — pass",
+          "next": "Blocker/Approval: 等待人工确认 01-07 候选文档，不自动提升状态",
+          "at": "2026-05-16T08:25:31.719Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003D Device V2 后端开发设计候选稿",
+          "changed": "docs/development/device-v2/candidate-07-backend-development-design.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003D-device-v2-07-code-facts.md",
+          "tests": "git diff --check / rg gates / jq empty — pass",
+          "next": "Blocker/Approval: 等待人工确认 01-07 候选文档，不自动提升状态",
+          "at": "2026-05-16T08:25:32.290Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003D Device V2 后端开发设计候选稿",
+          "changed": "docs/development/device-v2/candidate-07-backend-development-design.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003D-device-v2-07-code-facts.md",
+          "tests": "git diff --check / rg gates / jq empty — pass",
+          "next": "Blocker/Approval: 等待人工确认 01-07 候选文档，不自动提升状态",
+          "at": "2026-05-16T08:26:06.903Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003D Device V2 后端开发设计候选稿",
+          "changed": "docs/development/device-v2/candidate-07-backend-development-design.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003D-device-v2-07-code-facts.md",
+          "tests": "git diff --check / rg gates / jq empty — pass",
+          "next": "Blocker/Approval: 等待人工确认 01-07 候选文档，不自动提升状态",
+          "at": "2026-05-16T08:26:15.745Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003D Device V2 后端开发设计候选稿",
+          "changed": "docs/development/device-v2/candidate-07-backend-development-design.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003D-device-v2-07-code-facts.md",
+          "tests": "git diff --check / rg gates / jq empty — pass",
+          "next": "Blocker/Approval: 等待人工确认 01-07 候选文档，不自动提升状态",
+          "at": "2026-05-16T08:26:16.343Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003D Device V2 后端开发设计候选稿",
+          "changed": "docs/development/device-v2/candidate-07-backend-development-design.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003D-device-v2-07-code-facts.md",
+          "tests": "git diff --check / rg gates / jq empty — pass",
+          "next": "Blocker/Approval: 等待人工确认 01-07 候选文档，不自动提升状态",
+          "at": "2026-05-16T08:26:49.866Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003D Device V2 后端开发设计候选稿",
+          "changed": "docs/development/device-v2/candidate-07-backend-development-design.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003D-device-v2-07-code-facts.md",
+          "tests": "git diff --check / rg gates / jq empty — pass",
+          "next": "Blocker/Approval: 等待人工确认 01-07 候选文档，不自动提升状态",
+          "at": "2026-05-16T08:26:58.376Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003D Device V2 后端开发设计候选稿",
+          "changed": "docs/development/device-v2/candidate-07-backend-development-design.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003D-device-v2-07-code-facts.md",
+          "tests": "git diff --check / rg gates / jq empty — pass",
+          "next": "Blocker/Approval: 等待人工确认 01-07 候选文档，不自动提升状态",
+          "at": "2026-05-16T08:26:58.942Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003D Device V2 后端开发设计候选稿",
+          "changed": "docs/development/device-v2/candidate-07-backend-development-design.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003D-device-v2-07-code-facts.md",
+          "tests": "git diff --check / rg gates / jq empty — pass",
+          "next": "Blocker/Approval: 等待人工确认 01-07 候选文档，不自动提升状态",
+          "at": "2026-05-16T08:27:32.373Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003D Device V2 后端开发设计候选稿",
+          "changed": "docs/development/device-v2/candidate-07-backend-development-design.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003D-device-v2-07-code-facts.md",
+          "tests": "git diff --check / rg gates / jq empty — pass",
+          "next": "Blocker/Approval: 等待人工确认 01-07 候选文档，不自动提升状态",
+          "at": "2026-05-16T08:27:40.934Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003D Device V2 后端开发设计候选稿",
+          "changed": "docs/development/device-v2/candidate-07-backend-development-design.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003D-device-v2-07-code-facts.md",
+          "tests": "git diff --check / rg gates / jq empty — pass",
+          "next": "Blocker/Approval: 等待人工确认 01-07 候选文档，不自动提升状态",
+          "at": "2026-05-16T08:27:41.505Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003D Device V2 后端开发设计候选稿",
+          "changed": "docs/development/device-v2/candidate-07-backend-development-design.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003D-device-v2-07-code-facts.md",
+          "tests": "git diff --check / rg gates / jq empty — pass",
+          "next": "Blocker/Approval: 等待人工确认 01-07 候选文档，不自动提升状态",
+          "at": "2026-05-16T08:28:15.172Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003D Device V2 后端开发设计候选稿",
+          "changed": "docs/development/device-v2/candidate-07-backend-development-design.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003D-device-v2-07-code-facts.md",
+          "tests": "git diff --check / rg gates / jq empty — pass",
+          "next": "Blocker/Approval: 等待人工确认 01-07 候选文档，不自动提升状态",
+          "at": "2026-05-16T08:28:23.658Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "dev-docs",
+          "control": "DONE",
+          "ticket": "DEV-DOCS-003D Device V2 后端开发设计候选稿",
+          "changed": "docs/development/device-v2/candidate-07-backend-development-design.md; docs/openclaw-autodev/evidence/dev-docs/DEV-DOCS-003D-device-v2-07-code-facts.md",
+          "tests": "git diff --check / rg gates / jq empty — pass",
+          "next": "Blocker/Approval: 等待人工确认 01-07 候选文档，不自动提升状态",
+          "at": "2026-05-16T08:28:24.222Z",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-15T10:41:39.928Z"
+    }
+  ]
+}

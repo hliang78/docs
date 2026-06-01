@@ -1,0 +1,109 @@
+{
+  "program": "device-v2-onboarding-observability",
+  "batch": "batch-002",
+  "title": "Repair fake onboarding closure and cut over real API usage",
+  "status": "reviewed",
+  "executionMode": "dependency-chain",
+  "targetTaskIds": ["d2on"],
+  "stories": [
+    {
+      "id": "D2ON-006",
+      "title": "Remove fake success from onboarding backend contract",
+      "status": "open",
+      "lanes": ["d2on"],
+      "scope": "Make the Device V2 onboarding backend honest. GET must return actions, retryableActions, and a summary from the latest real store run. PLAN must stop using a fixed placeholder list and validate server monitor mode only when required. ENSURE must stop writing hardcoded success, load a concrete config source, and merge results into the latest real store run instead of inventing a synthetic success path.",
+      "nonGoals": [
+        "Do not add batch execution.",
+        "Do not invent remote success when the real business contract is not safely callable.",
+        "Do not widen scope into full SNMP trap support."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "GET onboarding returns actions, retryableActions, and a derived summary from the latest real store run.",
+        "PLAN onboarding is not a fixed placeholder response and rejects missing server monitor mode only when the target device actually requires it.",
+        "ENSURE onboarding no longer writes hardcoded success or dispatch_result=success placeholders.",
+        "ENSURE onboarding either loads a concrete config source or fails loudly with a concrete config-source error; it must not treat DefaultOnboardingConfig as a complete runtime source.",
+        "ENSURE onboarding merges action evidence into the latest real store run instead of creating a synthetic placeholder run."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/...",
+        "rg -n \"dispatch_result\\\": \\\"success\\\"|DefaultOnboardingConfig\\(\" /Users/huangliang/project/OneOPS-ALL/OneOPS/app/device/v2"
+      ],
+      "notes": [
+        "Start from docs/prd-autodev/device-v2-onboarding-observability/automation-repair-brief.md.",
+        "Current bug anchor: OneOPS/app/device/v2/api/device_v2_onboarding_api.go.",
+        "If a real contract is missing, prefer blocked evidence over hardcoded success."
+      ]
+    },
+    {
+      "id": "D2ON-007",
+      "title": "Cut DeviceV2ManagementRedesign over to onboarding APIs",
+      "status": "open",
+      "dependsOn": ["D2ON-006"],
+      "lanes": ["d2on"],
+      "scope": "Change the DeviceV2ManagementRedesign continue-onboarding UX so it uses the new onboarding plan/ensure/read APIs instead of startDeviceV2StorePipelineReq or retryDeviceV2StorePipelineReq. Keep the first phase single-device-only rule, require explicit server monitor mode selection when needed, and render onboarding action evidence directly instead of using store observations as a substitute.",
+      "nonGoals": [
+        "Do not restore batch execution.",
+        "Do not redesign unrelated Device V2 panels.",
+        "Do not keep the old store-start path behind the same continue-onboarding action."
+      ],
+      "allowedPaths": [
+        "OneOPS-UI/src/views/device/**",
+        "OneOPS-UI/src/api/device/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "The continue-onboarding CTA in DeviceV2ManagementRedesign no longer calls startDeviceV2StorePipelineReq or retryDeviceV2StorePipelineReq.",
+        "The redesign view reads onboarding evidence from onboarding APIs instead of treating store run observations as onboarding action evidence.",
+        "The UI still enforces one-device-only execution.",
+        "When the backend requires server monitor mode, the UI collects an explicit choice before ensure.",
+        "The UI renders backend blocked/failed/unknown action evidence directly without masking it as generic success."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "rg -n \"startDeviceV2StorePipelineReq|retryDeviceV2StorePipelineReq\" /Users/huangliang/project/OneOPS-ALL/OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue"
+      ],
+      "notes": [
+        "Current bug anchor: DeviceV2ManagementRedesign.vue still routes continue-onboarding through the old store pipeline.",
+        "Keep the single-device rule visible to the user."
+      ]
+    },
+    {
+      "id": "D2ON-008",
+      "title": "Close validation and evidence gaps for the repaired batch",
+      "status": "open",
+      "dependsOn": ["D2ON-007"],
+      "lanes": ["d2on"],
+      "scope": "Finish this repair batch by running the intended verification and filling the missing durable artifacts. Add any missing D2ON evidence summaries that were previously marked done without files, run browser/devtools validation for the redesign page if the local target is available, and replace TBD placeholders in batch-001-summary, final-readiness, and review with concrete findings and residual risks.",
+      "nonGoals": [
+        "Do not claim visual validation happened if the page or credentials are unavailable.",
+        "Do not mark the batch done while acceptance artifacts are still missing."
+      ],
+      "allowedPaths": [
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "Missing evidence summaries from prior done stories are created or their absence is explicitly explained with a blocker.",
+        "Browser/devtools validation is run for the redesign page, or a concrete blocker is documented with the attempted target.",
+        "docs/prd-autodev/device-v2-onboarding-observability/evidence/batch-001-summary.md is no longer TBD.",
+        "docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md is no longer TBD.",
+        "docs/prd-autodev/device-v2-onboarding-observability/review.md is no longer TBD and clearly lists any remaining blockers."
+      ],
+      "validation": [
+        "rg -n \"TBD\" /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/evidence/batch-001-summary.md /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/review.md",
+        "find /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on -maxdepth 1 -type f | sort"
+      ],
+      "notes": [
+        "This story is documentation and evidence closure, but it is not optional.",
+        "If D2ON-006 or D2ON-007 are still materially incomplete, keep this story blocked."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "d2on": {
+    "task": "d2on",
+    "label": "D2ON",
+    "description": "Device V2 监控与日志纳管自动开发"
+  },
+  "poc": {
+    "task": "poc-ct",
+    "label": "POC",
+    "description": "OneOps PoC 关注方向探索驱动测试"
+  },
+  "pocct": {
+    "task": "poc-ct",
+    "label": "POC",
+    "description": "OneOps PoC 关注方向探索驱动测试"
+  },
+  "poc-ct": {
+    "task": "poc-ct",
+    "label": "POC",
+    "description": "OneOps PoC 关注方向探索驱动测试"
+  }
+}

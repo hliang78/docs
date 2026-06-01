@@ -1,0 +1,137 @@
+{
+  "program": "device-v2-onboarding-observability",
+  "batch": "batch-007",
+  "title": "Rework the on-goal execute-path tasks until the real task is high-quality complete",
+  "status": "reviewed",
+  "executionMode": "dependency-chain",
+  "targetTaskIds": [
+    "d2on"
+  ],
+  "stories": [
+    {
+      "id": "D2ON-020",
+      "title": "Rework the exact controller-backed onboarding path instead of closing on local-only evidence",
+      "status": "open",
+      "priority": 190,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Rework the same single-device monitor/log onboarding path targeted by D2ON-017, starting from the current blocker recorded in D2ON-018. The backend/frontend contract must no longer stop at \"local evidence was persisted\". Instead, it must carry one exact controller-backed execution result or one exact stage blocker through the API/UI contract so the path is judged by the real task outcome rather than by a formal story footer.",
+      "nonGoals": [
+        "Do not add batch execution.",
+        "Do not reopen browser-only validation as the main task.",
+        "Do not fabricate remote success when the controller-backed step did not actually run."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/**",
+        "OneOPS-UI/src/views/device/**",
+        "OneOPS-UI/src/api/device/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "The exact single-device onboarding path no longer closes on local-only evidence when the controller-backed execution result is still missing.",
+        "One real controller-backed execution result or one exact stage-specific blocker is surfaced through the onboarding action evidence for that path.",
+        "The API/UI contract explicitly exposes which stage was reached: controller request not attempted, controller request attempted but failed, controller returned remote blocker, or controller returned a real execution result.",
+        "Focused validation covers the changed backend/frontend execution path."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/...",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2"
+      ],
+      "notes": [
+        "Rework target: D2ON-017 stayed on goal but still did not reach high-quality completion of the real execution task.",
+        "Must read first: docs/openclaw-autodev/evidence/d2on/D2ON-018.md, OneOPS/app/device/v2/api/device_v2_onboarding_api.go, OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue.",
+        "Not enough for DONE: only persisting onboarding evidence, only improving copy, or only rephrasing blocker docs without exposing a controller-backed execution stage/result."
+      ]
+    },
+    {
+      "id": "D2ON-021",
+      "title": "Rework the real single-device execution probe until it yields a controller-backed trace or exact blocker",
+      "status": "open",
+      "dependsOn": [
+        "D2ON-020"
+      ],
+      "priority": 200,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Re-run the same real single-device continue-onboarding execution concern targeted by D2ON-018, but require the result to be a controller-backed execution trace or an exact blocker produced by that path. A local-only evidence summary is not sufficient completion for this rework story. The evidence must name the exact device/request path used, the stage reached, and the returned result or blocker.",
+      "nonGoals": [
+        "Do not perform batch onboarding execution.",
+        "Do not downgrade a real execution blocker into generic success wording.",
+        "Do not widen scope beyond one bounded single-device execution attempt."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/**",
+        "OneOPS-UI/src/views/device/**",
+        "OneOPS-UI/src/api/device/**",
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "A durable evidence summary is written for one real single-device execution attempt with a controller-backed trace or exact blocker.",
+        "The evidence clearly distinguishes what actually executed, what returned from the controller-backed path, and what remained blocked.",
+        "The evidence names the exact action path used and the stage reached, rather than only saying that real execution evidence is missing.",
+        "Any non-success, retryable, blocked, or unknown outcome from that execution attempt is preserved explicitly."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/...",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-021.md"
+      ],
+      "notes": [
+        "Rework target: D2ON-018 stayed on goal but still closed without a real controller-backed single-device execution trace.",
+        "Must read first: docs/openclaw-autodev/evidence/d2on/D2ON-018.md and the exact contract/evidence files changed by D2ON-020.",
+        "Not enough for DONE: another evidence file that only repeats 'real execution evidence is unavailable' without naming the exact controller-backed stage and blocker."
+      ]
+    },
+    {
+      "id": "D2ON-022",
+      "title": "Rework readiness only after the real execution result is high-quality complete",
+      "status": "open",
+      "dependsOn": [
+        "D2ON-021"
+      ],
+      "priority": 210,
+      "risk": "Medium",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Rework the same readiness carry-forward concern handled by D2ON-019, but update readiness/review only after the new real execution result is high-quality complete for the bounded task. If the controller-backed path still blocks, record that exact blocker, the exact execution stage reached, and the next rework rule instead of closing the batch on a passive wait conclusion.",
+      "nonGoals": [
+        "Do not close the whole program unless the reworked execution result really justifies it.",
+        "Do not reintroduce browser-only closure language.",
+        "Do not treat a local-only summary as final readiness."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/**",
+        "OneOPS-UI/src/views/device/**",
+        "OneOPS-UI/src/api/device/**",
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "final-readiness.md and review.md reflect the reworked real execution result rather than passive waiting on a completed batch.",
+        "If a concrete frontend/backend honesty mismatch remains inside allowed paths, it is fixed and validated before the readiness update is finalized.",
+        "The next-step note explicitly states whether the real task is now high-quality complete or what exact blocker still requires another execution rework.",
+        "The readiness decision must explicitly apply the PRD principle: formal story DONE does not pass unless the real task goal and truthful execution evidence are high-quality complete."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/...",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/review.md"
+      ],
+      "notes": [
+        "Rework target: D2ON-019 stayed on goal but still ended with a passive blocker note instead of a high-quality completion verdict.",
+        "Must read first: docs/openclaw-autodev/evidence/d2on/D2ON-021.md, docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md, docs/prd-autodev/device-v2-onboarding-observability/review.md.",
+        "Not enough for DONE: carrying forward another passive wait conclusion without an explicit quality verdict on the real task goal."
+      ]
+    }
+  ]
+}

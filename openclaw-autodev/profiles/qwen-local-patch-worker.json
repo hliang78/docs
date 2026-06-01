@@ -1,0 +1,50 @@
+{
+  "profileId": "qwen-local-patch-worker",
+  "description": "Weak local model profile for copied-workspace code patch tasks with strict controller verification.",
+  "supportedTaskKinds": [
+    "code_patch"
+  ],
+  "supportedEnvironmentKinds": [
+    "copied_workspace"
+  ],
+  "contextTolerance": {
+    "profile": "small",
+    "maxPromptTokensClass": "small",
+    "prefersCompiledContext": true,
+    "requiresWorkspaceSanitization": true
+  },
+  "actionCapabilities": {
+    "shellExec": true,
+    "fileEdit": true,
+    "browserInteract": false,
+    "dbReadonly": false,
+    "apiReadonly": false,
+    "remoteReadonly": false,
+    "remoteApply": false,
+    "serviceRestart": false,
+    "deleteFiles": false
+  },
+  "writeCapabilities": {
+    "maxFilesPerTurn": 3,
+    "supportsBroadRefactor": false,
+    "supportsCrossModuleChanges": false,
+    "supportsDocOnlyTurns": true
+  },
+  "verificationModel": {
+    "needsControllerVerifyOnDone": true,
+    "supportsTargetedValidation": true,
+    "supportsRealOperationValidation": false,
+    "trustSelfReportedDone": false
+  },
+  "coordinationModel": {
+    "supportsMultiStoryTurns": false,
+    "supportsMultiLaneCoordination": false,
+    "requiresExplicitJoinPolicy": true
+  },
+  "schedulingDefaults": {
+    "maxTurns": 1,
+    "maxMinutes": 25,
+    "timeoutSeconds": 1500,
+    "preferFreshSession": true
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "program": "d2-launch-acceptance",
+  "batch": "batch-001",
+  "title": "Device V2 DB-derived real-device launch acceptance preparation",
+  "status": "reviewed",
+  "targetTaskIds": ["d2-fe", "d2-be"],
+  "releaseGate": "User confirms DB-derived sample scope, credential redaction boundary, clone/update strategy, collection protocols, and cleanup policy.",
+  "stories": [
+    {
+      "id": "D2LA-001",
+      "title": "DB-derived real device sample and redacted export contract",
+      "lanes": ["d2-be"],
+      "status": "open",
+      "priority": 50,
+      "risk": "Medium",
+      "scope": "Inventory the current Device V2 data model, DB/API fields, credential reference fields, access point fields, and confirmed sample-selection criteria for launch acceptance. Produce a read-only sample/export contract that selects 5 real devices, preferably 1 per device type, without exposing plaintext secrets.",
+      "nonGoals": "Do not mutate Device V2 records, do not export plaintext credentials, do not start collection, and do not purge import batches.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/OneOPS/app/device/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/d2-launch-acceptance/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-be/**"
+      ],
+      "acceptance": [
+        "Report identifies the exact fields needed for DB-derived import: code, name, platform/status, management address or access_points, credential refs, protocol/port, labels/attributes/metadata, and original-code mapping.",
+        "Report defines candidate selection rules for 5 real devices, preferably 1 per device type, and exclusion reasons for unusable candidates.",
+        "Report documents credential redaction rules and proves no plaintext password, token, community secret, or private key is required in evidence.",
+        "Report lists the read-only command/API/query path to inspect candidates, or records the exact blocker if DB access/config is unavailable."
+      ],
+      "validation": [
+        "Docs/evidence only unless a read-only backend test already exists.",
+        "Allowed backend tests: `go test ./app/device/v2/...` and `go test ./app/device/v2/ingest/...`.",
+        "Search evidence must include route/model/DTO references for Device V2, ingest, import batch, store/start, and credential reference fields."
+      ],
+      "notes": [
+        "Program: docs/prd-autodev/d2-launch-acceptance/program-plan.md",
+        "Default import strategy is cloned code D2LA_<orig_code>; same-code update is out of scope until approved."
+      ]
+    },
+    {
+      "id": "D2LA-002",
+      "title": "Frontend ingest/import template mapping for DB-derived sample",
+      "lanes": ["d2-fe"],
+      "status": "open",
+      "priority": 50,
+      "risk": "Medium",
+      "scope": "Map the DB-derived sample contract to the Device V2 ingest/import UI fields and Excel template. Identify any frontend gaps before real upload, including credential refs, access_points, original-code mapping, validation messages, and handoff to management.",
+      "nonGoals": "Do not run real import, do not redesign the UI, do not put secrets in Excel, and do not modify production data.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/OneOPS-UI/src/api/device/**",
+        "/Users/huangliang/project/OneOPS-ALL/OneOPS-UI/src/views/cmdb/**",
+        "/Users/huangliang/project/OneOPS-ALL/OneOPS-UI/scripts/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/d2-launch-acceptance/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-fe/**"
+      ],
+      "acceptance": [
+        "Report maps DB-derived fields to ingest/import template columns and frontend API payload fields.",
+        "Report verifies UI/API support for credential_ref_in_band, credential_ref_out_band, snmp_credential_ref, winrm_credential_ref, credential_refs, and access_points where applicable.",
+        "Report defines how cloned D2LA_<orig_code> rows retain original-code traceability without overwriting originals.",
+        "Report identifies any blocker that would prevent upload/validate/apply/handoff from using the DB-derived sample."
+      ],
+      "validation": [
+        "npm run typecheck:d2 if frontend source is touched.",
+        "No real upload is required in this batch."
+      ],
+      "notes": [
+        "Coordinate with D2LA-001 output; do not invent sample secrets."
+      ]
+    },
+    {
+      "id": "D2LA-003",
+      "title": "Launch acceptance harness plan with fine-grained store phases",
+      "lanes": ["d2-fe"],
+      "status": "open",
+      "priority": 45,
+      "risk": "Low",
+      "scope": "Extend the existing launch acceptance plan so the next batches can generate a DB-derived Excel, upload it through UI, compare imported records with source samples, then run store in separate handoff-driven phases: readiness, start, summary/runs, observations, latest DC2, collection plans, retry decision, and retry execution.",
+      "nonGoals": "Do not run collection against real devices in this preparatory batch, do not delete original records, and do not add broad new automation dependencies.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/OneOPS-UI/scripts/d2-real-operation-smoke.cjs",
+        "/Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/d2-launch-acceptance/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-fe/**"
+      ],
+      "acceptance": [
+        "Plan names the exact evidence artifacts needed for DB-derived import, management reconciliation, store readiness, store start, task summary/runs, observations, latest DC2, collection plans, retry, edit/delete, and cleanup.",
+        "Plan separates preparatory dry-run checks from real import and separates real collection into small phases that can each finish within one worker turn.",
+        "Plan defines compact handoff files between store phases, including sample-set, readiness result, task_id, summary, runs, observation classification, latest DC2, and retry decision.",
+        "Plan defines stop conditions for missing credential refs, unreachable devices, long-running tasks, empty observations/DC2, and destructive actions.",
+        "Plan keeps D2P2 local fixture smoke as a fallback health gate but does not treat it as real-device proof."
+      ],
+      "validation": [
+        "Docs/evidence only unless small script inspection is needed.",
+        "If script code changes are made, run npm run typecheck:d2 and explain why no real collection was run."
+      ],
+      "notes": [
+        "This story prepares Batch 002/003; it should not perform real upload or collection without user confirmation.",
+        "Store must not be implemented as one coarse story. One story should handle one device and one store phase unless the user explicitly approves a broader batch."
+      ]
+    }
+  ]
+}

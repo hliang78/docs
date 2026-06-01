@@ -1,0 +1,935 @@
+{
+  "taskGroup": "poc-ct",
+  "updatedAt": "2026-05-15T09:56:39+0800",
+  "stories": [
+    {
+      "id": "OPOC-EXP-001",
+      "title": "Map WS-01 exploration flow lines",
+      "status": "done",
+      "priority": 10,
+      "risk": "Low",
+      "lanes": [
+        "poc-ct"
+      ],
+      "scope": "Create a compact WS-01 flow-line evidence note that maps the Device, Monitoring, Logging, and Topology flows from entry action to final proof. For each flow, identify start, steps, final goal, critical environments, and evidence candidates. This is a static/read-only planning story only.",
+      "nonGoals": "Do not query the test DB, run Device V2/DC2 scripts, apply monitoring/logging plans, or open browser UI.",
+      "acceptance": [
+        "Evidence includes four WS-01 flow lines: Device, Monitoring, Logging, and Topology.",
+        "Each flow line states final goal, critical environments, and evidence candidates.",
+        "The output references `docs/prd-autodev/oneops-poc-concern-autotest/exploration-driven-test-method.md` as the method source.",
+        "No product code, DB data, PRD program files, or story queues are modified."
+      ],
+      "allowedPaths": [
+        "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/**",
+        "docs/openclaw-autodev/issues/**"
+      ],
+      "validation": [
+        "Review the generated evidence note for one-flow-per-section structure.",
+        "Confirm the story only wrote under allowed poc-ct evidence or issue paths."
+      ],
+      "notes": [
+        "This story establishes the exploration spine before any real probe."
+      ],
+      "updatedAt": "2026-05-15T01:50:17.998Z",
+      "lastTask": "poc-ct",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "poc-ct",
+        "control": "DONE",
+        "ticket": "OPOC-EXP-001 Map WS-01 exploration flow lines",
+        "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-flow-lines.md",
+        "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass",
+        "next": "OPOC-EXP-002 classify WS-01 high-harm weak-point hypotheses",
+        "at": "2026-05-15T01:50:17.998Z",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-001 Map WS-01 exploration flow lines",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-flow-lines.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass",
+          "next": "OPOC-EXP-002 classify WS-01 high-harm weak-point hypotheses",
+          "at": "2026-05-15T09:47:57+0800",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-001 Map WS-01 exploration flow lines",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-flow-lines.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass",
+          "next": "OPOC-EXP-002 classify WS-01 high-harm weak-point hypotheses",
+          "at": "2026-05-15T01:48:13.050Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-001 Map WS-01 exploration flow lines",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-flow-lines.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass",
+          "next": "OPOC-EXP-002 classify WS-01 high-harm weak-point hypotheses",
+          "at": "2026-05-15T01:48:13.055Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-001 Map WS-01 exploration flow lines",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-flow-lines.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass",
+          "next": "OPOC-EXP-002 classify WS-01 high-harm weak-point hypotheses",
+          "at": "2026-05-15T01:48:13.059Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-001 Map WS-01 exploration flow lines",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-flow-lines.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass",
+          "next": "OPOC-EXP-002 classify WS-01 high-harm weak-point hypotheses",
+          "at": "2026-05-15T01:48:13.169Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-001 Map WS-01 exploration flow lines",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-flow-lines.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass",
+          "next": "OPOC-EXP-002 classify WS-01 high-harm weak-point hypotheses",
+          "at": "2026-05-15T01:48:16.962Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-001 Map WS-01 exploration flow lines",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-flow-lines.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass",
+          "next": "OPOC-EXP-002 classify WS-01 high-harm weak-point hypotheses",
+          "at": "2026-05-15T01:48:26.642Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-001 Map WS-01 exploration flow lines",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-flow-lines.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass",
+          "next": "OPOC-EXP-002 classify WS-01 high-harm weak-point hypotheses",
+          "at": "2026-05-15T01:48:27.432Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-001 Map WS-01 exploration flow lines",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-flow-lines.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass",
+          "next": "OPOC-EXP-002 classify WS-01 high-harm weak-point hypotheses",
+          "at": "2026-05-15T01:49:01.288Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-001 Map WS-01 exploration flow lines",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-flow-lines.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass",
+          "next": "OPOC-EXP-002 classify WS-01 high-harm weak-point hypotheses",
+          "at": "2026-05-15T01:49:08.861Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-001 Map WS-01 exploration flow lines",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-flow-lines.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass",
+          "next": "OPOC-EXP-002 classify WS-01 high-harm weak-point hypotheses",
+          "at": "2026-05-15T01:49:09.613Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-001 Map WS-01 exploration flow lines",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-flow-lines.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass",
+          "next": "OPOC-EXP-002 classify WS-01 high-harm weak-point hypotheses",
+          "at": "2026-05-15T01:49:43.584Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-001 Map WS-01 exploration flow lines",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-flow-lines.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass",
+          "next": "OPOC-EXP-002 classify WS-01 high-harm weak-point hypotheses",
+          "at": "2026-05-15T01:49:51.985Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-001 Map WS-01 exploration flow lines",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-flow-lines.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass",
+          "next": "OPOC-EXP-002 classify WS-01 high-harm weak-point hypotheses",
+          "at": "2026-05-15T01:49:52.735Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-001 Map WS-01 exploration flow lines",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-flow-lines.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass",
+          "next": "OPOC-EXP-002 classify WS-01 high-harm weak-point hypotheses",
+          "at": "2026-05-15T01:50:17.998Z",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-15T09:47:57+0800"
+    },
+    {
+      "id": "OPOC-EXP-002",
+      "title": "Classify WS-01 high-harm weak-point hypotheses",
+      "status": "done",
+      "priority": 20,
+      "risk": "Low",
+      "lanes": [
+        "poc-ct"
+      ],
+      "scope": "Using the WS-01 flow-line evidence from OPOC-EXP-001, classify likely weak points by harm severity H0/H1/H2/H3. Prioritize H0/H1 points that can make the quality gate unsafe or untrustworthy, such as wrong fixture target, missing evidence, ignored fact issues, impossible recovery, or external-system risk.",
+      "nonGoals": "Do not fix product code or run controlled actions.",
+      "acceptance": [
+        "Evidence lists weak-point hypotheses for every WS-01 flow.",
+        "Every weak point has harm class H0/H1/H2/H3 and a short reason.",
+        "H0/H1 items are separated into a priority list for the next probe batch.",
+        "Evidence distinguishes product defect risk, environment gap, fixture gap, script gap, and approval need."
+      ],
+      "allowedPaths": [
+        "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/**",
+        "docs/openclaw-autodev/issues/**"
+      ],
+      "validation": [
+        "Check there are no unclassified weak points.",
+        "Check H0/H1 items have proposed next probe or repair direction."
+      ],
+      "notes": [
+        "Unknown harm should default to H1 until evidence lowers or raises it."
+      ],
+      "dependsOn": [
+        "OPOC-EXP-001"
+      ],
+      "updatedAt": "2026-05-15T01:59:33.223Z",
+      "lastTask": "poc-ct",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "poc-ct",
+        "control": "DONE",
+        "ticket": "OPOC-EXP-002 Classify WS-01 high-harm weak-point hypotheses",
+        "changed": "none",
+        "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; harm classification awk pass; find evidence path pass",
+        "next": "OPOC-EXP-003 read-only fixture inventory probe for ONEOPS_GATE_* targets",
+        "at": "2026-05-15T01:59:33.223Z",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "poc-ct",
+          "control": "CONTINUE",
+          "ticket": "OPOC-EXP-002 Classify WS-01 high-harm weak-point hypotheses",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-weak-point-hypotheses.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass; harm classification awk pass",
+          "next": "OPOC-EXP-003 read-only fixture inventory probe for ONEOPS_GATE_* targets",
+          "at": "2026-05-15T01:55:02.820Z",
+          "transitionReason": "continue"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "CONTINUE",
+          "ticket": "OPOC-EXP-002 Classify WS-01 high-harm weak-point hypotheses",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-weak-point-hypotheses.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass; harm classification awk pass",
+          "next": "OPOC-EXP-003 read-only fixture inventory probe for ONEOPS_GATE_* targets",
+          "at": "2026-05-15T01:55:36.636Z",
+          "transitionReason": "continue"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "CONTINUE",
+          "ticket": "OPOC-EXP-002 Classify WS-01 high-harm weak-point hypotheses",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-weak-point-hypotheses.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass; harm classification awk pass",
+          "next": "OPOC-EXP-003 read-only fixture inventory probe for ONEOPS_GATE_* targets",
+          "at": "2026-05-15T01:55:46.602Z",
+          "transitionReason": "continue"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "CONTINUE",
+          "ticket": "OPOC-EXP-002 Classify WS-01 high-harm weak-point hypotheses",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-weak-point-hypotheses.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass; harm classification awk pass",
+          "next": "OPOC-EXP-003 read-only fixture inventory probe for ONEOPS_GATE_* targets",
+          "at": "2026-05-15T01:55:47.375Z",
+          "transitionReason": "continue"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "CONTINUE",
+          "ticket": "OPOC-EXP-002 Classify WS-01 high-harm weak-point hypotheses",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-weak-point-hypotheses.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass; harm classification awk pass",
+          "next": "OPOC-EXP-003 read-only fixture inventory probe for ONEOPS_GATE_* targets",
+          "at": "2026-05-15T01:56:21.440Z",
+          "transitionReason": "continue"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "CONTINUE",
+          "ticket": "OPOC-EXP-002 Classify WS-01 high-harm weak-point hypotheses",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-weak-point-hypotheses.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass; harm classification awk pass",
+          "next": "OPOC-EXP-003 read-only fixture inventory probe for ONEOPS_GATE_* targets",
+          "at": "2026-05-15T01:56:31.155Z",
+          "transitionReason": "continue"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "CONTINUE",
+          "ticket": "OPOC-EXP-002 Classify WS-01 high-harm weak-point hypotheses",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-weak-point-hypotheses.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; find evidence path pass; harm classification awk pass",
+          "next": "OPOC-EXP-003 read-only fixture inventory probe for ONEOPS_GATE_* targets",
+          "at": "2026-05-15T01:56:31.985Z",
+          "transitionReason": "continue"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-002 Classify WS-01 high-harm weak-point hypotheses",
+          "changed": "none",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; harm classification awk pass; find evidence path pass",
+          "next": "OPOC-EXP-003 read-only fixture inventory probe for ONEOPS_GATE_* targets",
+          "at": "2026-05-15T09:56:39+0800",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-002 Classify WS-01 high-harm weak-point hypotheses",
+          "changed": "none",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; harm classification awk pass; find evidence path pass",
+          "next": "OPOC-EXP-003 read-only fixture inventory probe for ONEOPS_GATE_* targets",
+          "at": "2026-05-15T01:57:05.572Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-002 Classify WS-01 high-harm weak-point hypotheses",
+          "changed": "none",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; harm classification awk pass; find evidence path pass",
+          "next": "OPOC-EXP-003 read-only fixture inventory probe for ONEOPS_GATE_* targets",
+          "at": "2026-05-15T01:57:16.842Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-002 Classify WS-01 high-harm weak-point hypotheses",
+          "changed": "none",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; harm classification awk pass; find evidence path pass",
+          "next": "OPOC-EXP-003 read-only fixture inventory probe for ONEOPS_GATE_* targets",
+          "at": "2026-05-15T01:57:17.651Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-002 Classify WS-01 high-harm weak-point hypotheses",
+          "changed": "none",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; harm classification awk pass; find evidence path pass",
+          "next": "OPOC-EXP-003 read-only fixture inventory probe for ONEOPS_GATE_* targets",
+          "at": "2026-05-15T01:57:52.318Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-002 Classify WS-01 high-harm weak-point hypotheses",
+          "changed": "none",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; harm classification awk pass; find evidence path pass",
+          "next": "OPOC-EXP-003 read-only fixture inventory probe for ONEOPS_GATE_* targets",
+          "at": "2026-05-15T01:58:02.939Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-002 Classify WS-01 high-harm weak-point hypotheses",
+          "changed": "none",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; harm classification awk pass; find evidence path pass",
+          "next": "OPOC-EXP-003 read-only fixture inventory probe for ONEOPS_GATE_* targets",
+          "at": "2026-05-15T01:58:03.704Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-002 Classify WS-01 high-harm weak-point hypotheses",
+          "changed": "none",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; harm classification awk pass; find evidence path pass",
+          "next": "OPOC-EXP-003 read-only fixture inventory probe for ONEOPS_GATE_* targets",
+          "at": "2026-05-15T01:58:37.709Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-002 Classify WS-01 high-harm weak-point hypotheses",
+          "changed": "none",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; harm classification awk pass; find evidence path pass",
+          "next": "OPOC-EXP-003 read-only fixture inventory probe for ONEOPS_GATE_* targets",
+          "at": "2026-05-15T01:58:47.257Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-002 Classify WS-01 high-harm weak-point hypotheses",
+          "changed": "none",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; harm classification awk pass; find evidence path pass",
+          "next": "OPOC-EXP-003 read-only fixture inventory probe for ONEOPS_GATE_* targets",
+          "at": "2026-05-15T01:58:48.100Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-002 Classify WS-01 high-harm weak-point hypotheses",
+          "changed": "none",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; harm classification awk pass; find evidence path pass",
+          "next": "OPOC-EXP-003 read-only fixture inventory probe for ONEOPS_GATE_* targets",
+          "at": "2026-05-15T01:59:22.029Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-002 Classify WS-01 high-harm weak-point hypotheses",
+          "changed": "none",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; harm classification awk pass; find evidence path pass",
+          "next": "OPOC-EXP-003 read-only fixture inventory probe for ONEOPS_GATE_* targets",
+          "at": "2026-05-15T01:59:32.405Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-002 Classify WS-01 high-harm weak-point hypotheses",
+          "changed": "none",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json pass; harm classification awk pass; find evidence path pass",
+          "next": "OPOC-EXP-003 read-only fixture inventory probe for ONEOPS_GATE_* targets",
+          "at": "2026-05-15T01:59:33.223Z",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-15T09:56:39+0800"
+    },
+    {
+      "id": "OPOC-EXP-003",
+      "title": "Design WS-01 read-only fixture and evidence probes",
+      "status": "done",
+      "priority": 30,
+      "risk": "Low",
+      "lanes": [
+        "poc-ct"
+      ],
+      "scope": "Design the next read-only probe batch for WS-01. Specify what can be safely read from the test DB, Device V2 APIs, DC2 facts, monitoring strategy, log-forward configuration, Loki/Prometheus, and topology APIs. Include secret handling, sanitization, stop conditions, and blocked classifications.",
+      "nonGoals": "Do not execute the probes in this story.",
+      "acceptance": [
+        "Probe design covers all four WS-01 flow lines.",
+        "Each probe states question, probe level, critical environment, evidence output, stop condition, and next decision.",
+        "DB secret handling is explicit and no password or secret value is written.",
+        "The design separates read-only probes from dry-run and controlled-action probes."
+      ],
+      "allowedPaths": [
+        "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/**",
+        "docs/openclaw-autodev/issues/**"
+      ],
+      "validation": [
+        "Check no secret values are present in evidence.",
+        "Check each proposed probe is narrow enough for one worker turn or explicitly split."
+      ],
+      "notes": [
+        "This story prepares batch-002, it does not perform batch-002."
+      ],
+      "dependsOn": [
+        "OPOC-EXP-002"
+      ],
+      "updatedAt": "2026-05-15T02:04:44.959Z",
+      "lastTask": "poc-ct",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "poc-ct",
+        "control": "DONE",
+        "ticket": "OPOC-EXP-003 Design WS-01 read-only fixture and evidence probes",
+        "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-batch-002-read-only-probe-design.md",
+        "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json + find evidence + secret-like assignment scan + required-field check pass",
+        "next": "Run batch-002 starting with D-RO-01 fixture inventory read-only probe",
+        "at": "2026-05-15T02:04:44.959Z",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-003 Design WS-01 read-only fixture and evidence probes",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-batch-002-read-only-probe-design.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json + find evidence + secret-like assignment scan + required-field check pass",
+          "next": "Run batch-002 starting with D-RO-01 fixture inventory read-only probe",
+          "at": "2026-05-15T02:00:06.784Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-003 Design WS-01 read-only fixture and evidence probes",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-batch-002-read-only-probe-design.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json + find evidence + secret-like assignment scan + required-field check pass",
+          "next": "Run batch-002 starting with D-RO-01 fixture inventory read-only probe",
+          "at": "2026-05-15T02:00:18.977Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-003 Design WS-01 read-only fixture and evidence probes",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-batch-002-read-only-probe-design.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json + find evidence + secret-like assignment scan + required-field check pass",
+          "next": "Run batch-002 starting with D-RO-01 fixture inventory read-only probe",
+          "at": "2026-05-15T02:00:19.784Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-003 Design WS-01 read-only fixture and evidence probes",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-batch-002-read-only-probe-design.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json + find evidence + secret-like assignment scan + required-field check pass",
+          "next": "Run batch-002 starting with D-RO-01 fixture inventory read-only probe",
+          "at": "2026-05-15T02:00:54.906Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-003 Design WS-01 read-only fixture and evidence probes",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-batch-002-read-only-probe-design.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json + find evidence + secret-like assignment scan + required-field check pass",
+          "next": "Run batch-002 starting with D-RO-01 fixture inventory read-only probe",
+          "at": "2026-05-15T02:01:06.679Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-003 Design WS-01 read-only fixture and evidence probes",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-batch-002-read-only-probe-design.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json + find evidence + secret-like assignment scan + required-field check pass",
+          "next": "Run batch-002 starting with D-RO-01 fixture inventory read-only probe",
+          "at": "2026-05-15T02:01:07.476Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-003 Design WS-01 read-only fixture and evidence probes",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-batch-002-read-only-probe-design.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json + find evidence + secret-like assignment scan + required-field check pass",
+          "next": "Run batch-002 starting with D-RO-01 fixture inventory read-only probe",
+          "at": "2026-05-15T02:01:42.291Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-003 Design WS-01 read-only fixture and evidence probes",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-batch-002-read-only-probe-design.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json + find evidence + secret-like assignment scan + required-field check pass",
+          "next": "Run batch-002 starting with D-RO-01 fixture inventory read-only probe",
+          "at": "2026-05-15T02:01:52.630Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-003 Design WS-01 read-only fixture and evidence probes",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-batch-002-read-only-probe-design.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json + find evidence + secret-like assignment scan + required-field check pass",
+          "next": "Run batch-002 starting with D-RO-01 fixture inventory read-only probe",
+          "at": "2026-05-15T02:01:53.426Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-003 Design WS-01 read-only fixture and evidence probes",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-batch-002-read-only-probe-design.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json + find evidence + secret-like assignment scan + required-field check pass",
+          "next": "Run batch-002 starting with D-RO-01 fixture inventory read-only probe",
+          "at": "2026-05-15T02:02:27.423Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-003 Design WS-01 read-only fixture and evidence probes",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-batch-002-read-only-probe-design.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json + find evidence + secret-like assignment scan + required-field check pass",
+          "next": "Run batch-002 starting with D-RO-01 fixture inventory read-only probe",
+          "at": "2026-05-15T02:02:37.941Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-003 Design WS-01 read-only fixture and evidence probes",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-batch-002-read-only-probe-design.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json + find evidence + secret-like assignment scan + required-field check pass",
+          "next": "Run batch-002 starting with D-RO-01 fixture inventory read-only probe",
+          "at": "2026-05-15T02:02:38.710Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-003 Design WS-01 read-only fixture and evidence probes",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-batch-002-read-only-probe-design.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json + find evidence + secret-like assignment scan + required-field check pass",
+          "next": "Run batch-002 starting with D-RO-01 fixture inventory read-only probe",
+          "at": "2026-05-15T02:03:13.793Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-003 Design WS-01 read-only fixture and evidence probes",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-batch-002-read-only-probe-design.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json + find evidence + secret-like assignment scan + required-field check pass",
+          "next": "Run batch-002 starting with D-RO-01 fixture inventory read-only probe",
+          "at": "2026-05-15T02:03:23.750Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-003 Design WS-01 read-only fixture and evidence probes",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-batch-002-read-only-probe-design.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json + find evidence + secret-like assignment scan + required-field check pass",
+          "next": "Run batch-002 starting with D-RO-01 fixture inventory read-only probe",
+          "at": "2026-05-15T02:03:24.536Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-003 Design WS-01 read-only fixture and evidence probes",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-batch-002-read-only-probe-design.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json + find evidence + secret-like assignment scan + required-field check pass",
+          "next": "Run batch-002 starting with D-RO-01 fixture inventory read-only probe",
+          "at": "2026-05-15T02:03:59.280Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-003 Design WS-01 read-only fixture and evidence probes",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-batch-002-read-only-probe-design.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json + find evidence + secret-like assignment scan + required-field check pass",
+          "next": "Run batch-002 starting with D-RO-01 fixture inventory read-only probe",
+          "at": "2026-05-15T02:04:09.175Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-003 Design WS-01 read-only fixture and evidence probes",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-batch-002-read-only-probe-design.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json + find evidence + secret-like assignment scan + required-field check pass",
+          "next": "Run batch-002 starting with D-RO-01 fixture inventory read-only probe",
+          "at": "2026-05-15T02:04:09.946Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-003 Design WS-01 read-only fixture and evidence probes",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-batch-002-read-only-probe-design.md",
+          "tests": "jq empty docs/openclaw-autodev/stories/poc-ct.json + find evidence + secret-like assignment scan + required-field check pass",
+          "next": "Run batch-002 starting with D-RO-01 fixture inventory read-only probe",
+          "at": "2026-05-15T02:04:44.959Z",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-15T02:00:06.784Z"
+    },
+    {
+      "id": "OPOC-EXP-004",
+      "title": "Define exploration evidence schema for flow and harm decisions",
+      "status": "done",
+      "priority": 40,
+      "risk": "Low",
+      "lanes": [
+        "poc-ct"
+      ],
+      "scope": "Define a compact evidence schema for exploration-driven testing that records flow line, question, probe level, critical environments, weak points, harm class, status, evidence paths, and next decision. The schema must support fixed Chinese summaries and machine-readable status JSON.",
+      "nonGoals": "Do not mark the program ready and do not publish automation results as customer PoC evidence.",
+      "acceptance": [
+        "Evidence schema includes flow line, final goal, critical environments, weak points, harm class, probe level, status, evidence paths, and next decision.",
+        "Status vocabulary remains `PASS/FAIL/BLOCKED/APPROVAL/SKIPPED`.",
+        "Schema can express H0/H1 priority ordering for remediation.",
+        "Schema includes a proposed Chinese summary shape for daily reporting."
+      ],
+      "allowedPaths": [
+        "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/**",
+        "docs/openclaw-autodev/issues/**"
+      ],
+      "validation": [
+        "Check the schema can represent at least one example from each WS-01 flow.",
+        "Check it remains compatible with `exploration-driven-test-method.md`."
+      ],
+      "notes": [
+        "This story supports later readiness and matrix updates."
+      ],
+      "dependsOn": [
+        "OPOC-EXP-003"
+      ],
+      "updatedAt": "2026-05-16T08:28:24.391Z",
+      "lastTask": "poc-ct",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "poc-ct",
+        "control": "DONE",
+        "ticket": "OPOC-EXP-004 Define exploration evidence schema for flow and harm decisions",
+        "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence-schema.md; docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence.schema.json",
+        "tests": "jq empty stories/schema + required-field/flow-example checks + find evidence tail pass",
+        "next": "Start batch-002 with D-RO-01 fixture inventory read-only probe.",
+        "at": "2026-05-16T08:28:24.391Z",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-004 Define exploration evidence schema for flow and harm decisions",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence-schema.md; docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence.schema.json",
+          "tests": "jq empty stories/schema + required-field/flow-example checks + find evidence tail pass",
+          "next": "Start batch-002 with D-RO-01 fixture inventory read-only probe.",
+          "at": "2026-05-16T08:24:05.683Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-004 Define exploration evidence schema for flow and harm decisions",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence-schema.md; docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence.schema.json",
+          "tests": "jq empty stories/schema + required-field/flow-example checks + find evidence tail pass",
+          "next": "Start batch-002 with D-RO-01 fixture inventory read-only probe.",
+          "at": "2026-05-16T08:24:06.392Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-004 Define exploration evidence schema for flow and harm decisions",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence-schema.md; docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence.schema.json",
+          "tests": "jq empty stories/schema + required-field/flow-example checks + find evidence tail pass",
+          "next": "Start batch-002 with D-RO-01 fixture inventory read-only probe.",
+          "at": "2026-05-16T08:24:39.871Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-004 Define exploration evidence schema for flow and harm decisions",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence-schema.md; docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence.schema.json",
+          "tests": "jq empty stories/schema + required-field/flow-example checks + find evidence tail pass",
+          "next": "Start batch-002 with D-RO-01 fixture inventory read-only probe.",
+          "at": "2026-05-16T08:24:48.685Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-004 Define exploration evidence schema for flow and harm decisions",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence-schema.md; docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence.schema.json",
+          "tests": "jq empty stories/schema + required-field/flow-example checks + find evidence tail pass",
+          "next": "Start batch-002 with D-RO-01 fixture inventory read-only probe.",
+          "at": "2026-05-16T08:24:49.473Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-004 Define exploration evidence schema for flow and harm decisions",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence-schema.md; docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence.schema.json",
+          "tests": "jq empty stories/schema + required-field/flow-example checks + find evidence tail pass",
+          "next": "Start batch-002 with D-RO-01 fixture inventory read-only probe.",
+          "at": "2026-05-16T08:25:23.069Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-004 Define exploration evidence schema for flow and harm decisions",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence-schema.md; docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence.schema.json",
+          "tests": "jq empty stories/schema + required-field/flow-example checks + find evidence tail pass",
+          "next": "Start batch-002 with D-RO-01 fixture inventory read-only probe.",
+          "at": "2026-05-16T08:25:31.780Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-004 Define exploration evidence schema for flow and harm decisions",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence-schema.md; docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence.schema.json",
+          "tests": "jq empty stories/schema + required-field/flow-example checks + find evidence tail pass",
+          "next": "Start batch-002 with D-RO-01 fixture inventory read-only probe.",
+          "at": "2026-05-16T08:25:32.470Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-004 Define exploration evidence schema for flow and harm decisions",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence-schema.md; docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence.schema.json",
+          "tests": "jq empty stories/schema + required-field/flow-example checks + find evidence tail pass",
+          "next": "Start batch-002 with D-RO-01 fixture inventory read-only probe.",
+          "at": "2026-05-16T08:26:07.062Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-004 Define exploration evidence schema for flow and harm decisions",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence-schema.md; docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence.schema.json",
+          "tests": "jq empty stories/schema + required-field/flow-example checks + find evidence tail pass",
+          "next": "Start batch-002 with D-RO-01 fixture inventory read-only probe.",
+          "at": "2026-05-16T08:26:15.809Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-004 Define exploration evidence schema for flow and harm decisions",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence-schema.md; docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence.schema.json",
+          "tests": "jq empty stories/schema + required-field/flow-example checks + find evidence tail pass",
+          "next": "Start batch-002 with D-RO-01 fixture inventory read-only probe.",
+          "at": "2026-05-16T08:26:16.521Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-004 Define exploration evidence schema for flow and harm decisions",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence-schema.md; docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence.schema.json",
+          "tests": "jq empty stories/schema + required-field/flow-example checks + find evidence tail pass",
+          "next": "Start batch-002 with D-RO-01 fixture inventory read-only probe.",
+          "at": "2026-05-16T08:26:49.925Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-004 Define exploration evidence schema for flow and harm decisions",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence-schema.md; docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence.schema.json",
+          "tests": "jq empty stories/schema + required-field/flow-example checks + find evidence tail pass",
+          "next": "Start batch-002 with D-RO-01 fixture inventory read-only probe.",
+          "at": "2026-05-16T08:26:58.434Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-004 Define exploration evidence schema for flow and harm decisions",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence-schema.md; docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence.schema.json",
+          "tests": "jq empty stories/schema + required-field/flow-example checks + find evidence tail pass",
+          "next": "Start batch-002 with D-RO-01 fixture inventory read-only probe.",
+          "at": "2026-05-16T08:26:59.109Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-004 Define exploration evidence schema for flow and harm decisions",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence-schema.md; docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence.schema.json",
+          "tests": "jq empty stories/schema + required-field/flow-example checks + find evidence tail pass",
+          "next": "Start batch-002 with D-RO-01 fixture inventory read-only probe.",
+          "at": "2026-05-16T08:27:32.431Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-004 Define exploration evidence schema for flow and harm decisions",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence-schema.md; docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence.schema.json",
+          "tests": "jq empty stories/schema + required-field/flow-example checks + find evidence tail pass",
+          "next": "Start batch-002 with D-RO-01 fixture inventory read-only probe.",
+          "at": "2026-05-16T08:27:40.993Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-004 Define exploration evidence schema for flow and harm decisions",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence-schema.md; docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence.schema.json",
+          "tests": "jq empty stories/schema + required-field/flow-example checks + find evidence tail pass",
+          "next": "Start batch-002 with D-RO-01 fixture inventory read-only probe.",
+          "at": "2026-05-16T08:27:41.681Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-004 Define exploration evidence schema for flow and harm decisions",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence-schema.md; docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence.schema.json",
+          "tests": "jq empty stories/schema + required-field/flow-example checks + find evidence tail pass",
+          "next": "Start batch-002 with D-RO-01 fixture inventory read-only probe.",
+          "at": "2026-05-16T08:28:15.232Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-004 Define exploration evidence schema for flow and harm decisions",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence-schema.md; docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence.schema.json",
+          "tests": "jq empty stories/schema + required-field/flow-example checks + find evidence tail pass",
+          "next": "Start batch-002 with D-RO-01 fixture inventory read-only probe.",
+          "at": "2026-05-16T08:28:23.716Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "poc-ct",
+          "control": "DONE",
+          "ticket": "OPOC-EXP-004 Define exploration evidence schema for flow and harm decisions",
+          "changed": "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence-schema.md; docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/ws-01-exploration-evidence.schema.json",
+          "tests": "jq empty stories/schema + required-field/flow-example checks + find evidence tail pass",
+          "next": "Start batch-002 with D-RO-01 fixture inventory read-only probe.",
+          "at": "2026-05-16T08:28:24.391Z",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-15T02:04:54.817Z"
+    }
+  ]
+}

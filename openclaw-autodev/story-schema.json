@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://oneops.local/openclaw-autodev/story-schema.json",
+  "title": "OpenClaw Autodev Story Queue",
+  "type": "object",
+  "required": ["stories"],
+  "additionalProperties": true,
+  "properties": {
+    "taskGroup": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": "string"
+    },
+    "stories": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/story"
+      }
+    }
+  },
+  "definitions": {
+    "story": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "status",
+        "priority",
+        "lanes",
+        "scope",
+        "acceptance",
+        "validation"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "open",
+            "in_progress",
+            "needs_next_turn",
+            "blocked",
+            "approval",
+            "done",
+            "cancelled",
+            "disabled"
+          ]
+        },
+        "priority": {
+          "type": "number"
+        },
+        "risk": {
+          "type": "string",
+          "enum": ["Low", "Medium", "High"]
+        },
+        "phase": {
+          "type": "string"
+        },
+        "lanes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "dependsOn": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "nonGoals": {
+          "type": "string"
+        },
+        "allowedPaths": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "acceptance": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "validation": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "coordination": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "mode": {
+              "type": "string",
+              "enum": ["single", "parallel", "handoff", "join"]
+            },
+            "joinPolicy": {
+              "type": "string",
+              "enum": ["all-lanes-done", "any-lane-blocked", "explicit-gate"]
+            }
+          }
+        },
+        "laneStatus": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "repeat": {
+          "type": "boolean"
+        },
+        "enabled": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

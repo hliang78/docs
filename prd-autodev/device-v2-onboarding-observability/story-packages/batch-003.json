@@ -1,0 +1,51 @@
+{
+  "program": "device-v2-onboarding-observability",
+  "batch": "batch-003",
+  "title": "Browser/devtools validation and readiness decision",
+  "status": "reviewed",
+  "executionMode": "dependency-chain",
+  "targetTaskIds": ["d2on"],
+  "releaseGate": "Final closure stage exception: this batch exists only to make the readiness close/continue/stop decision after batch-002. Keep it reviewed only while one browser/devtools validation is the most efficient remaining decision gate; do not reuse this pattern for Chrome/session/token repair micro-batches.",
+  "stories": [
+    {
+      "id": "D2ON-009",
+      "title": "Validate DeviceV2ManagementRedesign in browser and preserve blocker evidence if blocked",
+      "status": "open",
+      "priority": 90,
+      "risk": "Medium",
+      "lanes": ["d2on"],
+      "scope": "Use browser/devtools on the local DeviceV2ManagementRedesign target and write one durable evidence summary under docs/openclaw-autodev/evidence/d2on/ showing either validated onboarding behavior or the exact blocker. If browser/runtime policy prevents the pass, keep the story blocked and preserve the blocker evidence instead of treating the report itself as completion. Then update final-readiness.md and review.md with the resulting close/continue/stop decision.",
+      "nonGoals": [
+        "Do not broaden into deeper remote ensure implementation.",
+        "Do not change product code unless browser validation exposes a narrow d2on-scoped fix.",
+        "Do not claim visual verification without durable evidence."
+      ],
+      "allowedPaths": [
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "A durable browser/devtools evidence summary is written under docs/openclaw-autodev/evidence/d2on/, or an equally durable blocker summary is written there with the attempted URL, auth state, and failed precondition.",
+        "If the output is blocker-only evidence, the story remains blocked until the execution/repair path reruns it or the program is explicitly stopped.",
+        "The evidence states whether continue-onboarding uses the new onboarding APIs and whether visible action evidence renders without relying on the old store pipeline semantics.",
+        "final-readiness.md is updated to either remove the pending browser-validation gap or keep it pending with a concrete blocker reason.",
+        "review.md is updated with the resulting follow-up decision: close the program, continue with a deeper batch, or stop.",
+        "If additional execution work is still needed after the browser pass/blocker, the next decision is recorded explicitly instead of leaving the loop ambiguous."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "jq empty /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/stories/d2on.json",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/evidence/final-readiness.md",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/device-v2-onboarding-observability/review.md"
+      ],
+      "notes": [
+        "Use the latest cycle brief, automation sync, and batch-002 completion evidence before deciding whether the program is really done.",
+        "Primary evidence target: docs/openclaw-autodev/evidence/d2on/.",
+        "If the browser target is unavailable, preserve the blocker with attempted URL, auth need, and any console/network observation.",
+        "Recording a blocker is evidence, not closure; execution-side repair/authorization still owns the rerun path.",
+        "This batch is a final-stage closure exception only because one browser/devtools pass was judged the most efficient remaining readiness decision gate.",
+        "Do not clone this pattern into repeated repair-oriented PRD micro-batches; environment recovery stays in execution/repair handling."
+      ]
+    }
+  ]
+}

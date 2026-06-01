@@ -1,0 +1,118 @@
+{
+  "program": "oneops-poc-concern-autotest",
+  "batch": "batch-001",
+  "title": "WS-01 flow mapping and high-harm weak-point exploration",
+  "status": "reviewed",
+  "executionMode": "dependency-chain",
+  "targetTaskIds": ["poc-ct"],
+  "releaseGate": "Supersedes the earlier reviewed batch-001 package. User redirected the program on 2026-05-15 to exploration-driven testing and then asked to operate it in automation with Weixin command support. This batch is reviewed for the dedicated poc-ct loop only.",
+  "stories": [
+    {
+      "id": "OPOC-EXP-001",
+      "title": "Map WS-01 exploration flow lines",
+      "scope": "Create a compact WS-01 flow-line evidence note that maps the Device, Monitoring, Logging, and Topology flows from entry action to final proof. For each flow, identify start, steps, final goal, critical environments, and evidence candidates. This is a static/read-only planning story only.",
+      "priority": 10,
+      "risk": "Low",
+      "lanes": ["poc-ct"],
+      "allowedPaths": [
+        "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/**",
+        "docs/openclaw-autodev/issues/**"
+      ],
+      "acceptance": [
+        "Evidence includes four WS-01 flow lines: Device, Monitoring, Logging, and Topology.",
+        "Each flow line states final goal, critical environments, and evidence candidates.",
+        "The output references `docs/prd-autodev/oneops-poc-concern-autotest/exploration-driven-test-method.md` as the method source.",
+        "No product code, DB data, PRD program files, or story queues are modified."
+      ],
+      "validation": [
+        "Review the generated evidence note for one-flow-per-section structure.",
+        "Confirm the story only wrote under allowed poc-ct evidence or issue paths."
+      ],
+      "nonGoals": "Do not query the test DB, run Device V2/DC2 scripts, apply monitoring/logging plans, or open browser UI.",
+      "notes": [
+        "This story establishes the exploration spine before any real probe."
+      ]
+    },
+    {
+      "id": "OPOC-EXP-002",
+      "title": "Classify WS-01 high-harm weak-point hypotheses",
+      "dependsOn": ["OPOC-EXP-001"],
+      "scope": "Using the WS-01 flow-line evidence from OPOC-EXP-001, classify likely weak points by harm severity H0/H1/H2/H3. Prioritize H0/H1 points that can make the quality gate unsafe or untrustworthy, such as wrong fixture target, missing evidence, ignored fact issues, impossible recovery, or external-system risk.",
+      "priority": 20,
+      "risk": "Low",
+      "lanes": ["poc-ct"],
+      "allowedPaths": [
+        "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/**",
+        "docs/openclaw-autodev/issues/**"
+      ],
+      "acceptance": [
+        "Evidence lists weak-point hypotheses for every WS-01 flow.",
+        "Every weak point has harm class H0/H1/H2/H3 and a short reason.",
+        "H0/H1 items are separated into a priority list for the next probe batch.",
+        "Evidence distinguishes product defect risk, environment gap, fixture gap, script gap, and approval need."
+      ],
+      "validation": [
+        "Check there are no unclassified weak points.",
+        "Check H0/H1 items have proposed next probe or repair direction."
+      ],
+      "nonGoals": "Do not fix product code or run controlled actions.",
+      "notes": [
+        "Unknown harm should default to H1 until evidence lowers or raises it."
+      ]
+    },
+    {
+      "id": "OPOC-EXP-003",
+      "title": "Design WS-01 read-only fixture and evidence probes",
+      "dependsOn": ["OPOC-EXP-002"],
+      "scope": "Design the next read-only probe batch for WS-01. Specify what can be safely read from the test DB, Device V2 APIs, DC2 facts, monitoring strategy, log-forward configuration, Loki/Prometheus, and topology APIs. Include secret handling, sanitization, stop conditions, and blocked classifications.",
+      "priority": 30,
+      "risk": "Low",
+      "lanes": ["poc-ct"],
+      "allowedPaths": [
+        "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/**",
+        "docs/openclaw-autodev/issues/**"
+      ],
+      "acceptance": [
+        "Probe design covers all four WS-01 flow lines.",
+        "Each probe states question, probe level, critical environment, evidence output, stop condition, and next decision.",
+        "DB secret handling is explicit and no password or secret value is written.",
+        "The design separates read-only probes from dry-run and controlled-action probes."
+      ],
+      "validation": [
+        "Check no secret values are present in evidence.",
+        "Check each proposed probe is narrow enough for one worker turn or explicitly split."
+      ],
+      "nonGoals": "Do not execute the probes in this story.",
+      "notes": [
+        "This story prepares batch-002, it does not perform batch-002."
+      ]
+    },
+    {
+      "id": "OPOC-EXP-004",
+      "title": "Define exploration evidence schema for flow and harm decisions",
+      "dependsOn": ["OPOC-EXP-003"],
+      "scope": "Define a compact evidence schema for exploration-driven testing that records flow line, question, probe level, critical environments, weak points, harm class, status, evidence paths, and next decision. The schema must support fixed Chinese summaries and machine-readable status JSON.",
+      "priority": 40,
+      "risk": "Low",
+      "lanes": ["poc-ct"],
+      "allowedPaths": [
+        "docs/openclaw-autodev/evidence/poc-ct/oneops-poc-concern-autotest/**",
+        "docs/openclaw-autodev/issues/**"
+      ],
+      "acceptance": [
+        "Evidence schema includes flow line, final goal, critical environments, weak points, harm class, probe level, status, evidence paths, and next decision.",
+        "Status vocabulary remains `PASS/FAIL/BLOCKED/APPROVAL/SKIPPED`.",
+        "Schema can express H0/H1 priority ordering for remediation.",
+        "Schema includes a proposed Chinese summary shape for daily reporting."
+      ],
+      "validation": [
+        "Check the schema can represent at least one example from each WS-01 flow.",
+        "Check it remains compatible with `exploration-driven-test-method.md`."
+      ],
+      "nonGoals": "Do not mark the program ready and do not publish automation results as customer PoC evidence.",
+      "notes": [
+        "This story supports later readiness and matrix updates."
+      ]
+    }
+  ]
+}

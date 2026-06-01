@@ -1,0 +1,239 @@
+{
+  "program": "device-v2-onboarding-observability",
+  "batch": "batch-012",
+  "title": "Open batch onboarding and device-side SNMP trap target scope",
+  "status": "reviewed",
+  "executionMode": "dependency-chain",
+  "releaseGate": "New owner-requested scope after the single-device server/network syslog closure. This batch must not reopen the old batch-011 blocker; it owns explicit batch onboarding and device-side SNMP trap target delivery.",
+  "targetTaskIds": [
+    "d2on"
+  ],
+  "stories": [
+    {
+      "id": "D2ON-043",
+      "title": "Add explicit batch onboarding API contract",
+      "status": "done",
+      "priority": 350,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Add backend batch onboarding plan/ensure endpoints for explicit `codes[]`. Execute sequentially by default, reuse the single-device action/evidence contract per code, and return aggregate counts plus per-device results without raw controller bodies.",
+      "nonGoals": [
+        "Do not execute devices selected by current filters.",
+        "Do not add remote parallel execution.",
+        "Do not change the single-device API response contract."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/api/**",
+        "OneOPS/app/device/v2/router/**",
+        "OneOPS/app/device/v2/model/**",
+        "OneOPS/cmd/wire_gen.go",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "Batch plan and ensure routes accept `codes[]` and reject empty or oversized requests.",
+        "Response includes per-device results and aggregate summary counts.",
+        "Server monitor-mode requirements are preserved per device.",
+        "Focused backend tests cover success, partial failure, and request validation."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/api"
+      ],
+      "notes": [
+        "Read workstream `09-batch-onboarding.md` first.",
+        "Keep the first implementation sequential and blast-radius-limited."
+      ]
+    },
+    {
+      "id": "D2ON-044",
+      "title": "Wire guarded batch onboarding UI",
+      "status": "done",
+      "dependsOn": [
+        "D2ON-043"
+      ],
+      "priority": 360,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Update the Device V2 redesigned page so multi-select `继续纳管` uses the batch API, shows a guarded confirmation, makes server monitor-mode policy explicit, and renders per-device results after execution.",
+      "nonGoals": [
+        "Do not run batch onboarding from filters.",
+        "Do not redesign the page shell.",
+        "Do not hide mixed success/failure results behind one success toast."
+      ],
+      "allowedPaths": [
+        "OneOPS-UI/src/views/device/DeviceV2ManagementRedesign.vue",
+        "OneOPS-UI/src/api/device/device-v2.ts",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "Selecting multiple rows no longer hits the single-device warning path.",
+        "Confirmation displays target count and monitor-mode policy.",
+        "Per-device result rows render success/failed/unknown/blocked truth.",
+        "Typecheck passes."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2"
+      ],
+      "notes": [
+        "Use Chrome devtools for the final UI check when a local UI target is available.",
+        "Do not trigger broad live remote runs from the browser without bounded evidence intent."
+      ]
+    },
+    {
+      "id": "D2ON-045",
+      "title": "Run all-device collection validation gate",
+      "status": "done",
+      "dependsOn": [
+        "D2ON-044"
+      ],
+      "priority": 370,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Before device-side trap target work, run a full explicit-code Device V2 store validation pass for every current device. Record per-device success/blocked truth and preserve expected unreachable devices as exact per-device blockers, not a global execution failure.",
+      "nonGoals": [
+        "Do not force unreachable devices to pass.",
+        "Do not start trap target delivery before this gate is recorded.",
+        "Do not persist credential material in evidence."
+      ],
+      "allowedPaths": [
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "All current Device V2 codes are included explicitly in one store/start validation task.",
+        "Aggregate task result and per-device statuses are recorded.",
+        "Unreachable or non-detectable devices are recorded as expected blockers with controller snapshot anchors.",
+        "The story chain clearly gates SNMP trap target work on this collection validation evidence."
+      ],
+      "validation": [
+        "POST /api/v1/device/v2/store/start with all current codes and options.device_collection2_mode=dc2_only",
+        "GET /api/v1/device/v2/tasks/{task_id}/summary",
+        "GET /api/v1/device/v2/tasks/{task_id}/runs?page=1&page_size=100",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-045.md"
+      ],
+      "notes": [
+        "Owner explicitly warned that some devices are expected to be unreachable.",
+        "Live task: entv2_1779094092855556000."
+      ]
+    },
+    {
+      "id": "D2ON-046",
+      "title": "Define SNMP trap target profile commands",
+      "status": "done",
+      "dependsOn": [
+        "D2ON-045"
+      ],
+      "priority": 380,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Add the device-side SNMP trap target command/profile layer for H3C/Comware. Produce commands to configure trap host, save config, and verify readback; unsupported profiles must return exact blockers.",
+      "nonGoals": [
+        "Do not implement every vendor.",
+        "Do not assert trap arrival at the collector.",
+        "Do not touch collector-side listener publish code."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/api/**",
+        "OneOPS/app/device/v2/model/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "H3C/Comware trap target commands are deterministic and unit-tested.",
+        "Default trap listener port handling is explicit.",
+        "Unsupported vendor/platform returns a blocked action with template identity.",
+        "No credential material is persisted."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/api"
+      ],
+      "notes": [
+        "Read workstream `10-device-side-snmp-trap-target.md` first.",
+        "Prefer the existing network syslog profile pattern.",
+        "D2ON-046 only defines and unit-tests the command/profile layer; controller execution remains D2ON-047."
+      ]
+    },
+    {
+      "id": "D2ON-047",
+      "title": "Execute SNMP trap target through controller",
+      "status": "done",
+      "dependsOn": [
+        "D2ON-046"
+      ],
+      "priority": 390,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Connect the H3C/Comware SNMP trap target profile to onboarding ensure. Resolve managed `snmp_trap_listener`, call controller `/api/v1/remote/run`, persist status/exit/readback summaries, and keep syslog evidence separate.",
+      "nonGoals": [
+        "Do not store raw controller responses.",
+        "Do not make SNMP trap target success required for syslog success.",
+        "Do not add batch remote parallelism."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/device/v2/api/**",
+        "OneOPS/app/device/v2/router/**",
+        "OneOPS/cmd/wire_gen.go",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "Onboarding action evidence includes `snmp_trap_target` truth.",
+        "Controller success and verify-match produce configured status.",
+        "Controller/runtime failures produce failed or unknown retryable status.",
+        "Focused backend tests pass."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/api",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/device/v2/... ./app/platform/..."
+      ],
+      "notes": [
+        "Use the same secret-free evidence discipline as D2ON-039/D2ON-040.",
+        "If no managed trap listener is available, record the exact blocker."
+      ]
+    },
+    {
+      "id": "D2ON-048",
+      "title": "Run bounded batch and trap live probes",
+      "status": "done",
+      "dependsOn": [
+        "D2ON-047"
+      ],
+      "priority": 400,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Run one bounded validation pass: a small explicit-code batch onboarding probe and one H3C/Comware device-side SNMP trap target probe. Persist exact evidence and update readiness for the new scope only.",
+      "nonGoals": [
+        "Do not run broad fleet onboarding.",
+        "Do not claim all-vendor SNMP trap support.",
+        "Do not reopen the old single-device syslog closure."
+      ],
+      "allowedPaths": [
+        "docs/openclaw-autodev/evidence/d2on/**",
+        "docs/prd-autodev/device-v2-onboarding-observability/**"
+      ],
+      "acceptance": [
+        "Evidence records selected device codes and why the probe is bounded.",
+        "Batch response preserves per-device truth and aggregate counts.",
+        "SNMP trap target result is success or exact blocker with readback details.",
+        "Final readiness states what remains out of scope."
+      ],
+      "validation": [
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-048.md",
+        "grep -Eq '^Verdict: (live-scope-closed|exact-product-blocker)$' /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-048.md"
+      ],
+      "notes": [
+        "Use `oneops_test_tool` and Chrome devtools only for bounded checks.",
+        "Do not write credentials into evidence."
+      ]
+    }
+  ]
+}

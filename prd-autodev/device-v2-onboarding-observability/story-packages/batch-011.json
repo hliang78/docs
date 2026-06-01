@@ -1,0 +1,182 @@
+{
+  "program": "device-v2-onboarding-observability",
+  "batch": "batch-011",
+  "title": "Complete the area listener management surface and land real collector-side publish before returning to onboarding runtime blockers",
+  "status": "completed",
+  "executionMode": "dependency-chain",
+  "releaseGate": "Owner-directed sequencing change: do not prioritize the managed-listener runtime/worker blocker next. First make the area listener page functionally complete from its highlighted create entries through real collector-side config publish/apply, then decide whether a later onboarding/runtime repair round is still needed.",
+  "targetTaskIds": [
+    "d2on"
+  ],
+  "stories": [
+    {
+      "id": "D2ON-032",
+      "title": "Complete the area listener quick-create and CRUD workflow",
+      "status": "done-with-functional-flow",
+      "priority": 310,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Make the highlighted quick-create entries on `#/platform/area-listener-services` lead to a complete usable workflow instead of a wrapper-only shell: each header/card entry must open the correct preset, save a valid listener plan, refresh into the table, and allow edit plus release-modal entry from the resulting row.",
+      "nonGoals": [
+        "Do not claim runtime publish success in this story.",
+        "Do not widen into Device V2 row-action onboarding reruns.",
+        "Do not redesign the page away from the existing platform visual language."
+      ],
+      "allowedPaths": [
+        "OneOPS-UI/src/views/platform/**",
+        "OneOPS-UI/src/api/platform/**",
+        "OneOPS-UI/src/typings/platform/**",
+        "OneOPS-UI/src/router/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "`docs/openclaw-autodev/evidence/d2on/D2ON-032.md` exists with `Verdict: done-with-functional-flow` or `Verdict: exact-product-blocker`.",
+        "The three header create buttons and the three card `新增` entries open the correct listener preset and are no longer dead-end shells.",
+        "A saved listener row appears in the table with usable edit and release-modal entrypoints.",
+        "Typecheck still passes after the workflow completion changes."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-032.md",
+        "grep -Eq '^Verdict: (done-with-functional-flow|exact-product-blocker)$' /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-032.md"
+      ],
+      "notes": [
+        "Must read first: the owner-marked screenshot feedback, `workstreams/07-independent-listener-management-page.md`, and `OneOPS-UI/src/views/platform/AreaListenerServiceManagement.vue`.",
+        "Treat the issue as functional completeness, not merely click wiring."
+      ]
+    },
+    {
+      "id": "D2ON-033",
+      "title": "Land real server and network syslog listener publish execution",
+      "status": "done-with-real-publish",
+      "dependsOn": [
+        "D2ON-032"
+      ],
+      "priority": 320,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Finish the platform-side publish path for `server_syslog_listener` and `network_syslog_listener` so the area listener page can perform concrete collector-side `dry-run / preflight / apply / remove` work and return exact deployment evidence instead of stopping at wrapper semantics or ambiguous placeholder-only results.",
+      "nonGoals": [
+        "Do not implement device-side syslog target remote configuration in this story.",
+        "Do not widen into SNMP trap publish in this story.",
+        "Do not paraphrase missing collector-side behavior as success."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/platform/**",
+        "OneOPS-UI/src/views/platform/**",
+        "OneOPS-UI/src/api/platform/**",
+        "OneOPS-UI/src/typings/platform/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "`docs/openclaw-autodev/evidence/d2on/D2ON-033.md` exists with `Verdict: done-with-real-publish` or `Verdict: exact-product-blocker`.",
+        "For server/network syslog listener services, release actions now surface concrete collector-side publish results and updated status fields.",
+        "The page no longer relies on wrapper-only semantics to describe a finished syslog listener publish path.",
+        "Focused platform/backend validation passes."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform/...",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-033.md",
+        "grep -Eq '^Verdict: (done-with-real-publish|exact-product-blocker)$' /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-033.md"
+      ],
+      "notes": [
+        "Use the existing `remote_syslog / log_forward_plan` chain only when it can produce real collector-side deployment truth.",
+        "If a remaining backend adapter contract blocks real publish, record it exactly."
+      ]
+    },
+    {
+      "id": "D2ON-034",
+      "title": "Land real SNMP Trap listener publish support on the area listener page",
+      "status": "done-with-real-publish",
+      "dependsOn": [
+        "D2ON-033"
+      ],
+      "priority": 330,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Replace the current `snmp_trap_listener` adapter-gap-only behavior with a real collector-side trap-listener publish path on the area listener page. Keep the boundary explicit: this story owns area listener publish only and still does not include device-side trap target remote configuration.",
+      "nonGoals": [
+        "Do not implement device-side SNMP trap target delivery.",
+        "Do not widen into unrelated telemetry or onboarding work.",
+        "Do not keep the page-level SNMP Trap entry as a permanent half-finished shell."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/platform/**",
+        "OneOPS-UI/src/views/platform/**",
+        "OneOPS-UI/src/api/platform/**",
+        "OneOPS-UI/src/typings/platform/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "`docs/openclaw-autodev/evidence/d2on/D2ON-034.md` exists with `Verdict: done-with-real-publish` or `Verdict: exact-product-blocker`.",
+        "The SNMP Trap create/publish flow no longer closes only with the old adapter-gap placeholder.",
+        "Release actions now return exact collector-side trap listener publish truth or a narrower exact blocker.",
+        "Focused platform/backend validation passes."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform/...",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-034.md",
+        "grep -Eq '^Verdict: (done-with-real-publish|exact-product-blocker)$' /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-034.md"
+      ],
+      "notes": [
+        "Honor the product boundary: make the page-level SNMP Trap listener entry real, but stop short of device-side trap target delivery.",
+        "Do not treat the existing `adapter_gap` honesty as sufficient completion anymore."
+      ]
+    },
+    {
+      "id": "D2ON-035",
+      "title": "Run one live platform-side listener verification after functional completion",
+      "status": "live-functional-completion",
+      "dependsOn": [
+        "D2ON-034"
+      ],
+      "priority": 340,
+      "risk": "High",
+      "lanes": [
+        "d2on"
+      ],
+      "scope": "Run one bounded live verification pass from the independent area listener management surface after the functional-completion stories land. Capture the exact create/save/release evidence for the repaired listener flows and state explicitly whether the program should next reopen the managed-listener runtime/onboarding thread or whether another platform-side repair round is still required.",
+      "nonGoals": [
+        "Do not return to Device V2 onboarding reruns in this story.",
+        "Do not create a docs-only closeout without live listener evidence.",
+        "Do not widen into batch listener provisioning."
+      ],
+      "allowedPaths": [
+        "OneOPS/app/platform/**",
+        "OneOPS-UI/src/views/platform/**",
+        "OneOPS-UI/src/api/platform/**",
+        "OneOPS-UI/src/typings/platform/**",
+        "docs/prd-autodev/device-v2-onboarding-observability/**",
+        "docs/development/device-v2-onboarding-observability/**",
+        "docs/openclaw-autodev/evidence/d2on/**"
+      ],
+      "acceptance": [
+        "`docs/openclaw-autodev/evidence/d2on/D2ON-035.md` exists with `Verdict: live-functional-completion` or `Verdict: exact-product-blocker`.",
+        "The evidence records exact create/save/release results for the newly completed listener flows.",
+        "The next-step note explicitly says whether a later batch should return to onboarding managed-listener runtime/blocker repair.",
+        "Focused controller-owned validation gates are left runnable."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform/...",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && npm run typecheck:d2",
+        "test -f /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-035.md",
+        "grep -Eq '^Verdict: (live-functional-completion|exact-product-blocker)$' /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2on/D2ON-035.md"
+      ],
+      "notes": [
+        "This story closes the owner-directed functional-completion round.",
+        "If the live page still exposes a narrower exact blocker, preserve it without jumping back to worker/runtime repair in the same story."
+      ]
+    }
+  ]
+}

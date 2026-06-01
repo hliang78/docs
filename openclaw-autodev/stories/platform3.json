@@ -1,0 +1,937 @@
+{
+  "taskGroup": "platform3",
+  "updatedAt": "2026-05-13T23:08:00+0800",
+  "context": {
+    "goLiveStrategy": "旁路接入、shadow 对比、逐步接管写入",
+    "legacyEntryPoint": "Monitoring V2 wizard flow ending at POST /api/v2/platform/monitoring/plans/{plan_id}:apply",
+    "applyWriteBoundary": "POST /api/v2/platform/monitoring/plans/{plan_id}:apply",
+    "supersededReferencePlanID": "08c0bcf7-4ed2-11f1-9da1-2ea5d900c150",
+    "referenceApplyPlanIDs": [
+      "a00e16ea-4ed3-11f1-9da1-2ea5d900c150",
+      "a035f21e-4ed3-11f1-9da1-2ea5d900c150"
+    ],
+    "observedLiveFlow": [
+      "POST /api/v2/platform/monitoring/targets:resolve",
+      "POST /api/v2/platform/monitoring/plans:compile",
+      "POST /api/v2/platform/monitoring/targets:resolve",
+      "POST /api/v2/platform/monitoring/plans:compile",
+      "POST /api/v2/platform/monitoring/credentials:resolve",
+      "POST /api/v2/platform/monitoring/credentials:validate-bindings",
+      "POST /api/v2/platform/monitoring/plans/a00e16ea-4ed3-11f1-9da1-2ea5d900c150:apply",
+      "POST /api/v2/platform/monitoring/plans/a035f21e-4ed3-11f1-9da1-2ea5d900c150:apply"
+    ],
+    "observedLiveFlowNote": "The host 192.168.100.122:3001 is environment-specific. The Platform3 contract uses method, path, ordering, request envelope, idempotency, and redacted response facts. Repeated target resolve and plan compile calls indicate one wizard/session can produce multiple compiled plan applications; model this as a parent monitoring wizard session with plan-scoped child apply tickets.",
+    "legacyFlow": [
+      "middleware.ApiPathV2 = /api/v2/",
+      "initialize/routers.go: privateV2 := engine.Group(middleware.ApiPathV2), then platformRouter.PlatformV2(privateV2, ...)",
+      "app/platform/router/platform_v2.go: monitoring.POST(\"targets:resolve\", MetricStrategyAPI.ResolveTargetsV2)",
+      "app/platform/router/platform_v2.go: monitoring.POST(\"plans:compile\", MetricStrategyAPI.CompilePlanV2)",
+      "app/platform/router/platform_v2.go: monitoring.POST(\"credentials:action\", MetricStrategyAPI.HandleCredentialsActionV2)",
+      "app/platform/router/platform_v2.go: monitoring.POST(\"plans/:plan_action\", MetricStrategyAPI.HandlePlanActionV2)",
+      "app/platform/api/metric_strategy_v2.go: HandlePlanActionV2 splits {plan_id}:apply and calls ApplyPlanV2",
+      "app/platform/api/metric_strategy_v2.go: ApplyPlanV2 checks credential-use permission and idempotency, then calls MonitoringTaskV3OrchestrationService.ApplyPlan",
+      "app/platform/service/impl/monitoring_task_v3_orchestration_apply.go: ApplyPlan loads wizard plan snapshot, resolves strategy intent, credentials, revisions, dispatch plan, apply result, mutation summary, and plan state"
+    ],
+    "routeConfirmation": "Confirmed in code and targeted tests on 2026-05-13: actual runtime path is POST /api/v2/platform/monitoring/plans/<plan_id>:apply. The braces form {plan_id} is documentation notation only; there is no slash before :apply. Older docs mentioning /api/v2/platform/monitoring/plans:apply are not the current handler path for applying an existing plan.",
+    "correction": "Do not use legacy quick-apply as the go-live entrypoint. quick-apply is historical reference only; Platform3 go-live stories target the active Monitoring V2 wizard flow and use plans/{plan_id}:apply as the final write boundary.",
+    "behaviorInvariant": "No Platform3 story may change the current app/platform runtime behavior. Any app/platform touch must be旁路/no-op-by-default, must preserve legacy Monitoring V2 target resolve, plan compile, credential action, and ApplyPlanV2 request/response/write semantics, and must include targeted regression tests proving behavior is unchanged when Platform3 is disabled or fails."
+  },
+  "stories": [
+    {
+      "id": "P3-NEXT-AUTONOMOUS-SAFE-SCOPE",
+      "title": "Find and complete the next PF3 autonomous safe-scope item",
+      "status": "done",
+      "priority": 10,
+      "lanes": [
+        "platform3"
+      ],
+      "scope": "Use the compact PF3 docs and handoff to identify one safe autonomous Platform3 item within allowed writes. If no eligible autonomous work remains, record evidence and return DONE.",
+      "nonGoals": "No commit, push, dependency change, production config, real route switch, real adapter/canary execution, credentials, migrations, destructive operations, or app/platform behavior change.",
+      "acceptance": [
+        "Exactly one bounded PF3 item is completed, or no eligible autonomous scope is evidenced.",
+        "go test ./app/platform3/... passes or a concrete blocker is recorded.",
+        "Evidence is compact and stored under docs/openclaw-autodev/evidence/platform3 when useful.",
+        "No change may alter current app/platform runtime behavior."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/..."
+      ],
+      "notes": [
+        "PF3 is a product loop, not the Weixin router or D2 loop."
+      ],
+      "updatedAt": "2026-05-13T17:10:27+0800",
+      "lastTask": "platform3",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "platform3",
+        "control": "DONE",
+        "ticket": "P3-NEXT-AUTONOMOUS-SAFE-SCOPE no eligible autonomous item remains",
+        "changed": "docs/openclaw-autodev/evidence/platform3/20260513-170619-no-eligible-scope/summary.md",
+        "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/... pass",
+        "next": "Next safe scope: V2 ApplyPlan shadow/dry-run readiness with no app/platform behavior change",
+        "at": "2026-05-13T17:10:27+0800"
+      },
+      "events": [
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-NEXT-AUTONOMOUS-SAFE-SCOPE no eligible autonomous item remains",
+          "changed": "docs/openclaw-autodev/evidence/platform3/20260513-170619-no-eligible-scope/summary.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/... pass",
+          "next": "Next safe scope: V2 ApplyPlan shadow/dry-run readiness with no app/platform behavior change",
+          "at": "2026-05-13T17:10:27+0800"
+        }
+      ],
+      "completedAt": "2026-05-13T17:10:27+0800"
+    },
+    {
+      "id": "P3-070-V2-APPLY-LEGACY-CONTRACT",
+      "title": "Extract V2 apply plan legacy contract",
+      "status": "done",
+      "priority": 70,
+      "lanes": [
+        "platform3"
+      ],
+      "risk": "Low",
+      "allowedPaths": [
+        "docs/platform3/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/platform3/**"
+      ],
+      "scope": "Document the exact legacy behavior of the active Monitoring V2 wizard flow, with POST /api/v2/platform/monitoring/plans/{plan_id}:apply as the final write boundary. Current observed apply plan ids are a00e16ea-4ed3-11f1-9da1-2ea5d900c150 and a035f21e-4ed3-11f1-9da1-2ea5d900c150; earlier plan 08c0bcf7-4ed2-11f1-9da1-2ea5d900c150 is superseded historical reference. Capture router, handler, idempotency scope, credential-use permission, wizard plan snapshot load, revision conflict, credential binding handling, command construction, dispatch, mutation summary, apply mutation logs, credential-use audit, and response fields.",
+      "nonGoals": "Do not modify app/platform, run a live apply, connect to DB/Bidi, or treat strategy/quick-apply as the go-live entrypoint.",
+      "acceptance": [
+        "A docs/platform3 extraction file names the active Monitoring V2 wizard flow and /api/v2/platform/monitoring/plans/{plan_id}:apply final write boundary.",
+        "The extraction maps wizard and ApplyPlanV2 inputs/outputs to Platform3 Ticket, FieldSnapshot, CirculationTrace, DispatchOrder, RuntimeTaskIdentity, and Ledger concepts.",
+        "The extraction explicitly marks quick-apply as historical reference only.",
+        "Evidence summary records the files inspected and the no-behavior-change boundary."
+      ],
+      "validation": [
+        "docs-only JSON/story validation",
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/..."
+      ],
+      "updatedAt": "2026-05-13T21:58:13+0800",
+      "lastTask": "platform3",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "platform3",
+        "control": "DONE",
+        "ticket": "P3-070-V2-APPLY-LEGACY-CONTRACT Extract V2 apply plan legacy contract",
+        "changed": "docs/platform3/extractions/v2_apply_plan_legacy_contract.md; docs/openclaw-autodev/evidence/platform3/P3-070-V2-APPLY-LEGACY-CONTRACT/summary.md",
+        "tests": "python3 -m json.tool ... pass; rg acceptance scan pass; go test ./app/platform3/... pass",
+        "next": "P3-071 can define the pure Ticket envelope from this extracted contract",
+        "at": "2026-05-13T21:58:13+0800",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-070-V2-APPLY-LEGACY-CONTRACT Extract V2 apply plan legacy contract",
+          "changed": "docs/platform3/extractions/v2_apply_plan_legacy_contract.md; docs/openclaw-autodev/evidence/platform3/P3-070-V2-APPLY-LEGACY-CONTRACT/summary.md",
+          "tests": "python3 -m json.tool ... pass; rg acceptance scan pass; go test ./app/platform3/... pass",
+          "next": "P3-071 can define the pure Ticket envelope from this extracted contract",
+          "at": "2026-05-13T21:58:13+0800",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-13T21:58:13+0800"
+    },
+    {
+      "id": "P3-071-V2-APPLY-TICKET-ENVELOPE",
+      "title": "Define Ticket envelope for V2 apply plan",
+      "status": "done",
+      "priority": 71,
+      "lanes": [
+        "platform3"
+      ],
+      "risk": "Low",
+      "allowedPaths": [
+        "app/platform3/kernel/**",
+        "app/platform3/legacyreadadapter/**",
+        "docs/platform3/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/platform3/**"
+      ],
+      "scope": "Add a pure Platform3 contract that converts a sanitized Monitoring V2 wizard/session envelope into Tickets. The parent ticket represents the observed sequence targets:resolve -> plans:compile -> credentials:resolve -> credentials:validate-bindings; each final apply becomes a plan-scoped child ticket, for example monitoring_plan:a00e16ea-4ed3-11f1-9da1-2ea5d900c150 and monitoring_plan:a035f21e-4ed3-11f1-9da1-2ea5d900c150. Idempotency must model both compile scope and legacy apply API scope: tenant + POST + /api/v2/platform/monitoring/plans/{plan_id}:apply + X-Idempotency-Key or a deterministic sanitized request fingerprint.",
+      "nonGoals": "No Gin context, app/platform import, tenant/auth implementation, DB read, or live request interception.",
+      "acceptance": [
+        "Ticket envelope includes tenant, wizard session id or request id, parent flow steps, child plan_id, expected_base_revision, apply_options summary, idempotency key, and sanitized payload hash.",
+        "Empty plan_id, tenant, or idempotency material fails closed.",
+        "Secret-like values in payload or idempotency material fail closed.",
+        "One parent session can safely contain multiple plan-scoped child apply tickets.",
+        "Existing SNMP device scenario tests still pass."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/..."
+      ],
+      "updatedAt": "2026-05-13T22:08:18+0800",
+      "lastTask": "platform3",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "platform3",
+        "control": "DONE",
+        "ticket": "P3-071-V2-APPLY-TICKET-ENVELOPE Define Ticket envelope for V2 apply plan",
+        "changed": "4 files",
+        "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/... pass",
+        "next": "P3-072 can consume the pure V2 apply ticket envelope contract",
+        "at": "2026-05-13T22:08:18+0800",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-071-V2-APPLY-TICKET-ENVELOPE Define Ticket envelope for V2 apply plan",
+          "changed": "4 files",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/... pass",
+          "next": "P3-072 can consume the pure V2 apply ticket envelope contract",
+          "at": "2026-05-13T22:08:18+0800",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-13T22:08:18+0800"
+    },
+    {
+      "id": "P3-072-V2-APPLY-FIELD-SNAPSHOT-MODEL",
+      "title": "Model ApplyPlanV2 FieldSnapshot facts",
+      "status": "done",
+      "priority": 72,
+      "lanes": [
+        "platform3"
+      ],
+      "risk": "Low",
+      "allowedPaths": [
+        "app/platform3/legacyreadadapter/**",
+        "app/platform3/kernel/**",
+        "docs/platform3/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/platform3/**"
+      ],
+      "scope": "Extend the sanitized legacy read model so the observed Monitoring V2 wizard flow can produce FieldSnapshot without Platform3 querying legacy DB directly. Facts should cover target resolve results, compile request/response facts, wizard plan snapshots, strategy intent/template, credential resolve results, credential binding validation status, normalized ApplyInput target specs, agent assignment/capability evidence, pre-existing owned task records, runtime observations, and apply options.",
+      "nonGoals": "No concrete GORM/service adapter, no raw credentials, no rendered config body, no app/platform import.",
+      "acceptance": [
+        "ReadModel or adjacent contract can represent plan apply facts needed by MonitoredTarget, CredentialBinding, CollectionTemplate, CollectorAgent, RuntimeTask, and RuntimeObservation.",
+        "Credential binding conflict/expired/missing can be represented without leaking secret values.",
+        "Current two-plan apply fixture can be expressed as sanitized session data.",
+        "Defensive copy and secret scan tests cover the new contract."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/..."
+      ],
+      "updatedAt": "2026-05-13T22:19:30+0800",
+      "lastTask": "platform3",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "platform3",
+        "control": "DONE",
+        "ticket": "P3-072-V2-APPLY-FIELD-SNAPSHOT-MODEL Model ApplyPlanV2 FieldSnapshot facts",
+        "changed": "4 files",
+        "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/... pass",
+        "next": "Pick next eligible PF3 story.",
+        "at": "2026-05-13T22:19:30+0800",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-072-V2-APPLY-FIELD-SNAPSHOT-MODEL Model ApplyPlanV2 FieldSnapshot facts",
+          "changed": "4 files",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/... pass",
+          "next": "Pick next eligible PF3 story.",
+          "at": "2026-05-13T22:19:30+0800",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-13T22:19:30+0800"
+    },
+    {
+      "id": "P3-073-V2-APPLY-CIRCULATION-TRACE",
+      "title": "Project ApplyPlanV2 legacy result into CirculationTrace",
+      "status": "done",
+      "priority": 73,
+      "lanes": [
+        "platform3"
+      ],
+      "risk": "Low",
+      "allowedPaths": [
+        "app/platform3/shadow/**",
+        "app/platform3/legacyreadadapter/**",
+        "docs/platform3/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/platform3/**"
+      ],
+      "scope": "Add a pure projection from sanitized Monitoring V2 wizard and ApplyPlanV2 legacy evidence to shadow.CirculationTrace. The trace should include parent session identity, ordered flow steps, per-plan ticket identity, targets, credential bindings, templates, agent assignments, idempotency keys, dispatch orders, runtime task identities, expected runtime keys, converge status, mutation summary, failed targets, and followup suggestions where they affect observable behavior.",
+      "nonGoals": "No live ApplyPlan execution and no quick-apply trace extractor as the primary source.",
+      "acceptance": [
+        "Trace diff critical fields include tenant, session kind, plan child subjects, targets, credential bindings, compile outputs, and idempotency keys.",
+        "Error fields include dispatch orders, agent assignments, templates, station visits, and settlement/converge status.",
+        "Mutation summary is represented as redacted observation or rule-decision evidence.",
+        "Secret-like evidence is rejected."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/..."
+      ],
+      "updatedAt": "2026-05-13T22:33:44+0800",
+      "lastTask": "platform3",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "platform3",
+        "control": "DONE",
+        "ticket": "P3-073-V2-APPLY-CIRCULATION-TRACE Project ApplyPlanV2 legacy result into CirculationTrace",
+        "changed": "5 app files + 1 evidence summary",
+        "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/... pass",
+        "next": "Pick next eligible PF3 story.",
+        "at": "2026-05-13T22:33:44+0800",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-073-V2-APPLY-CIRCULATION-TRACE Project ApplyPlanV2 legacy result into CirculationTrace",
+          "changed": "5 app files + 1 evidence summary",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/... pass",
+          "next": "Pick next eligible PF3 story.",
+          "at": "2026-05-13T22:33:44+0800",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-13T22:33:44+0800"
+    },
+    {
+      "id": "P3-074-V2-APPLY-REFERENCE-SCENARIO",
+      "title": "Create sanitized reference scenario for plan apply",
+      "status": "done",
+      "priority": 74,
+      "lanes": [
+        "platform3"
+      ],
+      "risk": "Low",
+      "allowedPaths": [
+        "app/platform3/scenarios/**",
+        "docs/platform3/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/platform3/**"
+      ],
+      "scope": "Create a sanitized scenario for the currently observed Monitoring V2 wizard flow: targets:resolve, plans:compile, targets:resolve, plans:compile, credentials:resolve, credentials:validate-bindings, then apply plan a00e16ea-4ed3-11f1-9da1-2ea5d900c150 and plan a035f21e-4ed3-11f1-9da1-2ea5d900c150. The fixture should stay narrow: one tenant, one template family, one target or explicitly justified target pair, one agent. It should represent the V2 wizard/apply path, not strategy/quick-apply.",
+      "nonGoals": "Do not use live DB data or secrets. Do not execute real apply.",
+      "acceptance": [
+        "Scenario name identifies the wizard session and both current apply plan ids.",
+        "Scenario can drive Platform3 Engine.Tick to DispatchOrder in pure memory.",
+        "Expected idempotency keys follow the V2 compile and apply endpoint contracts.",
+        "Scenario secret guard passes."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/..."
+      ],
+      "updatedAt": "2026-05-13T22:44:07+0800",
+      "lastTask": "platform3",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "platform3",
+        "control": "DONE",
+        "ticket": "P3-074-V2-APPLY-REFERENCE-SCENARIO Create sanitized reference scenario for plan apply",
+        "changed": "app/platform3/scenarios/scenario.go; app/platform3/scenarios/scenario_test.go; app/platform3/scenarios/v2_wizard_session_a00e16ea_a035f21e_apply_reference.json",
+        "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/... pass",
+        "next": "Review and merge P3-074 changes.",
+        "at": "2026-05-13T22:44:07+0800",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-074-V2-APPLY-REFERENCE-SCENARIO Create sanitized reference scenario for plan apply",
+          "changed": "app/platform3/scenarios/scenario.go; app/platform3/scenarios/scenario_test.go; app/platform3/scenarios/v2_wizard_session_a00e16ea_a035f21e_apply_reference.json",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/... pass",
+          "next": "Review and merge P3-074 changes.",
+          "at": "2026-05-13T22:44:07+0800",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-13T22:44:07+0800"
+    },
+    {
+      "id": "P3-075-V2-APPLY-SHADOW-DIFF-GOLDEN",
+      "title": "Add golden shadow diff for ApplyPlanV2",
+      "status": "done",
+      "priority": 75,
+      "lanes": [
+        "platform3"
+      ],
+      "risk": "Low",
+      "allowedPaths": [
+        "app/platform3/scenarios/**",
+        "app/platform3/shadow/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/platform3/**"
+      ],
+      "scope": "Use the sanitized Monitoring V2 wizard/apply legacy trace and Platform3 ledger projection to produce a golden shadow diff. The first golden should be compare-only and no-diff for the narrow current observed flow, comparing both per-plan apply traces and the parent session aggregate.",
+      "nonGoals": "No live route hook and no production dashboard.",
+      "acceptance": [
+        "Golden expected output is checked into app/platform3/scenarios or app/platform3/shadow tests.",
+        "Critical diff is emitted when flow step order, plan id, target, credential binding, template, compile output, runtime task identity, or idempotency key differs.",
+        "Commit gate remains blocked unless shadow diff is clean and later approval gates pass.",
+        "Report output is redacted."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/..."
+      ],
+      "updatedAt": "2026-05-13T22:58:51+0800",
+      "lastTask": "platform3",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "platform3",
+        "control": "DONE",
+        "ticket": "P3-075-V2-APPLY-SHADOW-DIFF-GOLDEN Add golden shadow diff for ApplyPlanV2",
+        "changed": "app/platform3/shadow/apply_plan_v2_shadow_diff_golden.json; app/platform3/shadow/apply_plan_v2_golden_test.go; app/platform3/shadow/diff.go (+5)",
+        "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/... pass",
+        "next": "Review P3-075 golden shadow diff changes.",
+        "at": "2026-05-13T22:58:51+0800",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-075-V2-APPLY-SHADOW-DIFF-GOLDEN Add golden shadow diff for ApplyPlanV2",
+          "changed": "app/platform3/shadow/apply_plan_v2_shadow_diff_golden.json; app/platform3/shadow/apply_plan_v2_golden_test.go; app/platform3/shadow/diff.go (+5)",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/... pass",
+          "next": "Review P3-075 golden shadow diff changes.",
+          "at": "2026-05-13T22:58:51+0800",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-13T22:58:51+0800"
+    },
+    {
+      "id": "P3-076-V2-APPLY-DRY-RUN-REPORT",
+      "title": "Adapt dry-run report to ApplyPlanV2",
+      "status": "done",
+      "priority": 76,
+      "lanes": [
+        "platform3"
+      ],
+      "risk": "Low",
+      "allowedPaths": [
+        "app/platform3/dryrunadapter/**",
+        "docs/platform3/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/platform3/**"
+      ],
+      "scope": "Extend dry-run report artifacts so they can explain what Platform3 would dispatch for a V2 wizard/apply session, including parent session id, flow steps, child plan ids, tenant, template, target, agent, runtime task identity, idempotency key, payload hash, and compare-only/shadow gate state.",
+      "nonGoals": "No real dispatch, Bidi call, production config, or route switch.",
+      "acceptance": [
+        "Dry-run report clearly names mode as dry-run, the observed wizard endpoints, and the final apply endpoint /api/v2/platform/monitoring/plans/{plan_id}:apply.",
+        "Report rejects missing plan id or secret-like evidence.",
+        "Report can be written as redacted JSON and summary markdown.",
+        "Existing dry-run tests remain green."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/..."
+      ],
+      "updatedAt": "2026-05-13T23:08:06+0800",
+      "lastTask": "platform3",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "platform3",
+        "control": "DONE",
+        "ticket": "P3-076-V2-APPLY-DRY-RUN-REPORT Adapt dry-run report to ApplyPlanV2",
+        "changed": "app/platform3/dryrunadapter/report.go; app/platform3/dryrunadapter/report_test.go",
+        "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/... pass",
+        "next": "Review P3-076 dry-run report changes.",
+        "at": "2026-05-13T23:08:06+0800",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-076-V2-APPLY-DRY-RUN-REPORT Adapt dry-run report to ApplyPlanV2",
+          "changed": "app/platform3/dryrunadapter/report.go; app/platform3/dryrunadapter/report_test.go",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/... pass",
+          "next": "Review P3-076 dry-run report changes.",
+          "at": "2026-05-13T23:08:06+0800",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-13T23:08:06+0800"
+    },
+    {
+      "id": "P3-077-V2-APPLY-COMPARE-ONLY-READINESS",
+      "title": "Gate compare-only readiness for ApplyPlanV2",
+      "status": "done",
+      "priority": 77,
+      "lanes": [
+        "platform3"
+      ],
+      "risk": "Low",
+      "allowedPaths": [
+        "app/platform3/shadow/**",
+        "docs/platform3/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/platform3/**"
+      ],
+      "scope": "Add or specialize compare-only readiness evidence for the V2 wizard/apply flow. The readiness check should require clean shadow diff, single tenant, single template family, narrow target scope, both named current apply plan ids, redacted dry-run report, and explicit non-execution mode.",
+      "nonGoals": "No canary execution, no commit mode, no ownership transfer.",
+      "acceptance": [
+        "Readiness fails closed when the flow does not end at /api/v2/platform/monitoring/plans/{plan_id}:apply.",
+        "Readiness fails closed when more than one tenant, unexpected template family, or non-allowlisted target scope is present.",
+        "Readiness allows compare-only artifact generation but keeps dry-run/commit/canary execution disabled unless later stories approve it.",
+        "Decision output is redacted."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/..."
+      ],
+      "updatedAt": "2026-05-13T23:19:40+0800",
+      "lastTask": "platform3",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "platform3",
+        "control": "DONE",
+        "ticket": "P3-077-V2-APPLY-COMPARE-ONLY-READINESS Gate compare-only readiness for ApplyPlanV2",
+        "changed": "app/platform3/shadow/apply_plan_v2_compare_readiness.go; app/platform3/shadow/apply_plan_v2_compare_readiness_test.go; docs/openclaw-autodev/evidence/platform3/P3-077-V2-APPLY-COMPARE-ONLY-READINESS/summary.md",
+        "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/... pass",
+        "next": "Review P3-077 compare-only readiness contract and evidence.",
+        "at": "2026-05-13T23:19:40+0800",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-077-V2-APPLY-COMPARE-ONLY-READINESS Gate compare-only readiness for ApplyPlanV2",
+          "changed": "app/platform3/shadow/apply_plan_v2_compare_readiness.go; app/platform3/shadow/apply_plan_v2_compare_readiness_test.go; docs/openclaw-autodev/evidence/platform3/P3-077-V2-APPLY-COMPARE-ONLY-READINESS/summary.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/... pass",
+          "next": "Review P3-077 compare-only readiness contract and evidence.",
+          "at": "2026-05-13T23:19:40+0800",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-13T23:19:40+0800"
+    },
+    {
+      "id": "P3-078-V2-APPLY-SHADOW-TAP",
+      "title": "Add no-behavior-change ApplyPlanV2 shadow tap",
+      "status": "done",
+      "priority": 78,
+      "lanes": [
+        "platform3"
+      ],
+      "risk": "High-NoBehaviorChange",
+      "allowedPaths": [
+        "app/platform/**",
+        "app/platform3/**",
+        "boot/provider/**"
+      ],
+      "scope": "Add a no-behavior-change shadow tap around the Monitoring V2 wizard flow and final ApplyPlanV2 write boundary so the legacy request/result can feed Platform3 compare-only shadow evidence. The tap should observe targets:resolve, plans:compile, credentials:resolve, credentials:validate-bindings, and per-plan ApplyPlanV2 results, but must be no-op by default, fail-silent for Platform3 failures, and must not affect legacy writes, response shape, status code, idempotency behavior, credential checks, revision conflict checks, mutation logs, audits, or dispatch order.",
+      "behaviorGuard": "Changing current app/platform behavior is forbidden. If a required hook cannot be implemented without changing behavior, stop with BLOCKED and document the reason.",
+      "acceptance": [
+        "Legacy Monitoring V2 wizard and ApplyPlanV2 behavior and responses remain unchanged when Platform3 shadow is disabled or fails.",
+        "Shadow tap captures only sanitized wizard, plan apply envelope, and result evidence.",
+        "No raw credentials or rendered config enter Platform3 ledger/report.",
+        "Feature flag or local config defaults to off.",
+        "Targeted regression tests prove targets resolve, plan compile, credential actions, ApplyPlanV2 idempotency, permission denial, revision conflict, and successful apply responses are unchanged with Platform3 disabled.",
+        "Targeted regression tests prove a Platform3 shadow failure does not change legacy response, writes, mutation summary, or audit behavior."
+      ],
+      "validation": [
+        "go test ./app/platform3/...",
+        "targeted app/platform tests for MetricStrategyAPI.ApplyPlanV2 and MonitoringTaskV3OrchestrationService.ApplyPlan"
+      ],
+      "updatedAt": "2026-05-14T00:26:47+0800",
+      "lastTask": "platform3",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "platform3",
+        "control": "DONE",
+        "ticket": "P3-078 Add no-behavior-change ApplyPlanV2 shadow tap",
+        "changed": "../docs/openclaw-autodev/evidence/platform3/20260514-002435-p3-078/summary.md",
+        "tests": "go test ./app/platform3/... pass",
+        "next": "Legacy app/platform wiring needs an allowed-write turn that explicitly includes app/platform/**",
+        "at": "2026-05-14T00:26:47+0800",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "platform3",
+          "control": "APPROVAL",
+          "ticket": "P3-078-V2-APPLY-SHADOW-TAP Add no-behavior-change ApplyPlanV2 shadow tap",
+          "changed": "app/platform3/shadow/apply_plan_v2_shadow_tap.go; app/platform3/shadow/apply_plan_v2_shadow_tap_test.go; docs/platform3/BACKLOG.md",
+          "tests": "cd /Users/huangliang/project/OneOPS-ALL/OneOPS && go test ./app/platform3/... pass",
+          "next": "Approval: allow app/platform/** targeted legacy tap wiring and regression tests for MetricStrategyAPI.ApplyPlanV2 / MonitoringTaskV3OrchestrationService.ApplyPlan",
+          "at": "2026-05-13T23:29:13+0800",
+          "transitionReason": "approval"
+        },
+        {
+          "taskId": "platform3",
+          "control": "APPROVAL",
+          "ticket": "P3-078-V2-APPLY-SHADOW-TAP Add no-behavior-change ApplyPlanV2 shadow tap",
+          "changed": "app/platform3/shadow/apply_plan_v2_shadow_tap.go; app/platform3/shadow/apply_plan_v2_shadow_tap_test.go; evidence/platform3/20260514-001316-p3-078-shadow-tap/summary.md",
+          "tests": "go test ./app/platform3/shadow ./app/platform3/... pass; targeted app/platform/api + app/platform/service/impl apply tests pass",
+          "next": "Approval: allow app/platform/** writes in this turn to wire the tap into legacy Monitoring V2 without behavior change",
+          "at": "2026-05-14T00:14:34+0800",
+          "transitionReason": "approval"
+        },
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-078 Add no-behavior-change ApplyPlanV2 shadow tap",
+          "changed": "../docs/openclaw-autodev/evidence/platform3/20260514-002435-p3-078/summary.md",
+          "tests": "go test ./app/platform3/... pass",
+          "next": "Legacy app/platform wiring needs an allowed-write turn that explicitly includes app/platform/**",
+          "at": "2026-05-14T00:26:47+0800",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-14T00:26:47+0800"
+    },
+    {
+      "id": "P3-079-REAL-LEGACY-READ-SOURCE",
+      "title": "Add no-behavior-change legacy read source",
+      "status": "done",
+      "priority": 79,
+      "lanes": [
+        "platform3"
+      ],
+      "risk": "High-NoBehaviorChange",
+      "allowedPaths": [
+        "app/platform/**",
+        "app/platform3/**",
+        "boot/provider/**"
+      ],
+      "scope": "Implement the concrete source that reads sanitized facts from the legacy Monitoring V2 wizard/apply service and store path and feeds app/platform3/legacyreadadapter. It should read target resolve facts, compile snapshots, plan snapshots, strategy intent, credential resolve and binding validation status, assignment/runtime facts, and apply result summaries without exposing secrets. The source must be read-only and must not introduce new writes, locks, transaction behavior, retries, or request blocking on the legacy path.",
+      "behaviorGuard": "Changing current app/platform behavior is forbidden. Source failure must not alter legacy ApplyPlanV2 behavior while Platform3 is shadow/compare-only.",
+      "acceptance": [
+        "Source returns the same sanitized model used by P3-072 and P3-073.",
+        "Source has explicit redaction and secret scan tests.",
+        "Failures do not block legacy ApplyPlanV2 while in shadow mode.",
+        "No production writes are performed by Platform3.",
+        "Targeted regression tests prove legacy Monitoring V2 wizard and ApplyPlanV2 behavior is unchanged when the read source is disabled, enabled, empty, or failing."
+      ],
+      "validation": [
+        "go test ./app/platform3/...",
+        "targeted app/platform tests"
+      ],
+      "updatedAt": "2026-05-15T00:15:15.112Z",
+      "lastTask": "platform3",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "platform3",
+        "control": "DONE",
+        "ticket": "P3-079 Add no-behavior-change legacy read source",
+        "changed": "evidence/platform3/P3-079-REAL-LEGACY-READ-SOURCE/worker-turn-20260514-0730-closure.md",
+        "tests": "go test ./app/platform3/... -count=1 PASS; go test ./app/platform/... -count=1 PASS",
+        "next": "P3-079 acceptance satisfied; no further safe story work remains.",
+        "at": "2026-05-15T00:15:15.112Z",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-079 Add no-behavior-change legacy read source",
+          "changed": "evidence/platform3/P3-079-REAL-LEGACY-READ-SOURCE/worker-turn-20260514-0730-closure.md",
+          "tests": "go test ./app/platform3/... -count=1 PASS; go test ./app/platform/... -count=1 PASS",
+          "next": "P3-079 acceptance satisfied; no further safe story work remains.",
+          "at": "2026-05-15T00:12:49.041Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-079 Add no-behavior-change legacy read source",
+          "changed": "evidence/platform3/P3-079-REAL-LEGACY-READ-SOURCE/worker-turn-20260514-0730-closure.md",
+          "tests": "go test ./app/platform3/... -count=1 PASS; go test ./app/platform/... -count=1 PASS",
+          "next": "P3-079 acceptance satisfied; no further safe story work remains.",
+          "at": "2026-05-15T00:12:59.636Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-079 Add no-behavior-change legacy read source",
+          "changed": "evidence/platform3/P3-079-REAL-LEGACY-READ-SOURCE/worker-turn-20260514-0730-closure.md",
+          "tests": "go test ./app/platform3/... -count=1 PASS; go test ./app/platform/... -count=1 PASS",
+          "next": "P3-079 acceptance satisfied; no further safe story work remains.",
+          "at": "2026-05-15T00:13:00.253Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-079 Add no-behavior-change legacy read source",
+          "changed": "evidence/platform3/P3-079-REAL-LEGACY-READ-SOURCE/worker-turn-20260514-0730-closure.md",
+          "tests": "go test ./app/platform3/... -count=1 PASS; go test ./app/platform/... -count=1 PASS",
+          "next": "P3-079 acceptance satisfied; no further safe story work remains.",
+          "at": "2026-05-15T00:13:00.419Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-079 Add no-behavior-change legacy read source",
+          "changed": "evidence/platform3/P3-079-REAL-LEGACY-READ-SOURCE/worker-turn-20260514-0730-closure.md",
+          "tests": "go test ./app/platform3/... -count=1 PASS; go test ./app/platform/... -count=1 PASS",
+          "next": "P3-079 acceptance satisfied; no further safe story work remains.",
+          "at": "2026-05-15T00:13:00.475Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-079 Add no-behavior-change legacy read source",
+          "changed": "evidence/platform3/P3-079-REAL-LEGACY-READ-SOURCE/worker-turn-20260514-0730-closure.md",
+          "tests": "go test ./app/platform3/... -count=1 PASS; go test ./app/platform/... -count=1 PASS",
+          "next": "P3-079 acceptance satisfied; no further safe story work remains.",
+          "at": "2026-05-15T00:13:33.577Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-079 Add no-behavior-change legacy read source",
+          "changed": "evidence/platform3/P3-079-REAL-LEGACY-READ-SOURCE/worker-turn-20260514-0730-closure.md",
+          "tests": "go test ./app/platform3/... -count=1 PASS; go test ./app/platform/... -count=1 PASS",
+          "next": "P3-079 acceptance satisfied; no further safe story work remains.",
+          "at": "2026-05-15T00:13:44.180Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-079 Add no-behavior-change legacy read source",
+          "changed": "evidence/platform3/P3-079-REAL-LEGACY-READ-SOURCE/worker-turn-20260514-0730-closure.md",
+          "tests": "go test ./app/platform3/... -count=1 PASS; go test ./app/platform/... -count=1 PASS",
+          "next": "P3-079 acceptance satisfied; no further safe story work remains.",
+          "at": "2026-05-15T00:13:44.789Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-079 Add no-behavior-change legacy read source",
+          "changed": "evidence/platform3/P3-079-REAL-LEGACY-READ-SOURCE/worker-turn-20260514-0730-closure.md",
+          "tests": "go test ./app/platform3/... -count=1 PASS; go test ./app/platform/... -count=1 PASS",
+          "next": "P3-079 acceptance satisfied; no further safe story work remains.",
+          "at": "2026-05-15T00:13:44.953Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-079 Add no-behavior-change legacy read source",
+          "changed": "evidence/platform3/P3-079-REAL-LEGACY-READ-SOURCE/worker-turn-20260514-0730-closure.md",
+          "tests": "go test ./app/platform3/... -count=1 PASS; go test ./app/platform/... -count=1 PASS",
+          "next": "P3-079 acceptance satisfied; no further safe story work remains.",
+          "at": "2026-05-15T00:13:45.009Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-079 Add no-behavior-change legacy read source",
+          "changed": "evidence/platform3/P3-079-REAL-LEGACY-READ-SOURCE/worker-turn-20260514-0730-closure.md",
+          "tests": "go test ./app/platform3/... -count=1 PASS; go test ./app/platform/... -count=1 PASS",
+          "next": "P3-079 acceptance satisfied; no further safe story work remains.",
+          "at": "2026-05-15T00:14:18.222Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-079 Add no-behavior-change legacy read source",
+          "changed": "evidence/platform3/P3-079-REAL-LEGACY-READ-SOURCE/worker-turn-20260514-0730-closure.md",
+          "tests": "go test ./app/platform3/... -count=1 PASS; go test ./app/platform/... -count=1 PASS",
+          "next": "P3-079 acceptance satisfied; no further safe story work remains.",
+          "at": "2026-05-15T00:14:28.847Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-079 Add no-behavior-change legacy read source",
+          "changed": "evidence/platform3/P3-079-REAL-LEGACY-READ-SOURCE/worker-turn-20260514-0730-closure.md",
+          "tests": "go test ./app/platform3/... -count=1 PASS; go test ./app/platform/... -count=1 PASS",
+          "next": "P3-079 acceptance satisfied; no further safe story work remains.",
+          "at": "2026-05-15T00:14:29.700Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-079 Add no-behavior-change legacy read source",
+          "changed": "evidence/platform3/P3-079-REAL-LEGACY-READ-SOURCE/worker-turn-20260514-0730-closure.md",
+          "tests": "go test ./app/platform3/... -count=1 PASS; go test ./app/platform/... -count=1 PASS",
+          "next": "P3-079 acceptance satisfied; no further safe story work remains.",
+          "at": "2026-05-15T00:14:29.877Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-079 Add no-behavior-change legacy read source",
+          "changed": "evidence/platform3/P3-079-REAL-LEGACY-READ-SOURCE/worker-turn-20260514-0730-closure.md",
+          "tests": "go test ./app/platform3/... -count=1 PASS; go test ./app/platform/... -count=1 PASS",
+          "next": "P3-079 acceptance satisfied; no further safe story work remains.",
+          "at": "2026-05-15T00:14:29.933Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-079 Add no-behavior-change legacy read source",
+          "changed": "evidence/platform3/P3-079-REAL-LEGACY-READ-SOURCE/worker-turn-20260514-0730-closure.md",
+          "tests": "go test ./app/platform3/... -count=1 PASS; go test ./app/platform/... -count=1 PASS",
+          "next": "P3-079 acceptance satisfied; no further safe story work remains.",
+          "at": "2026-05-15T00:15:03.189Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-079 Add no-behavior-change legacy read source",
+          "changed": "evidence/platform3/P3-079-REAL-LEGACY-READ-SOURCE/worker-turn-20260514-0730-closure.md",
+          "tests": "go test ./app/platform3/... -count=1 PASS; go test ./app/platform/... -count=1 PASS",
+          "next": "P3-079 acceptance satisfied; no further safe story work remains.",
+          "at": "2026-05-15T00:15:14.252Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-079 Add no-behavior-change legacy read source",
+          "changed": "evidence/platform3/P3-079-REAL-LEGACY-READ-SOURCE/worker-turn-20260514-0730-closure.md",
+          "tests": "go test ./app/platform3/... -count=1 PASS; go test ./app/platform/... -count=1 PASS",
+          "next": "P3-079 acceptance satisfied; no further safe story work remains.",
+          "at": "2026-05-15T00:15:14.883Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-079 Add no-behavior-change legacy read source",
+          "changed": "evidence/platform3/P3-079-REAL-LEGACY-READ-SOURCE/worker-turn-20260514-0730-closure.md",
+          "tests": "go test ./app/platform3/... -count=1 PASS; go test ./app/platform/... -count=1 PASS",
+          "next": "P3-079 acceptance satisfied; no further safe story work remains.",
+          "at": "2026-05-15T00:15:15.054Z",
+          "transitionReason": "done"
+        },
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-079 Add no-behavior-change legacy read source",
+          "changed": "evidence/platform3/P3-079-REAL-LEGACY-READ-SOURCE/worker-turn-20260514-0730-closure.md",
+          "tests": "go test ./app/platform3/... -count=1 PASS; go test ./app/platform/... -count=1 PASS",
+          "next": "P3-079 acceptance satisfied; no further safe story work remains.",
+          "at": "2026-05-15T00:15:15.112Z",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-14T07:33:17+0800"
+    },
+    {
+      "id": "P3-080-V2-APPLY-DRY-RUN-CANARY-READINESS",
+      "title": "Enable narrow flow dry-run and canary readiness without behavior change",
+      "status": "done",
+      "priority": 80,
+      "lanes": [
+        "platform3"
+      ],
+      "risk": "High-NoBehaviorChange",
+      "allowedPaths": [
+        "app/platform/**",
+        "app/platform3/**",
+        "docs/platform3/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/platform3/**"
+      ],
+      "scope": "After shadow diff is stable, run Platform3 dry-run reporting only for the tenant/template/target scope allowlisted by the current observed wizard flow and its two apply plan ids. Build canary readiness evidence but do not execute canary DispatchOrder from the legacy Monitoring V2 path. Legacy remains the only writer.",
+      "behaviorGuard": "Changing current app/platform behavior is forbidden. Dry-run must be report-only; canary execution remains disabled under the current invariant.",
+      "acceptance": [
+        "Allowlist contains exactly one tenant, one template family, one target scope, and the two named current apply plan ids.",
+        "Dry-run artifact matches legacy wizard compile facts and per-plan ApplyPlanV2 dispatch intent.",
+        "Canary readiness is computed, but canary_execution_allowed remains false.",
+        "Rollback to legacy remains available and documented.",
+        "Targeted regression tests prove dry-run/readiness generation does not change Monitoring V2 wizard responses, ApplyPlanV2 response, writes, mutation logs, audits, or dispatch behavior."
+      ],
+      "validation": [
+        "go test ./app/platform3/...",
+        "targeted app/platform tests"
+      ],
+      "updatedAt": "2026-05-13T23:56:08+0800",
+      "lastTask": "platform3",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "platform3",
+        "control": "DONE",
+        "ticket": "P3-080 V2 apply dry-run canary readiness",
+        "changed": "app/platform3/dryrunadapter/report.go, app/platform3/dryrunadapter/report_test.go, evidence summary",
+        "tests": "go test ./app/platform3/... pass; targeted app/platform/api ApplyPlanV2 tests pass",
+        "next": "Human review / mark story closed if acceptable",
+        "at": "2026-05-13T23:56:08+0800",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-080 V2 apply dry-run canary readiness",
+          "changed": "app/platform3/dryrunadapter/report.go, app/platform3/dryrunadapter/report_test.go, evidence summary",
+          "tests": "go test ./app/platform3/... pass; targeted app/platform/api ApplyPlanV2 tests pass",
+          "next": "Human review / mark story closed if acceptable",
+          "at": "2026-05-13T23:56:08+0800",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-13T23:56:08+0800"
+    },
+    {
+      "id": "P3-081-V2-APPLY-WRITE-OWNERSHIP-READINESS",
+      "title": "Model write ownership transfer readiness without changing behavior",
+      "status": "done",
+      "priority": 81,
+      "lanes": [
+        "platform3"
+      ],
+      "risk": "High-NoBehaviorChange",
+      "allowedPaths": [
+        "app/platform/**",
+        "app/platform3/**",
+        "boot/provider/**",
+        "docs/platform3/**"
+      ],
+      "scope": "After compare-only and dry-run evidence are stable, model write ownership transfer readiness for the narrow Monitoring V2 wizard/apply slice without transferring ownership. Platform3 may prove that it can sign per-plan DispatchOrder entries and process synthetic receipts, but legacy remains the only real writer and route behavior must remain unchanged.",
+      "behaviorGuard": "Changing current app/platform behavior is forbidden. Actual write ownership transfer, real Bidi scheduling by Platform3, route switching, and production feature flag enablement are out of scope under this invariant.",
+      "acceptance": [
+        "Ownership transfer readiness contract is green for the exact approved scope.",
+        "Feature flag defaults off and cannot enable Platform3 writes from this story.",
+        "Synthetic dispatch receipts are written back to Platform3 Ledger.",
+        "Legacy remains the only real writer.",
+        "Targeted regression tests prove Monitoring V2 wizard and ApplyPlanV2 runtime behavior remains unchanged."
+      ],
+      "validation": [
+        "go test ./app/platform3/...",
+        "targeted app/platform tests"
+      ],
+      "updatedAt": "2026-05-14T00:06:33+0800",
+      "lastTask": "platform3",
+      "lastControl": "DONE",
+      "lastReport": {
+        "taskId": "platform3",
+        "control": "DONE",
+        "ticket": "P3-081-V2-APPLY-WRITE-OWNERSHIP-READINESS Model write ownership transfer readiness without changing behavior",
+        "changed": "app/platform3/shadow/v2_apply_ownership_readiness.go, app/platform3/shadow/v2_apply_ownership_readiness_test.go, evidence summary",
+        "tests": "go test ./app/platform3/... pass; targeted app/platform/api+router ApplyPlanV2 tests pass",
+        "next": "Human review / close story if acceptable",
+        "at": "2026-05-14T00:06:33+0800",
+        "transitionReason": "done"
+      },
+      "events": [
+        {
+          "taskId": "platform3",
+          "control": "DONE",
+          "ticket": "P3-081-V2-APPLY-WRITE-OWNERSHIP-READINESS Model write ownership transfer readiness without changing behavior",
+          "changed": "app/platform3/shadow/v2_apply_ownership_readiness.go, app/platform3/shadow/v2_apply_ownership_readiness_test.go, evidence summary",
+          "tests": "go test ./app/platform3/... pass; targeted app/platform/api+router ApplyPlanV2 tests pass",
+          "next": "Human review / close story if acceptable",
+          "at": "2026-05-14T00:06:33+0800",
+          "transitionReason": "done"
+        }
+      ],
+      "completedAt": "2026-05-14T00:06:33+0800"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "program": "d2-launch-acceptance",
+  "batch": "batch-005-readiness-report",
+  "title": "Device V2 launch readiness decision report",
+  "status": "reviewed",
+  "targetTaskIds": [
+    "d2-fe"
+  ],
+  "releaseGate": "Publish after Batches 001-004 have completed, or after their blockers are accepted as sufficient launch evidence. P0 may be ACCEPTED RISK only with explicit human acceptance.",
+  "stories": [
+    {
+      "id": "D2LA-005A",
+      "title": "Compile Device V2 launch acceptance evidence index",
+      "lanes": [
+        "d2-fe"
+      ],
+      "status": "open",
+      "priority": 45,
+      "risk": "Low",
+      "scope": "Read evidence summaries from Batches 001-004 and build a compact index linking every P0 matrix item to evidence, blocker, or accepted risk.",
+      "nonGoals": "Do not rerun tests, do not modify product code, and do not perform cleanup.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-fe/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/d2-launch-acceptance/**"
+      ],
+      "acceptance": [
+        "Writes `evidence-index.md`.",
+        "Every P0 test matrix row is PASS, BLOCKED, NOT RUN, or ACCEPTED RISK.",
+        "If 5-device parallel collection partially failed, evidence index must not auto-PASS; it must mark human decision required or record the accepted risk.",
+        "Missing evidence is explicit."
+      ],
+      "validation": [
+        "Docs-only validation."
+      ],
+      "dependsOn": [
+        "D2LA-004D"
+      ]
+    },
+    {
+      "id": "D2LA-005B",
+      "title": "Produce final go/no-go readiness report",
+      "lanes": [
+        "d2-fe"
+      ],
+      "status": "open",
+      "priority": 50,
+      "risk": "Low",
+      "scope": "Produce the final launch readiness report for Device V2 入库工作台 and 设备 V2 清册管理.",
+      "nonGoals": "Do not hide blockers, do not create new tests, and do not change acceptance criteria.",
+      "allowedPaths": [
+        "/Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/d2-launch-acceptance/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/d2-fe/**"
+      ],
+      "acceptance": [
+        "Writes `launch-readiness-report.md`.",
+        "Report states PASS, BLOCKED, or ACCEPTED RISK with reasons.",
+        "Report separates conclusions for Device V2 入库工作台 and 设备 V2 清册管理.",
+        "Report includes real import, real collection, edit/delete/cleanup, credential redaction, and original-record safety conclusions.",
+        "Report includes must-fix-before-launch and post-launch-watch-list sections."
+      ],
+      "validation": [
+        "Docs-only validation."
+      ],
+      "dependsOn": [
+        "D2LA-005A"
+      ]
+    }
+  ],
+  "executionMode": "dependency-chain"
+}

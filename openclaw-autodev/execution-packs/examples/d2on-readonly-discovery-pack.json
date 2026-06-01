@@ -1,0 +1,144 @@
+{
+  "taskId": "d2on",
+  "workerProfileId": "readonly-discovery-worker",
+  "taskKind": "readonly_discovery",
+  "environmentKind": "remote_readonly",
+  "projectRoot": "/Users/huangliang/project/OneOPS-ALL",
+  "sourceOfTruth": [
+    "docs/openclaw-autodev/stories/d2on.json",
+    "docs/prd-autodev/device-v2-onboarding-observability/context-brief.md",
+    "docs/prd-autodev/device-v2-onboarding-observability/remote-access-minimal-strategy.md",
+    "active approved targets and runtime-only credentials"
+  ],
+  "currentStory": {
+    "id": "D2ON-000",
+    "title": "Remote discovery helper tools",
+    "status": "blocked",
+    "scope": "Build bounded development/test helper tools for Device V2 onboarding discovery and later validation. The tools may query database device records, select real server/network devices, remotely log in, and collect evidence for Linux system-log files, server log-forwarding commands, network-device syslog commands, and SNMP trap commands.",
+    "nonGoals": [
+      "Do not turn these helpers into business feature paths.",
+      "Do not change target-device configuration in this discovery story.",
+      "Do not guess credentials, vendors, commands, log paths, or listener addresses."
+    ],
+    "allowedPaths": [
+      "docs/openclaw-autodev/tools/d2on/**",
+      "docs/development/device-v2-onboarding-observability/**",
+      "docs/openclaw-autodev/evidence/d2on/**"
+    ],
+    "acceptance": [
+      "The tool reads real device candidates from the database or fails with explicit errors.",
+      "The tool can run read-only remote inspection commands and records command, target, exit status, stdout/stderr summary, and timestamp.",
+      "Evidence summary is written to docs/openclaw-autodev/evidence/d2on/D2ON-000.md."
+    ],
+    "validation": [
+      "jq empty /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/stories/d2on.json",
+      "find /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/tools/d2on -type f -maxdepth 2 -print"
+    ]
+  },
+  "contextPack": {
+    "mustRead": [
+      "docs/prd-autodev/device-v2-onboarding-observability/context-brief.md",
+      "docs/prd-autodev/device-v2-onboarding-observability/remote-access-minimal-strategy.md",
+      "docs/openclaw-autodev/approval-profiles.json"
+    ],
+    "optionalRead": [
+      "docs/prd-autodev/device-v2-onboarding-observability/test-matrix.md",
+      "docs/development/device-v2-onboarding-observability/README.md"
+    ],
+    "forbiddenRead": [
+      "broad unrelated product code",
+      "raw secret files persisted into docs or evidence"
+    ],
+    "readBudgetRules": [
+      "Read current story and remote-access strategy first.",
+      "Work on one story per turn and keep implementation inside allowed paths.",
+      "Write durable findings to evidence summaries instead of carrying large context."
+    ]
+  },
+  "actionPolicy": {
+    "allowedWrites": [
+      "docs/openclaw-autodev/tools/d2on/**",
+      "docs/development/device-v2-onboarding-observability/**",
+      "docs/openclaw-autodev/evidence/d2on/**"
+    ],
+    "allowedActions": [
+      "shell.exec",
+      "file.edit",
+      "db.readonly",
+      "api.readonly",
+      "remote.readonly"
+    ],
+    "deniedActions": [
+      "remote.apply",
+      "guess.commands",
+      "guess.credentials",
+      "production.config.change",
+      "dependency.change",
+      "commit.push"
+    ],
+    "approvalProfilesAllowed": [
+      "discovery-readonly",
+      "readonly-db-api",
+      "remote-readonly",
+      "controller-remote-readonly"
+    ]
+  },
+  "runtimePolicy": {
+    "precheckCommands": [
+      "/Users/huangliang/project/OneOPS-ALL/scripts/openclaw-d2-runtime.sh ensure-backend"
+    ],
+    "maxTurns": 1,
+    "maxMinutes": 25,
+    "timeoutSeconds": 1500,
+    "patchMaxFiles": 6,
+    "workspaceIsolated": false
+  },
+  "verificationPolicy": {
+    "workerValidationCommands": [
+      "jq empty /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/stories/d2on.json",
+      "find /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/tools/d2on -type f -maxdepth 2 -print"
+    ],
+    "controllerVerifyOnDone": false,
+    "successCriteria": [
+      "Only approved read-only targets are touched.",
+      "No secrets are persisted in code, docs, config, or evidence.",
+      "No remote configuration change is executed."
+    ],
+    "blockedClasses": [
+      "environment.runtime",
+      "business.authorization",
+      "unknown.blocked"
+    ]
+  },
+  "outputContract": {
+    "requiresFooter": true,
+    "footerFields": [
+      "LoopControl",
+      "Task",
+      "Status",
+      "Ticket",
+      "Changed",
+      "Tests",
+      "Next"
+    ],
+    "maxReportLines": 8
+  },
+  "evidenceContract": {
+    "required": true,
+    "summaryPathTemplate": "docs/openclaw-autodev/evidence/d2on/D2ON-000.md",
+    "requiredClaimFields": [
+      "claim",
+      "sourceRefs",
+      "resultSummary",
+      "redactionBoundary",
+      "residualRisk"
+    ]
+  },
+  "recoveryPolicy": {
+    "maxRepairAttempts": 1,
+    "controllerValidationFailedRequiresEvidenceRead": false,
+    "retryAllowedForClasses": [
+      "environment.runtime"
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+# Bidi Agent 能力契约 IDL
+# 与 OneOPS app/platform/bidi/spec、Controller 白名单、Agent 表驱动一致；代码生成见 tools/bidi_codegen。
+# 命名约定：平台边界 snake_case（dir_path, file_path, session_id 等）
+
+agent_capabilities:
+  - method: ListFiles
+    request: [dir_path]
+    response: [path, files]
+  - method: GetSystemMetrics
+    request: [duration]
+    response: [cpu_usage, memory_usage, disk_usage]
+  - method: CreateDirectory
+    request: [dir_path, mode]
+    response: []
+  - method: DeleteFile
+    request: [file_path, recursive]
+    response: []
+  - method: DownloadFile
+    request: [file_path]
+    response: []  # 二进制流或 base64
+  - method: StartFileUpload
+    request: [file_path, file_size, md5, sha256]
+    response: [session_id, chunk_size]
+  - method: UploadFileChunk
+    request: [session_id, chunk_index, chunk_data]
+    response: []
+  - method: GetUploadStatus
+    request: [session_id]
+    response: [status, total_size, received_size, progress]
+  - method: GetAgentDetail
+    request: []
+    response: [agent_id, device_info, system_metrics, status, ...]

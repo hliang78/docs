@@ -1,0 +1,54 @@
+{
+  "profileId": "readonly-discovery-worker",
+  "description": "Worker for bounded read-only discovery across DB, API, and remote targets with explicit redaction and no-mutation evidence.",
+  "supportedTaskKinds": [
+    "readonly_discovery",
+    "remote_readonly"
+  ],
+  "supportedEnvironmentKinds": [
+    "db_readonly",
+    "api_readonly",
+    "remote_readonly",
+    "local_workspace"
+  ],
+  "contextTolerance": {
+    "profile": "medium",
+    "maxPromptTokensClass": "medium",
+    "prefersCompiledContext": true,
+    "requiresWorkspaceSanitization": false
+  },
+  "actionCapabilities": {
+    "shellExec": true,
+    "fileEdit": true,
+    "browserInteract": false,
+    "dbReadonly": true,
+    "apiReadonly": true,
+    "remoteReadonly": true,
+    "remoteApply": false,
+    "serviceRestart": false,
+    "deleteFiles": false
+  },
+  "writeCapabilities": {
+    "maxFilesPerTurn": 6,
+    "supportsBroadRefactor": false,
+    "supportsCrossModuleChanges": false,
+    "supportsDocOnlyTurns": true
+  },
+  "verificationModel": {
+    "needsControllerVerifyOnDone": false,
+    "supportsTargetedValidation": true,
+    "supportsRealOperationValidation": true,
+    "trustSelfReportedDone": false
+  },
+  "coordinationModel": {
+    "supportsMultiStoryTurns": false,
+    "supportsMultiLaneCoordination": true,
+    "requiresExplicitJoinPolicy": true
+  },
+  "schedulingDefaults": {
+    "maxTurns": 1,
+    "maxMinutes": 25,
+    "timeoutSeconds": 1500,
+    "preferFreshSession": true
+  }
+}

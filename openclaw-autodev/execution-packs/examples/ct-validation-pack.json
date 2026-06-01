@@ -1,0 +1,119 @@
+{
+  "taskId": "ct",
+  "workerProfileId": "shell-validation-worker",
+  "taskKind": "validation_only",
+  "environmentKind": "local_workspace",
+  "projectRoot": "/Users/huangliang/project/OneOPS-ALL",
+  "sourceOfTruth": [
+    "scripts/continuous-validation.sh",
+    "docs/openclaw-autodev/reliability-model.md"
+  ],
+  "currentStory": {
+    "id": "CT-CURRENT-VALIDATION",
+    "title": "Run the bounded continuous validation cycle and record failures",
+    "status": "open",
+    "scope": "Execute the configured validation shell turn, summarize failures, and write concise evidence or issue notes without implementing unrelated product changes.",
+    "nonGoals": [
+      "Do not make product code changes.",
+      "Do not reinterpret failing tests as success."
+    ],
+    "allowedPaths": [
+      "docs/openclaw-autodev/evidence/ct/**",
+      "docs/openclaw-autodev/issues/**",
+      "docs/openclaw-autodev/logs/**"
+    ],
+    "acceptance": [
+      "Configured validation shell turn completed.",
+      "Evidence or issue notes summarize the validation outcome."
+    ],
+    "validation": [
+      "scripts/continuous-validation.sh"
+    ]
+  },
+  "contextPack": {
+    "mustRead": [
+      "scripts/continuous-validation.sh"
+    ],
+    "optionalRead": [
+      "docs/openclaw-autodev/reliability-model.md"
+    ],
+    "forbiddenRead": [
+      "product source trees unrelated to the failing validation"
+    ],
+    "readBudgetRules": [
+      "Prefer the configured validation script and existing evidence summaries.",
+      "Do not broaden into implementation work unless explicitly approved."
+    ]
+  },
+  "actionPolicy": {
+    "allowedWrites": [
+      "docs/openclaw-autodev/evidence/ct/**",
+      "docs/openclaw-autodev/issues/**",
+      "docs/openclaw-autodev/logs/**"
+    ],
+    "allowedActions": [
+      "shell.exec",
+      "evidence.write",
+      "issue.note.write"
+    ],
+    "deniedActions": [
+      "product.code.edit",
+      "dependency.change",
+      "commit.push",
+      "delete.file"
+    ],
+    "approvalProfilesAllowed": []
+  },
+  "runtimePolicy": {
+    "precheckCommands": [],
+    "maxTurns": 1,
+    "maxMinutes": 10,
+    "timeoutSeconds": 600,
+    "patchMaxFiles": 0,
+    "workspaceIsolated": false
+  },
+  "verificationPolicy": {
+    "workerValidationCommands": [
+      "scripts/continuous-validation.sh"
+    ],
+    "controllerVerifyOnDone": false,
+    "successCriteria": [
+      "Validation script result is captured.",
+      "Failure summaries are preserved in evidence or issues."
+    ],
+    "blockedClasses": [
+      "automation.health_check",
+      "environment.runtime"
+    ]
+  },
+  "outputContract": {
+    "requiresFooter": true,
+    "footerFields": [
+      "LoopControl",
+      "Task",
+      "Status",
+      "Ticket",
+      "Changed",
+      "Tests",
+      "Next"
+    ],
+    "maxReportLines": 8
+  },
+  "evidenceContract": {
+    "required": true,
+    "summaryPathTemplate": "docs/openclaw-autodev/evidence/ct/<run-id>/summary.md",
+    "requiredClaimFields": [
+      "claim",
+      "sourceRefs",
+      "resultSummary",
+      "residualRisk"
+    ]
+  },
+  "recoveryPolicy": {
+    "maxRepairAttempts": 0,
+    "controllerValidationFailedRequiresEvidenceRead": false,
+    "retryAllowedForClasses": [
+      "automation.health_check"
+    ]
+  }
+}

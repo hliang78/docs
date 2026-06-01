@@ -1,0 +1,188 @@
+{
+  "program": "oneops-engineering-docs-standardization",
+  "batch": "batch-003-device-v2-code-fact-standard-docs",
+  "title": "Device V2 01-07 候选标准文档生成",
+  "status": "reviewed",
+  "executionMode": "dependency-chain",
+  "targetTaskIds": [
+    "dev-docs"
+  ],
+  "direction": {
+    "slug": "device-v2",
+    "name": "Device V2 入库与设备管理",
+    "businessScope": "基于当前代码反向整理 Device V2 入库、设备管理、store/start、观测和 latest DC2 相关既有能力。",
+    "sourceScopes": {
+      "backend": [
+        "OneOPS/app/device/v2/**"
+      ],
+      "frontend": [
+        "OneOPS-UI/src/api/device/device-v2*.ts",
+        "OneOPS-UI/src/views/**/DeviceV2*",
+        "OneOPS-UI/src/router/**"
+      ],
+      "existingDocs": [
+        "docs/development/device-v2/**",
+        "docs/prd-autodev/oneops-engineering-docs-standardization/**"
+      ],
+      "evidence": [
+        "docs/openclaw-autodev/evidence/dev-docs/**"
+      ]
+    },
+    "outputDir": "docs/development/device-v2",
+    "templateRange": "01-07",
+    "humanConfirmationRoles": [
+      "产品负责人",
+      "后端负责人",
+      "前端负责人",
+      "测试负责人",
+      "安全/权限负责人"
+    ]
+  },
+  "templateRange": "01-07",
+  "releaseGate": "本批仅用于按 docs/development-doc-templates/01-07 反向生成 Device V2 候选标准文档；不生成 08-11；不得确认产品需求、架构决策、API 契约、数据库字段语义、权限或验收标准。",
+  "storySizingRule": "每个 story 只覆盖一类模板文档或一个相邻模板组合；不得把 01-07 之外的测试、接口调用、自动化脚本或代码审查文档纳入本批。",
+  "pipeline": [
+    "选择 docs/development-doc-templates/01-07 中的具体模板",
+    "阅读方向包限定的 route、handler、DTO、model、service、DAO/GORM、前端 wrapper、页面、测试/evidence，提取真实结构体/字段/API/流程/页面",
+    "产出代码事实来源清单",
+    "按模板结构填充候选文档",
+    "人工确认、修改候选文档后再定稿"
+  ],
+  "excludedTemplates": [
+    "08-测试用例模板.md",
+    "09-接口调用文档模板.md",
+    "10-自动化测试脚本说明模板.md",
+    "11-Service代码审查报告模板.md"
+  ],
+  "stories": [
+    {
+      "id": "DEV-DOCS-003A",
+      "status": "open",
+      "lanes": [
+        "dev-docs"
+      ],
+      "title": "生成 Device V2 需求与功能候选文档",
+      "priority": 40,
+      "risk": "Low",
+      "scope": "按 01-02 模板，阅读 Device V2 route、handler、DTO、model、service、前端 wrapper、页面和 evidence，生成需求与功能候选文档并记录代码事实来源清单。",
+      "nonGoals": "不生成测试文档，不确认业务范围、优先级、验收标准或上线范围。",
+      "allowedPaths": [
+        "docs/development/device-v2/**",
+        "docs/openclaw-autodev/evidence/dev-docs/**"
+      ],
+      "acceptance": [
+        "生成 candidate-01-requirements-summary.md。",
+        "生成 candidate-02-function-list.md。",
+        "两份文档保留模板章节并含 blocked-human-confirmation。",
+        "未确认内容保留待确认占位。",
+        "文档或 evidence 包含代码事实来源清单。"
+      ],
+      "validation": [
+        "test -f docs/development/device-v2/candidate-01-requirements-summary.md",
+        "test -f docs/development/device-v2/candidate-02-function-list.md",
+        "rg -n \"【需求概要】|【功能清单】|blocked-human-confirmation|待确认\" docs/development/device-v2/candidate-01-requirements-summary.md docs/development/device-v2/candidate-02-function-list.md",
+        "rg -n \"代码事实来源清单|已读取关键文件|源码路径\" docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs",
+        "git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs"
+      ]
+    },
+    {
+      "id": "DEV-DOCS-003B",
+      "status": "open",
+      "dependsOn": [
+        "DEV-DOCS-003A"
+      ],
+      "lanes": [
+        "dev-docs"
+      ],
+      "title": "生成 Device V2 实体与原型候选文档",
+      "priority": 45,
+      "risk": "Low",
+      "scope": "按 03-04 模板，阅读真实 model/DTO、service、DAO/GORM、前端路由、页面和组件，生成实体与原型候选文档并记录代码事实来源清单。",
+      "nonGoals": "不设计新实体，不确认页面最终交互，不生成测试或代码审查文档。",
+      "allowedPaths": [
+        "docs/development/device-v2/**",
+        "docs/openclaw-autodev/evidence/dev-docs/**"
+      ],
+      "acceptance": [
+        "生成 candidate-03-entity-attribute-list.md。",
+        "生成 candidate-04-prototype-list.md。",
+        "实体字段来自源码路径，页面来自真实前端路由和页面。",
+        "业务含义不确定处保留待确认。",
+        "文档或 evidence 包含代码事实来源清单。"
+      ],
+      "validation": [
+        "test -f docs/development/device-v2/candidate-03-entity-attribute-list.md",
+        "test -f docs/development/device-v2/candidate-04-prototype-list.md",
+        "rg -n \"【实体属性清单】|【原型清单】|DeviceV2|DeviceV2Management|待确认\" docs/development/device-v2/candidate-03-entity-attribute-list.md docs/development/device-v2/candidate-04-prototype-list.md",
+        "rg -n \"代码事实来源清单|已读取关键文件|源码路径\" docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs",
+        "git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs"
+      ]
+    },
+    {
+      "id": "DEV-DOCS-003C",
+      "status": "open",
+      "dependsOn": [
+        "DEV-DOCS-003B"
+      ],
+      "lanes": [
+        "dev-docs"
+      ],
+      "title": "生成 Device V2 数据库与接口候选文档",
+      "priority": 50,
+      "risk": "Medium",
+      "scope": "按 05-06 模板，阅读 GORM model/TableName、DAO/GORM、router、handler、DTO、service 和前端 wrapper，生成数据库与接口候选文档并记录代码事实来源清单。",
+      "nonGoals": "不设计新表或新接口，不确认字段语义、权限、错误码、验收标准。",
+      "allowedPaths": [
+        "docs/development/device-v2/**",
+        "docs/openclaw-autodev/evidence/dev-docs/**"
+      ],
+      "acceptance": [
+        "生成 candidate-05-database-design.md。",
+        "生成 candidate-06-api-documentation.md。",
+        "数据库文档包含真实表名和字段。",
+        "接口文档包含真实 method/path/handler 和前端 wrapper。",
+        "文档或 evidence 包含代码事实来源清单。"
+      ],
+      "validation": [
+        "test -f docs/development/device-v2/candidate-05-database-design.md",
+        "test -f docs/development/device-v2/candidate-06-api-documentation.md",
+        "rg -n \"【数据库设计】|platform_devices_v2|device_v2_import_batch|【接口文档】|/device/v2|DeviceV2API\" docs/development/device-v2/candidate-05-database-design.md docs/development/device-v2/candidate-06-api-documentation.md",
+        "rg -n \"代码事实来源清单|已读取关键文件|源码路径\" docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs",
+        "git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs"
+      ]
+    },
+    {
+      "id": "DEV-DOCS-003D",
+      "status": "open",
+      "dependsOn": [
+        "DEV-DOCS-003C"
+      ],
+      "lanes": [
+        "dev-docs"
+      ],
+      "title": "生成 Device V2 后端开发设计候选文档",
+      "priority": 55,
+      "risk": "Medium",
+      "scope": "按 07 模板，阅读 Go/Gin/GORM 真实目录、router/API/service/model/DTO/DAO/GORM 调用链，生成后端设计候选文档并更新 README。",
+      "nonGoals": "不按 Java/Spring 模板伪造实现，不生成 08-11 文档，不确认新开发任务。",
+      "allowedPaths": [
+        "docs/development/device-v2/**",
+        "docs/openclaw-autodev/evidence/dev-docs/**"
+      ],
+      "acceptance": [
+        "生成 candidate-07-backend-development-design.md。",
+        "README 链接 candidate-01 到 candidate-07。",
+        "文档明确当前真实技术栈为 Go/Gin/GORM。",
+        "未确认事务、权限、缓存、异常口径保留待确认。",
+        "文档或 evidence 包含代码事实来源清单。"
+      ],
+      "validation": [
+        "test -f docs/development/device-v2/candidate-07-backend-development-design.md",
+        "rg -n \"【后端开发设计】|Go / Gin / GORM|DeviceV2API|router|service|model|blocked-human-confirmation\" docs/development/device-v2/candidate-07-backend-development-design.md",
+        "rg -n \"candidate-01-requirements-summary|candidate-02-function-list|candidate-03-entity-attribute-list|candidate-04-prototype-list|candidate-05-database-design|candidate-06-api-documentation|candidate-07-backend-development-design\" docs/development/device-v2/README.md",
+        "rg -n \"代码事实来源清单|已读取关键文件|源码路径\" docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs",
+        "git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs"
+      ]
+    }
+  ]
+}

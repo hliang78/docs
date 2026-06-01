@@ -1,0 +1,129 @@
+{
+  "taskId": "dev-docs",
+  "workerProfileId": "doc-fact-draft-worker",
+  "taskKind": "doc_fact_extraction",
+  "environmentKind": "local_workspace",
+  "projectRoot": "/Users/huangliang/project/OneOPS-ALL",
+  "sourceOfTruth": [
+    "docs/openclaw-autodev/stories/dev-docs.json",
+    "docs/development-doc-templates/**",
+    "target source code and evidence files explicitly cited in the output"
+  ],
+  "currentStory": {
+    "id": "DEV-DOCS-002A",
+    "title": "建立 Device V2 工程文档结构索引",
+    "status": "done",
+    "scope": "在 docs/development/device-v2/ 下建立中文工程文档入口，定义入库与设备管理两个方向的文档结构、状态门禁、来源材料和待人工确认清单。",
+    "nonGoals": [
+      "不确认任何业务规则、API path、DTO、数据库字段、权限模型、fixture、验收口径。",
+      "不修改产品代码和既有 D2 PRD。"
+    ],
+    "allowedPaths": [
+      "docs/development/device-v2/**",
+      "docs/openclaw-autodev/evidence/dev-docs/**"
+    ],
+    "acceptance": [
+      "生成 docs/development/device-v2/README.md。",
+      "README 明确文档状态为 blocked-human-confirmation。",
+      "README 分出入库和设备管理两个方向。",
+      "README 列出来源材料和待人工确认清单。"
+    ],
+    "validation": [
+      "test -f docs/development/device-v2/README.md",
+      "rg -n \"blocked-human-confirmation|Device V2 入库|Device V2 设备管理|待人工确认\" docs/development/device-v2/README.md",
+      "git diff --check -- docs/development/device-v2 docs/openclaw-autodev/evidence/dev-docs"
+    ]
+  },
+  "contextPack": {
+    "mustRead": [
+      "docs/development-doc-templates/README.md",
+      "docs/development-doc-templates/01-需求概要模板.md",
+      "docs/prd-autodev/oneops-engineering-docs-standardization/story-generation-guide.md"
+    ],
+    "optionalRead": [
+      "docs/prd-autodev/d2-launch-acceptance/context-brief.md",
+      "docs/openclaw-autodev/shared-d2.md"
+    ],
+    "forbiddenRead": [
+      "08-11 template files unless the task explicitly expands template scope",
+      "broad evidence JSON without targeted lookup"
+    ],
+    "readBudgetRules": [
+      "Select the target template first, then read source code facts.",
+      "Separate current code facts from AI suggestions and human-confirmation gaps.",
+      "Do not generate candidate documents from search hits alone."
+    ]
+  },
+  "actionPolicy": {
+    "allowedWrites": [
+      "docs/development/**",
+      "docs/openclaw-autodev/evidence/dev-docs/**"
+    ],
+    "allowedActions": [
+      "shell.exec",
+      "document.write",
+      "evidence.write",
+      "source.read"
+    ],
+    "deniedActions": [
+      "product.code.edit",
+      "prd.edit",
+      "credential.persistence",
+      "migration",
+      "commit.push"
+    ],
+    "approvalProfilesAllowed": []
+  },
+  "runtimePolicy": {
+    "precheckCommands": [],
+    "maxTurns": 1,
+    "maxMinutes": 25,
+    "timeoutSeconds": 1500,
+    "patchMaxFiles": 8,
+    "workspaceIsolated": false
+  },
+  "verificationPolicy": {
+    "workerValidationCommands": [
+      "git diff --check -- docs/development docs/openclaw-autodev/evidence/dev-docs",
+      "jq empty docs/openclaw-autodev/stories/dev-docs.json"
+    ],
+    "controllerVerifyOnDone": false,
+    "successCriteria": [
+      "Template structure is preserved.",
+      "Facts and speculation are clearly separated.",
+      "Human-confirmation boundaries remain explicit."
+    ],
+    "blockedClasses": [
+      "business.authorization",
+      "unknown.blocked"
+    ]
+  },
+  "outputContract": {
+    "requiresFooter": true,
+    "footerFields": [
+      "LoopControl",
+      "Task",
+      "Status",
+      "Ticket",
+      "Changed",
+      "Tests",
+      "Next"
+    ],
+    "maxReportLines": 8
+  },
+  "evidenceContract": {
+    "required": true,
+    "summaryPathTemplate": "docs/openclaw-autodev/evidence/dev-docs/<story-id>.md",
+    "requiredClaimFields": [
+      "claim",
+      "sourceRefs",
+      "resultSummary",
+      "residualRisk"
+    ]
+  },
+  "recoveryPolicy": {
+    "maxRepairAttempts": 1,
+    "controllerValidationFailedRequiresEvidenceRead": false,
+    "retryAllowedForClasses": []
+  }
+}

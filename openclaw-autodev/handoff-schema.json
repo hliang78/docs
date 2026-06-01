@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://oneops.local/openclaw-autodev/handoff-schema.json",
+  "title": "OpenClaw Worker Handoff",
+  "type": "object",
+  "required": [
+    "taskId",
+    "updatedAt",
+    "reason",
+    "control",
+    "ticket",
+    "changed",
+    "tests",
+    "next"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "taskId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "updatedAt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "control": {
+      "type": "string",
+      "enum": ["CONTINUE", "DONE", "BLOCKED", "APPROVAL"]
+    },
+    "ticket": {
+      "type": "string",
+      "minLength": 1
+    },
+    "changed": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tests": {
+      "type": "string",
+      "minLength": 1
+    },
+    "next": {
+      "type": "string",
+      "minLength": 1
+    },
+    "blockerClass": {
+      "type": "string",
+      "enum": [
+        "automation.model_runtime",
+        "automation.controller_or_story",
+        "automation.health_check",
+        "environment.runtime",
+        "business.authorization",
+        "business.optimization",
+        "unknown.blocked"
+      ]
+    },
+    "activeStory": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "sourceOfTruth": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "verifyEvidence": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "requiredNextRead": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "progress": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "classification": {
+          "type": "string"
+        },
+        "stage": {
+          "type": "string"
+        },
+        "event": {
+          "type": "string"
+        },
+        "session": {
+          "type": "string"
+        }
+      }
+    },
+    "lastReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "control": {
+          "type": "string"
+        },
+        "ticket": {
+          "type": "string"
+        },
+        "changed": {
+          "type": "string"
+        },
+        "tests": {
+          "type": "string"
+        },
+        "next": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

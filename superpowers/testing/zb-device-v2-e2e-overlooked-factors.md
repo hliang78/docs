@@ -235,6 +235,8 @@
 - `REAL-074` 之后解读 `last_updated / last_gather_at` 也要注意区分“input 自己真正完成的时间”和“整轮循环起点时间”。如果 later input 明显比 earlier input 晚很多才从 `unknown` 变成 `running`，但两者却共享同一个更早时间戳，那更像是时间戳口径 bug；修复后，这两条时间应该能自然拉开。
 - `REAL-075` 之后还要补一层判断：如果 agent 日志能证明 `snmp` 比 `ping` 更早收到 apply，但它仍明显更晚才从 `unknown` 变成 `running`，就不要再默认是“后续无关 replace 把它 priority 覆盖掉了”。priority carry-over 修完后，这类窗口更可能是 `snmp` 自己这一轮 gather 的真实耗时。
 - `REAL-076` 之后这个判断口径还要再细一层：如果 debug 日志显示 `snmp` 自己真正的 gather duration 只有几秒，但它距离 apply 很久之后才开始，那优先怀疑的是“旧 priority backlog 抢在当前 replay 前面”，而不是 SNMP 插件本身慢。修掉这层后，`snmp` 的完成时间应该会收敛到接近 `ping + snmp` 自身耗时的量级，而不是继续卡在几十秒甚至一分钟以上。
+- `REAL-077` 之后还要再补一层：如果 agent 已经切到 Telegraf 式 per-input runner，并且像 `DVCE1EE3F7D394C` 这类 replay 在恢复了几十条旧任务的情况下也能在首轮查询就直接返回 `running`，那就不要再默认把后续任何慢窗口都归因到“全局串行 sweep”或“priority backlog”。这时若某条任务仍明显慢很多，优先看的是该 input 自己的真实 gather 时长、同设备限流、或监控模板内容体量。
+- `REAL-078` 之后还要补一个解读口径：如果 replay 后 `ping/snmp` 已经在新版本上返回 `running`，但 `t+30s` 左右再次查询时 `last_updated` 没有继续推进，不要马上判成“采集停了”。先对照当前 `telegraf_inputs.interval`；像本轮 `interval=60s` 的配置下，`21:08:44` 已完成 fresh gather，而 `21:09:30` 仍保持同一 `last_updated` 是预期表现，关键是版本是否已切到本轮、以及 agent 日志里是否已有 fresh apply 和 metric dump。
 
 ### 11. 阻断后“没刷新 agent 任务”也是正式验收项
 

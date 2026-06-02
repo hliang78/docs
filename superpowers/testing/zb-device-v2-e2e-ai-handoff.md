@@ -389,6 +389,8 @@ cd /home/jacky/project/OneOPS-ALL/quick_env
 - later input 复用整轮起点时间戳，这一层也已经修掉
 - 较早更新 input 会被后续无关 replace 挤掉 priority，这一层也已经修掉
 - 旧 priority backlog 会抢在当前 replay 前面，这一层也已经修掉
+- agent 侧全局串行 sweep 已替换成 Telegraf 式 per-input runner；`REAL-077` 在“恢复 41 条持久化任务后立即 replay”的最差场景下，也没有再观察到 `unknown` 窗口，`ping/snmp` 直接在当前版本上收敛为 `running`
+- `REAL-078` 又在当前工作树上补了一次本地复验：`2026-06-01 21:08 +08:00` 对 `DVCE1EE3F7D394C` 执行真实 `store/start(async=false)`，得到 `task_id=entv2_1780319299724584026`、版本 `1780319314`；agent 日志确认 `21:08:34.311/21:08:34.421` 收到 `snmp/ping` fresh apply，`21:08:34.524` 已出现 `172.32.2.15` 的 `snmp` metric dump，`21:08:36.486` 出现 `ping` metric dump，`21:08:44` 查询时两条 runtime 已都是 `running`，设备级也已回到 `healthy`
 - 仍然可能存在的短暂 `unknown`，现在更像是 `ping/snmp` 自身真实 gather 耗时之和，而不再像前面几层 priority/并发/时间戳 bug
 - 下一步如果还要继续压时间，重点已经不是“会不会排不到前面”，而是看值不值得把 `ping` 和 `snmp` 两条真正并行化，或者让同设备的 `snmp` 比 `ping` 先跑
 
@@ -404,7 +406,14 @@ cd /home/jacky/project/OneOPS-ALL/quick_env
 - 目标是先把当前 agent 从“全局串行 sweep”改成“每个 input 独立 runner + overrun skip + bounded SNMP concurrency”
 - 先不做“把多个 OneOps SNMP 任务合并成一个多-agent SNMP input”的语义级 batching；那会是下一份独立计划
 
-下一位 AI 如果继续开发，建议默认按计划里的 Task 1 -> Task 6 顺序走，而不是重新在旧的 global priority queue 上继续打补丁
+当前状态更新：
+
+- 计划里的核心代码已经落地到 `ctrlhub/controller/agent/pkg/ops/metrics`
+- `go test ./pkg/ops/metrics ./pkg/config ./cmd/agent ./app -count=1 -timeout 120s` 已通过
+- `REAL-077` 已补到真实联调证据，证明 per-input runner 在当前现场是生效的
+- `REAL-078` 进一步证明后续补上的 limiter 取消路径 / 公平性 / offset 修复，没有把真实采集链路打坏；当前工作树仍能在恢复旧任务后完成 fresh gather
+
+下一位 AI 如果继续开发，建议默认把这份计划当作“核心重构已完成、后续继续做真实运行验证和更大规模容量验证”的基线，而不是重新在旧的 global priority queue 上继续打补丁
 
 ### 9.2 通用 SNMP 策略对 `VSR1000` 的内容覆盖
 

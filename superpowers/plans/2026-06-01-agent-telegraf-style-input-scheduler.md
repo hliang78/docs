@@ -4,6 +4,21 @@
 
 **Goal:** Refactor the OneOps agent collector from a global serial input sweep into a Telegraf-style per-input scheduler with bounded SNMP concurrency, so thousands of monitoring tasks no longer share one blocking gather queue.
 
+## Current Status
+
+- Implemented on `2026-06-01` in `ctrlhub/controller/agent/pkg/ops/metrics`:
+  - per-input runner registry
+  - diff-based `ReplaceAllInputs()`
+  - Telegraf-style overrun skip behavior
+  - bounded SNMP global / per-device concurrency
+  - scheduler config wiring in agent YAML + startup path
+- Verified in code with:
+  - `go test ./pkg/ops/metrics ./pkg/config ./cmd/agent ./app -count=1 -timeout 120s`
+- Verified in real runtime with:
+  - `REAL-077` in [zb-device-v2-e2e-master-outline.md](/home/jacky/project/OneOPS-ALL/docs/superpowers/testing/zb-device-v2-e2e-master-outline.md)
+  - evidence shows `DVCE1EE3F7D394C` replay converging directly to `ping/snmp=running` even after restoring `41` persisted agent tasks
+- Remaining worthwhile follow-up is no longer “remove the global queue” but larger-scale runtime validation and, if needed, a separate batching/sharding plan.
+
 **Architecture:** Replace the current single `collectLoop() -> gatherMetricsSnapshot()` model with an input-runner registry: each input owns its own ticker, immediate-trigger channel, and overrun protection, while processors/outputs remain shared. Add Telegraf-like scheduling controls (`collection_jitter`, `collection_offset`) plus explicit SNMP concurrency limits so we gain Telegraf’s isolation benefits without letting thousands of SNMP goroutines stampede devices or outputs. This plan intentionally does **not** batch multiple OneOps tasks into one SNMP input instance yet; that is a higher-risk semantic change and should be a separate follow-up after the scheduler refactor is stable.
 
 **Tech Stack:** Go, existing Telegraf input/output plugins, `go test`, existing runtime APIs, YAML config, Markdown docs, Git

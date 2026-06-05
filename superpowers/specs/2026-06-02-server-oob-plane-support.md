@@ -274,6 +274,75 @@ Do not let `snmp` and `snmp_outband` fall back to each other.
 
 `snmp_outband` means OOB SNMP.
 
+OOB SNMP monitoring must also require a successful OOB SNMP probe.
+
+Configuration is not reachability.
+
+`out_band_ip + out_band:snmp` means the target is configured.
+
+`oob_snmp_probe.status=success` means the target is verified for monitoring.
+
+Do not push `server_oob_snmp` when the probe is missing, pending, failed, timed out, or authentication failed.
+
+Probe state is not the same thing as device store state.
+
+For `in_band + OOB` servers, an OOB SNMP probe failure must not turn a successful in-band store run into a failed device store run.
+
+For `in_band + OOB` servers, an OOB SNMP probe failure only means:
+
+```text
+do not push server_oob_snmp monitoring
+do not use OOB facts as verified hardware-health facts
+keep in-band store and in-band monitoring independent
+```
+
+For `OOB-only` servers, an OOB SNMP probe failure means the device may remain registered, but OOB fact collection and OOB monitoring are not verified.
+
+Collection plan behavior:
+
+```text
+if oob_snmp_probe.status is missing:
+    next action = retry_store
+    reason = oob_snmp_probe_pending
+
+if oob_snmp_probe.status is not success:
+    next action = retry_store
+    reason = oob_snmp_probe_<status>
+
+if oob_snmp_probe.status is success:
+    no OOB probe retry is needed
+```
+
+`retry_store` here means rerun the Device V2 store pipeline for the selected device, so DC2/controller can probe OOB SNMP again and write a fresh `oob_snmp_probe` state.
+
+Recommended probe state:
+
+```json
+{
+  "oob_snmp_probe": {
+    "status": "success",
+    "address": "10.1.1.5",
+    "credential_key": "out_band:snmp",
+    "checked_at": "2026-06-03T10:00:00+08:00",
+    "error_code": ""
+  }
+}
+```
+
+Failed probe example:
+
+```json
+{
+  "oob_snmp_probe": {
+    "status": "failed",
+    "address": "10.1.1.5",
+    "credential_key": "out_band:snmp",
+    "checked_at": "2026-06-03T10:00:00+08:00",
+    "error_code": "timeout"
+  }
+}
+```
+
 The monitoring gate must be plane-aware.
 
 In-band monitoring checks in-band credentials.
@@ -681,6 +750,7 @@ add an independent server_oob_snmp strategy set
 the strategy set should be catalog=SERVER
 the strategy set should be auto_apply_on_store=true only when the environment wants OOB SNMP monitoring
 the strategy set should select only devices that have out_band_ip + out_band:snmp
+the strategy set or resolver should require oob_snmp_probe.status=success before rendering a target
 the strategy set should render target address from out_band_ip / OOB SNMP access point
 the strategy set should resolve credential usage as snmp_outband
 ```
@@ -1022,7 +1092,15 @@ OOB task:
   target_part = 172_21_160_1_161
   config contains udp://172.21.160.1:161
   agent task enabled = true
+  agent runtime status = running
+  agent runtime sync_status = in_sync
+  agent local task version = 1780447453
   config contains sysDescr/sysName/sysUpTime
+  config contains access_plane=out_band
+  config contains protocol=snmp
+  config contains monitoring_profile=server_oob_snmp
+  config contains credential_binding=snmp_outband
+  config contains source_address=172.21.160.1
   config does not contain in-band address 172.21.144.1
   config does not contain ENTITY-MIB table
   config does not contain ifTable
@@ -1035,10 +1113,48 @@ In-band task:
   config does not contain OOB address 172.21.160.1
 ```
 
-Still not closed:
+Agent-side tagged TOML evidence:
+
+```toml
+[[inputs.snmp]]
+  agents = ["udp://172.21.160.1:161"]
+  version = 2
+  community = "***"
+  interval = "60s"
+
+  [inputs.snmp.tags]
+    source_address = "172.21.160.1"
+    device_id = "DEV20260603000001"
+    protocol = "snmp"
+    device_name = "张江IDC机房-D05-21-21"
+    access_plane = "out_band"
+    monitoring_profile = "server_oob_snmp"
+    credential_binding = "snmp_outband"
+```
+
+Agent-side source:
 
 ```text
-OOB DC2 fact merge for a real OOB-only server still needs longest-chain runtime validation.
+/home/sy_cmsr/app/agent/data/telegraf_tasks/tasks.json
+```
+
+Agent-side verification checks:
+
+```text
+agents = ["udp://172.21.160.1:161"] = yes
+access_plane = "out_band" = yes
+protocol = "snmp" = yes
+monitoring_profile = "server_oob_snmp" = yes
+credential_binding = "snmp_outband" = yes
+source_address = "172.21.160.1" = yes
+device_id = "DEV20260603000001" = yes
+```
+
+Current phase closure notes:
+
+```text
+Current code-chain scope is closed.
+Current weakness-test scope is closed.
 OOB ifTable isolation now has unit evidence:
   server_oob_snmp contract excludes snmp_if_table.
   OOB hardware facts from snmp_sys_descr and snmp_entPhysicalEntry do not build interface/ip/mac/neighbor/arp resources.
@@ -1047,7 +1163,39 @@ server_oob_snmp production seed now defaults to enabled=0 and auto_apply_on_stor
 Pilot DBs may keep enabled=1 and auto_apply_on_store=1 when OOB monitoring validation is desired.
 OOB render targets now carry access_plane, protocol, monitoring_profile, credential_binding, and source_address.
 Final generated TOML now carries the same OOB tags under [inputs.snmp.tags].
-Agent-side downloaded task still needs runtime sampling after the tagged build is deployed.
+OOB probe failed/missing now appears in collection plans as retry_store, without changing successful in-band store semantics.
+```
+
+2026-06-03 weakness retest addendum:
+
+```text
+Reimporting test_data2 and retrying store exposed a stale prepared_facts issue.
+metadata.prepare_result.prepared_facts.access.credential_ref_out_band could carry an old OOB SNMP ref.
+The stale ref caused retry_store to recreate credential_ref_out_band, credential_refs.out_band, and credential_refs.out_band:ssh.
+This was incorrect because out_band:snmp is not a generic OOB CLI credential.
+
+Fix:
+  generic OOB credential extraction skips out_band SNMP endpoints
+  collected access facts skip out_band SNMP endpoint credential_ref for credential_ref_out_band
+  prepared facts replay skips stale credential_ref_out_band when it matches out_band:snmp or an OOB SNMP endpoint
+
+Runtime verification:
+  after reimport + retry_store, DVC94FA66E51531 keeps credential_refs.out_band:snmp only
+  credential_ref_out_band remains empty
+  credential_refs.out_band remains absent
+  credential_refs.out_band:ssh remains absent
+  oob_snmp_probe.status remains success
+```
+
+Productization still open:
+
+```text
+real OOB-only server DC2 fact merge runtime validation
+UI display implementation
+alarm policy implementation
+Redfish/IPMI implementation
+ENTITY-MIB inventory rollout
+additional production rollout workflow changes
 ```
 
 Current phase should not include:
@@ -1450,16 +1598,25 @@ Required regression cases:
 4. server with out_band_ip but no out_band:snmp
    expected: no OOB SNMP task; precise gate reason
 
-5. server with in-band SNMP only
+5. server with out_band_ip + out_band:snmp but oob_snmp_probe=failed
+   expected: no OOB SNMP task; precise probe failure reason
+
+6. server with out_band_ip + out_band:snmp but no oob_snmp_probe
+   expected: no OOB SNMP task; status treated as pending
+
+7. server with in-band SNMP only
    expected: in-band SNMP task only; no OOB SNMP task
 
-6. server with in-band SNMP + OOB SNMP
+8. server with in-band SSH + OOB SNMP + failed OOB probe
+   expected: device store can remain successful through in-band; server_oob_snmp is not pushed; collection plan shows retry_store for OOB probe
+
+9. server with in-band SNMP + verified OOB SNMP
    expected: two SNMP tasks with different addresses and different credential usages
 
-7. server with OOB Redfish only
+10. server with OOB Redfish only
    expected: no OOB SNMP task; future Redfish strategy set may match
 
-8. network device with SNMP
+11. network device with SNMP
    expected: no server_oob_snmp match
 ```
 
@@ -1483,7 +1640,53 @@ agent metric debug dump
 
 Do not accept API success alone.
 
-## 27. Remaining Decisions
+## 27. Weakness Audit
+
+High-risk weak points:
+
+```text
+1. OOB-only legacy snmp_credential_ref must not become credential_refs.snmp
+2. server_oob_snmp must not fall back to in_band_ip when out_band_ip is missing
+3. server_oob_snmp must not render a target without snmp_outband credential binding
+4. server_oob_snmp must not render a target unless oob_snmp_probe.status=success
+5. in-band SSH plus OOB SNMP must keep in-band DC2 collection authoritative
+6. OOB SNMP facts must not create server OS interface resources
+7. server_oob_snmp seed must remain present-disabled unless a pilot explicitly enables it
+```
+
+Weakness tests added or confirmed:
+
+```text
+TestNormalizeDeviceV2WriteAttributesBuildsOutBandSNMPAccessPoint
+TestNormalizeDeviceV2WriteAttributesDoesNotCreateEmptyOutBandSSHForOOBOnlySNMP
+TestTargetResolverRegistryV2_ResolveTargets_ServerOOBSNMPDoesNotFallbackToInBandWhenOOBMissing
+TestTargetResolverRegistryV2_ResolveTargets_ServerOOBSNMPRequiresOutBandCredential
+TestTargetResolverRegistryV2_ResolveTargets_ServerOOBSNMPRequiresSuccessfulProbe
+TestTargetResolverRegistryV2_ResolveTargets_ServerOOBSNMPRequiresProbeStatusPresent
+TestTargetResolverRegistryV2_ResolveTargets_ServerOOBSNMPUsesOutBandEndpoint
+TestDeviceV2DC2StoreSidecarReportsMissingOutBandAddressForOOBSNMP
+TestDeviceV2DC2StoreSidecarReportsMissingOutBandCredentialForOOBSNMP
+TestDeviceV2DC2TargetKeepsInBandServerWhenCLICredentialExists
+TestDeviceV2DC2OOBSNMPHardwareFactsDoNotBuildInterfaceResources
+TestServerOOBSNMPSeedDefaultsToPresentDisabled
+```
+
+Focused weakness-test commands:
+
+```text
+go test ./app/device/v2/service/impl -run 'TestNormalizeDeviceV2WriteAttributesBuildsOutBandSNMPAccessPoint|TestNormalizeDeviceV2WriteAttributesDoesNotCreateEmptyOutBandSSHForOOBOnlySNMP' -count=1
+go test ./app/platform/service/impl -run 'TestTargetResolverRegistryV2_ResolveTargets_ServerOOBSNMPDoesNotFallbackToInBandWhenOOBMissing|TestTargetResolverRegistryV2_ResolveTargets_ServerOOBSNMPRequiresOutBandCredential|TestTargetResolverRegistryV2_ResolveTargets_ServerOOBSNMPRequiresSuccessfulProbe|TestTargetResolverRegistryV2_ResolveTargets_ServerOOBSNMPRequiresProbeStatusPresent|TestTargetResolverRegistryV2_ResolveTargets_ServerOOBSNMPUsesOutBandEndpoint' -count=1
+go test ./app/entity/v2/service/impl -run 'TestDeviceV2DC2StoreSidecarReportsMissingOutBandAddressForOOBSNMP|TestDeviceV2DC2StoreSidecarReportsMissingOutBandCredentialForOOBSNMP|TestDeviceV2DC2TargetKeepsInBandServerWhenCLICredentialExists|TestDeviceV2DC2OOBSNMPHardwareFactsDoNotBuildInterfaceResources' -count=1
+go test ./app/platform/service/impl -run 'TestServerOOBSNMPSeedDefaultsToPresentDisabled' -count=1
+```
+
+The weakness tests protect against silent plane downgrade.
+
+Silent plane downgrade means the system accepts an OOB request but executes against an in-band address or in-band credential.
+
+Silent plane downgrade is not allowed.
+
+## 28. Remaining Decisions
 
 Open decisions:
 
@@ -1506,7 +1709,7 @@ define alarm ownership after metric labels are stable
 prototype Redfish as a parallel OOB protocol, not as a replacement for SNMP
 ```
 
-## 28. Deferred Productization Backlog
+## 29. Deferred Productization Backlog
 
 This is a deferred backlog.
 
@@ -1517,7 +1720,7 @@ When the current phase is closed, the next phase should focus on product hardeni
 Recommended tasks:
 
 ```text
-1. Add explicit plane labels to OOB SNMP rendered metrics
+1. Build UI and alarm grouping rules on the existing OOB plane labels
 2. Add matcher tests for in-band + OOB coexistence
 3. Add API/DB visibility for strategy_set_id and access_plane on monitoring tasks
 4. Add UI grouping contract for OOB monitoring
@@ -1535,7 +1738,7 @@ metric labels are plane-aware
 display does not confuse OOB SNMP with OS SNMP
 ```
 
-## 29. Deferred Productization Plan File
+## 30. Deferred Productization Plan File
 
 The deferred implementation plan is:
 

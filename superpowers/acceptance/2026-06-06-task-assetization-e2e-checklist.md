@@ -31,12 +31,12 @@
 
 - The asset detail/data model is generic and covers multiple runtime families, including Ansible, shell, Terraform, OpenTofu/tofu, and Terragrunt-style task assets.
 - The first shipped precheck/start/config-backup execution flow remains scoped to Ansible `network-config-backup`.
-- The final acceptance did not modify UI or backend code; only this checklist was updated.
+- Final review found two Important UI gaps after the first acceptance pass: task device-result row actions and structured asset contract summary. UI follow-up `9763215` closed those gaps; backend code was not modified during final acceptance.
 
 ### Commits Under Acceptance
 
 - Backend worktree HEAD: `6917e440` (`task-assetization-e2e`).
-- UI commits validated: `e85d350`, `5801c7a`, `a5c4495`, `3737480`, `916fafd`.
+- UI commits validated: `e85d350`, `5801c7a`, `a5c4495`, `3737480`, `916fafd`, `9763215`.
 - Docs checklist baseline before this final update: `0933887`.
 
 ### Worktree Status Evidence
@@ -55,12 +55,23 @@
 
 - `npm run typecheck` -> exit 0.
 - `npm run build:force` -> exit 0.
-- Build output included `12198 modules transformed` and `built in 3m 27s`.
+- Post-final-review UI verification also ran `git diff --check` -> exit 0.
+- Latest post-`9763215` build output included `12198 modules transformed` and `built in 3m 8s`.
 - Build warning retained: `Some chunks are larger than 500 kB after minification`; this final acceptance did not attempt bundle splitting.
+
+### Final Review Follow-up
+
+- Final reviewer initially returned `NOT_READY` with no Critical findings and two Important findings:
+  - task detail device results needed row actions for child task, governed artifact download, and device backup history navigation.
+  - task template asset detail needed structured common contract metadata rather than only raw Contract JSON.
+- UI follow-up commit `9763215` (`fix: complete task asset user flows`) addressed both:
+  - `TaskManagement.vue` device-result rows now expose child-task navigation, `artifact_download_url` download links, and `DeviceV2Management` navigation with `query.code` for device detail/config-backup history.
+  - `TaskTemplateManagement.vue` asset detail now shows supported device types, vendor families, access planes, credential contract, output contract, runtime-specific contract, and sensitive artifact note before the redacted raw Contract JSON.
+- Final reviewer re-reviewed `916fafd..9763215` and returned `READY` with no Critical or Important findings.
 
 ### Secret / Sensitive Information Check
 
-- UI diff range checked: `d293e51..916fafd`.
+- UI diff range checked: `d293e51..9763215`.
 - Secret-like grep over added UI diff lines matched only `credential_ref`, `credential_source`, and redaction helper code/text.
 - Exact high-risk token/key pattern check for PEM private keys, AWS access keys, GitHub tokens, Slack tokens, OpenAI-style keys, and long bearer tokens returned no matches.
 - Acceptance result: no real secret literal found in the UI diff; newly added UI shows reference/source fields and includes redaction behavior for resolved secret-like fields.

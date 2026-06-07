@@ -69,6 +69,29 @@ Phase 1 acceptance criteria:
 - Configuration view does not leak sensitive fields by default.
 - Batch operations return counts for success, skipped, and failed rows.
 
+## Configuration Collection Task Center
+
+Configuration management owns the collection task lifecycle.
+
+The task center covers:
+
+- one-time collection for selected assets;
+- scheduled collection for network devices and servers;
+- task status and recent run review;
+- failed target recollection;
+- transition from task result to configuration version.
+
+The first implementation reuses platform task and scheduled task APIs. Config management marks its tasks with project ids `project-network-config-management` and `project-server-config-management`, plus `config_management=true` in `extra_vars_json`.
+
+The operator workflow is:
+
+1. Select assets from the configuration version queue or task composer.
+2. Choose collection mode: run once or schedule.
+3. Confirm asset type, access plane, template, agent, and credential source.
+4. Create the task.
+5. Review task status and failed targets.
+6. Open generated configuration versions from the same page.
+
 ## Phase 1 Server Collection Contract
 
 Server configuration management uses the same `ConfigVersion` lifecycle as network devices. The producer is still a task runtime output; the difference is that the asset identity is a server and the collector is usually an Agent-side shell, Python, PowerShell, or Ansible task.

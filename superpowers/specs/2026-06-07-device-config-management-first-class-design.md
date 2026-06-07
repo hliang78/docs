@@ -116,6 +116,17 @@ Operationally this means the closed loop for servers is:
 4. Backend creates a `ConfigVersion` for `server|asset_code|server_system_snapshot|host_agent`.
 5. Configuration management shows the server in the version queue, with the same view, download, compare, and baseline operations as network devices.
 
+Quick env must carry the same initialization data. The first server-side seed template is:
+
+- template: `task-center-ansible-server-config-collection`
+- playbook: `quick_env/init-configs/gitea/source-repo/ansible/server-config-collection/site.yml`
+- variable set: `task-center-ansible-server-config-collection-defaults`
+- catalog files:
+  - `quick_env/init-configs/gitea/source-repo/templates/task-template-catalog.json`
+  - `quick_env/init-configs/gitea/source-repo/templates/variable-set-catalog.json`
+
+Any future configuration-management task template, runtime contract, or seed SQL change must be synchronized to quick env in the same change set. Otherwise a fresh quick env instance can start without the template or seed data needed to reproduce the configuration-management workflow.
+
 ## Non-Goals For MVP
 
 - Full compliance policy engine.

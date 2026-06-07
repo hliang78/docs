@@ -4,7 +4,7 @@
 
 **Goal:** Promote device configuration management from backup history metadata into a first-class version, change-detection, and redacted-diff capability.
 
-**Architecture:** Build the MVP in three layers: backend config-version facts derived from existing `platform_device_config_backup`, backend redacted diff APIs, then frontend version history and diff drawer in Device V2 detail. Baseline, drift review, and config management center remain future phases; the MVP proves immutable versions, previous-version change detection, and governed historical diff.
+**Architecture:** Build the MVP in three layers: backend config-version facts derived from existing `platform_device_config_backup`, backend redacted diff APIs, then frontend configuration management surfaces. Frontend work includes Device V2 detail version history, a governed diff drawer, an independent `配置管理` page, and a temporary Device V2 top button that opens that page. Baseline, drift review, and final menu placement remain future phases; the MVP proves immutable versions, previous-version change detection, and governed historical diff.
 
 **Tech Stack:** Go, Gin, GORM, MySQL-compatible platform models, Vue 3, TypeScript, Ant Design Vue.
 
@@ -20,8 +20,10 @@ Implement MVP phases from `docs/superpowers/specs/2026-06-07-device-config-manag
 - Device config version list API.
 - Redacted unified diff API.
 - Device detail config management UI with version history and diff drawer.
+- Independent config management page shell for cross-device discovery.
+- Device V2 management page top `配置管理` button as the development-stage entry.
 
-Do not implement baseline, drift policy, review workflow, alerting, or a global config management center in this plan.
+Do not implement baseline, drift policy, review workflow, alerting, or final sidebar/menu placement in this plan. If a route is required for the independent page, register it as hidden or non-menu and reach it only from the Device V2 top button during development.
 
 ## File Map
 
@@ -47,6 +49,9 @@ Frontend:
 
 - Modify `src/api/device/device-v2.ts` to add config version and diff types/API helpers.
 - Modify `src/views/device/DeviceV2ManagementGrouped.vue` to show version history and diff drawer.
+- Modify `src/views/device/DeviceV2ManagementGrouped.vue` to add a top `配置管理` button.
+- Create `src/views/device/DeviceConfigManagement.vue` for the independent config management page.
+- Modify `src/router/utils.ts` only as needed to support a hidden or non-menu route for the independent page.
 - Add smoke script `scripts/device-config-management-smoke.ts` if needed for focused frontend validation.
 
 Docs:
@@ -918,7 +923,76 @@ git commit -m "feat: compare device config versions"
 
 ---
 
-### Task 9: Final Acceptance
+### Task 9: Independent Config Management Page And Development Entry
+
+**Files:**
+- Create: `src/views/device/DeviceConfigManagement.vue`
+- Modify: `src/views/device/DeviceV2ManagementGrouped.vue`
+- Modify: `src/router/utils.ts`
+
+- [ ] **Step 1: Add hidden config management route**
+
+Modify `src/router/utils.ts` near the existing `deviceV2ManagementRoute`:
+
+```ts
+const deviceConfigManagementRoute: RouteRecordRaw = {
+  path: 'device/config-management',
+  name: 'DeviceConfigManagement',
+  component: () => import('@/views/device/DeviceConfigManagement.vue'),
+  meta: {
+    title: '配置管理',
+    requiresAuth: true,
+    hideInMenu: true,
+  },
+};
+```
+
+Add it to the same child route list as the other hidden Device V2 workbench routes. This is a development-stage route only; do not add final sidebar/menu metadata in this plan.
+
+- [ ] **Step 2: Create independent page shell**
+
+Create `src/views/device/DeviceConfigManagement.vue` as an operational overview page, not a marketing page. It should use the existing Ant Design Vue patterns and show compact work sections:
+
+- 今日变化设备
+- 未审核变化
+- 已漂移设备
+- 无基线设备
+- 备份失败设备
+- 长时间未备份设备
+
+For MVP implementation, sections may use backend data that already exists or documented placeholders only when the backing API is explicitly deferred. Do not pretend unsupported metrics are live.
+
+- [ ] **Step 3: Add Device V2 top entry button**
+
+Modify the top action area of `src/views/device/DeviceV2ManagementGrouped.vue` to add a `配置管理` button. The button should navigate with:
+
+```ts
+router.push({ name: 'DeviceConfigManagement' });
+```
+
+The button belongs with page-level actions, not inside a device row or device detail drawer.
+
+- [ ] **Step 4: Run frontend verification**
+
+```bash
+npm run typecheck
+npm run build:force
+```
+
+Expected: both pass. Existing Vite large chunk warning may remain.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add src/views/device/DeviceConfigManagement.vue \
+  src/views/device/DeviceV2ManagementGrouped.vue \
+  src/router/utils.ts
+git commit -m "feat: add config management entry page"
+```
+
+---
+
+### Task 10: Final Acceptance
 
 **Files:**
 - Create: `docs/superpowers/acceptance/2026-06-07-device-config-management-first-class-checklist.md`
@@ -961,6 +1035,8 @@ Create `docs/superpowers/acceptance/2026-06-07-device-config-management-first-cl
 - Config versions are first-class facts derived from successful device config backups.
 - Change detection compares each new version with the previous successful version.
 - Historical diff is returned only as redacted unified diff.
+- The independent config management page exists and is reachable from the Device V2 top `配置管理` button.
+- The config management page is not added to the final sidebar/menu structure during development.
 
 ## Verification
 
@@ -996,6 +1072,6 @@ git commit -m "docs: record config management acceptance"
 
 ## Self-Review
 
-- Spec coverage: MVP covers version facts, change detection, diff, frontend version history, and governed diff drawer. Baseline/drift/review center are explicitly deferred.
+- Spec coverage: MVP covers version facts, change detection, diff, frontend version history, governed diff drawer, independent config management page shell, and Device V2 development entry. Baseline/drift/review workflow and final menu placement are explicitly deferred.
 - Completeness scan: no unresolved filler terms remain in the plan.
 - Type consistency: DTO names use `ConfigVersion*` in Go and `DeviceConfigVersion*` in frontend helpers; backend model uses `ConfigVersion`.

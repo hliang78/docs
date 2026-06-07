@@ -359,6 +359,18 @@ MVP redaction can be regex-based and vendor-agnostic. Future versions can add ve
 
 ## Frontend Design
 
+### Page Ownership And Development Entry
+
+Config management needs an independent page because it owns cross-device work: recent changes, unreviewed changes, drift, missing baselines, failed backups, and stale backups. Device detail remains the per-device context, but it should not be the only place where operators discover configuration risk.
+
+Development-stage navigation should be intentionally narrow:
+
+- Build an independent `配置管理` page as the future center surface.
+- Do not add the page to the formal menu structure yet.
+- Add a top-level `配置管理` button on the Device V2 management page as the temporary entry point.
+- If the frontend router requires a route for the page, register it as a hidden or non-menu route and navigate to it from the Device V2 button.
+- After the capability is implemented and validated, decide whether the final menu entry belongs under device operations, platform operations, or a dedicated configuration domain.
+
 ### Device Detail Config View
 
 The existing config backup block should evolve into a config management block.
@@ -405,7 +417,9 @@ It must not show raw config preview as the default state.
 
 ### Config Management Center
 
-This is not required for MVP but should shape the domain.
+An independent config management page is required for the domain. During development it should be reachable from the Device V2 management page through the top `配置管理` button, not from the final sidebar menu.
+
+The MVP version of this page can start as an operational overview and discovery surface. It does not need the full governance workflow, but it should establish the page shape that future baseline, drift, review, and alerting features will grow into.
 
 Views:
 
@@ -464,6 +478,8 @@ Backfill should not require reading artifact content. Artifact content is needed
 
 ### Frontend
 
+- Device V2 management page has a top `配置管理` button that opens the independent config management page.
+- The independent config management page exists but is not added to the final menu structure during development.
 - Device detail shows current config version and version history.
 - Version history clearly shows `first_backup`, `no_change`, and `changed`.
 - Operator can compare a version with previous version.
@@ -485,6 +501,7 @@ Backfill should not require reading artifact content. Artifact content is needed
 - Project backups into versions.
 - Derive previous-version status by hash.
 - Update device detail to show version/change state.
+- Add the independent config management page shell and the Device V2 top entry button.
 
 ### Phase 2: Historical Diff
 

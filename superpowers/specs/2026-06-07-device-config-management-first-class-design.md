@@ -555,6 +555,29 @@ Action principle:
 - Every list row must expose the next likely action: diff, review, set baseline, retry collection, view task, or open asset detail.
 - The page should show risk and work queues first, then historical detail.
 
+### Network Device Daily Closed Loop
+
+Network devices are the first operational example for the config management center. The daily path should be visible and executable from the page, not hidden behind task history.
+
+Closed-loop path:
+
+1. `发现工作项`: the operator starts from actionable counters such as changed devices, backup failures, missing baselines, stale backups, and drifted assets.
+2. `确认范围`: the operator narrows the queue by device, vendor family, access plane, config scope, and latest work status.
+3. `执行预检`: before backup or retry, the system checks netlink or Ansible reachability, credential availability, access plane, collector support, and artifact storage readiness.
+4. `发起备份`: the selected devices are collected through netlink or Ansible and linked to a task run.
+5. `版本入库`: every successful collection becomes an immutable config version with source task, artifact, hash, timestamp, and previous-version relation.
+6. `差异审查`: changed versions are compared with the previous successful version or active baseline. The UI should show redacted diff, summary counts, and task provenance.
+7. `基线/修复`: the operator accepts expected change as the new baseline, records an expected change, creates or links a repair task for unexpected change, or leaves it unreviewed with a reason.
+8. `复采关闭`: after baseline update or repair, the operator triggers or waits for another backup. The loop closes only when the latest version is stable, diff status is reviewed, and baseline status is acceptable.
+
+Frontend closure rules:
+
+- A summary card must lead to a filtered work queue.
+- A selected row must show the current stage, current evidence, and the next likely action.
+- The page must keep the operator on the same workspace while drilling into device detail or task detail.
+- If the backend write action is not available yet, the UI should mark the action as pending instead of pretending it completed.
+- A work item is considered closed only when the latest collection result, diff status, baseline status, and review state all agree.
+
 ### Device Detail Config View
 
 The existing config backup block should evolve into a config management block.

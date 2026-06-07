@@ -43,6 +43,32 @@ The current implementation does not yet have:
 6. Support network devices first, then servers and application configuration through the same lifecycle.
 7. Produce change facts that other domains can consume: device detail, server detail, config center, alerting, audit, and future policy.
 
+## Phase 1 Daily Operations
+
+Phase 1 should make configuration management usable in daily network-device work. The page should support a closed loop from finding an item, inspecting the configuration, comparing changes, accepting the current version, and re-collecting failed or stale devices.
+
+Required phase 1 auxiliary functions:
+
+- View configuration content for the selected version. The default view is redacted so passwords, tokens, community strings, and private keys are not exposed in normal browsing.
+- Download configuration content for the selected version. Downloads keep the original configuration content and filename where possible.
+- Compare the current version with the previous version for daily change review.
+- Compare any two configuration versions from the configuration management page. The two versions may belong to different devices so operators can compare peer devices, migration targets, or suspected drift sources.
+- Set the selected version as the baseline for a single device.
+- Batch set the current listed/selected versions as baselines. Rows without a version are skipped; failed rows return a per-device reason.
+- Retry configuration backup for failed or stale devices. The UI should create a `network_config_backup` task with `device_codes` and let the backend fan out per device. Failed-device retry should be available as a queue-level action, not only as a per-row action.
+- Show daily identification fields in the version queue: device name, device code, management IP, vendor, model, and asset status. These fields should be enriched from Device V2 instead of inferred by the frontend.
+- Keep device-detail navigation as one clear action. Configuration operations should stay in configuration management; asset detail navigation should not compete with the primary configuration action.
+- Keep the page action-oriented. Text on the page should either identify state, trigger an action, filter a queue, or explain a blocking condition.
+
+Phase 1 acceptance criteria:
+
+- An operator can open configuration management, select one or more devices, and set the current versions as baselines without leaving the page.
+- An operator can view and download the selected version's configuration from the operation panel.
+- An operator can compare any two versions from the page, including versions from different devices.
+- An operator can retry backup for failed or stale selected devices, and can retry all failed devices from the queue toolbar.
+- Configuration view does not leak sensitive fields by default.
+- Batch operations return counts for success, skipped, and failed rows.
+
 ## Non-Goals For MVP
 
 - Full compliance policy engine.

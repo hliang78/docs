@@ -69,6 +69,53 @@ Phase 1 acceptance criteria:
 - Configuration view does not leak sensitive fields by default.
 - Batch operations return counts for success, skipped, and failed rows.
 
+## Phase 1 Server Collection Contract
+
+Server configuration management uses the same `ConfigVersion` lifecycle as network devices. The producer is still a task runtime output; the difference is that the asset identity is a server and the collector is usually an Agent-side shell, Python, PowerShell, or Ansible task.
+
+The backend projects a server collection automatically when a `task_runtime_output` event clearly declares either:
+
+- `asset_type = server`; or
+- `config_scope = server_system_snapshot`; or
+- task `app_type` is one of `server_config_collection`, `server_config_collect`, `server_config_backup`.
+
+The runtime output should include one primary text artifact and enough identity metadata to create a version:
+
+```json
+{
+  "result": {
+    "status": "success",
+    "summary": {
+      "asset_type": "server",
+      "asset_code": "SRV001",
+      "asset_name": "应用服务器-01",
+      "config_scope": "server_system_snapshot",
+      "collector_type": "agent",
+      "collection_plane": "host_agent"
+    }
+  },
+  "artifacts": [
+    {
+      "name": "server-config-SRV001.txt",
+      "kind": "text",
+      "storage_key": "application/task-artifacts/.../server-config-SRV001.txt",
+      "sha256": "raw-artifact-sha256",
+      "size": 128000
+    }
+  ]
+}
+```
+
+If `content_base64` is present on the primary artifact, the backend computes a comparable config hash from normalized content. Volatile lines such as collection time are ignored so timestamp-only collections do not create false changes. If inline content is absent, the backend falls back to `stable_config_hash`, `normalized_config_hash`, `config_hash`, and finally artifact `sha256`.
+
+Operationally this means the closed loop for servers is:
+
+1. Run a server collection task through the Agent.
+2. Agent uploads the collected configuration artifact.
+3. Agent reports `task_runtime_output` with server asset identity and artifact metadata.
+4. Backend creates a `ConfigVersion` for `server|asset_code|server_system_snapshot|host_agent`.
+5. Configuration management shows the server in the version queue, with the same view, download, compare, and baseline operations as network devices.
+
 ## Non-Goals For MVP
 
 - Full compliance policy engine.

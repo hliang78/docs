@@ -306,6 +306,14 @@ Recommended evolution:
 
 This lets configuration management remain cross-asset without breaking the already implemented network-device path.
 
+Current phase 1 implementation has added the projection boundary before adding a full generic collection record table. A producer can already report a governed artifact into configuration management through:
+
+```http
+POST /api/v1/device/v2/config-management/collections:project
+```
+
+The request carries `asset_type`, `asset_code`, `config_scope`, `collection_plane`, artifact metadata, and source task fields. The backend creates a `ConfigVersion`, compares it with the latest version for the same asset and scope, and makes the result visible in the configuration management page. This is the first server-ready closed-loop boundary: server agent collection can be connected by posting its artifact manifest to this route.
+
 ### Change Detection
 
 When a new successful backup or collection is projected:
@@ -361,6 +369,14 @@ GET /api/v1/config-management/versions?asset_type=server&asset_code=SRV001&confi
 
 This is the generic API for new surfaces. Device-specific APIs can remain for Device V2 compatibility.
 
+Current phase 1 compatibility route:
+
+```http
+GET /api/v1/device/v2/config-management/versions
+```
+
+The response includes both network-device and server-ready asset fields: `asset_type`, `asset_code`, `asset_name`, `config_scope`, `collector_type`, and `collection_plane`.
+
 ### List Change Events
 
 ```http
@@ -388,6 +404,46 @@ Request:
 ```
 
 The response should return the parent task id and precheck result. The UI should always lead operators through precheck before execution for multi-asset collection.
+
+Phase 1 status:
+
+- Network-device retry still creates the existing `network_config_backup` task.
+- Server recollection is intentionally not wired to the network backup template. It should be connected only after a server collection template or agent command is registered.
+- Server collection results can already enter the version center through `collections:project`.
+
+### Project Collection Result
+
+```http
+POST /api/v1/device/v2/config-management/collections:project
+```
+
+Example request for a Linux server system snapshot:
+
+```json
+{
+  "asset_type": "server",
+  "asset_code": "SRV001",
+  "asset_name": "app-server-01",
+  "config_scope": "server_system_snapshot",
+  "collector_type": "agent",
+  "collection_plane": "host_agent",
+  "source_task_id": "task-server-collect-1",
+  "backup_record_id": "server-collection-1",
+  "artifact_name": "SRV001-system-snapshot.txt",
+  "artifact_storage_key": "server/SRV001/snapshot-20260607.txt",
+  "artifact_sha256": "sha256-value",
+  "artifact_size": 4096,
+  "config_hash": "normalized-config-hash",
+  "collected_at": "2026-06-07T16:00:00+08:00"
+}
+```
+
+Closed-loop result:
+
+- first projection creates `change_status = first_backup`;
+- repeated projection with the same `config_hash` creates `no_change`;
+- projection with a different `config_hash` creates `changed` and a change event;
+- the version appears in the config management queue with asset type, scope, latest version, baseline status, view, download, diff, and baseline actions.
 
 ### List Device Config Versions
 
@@ -465,6 +521,22 @@ Security rule:
 - The API returns redacted diff only.
 - It must not return raw config content by default.
 - Large diff responses may be truncated with a `truncated` flag and server-side storage key for governed download.
+
+Current phase 1 also supports center-level arbitrary version comparison:
+
+```http
+POST /api/v1/device/v2/config-management/versions/diff
+```
+
+This route is not restricted to one device code. It can compare versions across devices, between two servers, or between different assets when the operator explicitly selects both versions.
+
+### View Version Content
+
+```http
+GET /api/v1/device/v2/config-management/versions/:version_id/content?redact=true
+```
+
+This route is the preferred configuration-management-page content reader. It works for network devices and server versions because it is keyed by version id rather than by `device_code`.
 
 ### Compare With Previous
 

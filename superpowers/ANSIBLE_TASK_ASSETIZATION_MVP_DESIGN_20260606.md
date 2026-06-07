@@ -550,3 +550,23 @@ MVP 通过的标准：
 5. `remote-tcpdump`：诊断产物归档和有效期管理。
 
 核心原则保持不变：每个 Ansible Playbook 都必须具备目标契约、变量契约、凭据契约、风险契约和输出契约。
+
+## 14. 当前实现状态（2026-06-06）
+
+已落地：
+
+1. `network-config-backup` 已提供 `oneops.contract.json`，模板导入会写入 `contract_json`、`asset_category`、`risk_level`、`lifecycle_status`。
+2. `POST /api/v1/platform/task-assets/:template_id/ansible/precheck` 已支持设备适配预检，输出 ready/blocked 设备列表。
+3. 网络设备 fanout 支持 Huawei VRP/USG、H3C Comware/SecPath、Maipu MyPower、Cisco IOS/NX-OS/ASA 等已支持画像优先走 agent/native netlink runner；不支持画像仍回落 Ansible runner。
+4. agent 上报 `task_runtime_output` 后会自动投影到 `platform_device_config_backup`，形成设备配置备份索引。
+5. 设备配置备份历史支持两个入口：
+   - `GET /api/v1/platform/devices/:device_code/config-backups`
+   - `GET /api/v1/device/v2/:code/config-backups`
+6. 父任务设备维度结果支持 `GET /api/v1/platform/tasks/:taskID/device-results`，返回总数、可执行数、阻断数、成功数、失败数、归档数、失败原因分布和设备明细。
+
+待继续：
+
+1. 前端任务详情页接入 `device-results`，展示设备维度状态和产物入口。
+2. 设备详情页接入 `config-backups`，展示最近备份状态、时间、任务和历史列表。
+3. 对 artifact 下载增加更细粒度的权限校验和敏感产物审计。
+4. 结合真实任务再验证失败原因归因和 summary JSON 字段稳定性。

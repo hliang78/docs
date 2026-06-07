@@ -92,6 +92,138 @@ The operator workflow is:
 5. Review task status and failed targets.
 6. Open generated configuration versions from the same page.
 
+## Platform Grouped Asset Selector
+
+Configuration collection needs a reusable asset selection mechanism. The current generic grouping page already supports hierarchical grouping for devices, applications, and NVR assets. That capability should be componentized into a platform-level grouped asset selector instead of staying tied to one management page or one task prefill flow.
+
+The selector is a temporary selection tool. It does not save a grouping selection set, create a task, apply a monitoring strategy, or know how a business workflow maps selected assets into its own payload. Calling pages own those actions.
+
+### Component Positioning
+
+The platform component should be named `GroupedAssetSelector` or equivalent and live under the platform UI component boundary because it depends on platform grouping APIs.
+
+Recommended frontend boundaries:
+
+- `OneOps-UI/src/views/platform/components/GroupedAssetSelector.vue`
+- `OneOps-UI/src/views/platform/composables/useGroupedAssetSelectorState.ts`
+
+The existing `DeviceGroupManagement.vue` should use the same state and child components where practical. The goal is one grouping and selection implementation that can be reused by configuration management, task management, monitoring strategy, log forwarding, and future asset-scoped workflows.
+
+### Entry Shape
+
+The selector opens as a full-screen drawer or large modal. A normal small modal is not acceptable because grouped asset selection needs enough room for rules, tree navigation, selected asset inspection, and confirmation.
+
+The default layout is a three-column workbench:
+
+- left column: asset type, grouping levels, pre-group filters, and the execute grouping action;
+- middle column: hierarchical grouping tree with node selection actions;
+- right column: selected asset detail table, selected-result search, and per-asset removal;
+- fixed footer: selected count, cancel, and confirm selection.
+
+Calling pages configure the selector through props such as:
+
+- `allowedEntityTypes`: allowed values among `device`, `application`, and `nvr`;
+- `defaultEntityType`;
+- `title`;
+- `confirmText`;
+- optional initial grouping levels and filters.
+
+If only one entity type is allowed, the selector shows that type as context and does not show a type switch. If multiple types are allowed, the operator can switch among them, but one confirmation returns only one entity type. Switching entity type clears the current grouping result and current selection.
+
+### Field Display Rules
+
+Grouping level dropdowns must show business-readable labels, not raw codes or technical keys as the primary text.
+
+Examples of correct primary labels:
+
+- `设备类别名称`
+- `平台名称`
+- `所属区域`
+- `应用类型`
+- `NVR 厂商`
+
+The actual grouping request still stores the technical key:
+
+```json
+{
+  "source": "attribute",
+  "key": "catalog_name"
+}
+```
+
+The dropdown option may show secondary helper text such as `属性 · catalog_name`, but the selected input and option primary text should use the readable label.
+
+Field display resolution should use this priority:
+
+1. schema label fields such as `label`, `display_name`, or `title`;
+2. backend grouping capability field labels if the API exposes them;
+3. frontend domain fallback dictionaries for common device, application, and NVR fields;
+4. the raw key only as a final fallback.
+
+The selector should normalize field options into a common UI structure:
+
+```ts
+interface GroupingFieldOption {
+  source: 'attribute' | 'metadata' | 'label';
+  key: string;
+  label: string;
+  description?: string;
+  valueType?: 'string' | 'number' | 'boolean' | 'enum';
+}
+```
+
+This structure drives both grouping-level dropdowns and pre-group filter controls.
+
+### Selection Semantics
+
+The selector supports hierarchical selection by tree node. Selecting a parent node selects all assets under that node. Operators can expand all, collapse all, select all, clear selection, or invert selection.
+
+Running grouping again clears old selected nodes and excluded assets. This avoids mixing a stale selection with a new grouping result.
+
+The right column shows the assets resolved from the selected tree nodes. Operators can remove individual assets from the selected detail table. Removing an individual asset does not force the grouping tree to change its checked state because tree nodes represent rule-based groups while right-column removal represents a temporary exclusion from the selected result.
+
+The selector returns both the final selected result and enough detail for auditing or debugging:
+
+```ts
+interface GroupedAssetSelectionResult {
+  entity_type: 'device' | 'application' | 'nvr';
+  entity_ids: string[];
+  raw_selected_entity_ids: string[];
+  excluded_entity_ids: string[];
+  entities: Record<string, unknown>[];
+  grouping_payload: EntityHierarchicalGroupingReq;
+  selected_group_keys: string[];
+  total: number;
+}
+```
+
+Calling pages should use `entity_ids` by default. `raw_selected_entity_ids` and `excluded_entity_ids` explain how the final result was derived.
+
+### Configuration Management Usage
+
+The configuration collection task composer should offer a `按分组选择资产` action alongside selection from the current version queue. The action opens `GroupedAssetSelector` with the asset types supported by the selected collection scenario.
+
+Network configuration collection starts with:
+
+```ts
+{
+  allowedEntityTypes: ['device'],
+  defaultEntityType: 'device',
+  title: '选择配置采集资产',
+  confirmText: '加入采集任务'
+}
+```
+
+When server, application, or NVR configuration collection is enabled, the caller may pass `application` or `nvr` as allowed entity types. The selector still returns one entity type per confirmation.
+
+Configuration management maps the selection result into its own task model:
+
+- `device`: map `entity_ids` to `device_codes` for network device or server collection, then apply existing access-plane and template grouping logic;
+- `application`: reserve for `application_config` collection and block with a clear message until backend collection support is enabled;
+- `nvr`: reserve for `nvr_codes` or a future unified `asset_targets` payload. NVR should not be silently forced into `device_codes` because that hides the asset semantics.
+
+The selector does not build task envelopes. Configuration management continues to own template resolution, access-plane handling, credential selection, task creation, schedule creation, and retry behavior.
+
 ## Phase 1 Server Collection Contract
 
 Server configuration management uses the same `ConfigVersion` lifecycle as network devices. The producer is still a task runtime output; the difference is that the asset identity is a server and the collector is usually an Agent-side shell, Python, PowerShell, or Ansible task.

@@ -1,0 +1,10 @@
+{
+  "node_count": 17,
+  "zone_count": 34,
+  "direct_import_row_count": 195,
+  "ui_excel_row_count": 195,
+  "zones_without_segments": 9,
+  "default_route_segment_rows": 18,
+  "management_default_routes_skipped": true,
+  "management_unmapped_default_routes_skipped": true
+}

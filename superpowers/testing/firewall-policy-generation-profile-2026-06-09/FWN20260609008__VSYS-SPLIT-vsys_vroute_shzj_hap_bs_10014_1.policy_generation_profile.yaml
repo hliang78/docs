@@ -1,0 +1,22 @@
+node:
+  id: d1f5c877-63ec-11f1-99fe-fa163e7745bf
+  code: FWN20260609008
+  name: VSYS-SPLIT-vsys_vroute_shzj_hap_bs_10014_1
+  ip: 172.21.166.19
+  platform: USG
+policy_generation_profile:
+  policy:
+    name_template: SH-policy{SEQ:id:4:1:1:MAIN}
+    patch_enabled: true
+    action: allow
+    enable: true
+  address:
+    strategy: inline_address
+    patch_enabled: false
+    reuse_anchor_patterns: []
+    naming: {}
+  service:
+    strategy: inline_service
+    patch_enabled: false
+    reuse_anchor_patterns: []
+    naming: {}

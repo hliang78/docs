@@ -1,0 +1,22 @@
+node:
+  id: fc31496e-63df-11f1-b3b3-fa163e7745bf
+  code: FWN20260609003
+  name: SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8
+  ip: 172.21.166.19
+  platform: USG
+policy_generation_profile:
+  policy:
+    name_template: SH-policy{SEQ:id:4:1:1:MAIN}
+    patch_enabled: true
+    action: allow
+    enable: true
+  address:
+    strategy: inline_address
+    patch_enabled: false
+    reuse_anchor_patterns: []
+    naming: {}
+  service:
+    strategy: inline_service
+    patch_enabled: false
+    reuse_anchor_patterns: []
+    naming: {}

@@ -1,0 +1,12 @@
+情景2：出向策略工单 - FW-172.22.166.14-H3C-M9016-CMNET
+访问源(必填),访问目标地址(必填),访问目标端口,协议(必填),SNAT,备注
+10.81.0.0/22,172.21.128.0/24,,ip,,FWN20260609019 rule202 trust_to_untrust private_ip_address->float_ip
+10.81.100.0/22,172.21.128.0/24,,ip,,FWN20260609019 rule202 trust_to_untrust private_ip_address->float_ip
+10.82.0.0/22,172.22.128.0/24,,ip,,FWN20260609019 rule202 trust_to_untrust private_ip_address->float_ip
+10.82.100.0/22,172.22.128.0/24,,ip,,FWN20260609019 rule202 trust_to_untrust private_ip_address->float_ip
+172.21.128.0/24,10.81.0.0/22,,ip,,FWN20260609019 rule201 untrust_to_trust float_ip->private_ip_address
+172.22.128.0/24,10.82.0.0/22,,ip,,FWN20260609019 rule201 untrust_to_trust float_ip->private_ip_address
+172.21.0.0/16,5.161.92.206,,ip,,FWN20260609019 rule203 management_to_untrust management_ip->external sample
+172.22.0.0/16,119.254.225.2,,ip,,FWN20260609019 rule203 management_to_untrust management_ip->external sample
+5.161.92.206,172.21.0.0/16,,ip,,FWN20260609019 rule206 untrust_to_management external sample->management_ip
+119.254.225.2,172.22.0.0/16,,ip,,FWN20260609019 rule206 untrust_to_management external sample->management_ip

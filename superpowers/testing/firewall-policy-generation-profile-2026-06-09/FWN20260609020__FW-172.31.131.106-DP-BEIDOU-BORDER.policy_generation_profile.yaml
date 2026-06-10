@@ -1,0 +1,22 @@
+node:
+  id: 19e81748-63f3-11f1-99fe-fa163e7745bf
+  code: FWN20260609020
+  name: FW-172.31.131.106-DP-BEIDOU-BORDER
+  ip: 172.31.131.106
+  platform: Dptech
+policy_generation_profile:
+  policy:
+    name_template: SH-policy{SEQ:id:4:1:1:MAIN}
+    patch_enabled: true
+    action: allow
+    enable: true
+  address:
+    strategy: inline_address
+    patch_enabled: false
+    reuse_anchor_patterns: []
+    naming: {}
+  service:
+    strategy: inline_service
+    patch_enabled: false
+    reuse_anchor_patterns: []
+    naming: {}

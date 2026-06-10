@@ -197,6 +197,25 @@
 - 确保测试环境与生产环境配置一致
 - 使用 docker-compose 统一测试环境
 
+## 8. 运维环境相关
+
+### 8.1 调整 inotify 后 Docker/Grafana 外部访问无响应
+
+**症状：**
+- 本机访问 `127.0.0.1:3000` 或宿主机 IP 的 `3000` 正常
+- 外部访问 `http://<host-ip>:3000` 无响应
+- `tcpdump` 只看到外部 SYN 进来，没有正常 SYN-ACK 回包
+
+**根因：**
+- `fs.inotify.max_user_watches` 本身不是原因
+- 执行 `sysctl --system` 时重新加载了既有 `net.ipv4.ip_forward=0`
+- Docker 发布端口的外部流量需要 IPv4 转发到容器网络，`ip_forward=0` 会导致转发失败
+
+**解决方案：**
+- 临时恢复：`sudo sysctl -w net.ipv4.ip_forward=1`
+- 永久修复：确保 `/etc/sysctl.conf` 和 `/etc/sysctl.d/*.conf` 中不会再把 `net.ipv4.ip_forward` 覆盖为 `0`
+- 参考：`docs/knowledge/docker-grafana-inotify-sysctl-ip-forward-2026-06-10.md`
+
 ## 使用方法
 
 当遇到问题时：

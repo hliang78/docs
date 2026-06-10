@@ -1,0 +1,37 @@
+node:
+  name: FW-172.22.166.14-H3C-M9016-CMNET
+  hostname: SH-HAP-ZQIDC-CMNET-FW-H3C-M9016-2
+  platform: SecPath
+  site_prefix: SH
+reverse_inference:
+  source: controller policy_generation_profile/expression_habit
+  address:
+    strategy: inline_address
+    confidence: high
+    signals:
+      - 解析策略地址侧为直写地址
+  service:
+    strategy: inline_service
+    confidence: medium
+    signals:
+      - 解析策略服务侧为直写服务
+  signals:
+    - 基于解析后的 node 最近 1 条有效策略只反推表达习惯
+    - 解析策略地址侧为直写地址
+    - 解析策略服务侧为直写服务
+policy_generation_profile:
+  policy:
+    name_template: "SH-policy{SEQ:id:4:1:1:MAIN}"
+    patch_enabled: true
+    action: allow
+    enable: true
+  address:
+    strategy: inline_address
+    patch_enabled: false
+    reuse_anchor_patterns: []
+    naming: {}
+  service:
+    strategy: inline_service
+    patch_enabled: false
+    reuse_anchor_patterns: []
+    naming: {}

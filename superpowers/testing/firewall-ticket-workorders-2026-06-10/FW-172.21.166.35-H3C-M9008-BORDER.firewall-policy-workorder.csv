@@ -1,0 +1,28 @@
+情景2：出向策略工单 - FW-172.21.166.35-H3C-M9008-BORDER
+访问源(必填),访问目标地址(必填),访问目标端口,协议(必填),SNAT,备注
+100.0.20.102,10.81.0.46,,ip,,FWN20260609018 rule15 zhangjiagang_to_zqhap-cors-pp Untrust->Trust
+100.0.20.102,10.82.101.51,,ip,,FWN20260609018 rule15 zhangjiagang_to_zqhap-cors-pp Untrust->Trust
+10.150.161.173,10.81.100.61,,ip,,FWN20260609018 rule14 zhongguoshikong_TO_HAP-CORS-PP Untrust->Trust
+10.150.161.11,10.81.100.62,,ip,,FWN20260609018 rule14 zhongguoshikong_TO_HAP-CORS-PP Untrust->Trust
+10.150.161.125,10.81.102.16,,ip,,FWN20260609018 rule14 zhongguoshikong_TO_HAP-CORS-PP Untrust->Trust
+10.81.8.201,48.130.2.10,,ip,,FWN20260609018 rule9 HAP-OMC-PROD_TO_zhongguoshikong Trust->Untrust
+10.81.8.202,48.130.23.7,,ip,,FWN20260609018 rule9 HAP-OMC-PROD_TO_zhongguoshikong Trust->Untrust
+10.81.8.0/22,10.150.161.173,,ip,,FWN20260609018 rule9 HAP-OMC-PROD_TO_zhongguoshikong Trust->Untrust
+10.81.100.61,48.130.23.8,,ip,,FWN20260609018 rule8 HAP-CORS-PP_TO_zhongguoshikong Trust->Untrust
+10.81.100.0/22,10.150.161.185,,ip,,FWN20260609018 rule8 HAP-CORS-PP_TO_zhongguoshikong Trust->Untrust
+10.11.1.2,10.81.100.201,,ip,,FWN20260609018 rule7 beijing_to_shangyan Untrust->Trust
+10.11.1.2,10.81.101.91,,ip,,FWN20260609018 rule7 beijing_to_shangyan Untrust->Trust
+10.81.100.201,10.11.1.2,,ip,,FWN20260609018 rule6 shangyan_to_beijing Trust->Untrust
+10.81.101.91,10.11.1.2,,ip,,FWN20260609018 rule6 shangyan_to_beijing Trust->Untrust
+100.0.20.102,10.82.100.10,,ip,,EXPECT_NEW Untrust->Trust route 10.82.100.0/22 via Route-Aggregation1011.201
+100.0.20.102,10.82.100.20,9443,tcp,,EXPECT_NEW Untrust->Trust tcp route 10.82.100.0/22 via Route-Aggregation1011.201
+10.11.1.2,10.82.100.10,8443,tcp,,EXPECT_NEW Untrust->Trust tcp route 10.82.100.0/22 via Route-Aggregation1011.201
+10.150.161.173,10.82.100.30,1812,udp,,EXPECT_NEW Untrust->Trust udp route 10.82.100.0/22 via Route-Aggregation1011.201
+10.81.8.201,10.25.35.10,,ip,,EXPECT_NEW Trust->Untrust route 10.25.35.0/24 via Vlan-interface203
+10.81.8.202,10.25.35.20,443,tcp,,EXPECT_NEW Trust->Untrust tcp route 10.25.35.0/24 via Vlan-interface203
+10.81.100.61,192.6.1.72,443,tcp,,EXPECT_NEW Trust->Untrust route 192.6.1.72/32 via Vlan-interface204
+10.81.100.62,10.25.35.30,8443,tcp,,EXPECT_NEW Trust->Untrust tcp route 10.25.35.0/24 via Vlan-interface203
+100.0.20.102,10.82.101.52,,ip,,EXPECT_PATCH rule15 zhangjiagang_to_zqhap-cors-pp Untrust->Trust add destination host
+100.0.20.102,10.82.101.53,,ip,,EXPECT_PATCH rule15 zhangjiagang_to_zqhap-cors-pp Untrust->Trust add destination host
+100.0.20.102,10.81.0.47,,ip,,EXPECT_PATCH rule15 zhangjiagang_to_zqhap-cors-pp Untrust->Trust add destination host
+100.0.20.102,10.82.101.54,,ip,,EXPECT_PATCH rule15 zhangjiagang_to_zqhap-cors-pp Untrust->Trust add destination host

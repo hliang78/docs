@@ -1,0 +1,2519 @@
+[
+  {
+    "name": "172.21.166.35-H3C-M9008-BORDER::Management",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=FW-172.21.166.35-H3C-M9008-BORDER；配置区域=Management",
+    "path": "FW-VSYS-SPLIT-20260609/FW-172.21.166.35-H3C-M9008-BORDER/Management",
+    "security_zone_code": "Management",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "internal",
+    "zone_role": "internal",
+    "transitable": false,
+    "network_segments": [
+      {
+        "cidr": "172.21.166.0/24",
+        "description": "interface M-GigabitEthernet1/0/0/0",
+        "gateway": "172.21.166.35",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "management",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "194762a5-63f3-11f1-99fe-fa163e7745bf",
+      "name": "FW-172.21.166.35-H3C-M9008-BORDER",
+      "ip": "172.21.166.35",
+      "code": "FWN20260609018"
+    }
+  },
+  {
+    "name": "172.21.166.35-H3C-M9008-BORDER::Trust",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=FW-172.21.166.35-H3C-M9008-BORDER；配置区域=Trust",
+    "path": "FW-VSYS-SPLIT-20260609/FW-172.21.166.35-H3C-M9008-BORDER/Trust",
+    "security_zone_code": "Trust",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "internal",
+    "zone_role": "internal",
+    "transitable": true,
+    "network_segments": [
+      {
+        "cidr": "10.81.0.0/22",
+        "description": "interface Route-Aggregation1011.1810",
+        "gateway": "10.81.0.14",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.81.100.0/22",
+        "description": "interface Route-Aggregation1011.2810",
+        "gateway": "10.81.100.14",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.81.4.0/22",
+        "description": "interface Route-Aggregation1011.1814",
+        "gateway": "10.81.4.14",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.81.8.0/22",
+        "description": "interface Route-Aggregation1011.1818",
+        "gateway": "10.81.8.14",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.82.0.0/22",
+        "description": "route Route-Aggregation1011.201 next-hop 172.21.254.129",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.82.100.0/22",
+        "description": "route Route-Aggregation1011.201 next-hop 172.21.254.129",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.254.128/30",
+        "description": "interface Route-Aggregation1011.201",
+        "gateway": "172.21.254.130",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "194762a5-63f3-11f1-99fe-fa163e7745bf",
+      "name": "FW-172.21.166.35-H3C-M9008-BORDER",
+      "ip": "172.21.166.35",
+      "code": "FWN20260609018"
+    }
+  },
+  {
+    "name": "172.21.166.35-H3C-M9008-BORDER::Untrust",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=FW-172.21.166.35-H3C-M9008-BORDER；配置区域=Untrust",
+    "path": "FW-VSYS-SPLIT-20260609/FW-172.21.166.35-H3C-M9008-BORDER/Untrust",
+    "security_zone_code": "Untrust",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "external",
+    "zone_role": "internet",
+    "transitable": false,
+    "network_segments": [
+      {
+        "cidr": "0.0.0.0/0",
+        "description": "route_default Route-Aggregation10 next-hop 117.135.142.193",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.11.1.0/30",
+        "description": "interface Vlan-interface201",
+        "gateway": "10.11.1.1",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.150.161.11/32",
+        "description": "route Vlan-interface202 next-hop 100.0.10.100",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.150.161.125/32",
+        "description": "route Vlan-interface202 next-hop 100.0.10.100",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.150.161.173/32",
+        "description": "route Vlan-interface202 next-hop 100.0.10.100",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.150.161.185/32",
+        "description": "route Vlan-interface202 next-hop 100.0.10.100",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.25.35.0/24",
+        "description": "route Vlan-interface203 next-hop 43.251.246.1",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.25.50.0/24",
+        "description": "route Vlan-interface205 next-hop 192.168.30.1",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.25.51.0/24",
+        "description": "route Vlan-interface205 next-hop 192.168.30.1",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "100.0.10.96/29",
+        "description": "interface Vlan-interface202",
+        "gateway": "100.0.10.101",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "100.0.20.100/30",
+        "description": "interface Vlan-interface204",
+        "gateway": "100.0.20.101",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "117.135.142.192/26",
+        "description": "interface Route-Aggregation10",
+        "gateway": "117.135.142.235",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "192.168.30.0/30",
+        "description": "interface Vlan-interface205",
+        "gateway": "192.168.30.2",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "192.6.1.72/32",
+        "description": "route Vlan-interface204 next-hop 100.0.20.102",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "43.251.246.0/30",
+        "description": "interface Vlan-interface203",
+        "gateway": "43.251.246.2",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "48.130.2.10/32",
+        "description": "route Vlan-interface202 next-hop 100.0.10.100",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "48.130.2.21/32",
+        "description": "route Vlan-interface202 next-hop 100.0.10.100",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "48.130.23.7/32",
+        "description": "route Vlan-interface202 next-hop 100.0.10.100",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "48.130.23.8/32",
+        "description": "route Vlan-interface202 next-hop 100.0.10.100",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "48.130.23.9/32",
+        "description": "route Vlan-interface202 next-hop 100.0.10.100",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "48.130.6.5/32",
+        "description": "route Vlan-interface202 next-hop 100.0.10.100",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "48.130.61.39/32",
+        "description": "route Vlan-interface202 next-hop 100.0.10.100",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "48.130.61.41/32",
+        "description": "route Vlan-interface202 next-hop 100.0.10.100",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "48.130.61.42/32",
+        "description": "route Vlan-interface202 next-hop 100.0.10.100",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "194762a5-63f3-11f1-99fe-fa163e7745bf",
+      "name": "FW-172.21.166.35-H3C-M9008-BORDER",
+      "ip": "172.21.166.35",
+      "code": "FWN20260609018"
+    }
+  },
+  {
+    "name": "172.21.166.35-H3C-M9008-BORDER::VPN",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=FW-172.21.166.35-H3C-M9008-BORDER；配置区域=VPN",
+    "path": "FW-VSYS-SPLIT-20260609/FW-172.21.166.35-H3C-M9008-BORDER/VPN",
+    "security_zone_code": "VPN",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "internal",
+    "zone_role": "transit",
+    "transitable": true,
+    "network_segments": [
+      {
+        "cidr": "172.21.254.56/29",
+        "description": "interface Vlan-interface100",
+        "gateway": "172.21.254.57",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "194762a5-63f3-11f1-99fe-fa163e7745bf",
+      "name": "FW-172.21.166.35-H3C-M9008-BORDER",
+      "ip": "172.21.166.35",
+      "code": "FWN20260609018"
+    }
+  },
+  {
+    "name": "172.22.166.14-H3C-M9016-CMNET::Management",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=FW-172.22.166.14-H3C-M9016-CMNET；配置区域=Management",
+    "path": "FW-VSYS-SPLIT-20260609/FW-172.22.166.14-H3C-M9016-CMNET/Management",
+    "security_zone_code": "Management",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "internal",
+    "zone_role": "internal",
+    "transitable": false,
+    "network_segments": [
+      {
+        "cidr": "172.22.166.0/24",
+        "description": "interface M-GigabitEthernet0/0/0",
+        "gateway": "172.22.166.14",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "management",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "2409:871e:6800:2a00:102:0:ac16:a600/120",
+        "description": "interface M-GigabitEthernet0/0/0",
+        "gateway": "2409:871E:6800:2A00:102:0:AC16:A60E",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "management",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "19a75c9f-63f3-11f1-99fe-fa163e7745bf",
+      "name": "FW-172.22.166.14-H3C-M9016-CMNET",
+      "ip": "172.22.166.14",
+      "code": "FWN20260609019"
+    }
+  },
+  {
+    "name": "172.22.166.14-H3C-M9016-CMNET::Trust",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=FW-172.22.166.14-H3C-M9016-CMNET；配置区域=Trust",
+    "path": "FW-VSYS-SPLIT-20260609/FW-172.22.166.14-H3C-M9016-CMNET/Trust",
+    "security_zone_code": "Trust",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "internal",
+    "zone_role": "internal",
+    "transitable": true,
+    "network_segments": [
+      {
+        "cidr": "10.1.1.0/30",
+        "description": "interface Route-Aggregation1",
+        "gateway": "10.1.1.2",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.22.254.12/30",
+        "description": "interface HundredGigE0/0/26",
+        "gateway": "172.22.254.14",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.22.254.4/30",
+        "description": "interface HundredGigE0/0/25",
+        "gateway": "172.22.254.6",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "2409:871e:6800:2a00:300:0:ac16:fe04/126",
+        "description": "interface HundredGigE0/0/25",
+        "gateway": "2409:871E:6800:2A00:300:0:AC16:FE06",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "2409:871e:6800:2a00:300:0:ac16:fe0c/126",
+        "description": "interface HundredGigE0/0/26",
+        "gateway": "2409:871E:6800:2A00:300:0:AC16:FE0E",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "19a75c9f-63f3-11f1-99fe-fa163e7745bf",
+      "name": "FW-172.22.166.14-H3C-M9016-CMNET",
+      "ip": "172.22.166.14",
+      "code": "FWN20260609019"
+    }
+  },
+  {
+    "name": "172.22.166.14-H3C-M9016-CMNET::Untrust",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=FW-172.22.166.14-H3C-M9016-CMNET；配置区域=Untrust",
+    "path": "FW-VSYS-SPLIT-20260609/FW-172.22.166.14-H3C-M9016-CMNET/Untrust",
+    "security_zone_code": "Untrust",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "external",
+    "zone_role": "internet",
+    "transitable": false,
+    "network_segments": [
+      {
+        "cidr": "0.0.0.0/0",
+        "description": "route_default Vlan-interface100 next-hop 172.22.254.76",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.22.254.72/29",
+        "description": "interface Vlan-interface100",
+        "gateway": "172.22.254.73",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "2409:871e:6800:2a00:300:0:ac16:fe48/125",
+        "description": "interface Vlan-interface100",
+        "gateway": "2409:871E:6800:2A00:300:0:AC16:FE49",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "::/0",
+        "description": "route_default Vlan-interface100 next-hop 2409:871E:6800:2A00:300:0:AC16:FE4C",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "19a75c9f-63f3-11f1-99fe-fa163e7745bf",
+      "name": "FW-172.22.166.14-H3C-M9016-CMNET",
+      "ip": "172.22.166.14",
+      "code": "FWN20260609019"
+    }
+  },
+  {
+    "name": "172.31.131.106-DP-BEIDOU-BORDER::UNMAPPED",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=FW-172.31.131.106-DP-BEIDOU-BORDER；配置区域=UNMAPPED",
+    "path": "FW-VSYS-SPLIT-20260609/FW-172.31.131.106-DP-BEIDOU-BORDER/UNMAPPED",
+    "security_zone_code": "UNMAPPED",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "external",
+    "zone_role": "internet",
+    "transitable": false,
+    "network_segments": [
+      {
+        "cidr": "0.0.0.0/0",
+        "description": "route_default meth0_0 next-hop 172.31.131.254",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "VRF_MGMT",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "19e81748-63f3-11f1-99fe-fa163e7745bf",
+      "name": "FW-172.31.131.106-DP-BEIDOU-BORDER",
+      "ip": "172.31.131.106",
+      "code": "FWN20260609020"
+    }
+  },
+  {
+    "name": "172.31.131.5-default::UNMAPPED",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-172.31.131.5-default；配置区域=UNMAPPED",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-172.31.131.5-default/UNMAPPED",
+    "security_zone_code": "UNMAPPED",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "external",
+    "zone_role": "internet",
+    "transitable": false,
+    "network_segments": [
+      {
+        "cidr": "0.0.0.0/0",
+        "description": "route_default GigabitEthernet0/0/0 next-hop 172.31.131.254",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.31.192.0/24",
+        "description": "route GigabitEthernet0/0/0 next-hop 172.31.131.6",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.31.192.244/32",
+        "description": "route GigabitEthernet0/0/0 next-hop 172.31.131.254",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.40.50.0/24",
+        "description": "route GigabitEthernet0/0/0 next-hop 172.31.131.254",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "18a8d683-63f3-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-172.31.131.5-default",
+      "ip": "172.31.131.5",
+      "code": "FWN20260609015"
+    }
+  },
+  {
+    "name": "172.31.188.111-Mgmt::UNMAPPED",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-172.31.188.111-Mgmt；配置区域=UNMAPPED",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-172.31.188.111-Mgmt/UNMAPPED",
+    "security_zone_code": "UNMAPPED",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "internal",
+    "zone_role": "internal",
+    "transitable": false,
+    "network_segments": [],
+    "_source_firewall_node": {
+      "id": "18e9483e-63f3-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-172.31.188.111-Mgmt",
+      "ip": "172.31.188.111",
+      "code": "FWN20260609016"
+    }
+  },
+  {
+    "name": "172.21.166.19-MGMT::UNMAPPED",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-MGMT；配置区域=UNMAPPED",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-MGMT/UNMAPPED",
+    "security_zone_code": "UNMAPPED",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "internal",
+    "zone_role": "internal",
+    "transitable": false,
+    "network_segments": [],
+    "_source_firewall_node": {
+      "id": "d1221595-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-MGMT",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609004"
+    }
+  },
+  {
+    "name": "172.21.166.19-default::UNMAPPED",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-default；配置区域=UNMAPPED",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-default/UNMAPPED",
+    "security_zone_code": "UNMAPPED",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "external",
+    "zone_role": "internet",
+    "transitable": false,
+    "network_segments": [
+      {
+        "cidr": "0.0.0.0/0",
+        "description": "route_default  next-hop 172.21.165.254",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "d16a9455-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-default",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609005"
+    }
+  },
+  {
+    "name": "172.21.166.19-ext_Internet9297::UNMAPPED",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-ext_Internet9297；配置区域=UNMAPPED",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-ext_Internet9297/UNMAPPED",
+    "security_zone_code": "UNMAPPED",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "internal",
+    "zone_role": "internal",
+    "transitable": true,
+    "network_segments": [
+      {
+        "cidr": "172.21.128.102/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.103/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.104/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.111/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.112/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.122/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.128/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.136/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.137/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.14/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.140/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.145/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.161/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.162/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.163/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.167/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.171/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.175/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.186/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.190/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.193/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.195/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.197/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.200/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.201/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.202/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.204/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.212/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.213/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.225/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.231/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.235/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.249/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.29/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.44/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.47/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.48/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.51/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.56/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.58/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.65/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.67/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.72/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.80/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.81/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.82/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.89/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.91/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "2409:871e:8f01:20a2:1:0:a51:800/118",
+        "description": "route  next-hop 2409:871E:8F01:20A2:300:0:AC15:FB79",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "d1945cbf-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-ext_Internet9297",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609006"
+    }
+  },
+  {
+    "name": "172.21.166.19-ext_Internet9297::untrust",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-ext_Internet9297；配置区域=untrust",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-ext_Internet9297/untrust",
+    "security_zone_code": "untrust",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "external",
+    "zone_role": "internet",
+    "transitable": false,
+    "network_segments": [
+      {
+        "cidr": "0.0.0.0/0",
+        "description": "route_default Vlanif2001 next-hop 172.21.251.5",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.81.0.0/22",
+        "description": "route Vlanif2001 next-hop 172.21.251.5",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.81.100.0/22",
+        "description": "route Vlanif2001 next-hop 172.21.251.5",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.81.104.0/22",
+        "description": "route Vlanif2001 next-hop 172.21.251.5",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.81.12.0/22",
+        "description": "route Vlanif2001 next-hop 172.21.251.5",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.81.4.0/22",
+        "description": "route Vlanif2001 next-hop 172.21.251.5",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.81.8.0/22",
+        "description": "route Vlanif2001 next-hop 172.21.251.5",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.134.0/24",
+        "description": "route Vlanif2001 next-hop 172.21.251.5",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.251.4/30",
+        "description": "interface Vlanif2001",
+        "gateway": "172.21.251.6",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "2409:871e:8f01:20a2:1:0:a51:6800/118",
+        "description": "route Vlanif2001 next-hop 2409:871E:8F01:20A2:300:0:AC15:FB01",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "2409:871e:8f01:20a2:300:0:ac15:fb00/126",
+        "description": "interface Vlanif2001",
+        "gateway": "2409:871E:8F01:20A2:300:0:AC15:FB02",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "::/0",
+        "description": "route_default Vlanif2001 next-hop 2409:871E:8F01:20A2:300:0:AC15:FB01",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "d1945cbf-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-ext_Internet9297",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609006"
+    }
+  },
+  {
+    "name": "172.21.166.19-vsys_vroute_shzj_hap_bs_10014_1::UNMAPPED",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-vsys_vroute_shzj_hap_bs_10014_1；配置区域=UNMAPPED",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-vsys_vroute_shzj_hap_bs_10014_1/UNMAPPED",
+    "security_zone_code": "UNMAPPED",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "internal",
+    "zone_role": "internal",
+    "transitable": true,
+    "network_segments": [
+      {
+        "cidr": "172.21.128.140/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.201/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.202/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "d1f5c877-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-vsys_vroute_shzj_hap_bs_10014_1",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609008"
+    }
+  },
+  {
+    "name": "172.21.166.19-vsys_vroute_shzj_hap_bs_10014_1::trust",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-vsys_vroute_shzj_hap_bs_10014_1；配置区域=trust",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-vsys_vroute_shzj_hap_bs_10014_1/trust",
+    "security_zone_code": "trust",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "external",
+    "zone_role": "internet",
+    "transitable": false,
+    "network_segments": [
+      {
+        "cidr": "0.0.0.0/0",
+        "description": "route_default Vlanif2002 next-hop 172.21.251.5",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.81.4.0/22",
+        "description": "route Vlanif2002 next-hop 172.21.251.5",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.251.4/30",
+        "description": "interface Vlanif2002",
+        "gateway": "172.21.251.6",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "d1f5c877-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-vsys_vroute_shzj_hap_bs_10014_1",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609008"
+    }
+  },
+  {
+    "name": "172.21.166.19-vsys_vroute_shzj_hap_bs_10014_1::untrust",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-vsys_vroute_shzj_hap_bs_10014_1；配置区域=untrust",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-vsys_vroute_shzj_hap_bs_10014_1/untrust",
+    "security_zone_code": "untrust",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "external",
+    "zone_role": "external_network",
+    "transitable": false,
+    "network_segments": [],
+    "_source_firewall_node": {
+      "id": "d1f5c877-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-vsys_vroute_shzj_hap_bs_10014_1",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609008"
+    }
+  },
+  {
+    "name": "172.21.166.19-vsys_vrouteshzjhapbacku_10029_1::trust",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-vsys_vrouteshzjhapbacku_10029_1；配置区域=trust",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-vsys_vrouteshzjhapbacku_10029_1/trust",
+    "security_zone_code": "trust",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "external",
+    "zone_role": "internet",
+    "transitable": false,
+    "network_segments": [
+      {
+        "cidr": "0.0.0.0/0",
+        "description": "route_default Vlanif2006 next-hop 172.21.251.5",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.134.0/24",
+        "description": "route Vlanif2006 next-hop 172.21.251.5",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.251.4/30",
+        "description": "interface Vlanif2006",
+        "gateway": "172.21.251.6",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "d223966b-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-vsys_vrouteshzjhapbacku_10029_1",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609009"
+    }
+  },
+  {
+    "name": "172.21.166.19-vsys_vrouteshzjhapbacku_10029_1::untrust",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-vsys_vrouteshzjhapbacku_10029_1；配置区域=untrust",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-vsys_vrouteshzjhapbacku_10029_1/untrust",
+    "security_zone_code": "untrust",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "external",
+    "zone_role": "external_network",
+    "transitable": false,
+    "network_segments": [],
+    "_source_firewall_node": {
+      "id": "d223966b-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-vsys_vrouteshzjhapbacku_10029_1",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609009"
+    }
+  },
+  {
+    "name": "172.21.166.19-vsys_vrouteshzjhapbsspp_10027_1::UNMAPPED",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-vsys_vrouteshzjhapbsspp_10027_1；配置区域=UNMAPPED",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-vsys_vrouteshzjhapbsspp_10027_1/UNMAPPED",
+    "security_zone_code": "UNMAPPED",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "internal",
+    "zone_role": "internal",
+    "transitable": true,
+    "network_segments": [
+      {
+        "cidr": "172.21.128.111/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.112/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "d24d5460-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-vsys_vrouteshzjhapbsspp_10027_1",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609010"
+    }
+  },
+  {
+    "name": "172.21.166.19-vsys_vrouteshzjhapbsspp_10027_1::trust",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-vsys_vrouteshzjhapbsspp_10027_1；配置区域=trust",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-vsys_vrouteshzjhapbsspp_10027_1/trust",
+    "security_zone_code": "trust",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "external",
+    "zone_role": "internet",
+    "transitable": false,
+    "network_segments": [
+      {
+        "cidr": "0.0.0.0/0",
+        "description": "route_default Vlanif2005 next-hop 172.21.251.5",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.81.104.0/22",
+        "description": "route Vlanif2005 next-hop 172.21.251.5",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.251.4/30",
+        "description": "interface Vlanif2005",
+        "gateway": "172.21.251.6",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "2409:871e:8f01:20a2:1:0:a51:6800/118",
+        "description": "route Vlanif2005 next-hop 2409:871E:8F01:20A2:300:0:AC15:FB01",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "2409:871e:8f01:20a2:300:0:ac15:fb00/126",
+        "description": "interface Vlanif2005",
+        "gateway": "2409:871E:8F01:20A2:300:0:AC15:FB02",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "::/0",
+        "description": "route_default Vlanif2005 next-hop 2409:871E:8F01:20A2:300:0:AC15:FB01",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "d24d5460-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-vsys_vrouteshzjhapbsspp_10027_1",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609010"
+    }
+  },
+  {
+    "name": "172.21.166.19-vsys_vrouteshzjhapbsspp_10027_1::untrust",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-vsys_vrouteshzjhapbsspp_10027_1；配置区域=untrust",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-vsys_vrouteshzjhapbsspp_10027_1/untrust",
+    "security_zone_code": "untrust",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "external",
+    "zone_role": "external_network",
+    "transitable": false,
+    "network_segments": [],
+    "_source_firewall_node": {
+      "id": "d24d5460-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-vsys_vrouteshzjhapbsspp_10027_1",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609010"
+    }
+  },
+  {
+    "name": "172.21.166.19-vsys_vrouteshzjhapcorsp_10005_1::UNMAPPED",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-vsys_vrouteshzjhapcorsp_10005_1；配置区域=UNMAPPED",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-vsys_vrouteshzjhapcorsp_10005_1/UNMAPPED",
+    "security_zone_code": "UNMAPPED",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "internal",
+    "zone_role": "internal",
+    "transitable": true,
+    "network_segments": [
+      {
+        "cidr": "172.21.128.102/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.103/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.104/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.122/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.128/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.136/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.14/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.171/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.175/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.190/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.193/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.195/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.197/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.204/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.231/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.235/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.249/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.29/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.44/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.47/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.51/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.56/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.58/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.65/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.67/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.80/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.81/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.82/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.89/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.91/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "d27956db-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-vsys_vrouteshzjhapcorsp_10005_1",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609011"
+    }
+  },
+  {
+    "name": "172.21.166.19-vsys_vrouteshzjhapcorsp_10005_1::trust",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-vsys_vrouteshzjhapcorsp_10005_1；配置区域=trust",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-vsys_vrouteshzjhapcorsp_10005_1/trust",
+    "security_zone_code": "trust",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "external",
+    "zone_role": "internet",
+    "transitable": false,
+    "network_segments": [
+      {
+        "cidr": "0.0.0.0/0",
+        "description": "route_default Vlanif2000 next-hop 172.21.251.5",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.81.0.0/22",
+        "description": "route Vlanif2000 next-hop 172.21.251.5",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.251.4/30",
+        "description": "interface Vlanif2000",
+        "gateway": "172.21.251.6",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "d27956db-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-vsys_vrouteshzjhapcorsp_10005_1",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609011"
+    }
+  },
+  {
+    "name": "172.21.166.19-vsys_vrouteshzjhapcorsp_10005_1::untrust",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-vsys_vrouteshzjhapcorsp_10005_1；配置区域=untrust",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-vsys_vrouteshzjhapcorsp_10005_1/untrust",
+    "security_zone_code": "untrust",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "external",
+    "zone_role": "external_network",
+    "transitable": false,
+    "network_segments": [],
+    "_source_firewall_node": {
+      "id": "d27956db-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-vsys_vrouteshzjhapcorsp_10005_1",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609011"
+    }
+  },
+  {
+    "name": "172.21.166.19-vsys_vrouteshzjhapcorsp_10023_1::UNMAPPED",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-vsys_vrouteshzjhapcorsp_10023_1；配置区域=UNMAPPED",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-vsys_vrouteshzjhapcorsp_10023_1/UNMAPPED",
+    "security_zone_code": "UNMAPPED",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "internal",
+    "zone_role": "internal",
+    "transitable": true,
+    "network_segments": [
+      {
+        "cidr": "172.21.128.137/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.145/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.161/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.162/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.163/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.186/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.225/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.48/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "d2b95d0e-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-vsys_vrouteshzjhapcorsp_10023_1",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609012"
+    }
+  },
+  {
+    "name": "172.21.166.19-vsys_vrouteshzjhapcorsp_10023_1::trust",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-vsys_vrouteshzjhapcorsp_10023_1；配置区域=trust",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-vsys_vrouteshzjhapcorsp_10023_1/trust",
+    "security_zone_code": "trust",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "external",
+    "zone_role": "internet",
+    "transitable": false,
+    "network_segments": [
+      {
+        "cidr": "0.0.0.0/0",
+        "description": "route_default Vlanif2004 next-hop 172.21.251.5",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.81.100.0/22",
+        "description": "route Vlanif2004 next-hop 172.21.251.5",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.251.4/30",
+        "description": "interface Vlanif2004",
+        "gateway": "172.21.251.6",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "d2b95d0e-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-vsys_vrouteshzjhapcorsp_10023_1",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609012"
+    }
+  },
+  {
+    "name": "172.21.166.19-vsys_vrouteshzjhapcorsp_10023_1::untrust",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-vsys_vrouteshzjhapcorsp_10023_1；配置区域=untrust",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-vsys_vrouteshzjhapcorsp_10023_1/untrust",
+    "security_zone_code": "untrust",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "external",
+    "zone_role": "external_network",
+    "transitable": false,
+    "network_segments": [],
+    "_source_firewall_node": {
+      "id": "d2b95d0e-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-vsys_vrouteshzjhapcorsp_10023_1",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609012"
+    }
+  },
+  {
+    "name": "172.21.166.19-vsys_vrouteshzjhapiotpr_10033_1::UNMAPPED",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-vsys_vrouteshzjhapiotpr_10033_1；配置区域=UNMAPPED",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-vsys_vrouteshzjhapiotpr_10033_1/UNMAPPED",
+    "security_zone_code": "UNMAPPED",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "external",
+    "zone_role": "internet",
+    "transitable": false,
+    "network_segments": [
+      {
+        "cidr": "172.21.128.167/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.72/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "::/0",
+        "description": "route_default  next-hop 2409:871E:8F01:20A2:300:0:AC15:FB01",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "d2e58ada-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-vsys_vrouteshzjhapiotpr_10033_1",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609013"
+    }
+  },
+  {
+    "name": "172.21.166.19-vsys_vrouteshzjhapiotpr_10033_1::trust",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-vsys_vrouteshzjhapiotpr_10033_1；配置区域=trust",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-vsys_vrouteshzjhapiotpr_10033_1/trust",
+    "security_zone_code": "trust",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "external",
+    "zone_role": "internet",
+    "transitable": false,
+    "network_segments": [
+      {
+        "cidr": "0.0.0.0/0",
+        "description": "route_default Vlanif2007 next-hop 172.21.251.5",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.81.12.0/22",
+        "description": "route Vlanif2007 next-hop 172.21.251.5",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.251.4/30",
+        "description": "interface Vlanif2007",
+        "gateway": "172.21.251.6",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "2409:871e:8f01:20a2:300:0:ac15:fbe8/126",
+        "description": "interface Vlanif2007",
+        "gateway": "2409:871E:8F01:20A2:300:0:AC15:FBEA",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "d2e58ada-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-vsys_vrouteshzjhapiotpr_10033_1",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609013"
+    }
+  },
+  {
+    "name": "172.21.166.19-vsys_vrouteshzjhapiotpr_10033_1::untrust",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-vsys_vrouteshzjhapiotpr_10033_1；配置区域=untrust",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-vsys_vrouteshzjhapiotpr_10033_1/untrust",
+    "security_zone_code": "untrust",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "external",
+    "zone_role": "external_network",
+    "transitable": false,
+    "network_segments": [],
+    "_source_firewall_node": {
+      "id": "d2e58ada-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-vsys_vrouteshzjhapiotpr_10033_1",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609013"
+    }
+  },
+  {
+    "name": "172.21.166.19-vsys_vrouteshzjhapomcpr_10018_1::UNMAPPED",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-vsys_vrouteshzjhapomcpr_10018_1；配置区域=UNMAPPED",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-vsys_vrouteshzjhapomcpr_10018_1/UNMAPPED",
+    "security_zone_code": "UNMAPPED",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "external",
+    "zone_role": "internet",
+    "transitable": false,
+    "network_segments": [
+      {
+        "cidr": "172.21.128.200/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.212/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.128.213/32",
+        "description": "route NULL0",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "::/0",
+        "description": "route_default  next-hop 2409:871E:8F01:20A2:300:0:AC15:FB01",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "d313c2d2-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-vsys_vrouteshzjhapomcpr_10018_1",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609014"
+    }
+  },
+  {
+    "name": "172.21.166.19-vsys_vrouteshzjhapomcpr_10018_1::trust",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-vsys_vrouteshzjhapomcpr_10018_1；配置区域=trust",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-vsys_vrouteshzjhapomcpr_10018_1/trust",
+    "security_zone_code": "trust",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "external",
+    "zone_role": "internet",
+    "transitable": false,
+    "network_segments": [
+      {
+        "cidr": "0.0.0.0/0",
+        "description": "route_default Vlanif2003 next-hop 172.21.251.5",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "10.81.8.0/22",
+        "description": "route Vlanif2003 next-hop 172.21.251.5",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "172.21.251.4/30",
+        "description": "interface Vlanif2003",
+        "gateway": "172.21.251.6",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "2409:871e:8f01:20a2:1:0:a51:800/118",
+        "description": "route Vlanif2003 next-hop 2409:871E:8F01:20A2:300:0:AC15:FB79",
+        "gateway": "",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      },
+      {
+        "cidr": "2409:871e:8f01:20a2:300:0:ac15:fb78/126",
+        "description": "interface Vlanif2003",
+        "gateway": "2409:871E:8F01:20A2:300:0:AC15:FB7A",
+        "vlan_id": "",
+        "prefix_code": "",
+        "vrf_code": "default",
+        "site_code": "",
+        "segment_type": "DEFAULT"
+      }
+    ],
+    "_source_firewall_node": {
+      "id": "d313c2d2-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-vsys_vrouteshzjhapomcpr_10018_1",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609014"
+    }
+  },
+  {
+    "name": "172.21.166.19-vsys_vrouteshzjhapomcpr_10018_1::untrust",
+    "level": 1,
+    "description": "由防火墙配置快照生成；节点=VSYS-SPLIT-vsys_vrouteshzjhapomcpr_10018_1；配置区域=untrust",
+    "path": "FW-VSYS-SPLIT-20260609/VSYS-SPLIT-vsys_vrouteshzjhapomcpr_10018_1/untrust",
+    "security_zone_code": "untrust",
+    "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+    "zone_type": "external",
+    "zone_role": "external_network",
+    "transitable": false,
+    "network_segments": [],
+    "_source_firewall_node": {
+      "id": "d313c2d2-63ec-11f1-99fe-fa163e7745bf",
+      "name": "VSYS-SPLIT-vsys_vrouteshzjhapomcpr_10018_1",
+      "ip": "172.21.166.19",
+      "code": "FWN20260609014"
+    }
+  }
+]

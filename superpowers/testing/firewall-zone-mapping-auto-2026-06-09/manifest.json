@@ -1,0 +1,16 @@
+{
+  "datacenter_id": "baa0f9bb-63ec-11f1-99fe-fa163e7745bf",
+  "datacenter_name": "FW-VSYS-SPLIT-20260609",
+  "generated_at": "2026-06-09T19:49:42",
+  "node_count": 17,
+  "security_zone_count": 34,
+  "mapping_count": 44,
+  "unmatched_count": 0,
+  "conflict_count": 0,
+  "files": {
+    "mappings_csv": "/OneOPS/docs/superpowers/testing/firewall-zone-mapping-auto-2026-06-09/firewall-zone-mapping-auto.csv",
+    "unmatched_csv": "/OneOPS/docs/superpowers/testing/firewall-zone-mapping-auto-2026-06-09/firewall-zone-mapping-unmatched.csv",
+    "conflicts_csv": "/OneOPS/docs/superpowers/testing/firewall-zone-mapping-auto-2026-06-09/firewall-zone-mapping-conflicts.csv",
+    "seed_sql": "/OneOPS/docs/superpowers/testing/firewall-zone-mapping-auto-2026-06-09/firewall-zone-mapping-seed.sql"
+  }
+}

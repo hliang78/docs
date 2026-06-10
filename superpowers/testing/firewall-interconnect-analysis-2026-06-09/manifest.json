@@ -1,0 +1,9 @@
+{
+  "nodes": 17,
+  "interfaces": 42,
+  "routes": 160,
+  "links": 201,
+  "high": 31,
+  "medium": 170,
+  "pairs": 30
+}

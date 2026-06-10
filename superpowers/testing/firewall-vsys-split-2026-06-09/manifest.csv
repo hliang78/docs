@@ -1,0 +1,12 @@
+file_name,node_name,physical_firewall,firewall_vsys
+SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1__MGMT.conf,SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1__MGMT,SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1,MGMT
+SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1__default.conf,SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1__default,SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1,default
+SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1__ext_Internet9297.conf,SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1__ext_Internet9297,SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1,ext_Internet9297
+SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1__vsys_route_shzj_ipv6_i_10034_1.conf,SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1__vsys_route_shzj_ipv6_i_10034_1,SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1,vsys_route_shzj_ipv6_i_10034_1
+SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1__vsys_vroute_shzj_hap_bs_10014_1.conf,SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1__vsys_vroute_shzj_hap_bs_10014_1,SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1,vsys_vroute_shzj_hap_bs_10014_1
+SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1__vsys_vrouteshzjhapbacku_10029_1.conf,SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1__vsys_vrouteshzjhapbacku_10029_1,SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1,vsys_vrouteshzjhapbacku_10029_1
+SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1__vsys_vrouteshzjhapbsspp_10027_1.conf,SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1__vsys_vrouteshzjhapbsspp_10027_1,SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1,vsys_vrouteshzjhapbsspp_10027_1
+SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1__vsys_vrouteshzjhapcorsp_10005_1.conf,SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1__vsys_vrouteshzjhapcorsp_10005_1,SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1,vsys_vrouteshzjhapcorsp_10005_1
+SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1__vsys_vrouteshzjhapcorsp_10023_1.conf,SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1__vsys_vrouteshzjhapcorsp_10023_1,SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1,vsys_vrouteshzjhapcorsp_10023_1
+SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1__vsys_vrouteshzjhapiotpr_10033_1.conf,SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1__vsys_vrouteshzjhapiotpr_10033_1,SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1,vsys_vrouteshzjhapiotpr_10033_1
+SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1__vsys_vrouteshzjhapomcpr_10018_1.conf,SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1__vsys_vrouteshzjhapomcpr_10018_1,SH-HAP-ZJIDC-CORE-FW-HW-E8000E-X8-1,vsys_vrouteshzjhapomcpr_10018_1

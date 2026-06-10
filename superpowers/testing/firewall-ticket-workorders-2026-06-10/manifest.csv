@@ -1,0 +1,3 @@
+blueprint_tag,source_node,node_code,csv_file,xlsx_file,row_count,notes
+FW-172.21.166.35-H3C-M9008-BORDER,172.21.166.35,FWN20260609018,FW-172.21.166.35-H3C-M9008-BORDER.firewall-policy-workorder.csv,FW-172.21.166.35-H3C-M9008-BORDER.firewall-policy-workorder.xlsx,14,按真实 security-policy ip 中 Trust/Untrust 样本反向生成
+FW-172.22.166.14-H3C-M9016-CMNET,172.22.166.14,FWN20260609019,FW-172.22.166.14-H3C-M9016-CMNET.firewall-policy-workorder.csv,FW-172.22.166.14-H3C-M9016-CMNET.firewall-policy-workorder.xlsx,10,按真实 security-policy ip 中 private/float/management 组反向生成

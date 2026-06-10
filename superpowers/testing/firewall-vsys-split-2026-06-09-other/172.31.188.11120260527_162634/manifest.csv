@@ -1,0 +1,3 @@
+file_name,node_name,physical_firewall,firewall_vsys
+ZQ01-mgt-fw-01-E9000E-F55-12-17-05U__Mgmt.conf,ZQ01-mgt-fw-01-E9000E-F55-12-17-05U__Mgmt,ZQ01-mgt-fw-01-E9000E-F55-12-17-05U,Mgmt
+ZQ01-mgt-fw-01-E9000E-F55-12-17-05U___management_vpn.conf,ZQ01-mgt-fw-01-E9000E-F55-12-17-05U___management_vpn_,ZQ01-mgt-fw-01-E9000E-F55-12-17-05U,_management_vpn_

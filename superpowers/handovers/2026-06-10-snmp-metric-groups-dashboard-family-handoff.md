@@ -6,6 +6,109 @@ Date: 2026-06-11
 
 Continue the SNMP metric groups work as a semantic strategy editor, not as a generic SNMP raw-parameter editor.
 
+## 2026-06-12 Progress Update
+
+The strategy/dashboard inheritance baseline is now fixed:
+
+- strategy runtime matches concrete copies, but metric contracts must resolve the full `parent_id` chain from root to leaf;
+- SNMP metric contract resolution now needs to align with strategy apply parameter merging, especially for append/merge parameters such as `passthrough_config` and `metric_manifest`;
+- dashboard trees are OneOps-side template/spec inheritance; Grafana receives independent materialized dashboard JSON.
+
+The demo2 switch dashboard loop was validated after reparenting existing vendor/platform copies under their vendor-generic strategy:
+
+```text
+target: AST20260603174801664
+matched strategy: 20000000-0000-4000-8000-000000000005
+matched context: Huawei / VRP / S5735
+support summary: 10 supported / 0 unsupported / 0 config_driven
+saved panel bindings: 20
+dashboard uid: snmp-switch-ast20260603174801-d01c0e303c
+```
+
+This confirms that a concrete Huawei S5735 copy can inherit interface, CPU, memory, fan, and power capabilities from ancestors while keeping model-specific temperature OIDs locally.
+
+Dashboard template inheritance has also started at the pure resolver layer:
+
+- `snmpGrafanaDashboardTemplate` applies ordered `snmpGrafanaPanelPatch` entries;
+- supported patch actions are `add`, `override`, `hide`, and `move`;
+- `before_panel_key` / `after_panel_key` style ordering is represented by patch anchors;
+- explicit grid zero overrides are supported through pointer layout fields, so children can move panels to `x=0` without losing intent;
+- the current static switch panel catalog is now treated as the root template and resolved through this same template-chain function before Grafana JSON materialization.
+
+The materializer now consumes that chain for concrete target contexts. For `Huawei / VRP / S5735`, dry-run/save resolves:
+
+```text
+snmp.switch.root
+snmp.switch.huawei.vrp
+snmp.switch.huawei.vrp.s5735
+```
+
+The dry-run materialization summary exposes both `dashboard_template_key` and `dashboard_template_chain`, and the inherited panel overrides are reflected in Grafana JSON plus panel bindings.
+
+A first persistent model now exists:
+
+```text
+platform_snmp_grafana_dashboard_template
+OneOps/migrations/add_snmp_grafana_dashboard_template.sql
+```
+
+It stores `template_key`, `parent_key`, switch dashboard variant, optional target match fields, `sort_order`, `enabled`, and `patches_json`. The by-target materializer attempts to load the most specific matching DB template chain first, then falls back to the built-in switch templates when the table is absent or empty.
+
+Quick env now has a late bootstrap seed:
+
+```text
+quick_env/docker-entrypoint-initdb.d/zzzzzzzzzz-snmp-grafana-dashboard-template-bootstrap.sql
+```
+
+The seed creates the table when needed and upserts:
+
+```text
+snmp.switch.root
+snmp.switch.huawei.vrp
+snmp.switch.huawei.vrp.s5735
+```
+
+The root template carries the current 20 switch-operation panel recipes. The Huawei/VRP child overrides CPU title and hides the inherited memory stat panel. The S5735 child overrides the device identity title. This closes the quick-env data anchor.
+
+A first read-only management/diagnostic API now exposes the template tree and concrete target resolution:
+
+```text
+GET  /platform/metrics/teleabs/metric-contract/grafana/dashboard-templates
+POST /platform/metrics/teleabs/metric-contract/grafana/dashboard-templates/resolve/by-target
+```
+
+The list endpoint reports either persisted DB templates or built-in fallback templates, including `template_key`, `parent_key`, match fields, patch count, and enabled state. The resolve endpoint accepts either `target_part` or a direct target context and returns the selected template key, full template chain, effective panel count, and effective panel keys. This is intentionally diagnostic/read-only; template edit API and UI are still pending.
+
+The first write-side template management API is now also available:
+
+```text
+POST /platform/metrics/teleabs/metric-contract/grafana/dashboard-templates
+```
+
+This endpoint upserts one template node by `template_key`. It writes the OneOps-side template tree only; it does not materialize dashboard JSON, save a `grafana_dashboard` row, or sync to Grafana. Request fields cover parent key, dashboard variant, target match fields, sort order, enabled state, and `patches_json`. The backend validates that the parent exists, the node does not parent itself, and `patches_json` parses as the same `snmpGrafanaPanelPatch` array consumed by the materializer.
+
+Frontend typed support and the first drawer entry are now connected:
+
+- `OneOPS-UI/src/typings/platform/snmp-metric-contract.ts` defines template list, resolve, and upsert request/response types;
+- `OneOPS-UI/src/api/platform/teleabs.ts` exposes `listSnmpGrafanaDashboardTemplates`, `resolveSnmpGrafanaDashboardTemplateByTarget`, and `upsertSnmpGrafanaDashboardTemplate`;
+- `StrategySetDetailDrawer` now adds `加载模板树` and `解析模板链` actions beside the existing target panel preview and dashboard save/sync actions;
+- `snmpGrafanaDashboardTemplateManagement.ts` keeps the reusable state helper for a future full edit UI.
+
+This gives operators an immediate read/diagnostic surface from a real target input.
+
+The drawer now also includes the first lightweight template-node editor:
+
+- selecting `编辑模板` copies the row into an editable draft;
+- the draft can edit template key, parent key, vendor/platform/model match fields, sort order, enabled state, and raw `patches_json`;
+- `patches_json` must be an array JSON before `保存模板` calls the upsert API;
+- save refreshes the template list so the updated node can be resolved again against the same target input.
+- list and upsert responses now include the node's actual `patches_json`, so editing an existing node does not silently reset inherited overrides to `[]`;
+- the internal patch structs now marshal with stable snake_case JSON keys such as `panel_key`, `before_panel_key`, `grid_x`, and `definition`, preserving the same format used by quick-env seed SQL and frontend raw editing.
+- the management list now calls the backend with `include_disabled=true`, so a disabled template node remains visible and can be re-enabled. Runtime template resolution and dashboard materialization still use enabled templates only, so disabled nodes are not accidentally applied to generated Grafana dashboards.
+- the strategy-set Grafana save summary now surfaces the materializer's `dashboard_template_key` and `dashboard_template_chain`, so an operator can see which concrete dashboard template copy was applied during save or save-and-sync without opening raw JSON.
+
+This is intentionally a raw patch JSON editor, not a visual panel/patch builder. It manages the OneOps template tree only and still does not materialize, persist, or sync a Grafana dashboard.
+
 The intended long path is still:
 
 ```text
@@ -46,6 +149,8 @@ These constraints were clarified repeatedly by the user and should be treated as
   - a visual editor for SNMP strategy semantics,
   - and a future editor/input layer for Grafana panel contracts.
 - We should not keep adding UI if the underlying data model is still conceptually wrong.
+- Real runtime matching usually lands on a concrete strategy copy. That copy must inherit parent and grandparent strategy capabilities; metric groups, recording rules, and Grafana materialization must consume the merged effective strategy, not only the leaf row.
+- Dashboard families may be tree-shaped inside OneOps, but Grafana should receive an independent materialized dashboard JSON. Grafana folders and library panels can help organization/reuse, but they should not be treated as full dashboard inheritance.
 
 ## Current Working Tree
 
@@ -2321,6 +2426,125 @@ Still deferred:
 - Grafana page consumption;
 - broad vendor/private metric standardization.
 
+### 18. Grafana Dashboard Materialization Dry-Run Is Now Opened
+
+The first Grafana-facing stage is now a strict by-target dry-run only.
+
+New backend endpoint:
+
+```text
+POST /platform/metrics/teleabs/strategy-sets/:id/metric-contract/grafana/dashboards/materialize/dry-run/by-target
+```
+
+Request:
+
+```json
+{ "target_part": "DEVICE-CODE-OR-ID" }
+```
+
+Current dry-run flow:
+
+```text
+strategy_set_id + target_part
+  -> by-target panel capability preview
+  -> by-target recording rule preview
+  -> pure Grafana dashboard JSON materializer
+  -> local JSON validation
+  -> panel binding preview
+```
+
+Response includes:
+
+```text
+strategy_set_id
+target
+source
+item_contracts[]
+effective_contract
+supports[]
+support_summary
+rule_group
+rules[]
+recording_rule_summary
+dashboard
+dashboard_json
+panel_bindings[]
+materialization
+```
+
+`materialization` contains:
+
+```text
+format = grafana_dashboard_json
+dry_run = true
+panel_count
+binding_count
+json_bytes
+valid
+validation_errors[]
+```
+
+Strict boundary:
+
+- request body remains `target_part` only;
+- no frontend manufacturer/platform/model/catalog/version inference is introduced;
+- no `grafana_dashboard` row is created or updated;
+- no `syncToGrafana` call is made;
+- no dashboard diff is computed;
+- no panel binding is persisted;
+- unsupported panels are left out of generated `dashboard.panels` but remain visible in `supports[]`.
+
+The generated panel binding preview carries:
+
+```text
+panel_key
+panel_id
+title
+strategy_set_id
+strategy_ids[]
+metric_group_key
+metric_keys[]
+selected_capability_keys[]
+record_names[]
+managed_state = preview
+content_hash
+```
+
+Implemented files:
+
+```text
+/OneOPS/OneOps/app/platform/dto/snmp_metric_contract.go
+/OneOPS/OneOps/app/platform/service/i_metric_capability_contract_resolver.go
+/OneOPS/OneOps/app/platform/service/impl/metric_capability_contract_resolver.go
+/OneOPS/OneOps/app/platform/api/teleabs.go
+/OneOPS/OneOps/app/platform/router/platform.go
+/OneOPS/OneOps/app/platform/router/platform_bidi.go
+/OneOPS/OneOps-UI/src/typings/platform/snmp-metric-contract.ts
+/OneOPS/OneOps-UI/src/api/platform/teleabs.ts
+/OneOPS/OneOps-UI/scripts/snmp-strategy-set-grafana-dashboard-materialization-dry-run-smoke.ts
+```
+
+Focused verification:
+
+```bash
+cd /OneOPS/OneOps
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolverMaterializesGrafanaDashboardJSON|TestMetricCapabilityContractResolverMaterializesStrategySetGrafanaDashboardByTarget' -count=1
+go test ./app/platform/api -run TestTeleabsAPI_MaterializeStrategySetGrafanaDashboardByTarget_HTTP -count=1
+go test ./app/platform/router -run TestTeleabsRoutes_ConsistentBetweenPlatformAndBidi -count=1
+
+cd /OneOPS/OneOps-UI
+npm run smoke:snmp-strategy-set-grafana-dashboard-materialization-dry-run
+```
+
+Still deferred:
+
+- writing generated JSON to `grafana_dashboard`;
+- syncing generated JSON to Grafana;
+- dashboard diff and rollback;
+- persisted panel binding table;
+- page-level Grafana materialization controls;
+- automatic generation after strategy or recording-rule publish.
+
 ## What The Next AI Should Verify Before Changing More UI
 
 1. Keep the current scope fixed on the existing by-target page-level preview.
@@ -2582,4 +2806,2070 @@ Also remove generated profile files:
 
 ```bash
 rm -f /OneOPS/OneOps/cpu.prof /OneOPS/OneOps/mem.prof
+```
+
+## 2026-06-12 Update: Grafana Switch Dashboard Direction Is Now Open
+
+The earlier boundary said not to expand Grafana. That boundary has changed by explicit user direction.
+
+New direction:
+
+```text
+SNMP Grafana materialization should continue,
+but the screenshot-inspired dashboard style is primarily for network switches.
+```
+
+The screenshot should be treated as a switch operations dashboard variant, not a universal SNMP dashboard template.
+
+New spec:
+
+```text
+docs/superpowers/specs/2026-06-12-snmp-grafana-dashboard-screenshot-alignment-design.md
+```
+
+New implementation plan:
+
+```text
+docs/superpowers/plans/2026-06-12-snmp-grafana-screenshot-style-materializer.md
+```
+
+Current accepted product/design interpretation:
+
+```text
+variant: snmp.switch.operations
+primary target: network switch
+primary principle: integrate with the existing strategy set / strategy / capability-contract data logic
+primary workflow:
+  identify device
+  -> decide urgency
+  -> locate saturated/faulty port
+  -> inspect trend/correlation
+  -> collect evidence for ownership and next action
+```
+
+The switch variant should prioritize:
+
+- device identity and data freshness;
+- health KPI strip;
+- CPU and memory current values plus trends;
+- interface utilization top-N;
+- port status map or status-history;
+- throughput trend;
+- interface quality hotspot table;
+- broadcast/non-unicast ratio where supported;
+- optional hardware health later when sensor capabilities are modeled.
+
+The most important point is not visual similarity. The dashboard must be materialized from the already implemented data logic:
+
+```text
+target_part
+  -> platform_devices_v2
+  -> deviceidentity.ResolveMetadata(...)
+  -> StrategySetMatcher
+  -> matched TeleabsStrategySet items
+  -> TeleabsStrategy parent/child/effective contract
+  -> supports[] / support_summary
+  -> recording rule preview rules[]
+  -> switch panel catalog
+  -> dashboard_json + panel_bindings[]
+```
+
+Do not create a standalone dashboard template that bypasses:
+
+- target context normalization;
+- strategy-set selector logic;
+- strategy parent/child inheritance;
+- effective SNMP metric capability contract;
+- panel capability support;
+- recording-rule preview;
+- panel binding traceability.
+
+Do not force this layout onto:
+
+- servers;
+- BMC/OOB devices;
+- generic SNMP devices;
+- routers/firewalls/load balancers without a dedicated variant decision.
+
+Those should use future variants or a smaller capability-driven fallback.
+
+Quick sample already produced in demo2 Grafana:
+
+```text
+http://127.0.0.1:3300/d/oneops-snmp-screenshot-style-sample/oneops-snmp-screenshot-style-sample
+```
+
+Sample facts:
+
+- datasource: `VictoriaMetrics`;
+- dashboard uid: `oneops-snmp-screenshot-style-sample`;
+- panel count: `19`;
+- panel types: `text`, `stat`, `timeseries`, `table`, `status-history`, `piechart`;
+- data is simulated VictoriaMetrics sample data, not real SNMP collection.
+
+Next implementation should follow:
+
+```text
+docs/superpowers/plans/2026-06-12-snmp-grafana-screenshot-style-materializer.md
+```
+
+Boundary for next implementation:
+
+- keep strict by-target dry-run route;
+- add switch variant metadata and section-aware panel catalog;
+- do not persist dashboards;
+- do not call `syncToGrafana`;
+- do not add real alert/event/compliance joins in this pass;
+- do not implement a custom Canvas port map in this pass.
+
+## 2026-06-12 Implementation Update: Switch Dashboard Dry-Run Materializer
+
+The switch dashboard direction has now moved from design/sample into the backend dry-run materializer.
+
+Implemented behavior:
+
+- the by-target Grafana dry-run still uses the existing authoritative chain: target metadata, StrategySet matching, effective contract, panel support preview, and recording-rule preview;
+- dashboard variant is fixed to `snmp.switch.operations` for this pass;
+- panels are rendered from a switch panel catalog only when the required capability keys and recording rules are available;
+- unsupported panels are omitted and reported in `materialization.skipped_panel_keys`;
+- rendered panels are reported in `materialization.rendered_panel_keys`;
+- panel bindings now carry `dashboard_variant`, `section_key`, `display_intent`, `visual_type`, and `render_policy`;
+- the identity panel is always rendered from target context and carries no metric/record binding;
+- metric panels keep strategy-set, strategy id, metric group, capability, and record-name traceability.
+
+Current switch dry-run panel catalog includes:
+
+- `device.identity`;
+- `system_basic.cpu.stat`;
+- `system_basic.memory.stat`;
+- `interface_basic.traffic_mix`;
+- `interface_basic.port_up_count`;
+- `interface_basic.port_down_count`;
+- `interface_basic.error_port_count`;
+- `interface_basic.discard_port_count`;
+- `interface_basic.utilization`;
+- `interface_basic.port_state`;
+- `system_basic.cpu_memory.trend`;
+- `interface_basic.throughput`;
+- `interface_basic.quality_hotspots`;
+- `interface_basic.broadcast`.
+
+Important boundaries still hold:
+
+- no `grafana_dashboard` persistence;
+- no `syncToGrafana`;
+- no dashboard diff;
+- no automatic publish;
+- no real alert/event/compliance/routing joins;
+- no custom Canvas port-map plugin.
+
+Verification run:
+
+```bash
+cd OneOps
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver.*GrafanaDashboard|TestMetricCapabilityContractResolver.*RecordingRule' -count=1
+go test ./app/platform/api -run 'TestTeleabsAPI_.*GrafanaDashboard' -count=1
+go test ./app/platform/router -run TestTeleabsRoutes_ConsistentBetweenPlatformAndBidi -count=1
+go test ./cmd -run '^$' -count=1
+
+cd ../OneOPS-UI
+npm run smoke:snmp-strategy-set-grafana-dashboard-materialization-dry-run
+npm run typecheck
+```
+
+## 2026-06-12 Quick Env Verification: Real Switch Target Imported To Grafana
+
+The local quick env was restarted with the latest OneOps code and the by-target dry-run was verified against a real loaded Device V2 switch target:
+
+- OneOps API: `http://127.0.0.1:8380`;
+- Grafana: `http://127.0.0.1:3300`;
+- datasource: `VictoriaMetrics`, uid `victoriametrics`;
+- strategy set: `4284353d-1233-4022-ad18-871b3d8444c7`;
+- target: `AST20260603174801664`;
+- target context: `SWITCH / H3C / Comware / S5735 / 7.1`;
+- metadata source: `platform_devices_v2`.
+
+Dry-run result:
+
+- `dashboard_variant`: `snmp.switch.operations`;
+- `panel_count`: `9`;
+- `binding_count`: `9`;
+- rendered panel keys:
+  - `device.identity`;
+  - `system_basic.cpu.stat`;
+  - `system_basic.memory.stat`;
+  - `interface_basic.traffic_mix`;
+  - `interface_basic.port_up_count`;
+  - `interface_basic.port_down_count`;
+  - `interface_basic.error_port_count`;
+  - `interface_basic.discard_port_count`;
+  - `interface_basic.utilization`;
+  - `interface_basic.port_state`;
+  - `system_basic.cpu_memory.trend`;
+  - `interface_basic.throughput`;
+  - `interface_basic.quality_hotspots`;
+  - `interface_basic.broadcast`.
+
+Grafana import result:
+
+```text
+http://127.0.0.1:3300/d/snmp-switch-ast3174801664/oneops-snmp-switch-ops-ast20260603174801664
+```
+
+Imported dashboard facts:
+
+- uid: `snmp-switch-ast3174801664`;
+- title: `OneOPS SNMP Switch Ops - AST20260603174801664`;
+- panel count read back from Grafana API: `9`;
+- panel types: `text`, `stat`, `table`, `status-history`, `timeseries`.
+
+## 2026-06-12 Update: Dashboard Save Closure And Quick Env Target Context Fix
+
+The Grafana switch dashboard closure now has a real persistence path, not only dry-run/import testing.
+
+New save endpoint:
+
+```text
+POST /platform/metrics/teleabs/strategy-sets/:id/metric-contract/grafana/dashboards/save/by-target
+```
+
+Current behavior:
+
+- resolves target context from `platform_devices_v2`;
+- matches the strategy set through the existing strategy-set matcher;
+- resolves inherited/effective SNMP capability contracts;
+- materializes Grafana dashboard JSON through the backend resolver;
+- upserts `grafana_dashboard` with a stable dashboard uid/code;
+- upserts `platform_teleabs_strategy_set_dashboard_binding`;
+- does not call `syncToGrafana`.
+
+Quick env had a concrete closure gap: the existing Device V2 seed row for target `AST20260603174801664` existed, but did not contain enough normalized context for the by-target resolver. The missing fields were:
+
+- `manufacturer_name`;
+- `platform_name`;
+- `system_version`.
+
+Because `ResolveTargetContext` requires the normalized target profile, the real save API previously failed with:
+
+```text
+target context missing required fields: manufacturer_name, platform_name, system_version
+```
+
+This is now fixed in `quick_env/start.sh`.
+
+New quick env startup sync:
+
+```text
+sync_snmp_switch_device_context_records
+```
+
+It runs before optional data loading and idempotently patches/inserts the SNMP switch demo target into:
+
+- `UniOPS`;
+- `zb_firewall`;
+- `zb_firewall_122`.
+
+Current normalized demo target context:
+
+```text
+target: AST20260603174801664
+catalog: SWITCH / CATL20231020001
+manufacturer: Huawei
+platform: VRP / PLT20231020016
+model: S5735 / TYP20240628000003
+system_version: V200R021C10
+function_area: DefaultArea
+```
+
+The current running quick env database was also patched in-place, so the save endpoint now succeeds against port `8380`.
+
+Verified real save result:
+
+```text
+strategy_set_id: 4284353d-1233-4022-ad18-871b3d8444c7
+target: AST20260603174801664
+dashboard_code: GDBSNMP3E6A64DC49CDE413A4C27D84
+dashboard_uid: snmp-switch-ast20260603174801-d01c0e303c
+dashboard_title: OneOPS SNMP Switch Ops - AST20260603174801664
+grafana_dashboard.state: Disabled
+platform_teleabs_strategy_set_dashboard_binding rows: 1
+```
+
+Idempotency was verified by calling the save endpoint twice:
+
+```text
+grafana_dashboard rows for uid: 1
+strategy-set dashboard binding rows: 1
+```
+
+This closes the first platform-side persistence loop:
+
+```text
+quick env seed target
+  -> platform_devices_v2 normalized target context
+  -> strategy set
+  -> metric capability contract
+  -> dashboard materialization
+  -> grafana_dashboard
+  -> strategy-set dashboard binding
+```
+
+Remaining closure gaps:
+
+- the saved dashboard is still `Disabled` and not synced to Grafana automatically;
+- there is still no diff/preview/rollback lifecycle for persisted dashboards;
+- the dashboard binding is currently at strategy-set level, not variant/profile/target level;
+- alert/event/compliance/routing data from the screenshot is not yet backed by real joined platform data;
+- hardware health panels require modeled sensor/fan/PSU capability contracts before they should be generated;
+- the frontend still needs a deliberate action surface for "dry-run -> save -> later sync/import".
+
+Verification commands used for this update:
+
+```bash
+cd quick_env
+python3 tests/test_seed_template_guard.py -v -k snmp_switch_device_context
+
+cd ../OneOps
+go run main.go
+
+curl -H 'Content-Type: application/json' \
+  -H 'X-Auth-Token: abc123' \
+  -X POST \
+  http://127.0.0.1:8380/api/v1/platform/metrics/teleabs/strategy-sets/4284353d-1233-4022-ad18-871b3d8444c7/metric-contract/grafana/dashboards/save/by-target \
+  -d '{"target_part":"AST20260603174801664"}'
+```
+
+Important data note:
+
+- Grafana layout and PromQL bindings are imported;
+- the current VictoriaMetrics query for `oneops:cpu_usage_direct:ratio` returned `0` series during this verification;
+- this means quick env still needs recording-rule publication and/or real SNMP sample ingestion before the dashboard shows live curves instead of empty panels.
+
+Follow-up implementation note:
+
+- A real quick-env mismatch was found where support preview selected representative keys such as `if_in_error_rate` and `if_in_broadcast_ratio`, while recording-rule preview had both in/out records.
+- The materializer was adjusted so a switch panel capability may be satisfied by either support-selected capability keys or existing recording-rule records.
+- This keeps panel rendering aligned with the existing StrategySet/support/recording-rule chain instead of requiring support preview to list every derived record key.
+
+## 2026-06-12 Quick Env Update: Switch Dashboard Now Has Sample Series
+
+To make the imported switch operations dashboard immediately visible in Grafana, synthetic VictoriaMetrics sample series were loaded into the current quick env runtime.
+
+Dashboard URL:
+
+```text
+http://127.0.0.1:3300/d/snmp-switch-ast3174801664/oneops-snmp-switch-ops-ast20260603174801664
+```
+
+Sample import facts:
+
+- VictoriaMetrics host port: `9390`;
+- Grafana datasource uid: `victoriametrics`;
+- sample file generated at: `/tmp/oneops-snmp-switch-ops-sample.prom`;
+- imported line count: `5002`;
+- import endpoint: `POST http://127.0.0.1:9390/api/v1/import/prometheus`;
+- import result: HTTP `204`.
+
+Verified query results:
+
+```bash
+curl -sS --get 'http://127.0.0.1:9390/api/v1/query' \
+  --data-urlencode 'query=oneops:cpu_usage_direct:ratio'
+```
+
+- result count: `1`;
+- sample metric labels: `device_code="AST20260603174801664"`, `device_name="H3C-S5735-Demo"`, `agent_host="192.168.106.68"`.
+
+```bash
+curl -sS --get 'http://127.0.0.1:9390/api/v1/query' \
+  --data-urlencode 'query=topk(10, max by (ifDescr, ifAlias) (oneops:if_in_rate:bps / oneops:if_speed_bps))'
+```
+
+- result count: `8`;
+- sample interface labels: `ifDescr="GigabitEthernet1/0/8"`, `ifAlias="access-8"`.
+
+Grafana datasource proxy was also verified:
+
+```bash
+curl -sS --get 'http://127.0.0.1:3300/api/datasources/proxy/uid/victoriametrics/api/v1/query' \
+  --data-urlencode 'query=oneops:cpu_usage_direct:ratio' \
+  -u admin:admin
+```
+
+- result count: `1`.
+
+Important boundary:
+
+- this is synthetic quick-env data for visual/dashboard smoke only;
+- it does not prove live SNMP collection, Telegraf ingestion, or vmalert recording-rule evaluation;
+- the dashboard itself is still imported manually from the dry-run output and is not persisted through `grafana_dashboard` or synced through `syncToGrafana`.
+
+## 2026-06-12 Quick Env Update: Traffic Mix Pie Panel Added
+
+The switch operations dry-run materializer now includes a composition panel:
+
+- panel key: `interface_basic.traffic_mix`;
+- title: `Traffic Mix`;
+- Grafana type: `piechart`;
+- display intent: `composition`;
+- required capabilities: `if_in_broadcast_ratio`, `if_out_broadcast_ratio`;
+- data source: existing recording-rule records, not new raw SNMP fields.
+
+The panel intentionally stays inside the current data logic:
+
+```text
+StrategySet/Strategy passthrough
+  -> capability support
+  -> recording-rule preview
+  -> oneops:if_in_broadcast_ratio:ratio
+  -> oneops:if_out_broadcast_ratio:ratio
+  -> Grafana piechart targets
+```
+
+It renders two slices:
+
+- `Broadcast / Non-Unicast`: average of inbound/outbound broadcast or non-unicast ratio;
+- `Other Traffic`: `1 - Broadcast / Non-Unicast`.
+
+Real quick env dry-run result after restarting OneOps on `8380`:
+
+- `panel_count`: `10`;
+- `binding_count`: `10`;
+- rendered panel keys include `interface_basic.traffic_mix`;
+- panel types include `piechart`, `stat`, `status-history`, `table`, `text`, and `timeseries`.
+
+Grafana was overwritten on the same UID:
+
+```text
+http://127.0.0.1:3300/d/snmp-switch-ast3174801664/oneops-snmp-switch-ops-ast20260603174801664
+```
+
+Grafana API readback:
+
+- uid: `snmp-switch-ast3174801664`;
+- version: `2`;
+- panel count: `10`;
+- panel titles now include `Traffic Mix`.
+
+Synthetic sample data was shifted to the current time and re-imported:
+
+- shifted file: `/tmp/oneops-snmp-switch-ops-sample-current.prom`;
+- imported line count: `5002`;
+- import result: HTTP `204`.
+
+Verified query results:
+
+```bash
+curl -sS --get 'http://127.0.0.1:9390/api/v1/query' \
+  --data-urlencode 'query=clamp_min(clamp_max(avg((oneops:if_in_broadcast_ratio:ratio + oneops:if_out_broadcast_ratio:ratio) / 2), 1), 0)'
+```
+
+- result count: `1`;
+- sample value: approximately `0.0307`.
+
+```bash
+curl -sS --get 'http://127.0.0.1:9390/api/v1/query' \
+  --data-urlencode 'query=clamp_min(1 - (clamp_min(clamp_max(avg((oneops:if_in_broadcast_ratio:ratio + oneops:if_out_broadcast_ratio:ratio) / 2), 1), 0)), 0)'
+```
+
+- result count: `1`;
+- sample value: approximately `0.9693`.
+
+The same broadcast/non-unicast query also returns `1` result through Grafana datasource proxy.
+
+Important boundary:
+
+- this is a useful visual approximation of the screenshot's traffic-mix donut;
+- true unicast/broadcast/multicast split still needs dedicated packet-ratio capabilities before it can be represented literally;
+- no new dashboard persistence, `syncToGrafana`, or automatic publication was added.
+
+## 2026-06-12 Quick Env Update: Port Up/Down KPI Panels Added
+
+The switch operations dry-run materializer now includes two immediate port-state KPI panels:
+
+- `interface_basic.port_up_count`
+  - title: `Ports Up`;
+  - Grafana type: `stat`;
+  - capability: `if_oper_status`;
+  - expression: `count(oneops:if_oper_status == 1) or vector(0)`.
+- `interface_basic.port_down_count`
+  - title: `Ports Down`;
+  - Grafana type: `stat`;
+  - capability: `if_oper_status`;
+  - expression: `count(oneops:if_oper_status != 1) or vector(0)`.
+
+Why this belongs in the switch variant:
+
+- network operators check interface availability before reading detailed traffic curves;
+- it uses the same `if_oper_status` recording rule as the existing port state map;
+- it adds a fast top-row triage signal without adding new SNMP fields, raw PromQL shortcuts, or a vendor-specific branch.
+
+Real quick env dry-run result after restarting OneOps on `8380`:
+
+- `panel_count`: `12`;
+- `binding_count`: `12`;
+- rendered panel keys include `interface_basic.port_up_count` and `interface_basic.port_down_count`;
+- panel titles include `Ports Up` and `Ports Down`.
+
+Grafana was overwritten on the same UID:
+
+```text
+http://127.0.0.1:3300/d/snmp-switch-ast3174801664/oneops-snmp-switch-ops-ast20260603174801664
+```
+
+Grafana API readback:
+
+- uid: `snmp-switch-ast3174801664`;
+- version: `3`;
+- panel count: `12`;
+- panel types: `piechart`, `stat`, `status-history`, `table`, `text`, `timeseries`.
+
+Synthetic sample data was shifted to the current time and re-imported:
+
+- shifted file: `/tmp/oneops-snmp-switch-ops-sample-current.prom`;
+- imported line count: `5002`;
+- import result: HTTP `204`.
+
+Verified query results:
+
+```bash
+curl -sS --get 'http://127.0.0.1:9390/api/v1/query' \
+  --data-urlencode 'query=count(oneops:if_oper_status == 1) or vector(0)'
+```
+
+- result count: `1`;
+- sample value: `7`.
+
+```bash
+curl -sS --get 'http://127.0.0.1:9390/api/v1/query' \
+  --data-urlencode 'query=count(oneops:if_oper_status != 1) or vector(0)'
+```
+
+- result count: `1`;
+- sample value: `1`.
+
+The `Ports Up` expression also returns `1` result through Grafana datasource proxy.
+
+Important boundary:
+
+- `Ports Down` currently means non-up `ifOperStatus`, not only administratively down;
+- a future panel can split `down/testing/dormant/notPresent/lowerLayerDown` if the product needs richer IF-MIB state semantics;
+- dashboard persistence and Grafana sync remain outside this dry-run-only phase.
+
+## 2026-06-12 Quick Env Update: Error/Discard Port KPI Panels Added
+
+The switch operations dry-run materializer now includes two immediate interface-quality KPI panels:
+
+- `interface_basic.error_port_count`
+  - title: `Error Ports`;
+  - Grafana type: `stat`;
+  - capabilities: `if_in_error_rate`, `if_out_error_rate`;
+  - expression: `count(max by (ifDescr, ifAlias) (oneops:if_in_error_rate:pps + oneops:if_out_error_rate:pps) > 0) or vector(0)`.
+- `interface_basic.discard_port_count`
+  - title: `Discard Ports`;
+  - Grafana type: `stat`;
+  - capabilities: `if_in_discard_rate`, `if_out_discard_rate`;
+  - expression: `count(max by (ifDescr, ifAlias) (oneops:if_in_discard_rate:pps + oneops:if_out_discard_rate:pps) > 0) or vector(0)`.
+
+Why this belongs in the switch variant:
+
+- operators need a top-level quality signal before opening the detailed hotspot table;
+- the panels reuse existing recording rules and capability gating;
+- no new raw SNMP inputs, dashboard-side vendor matching, or alert/event joins were added.
+
+Real quick env dry-run result after restarting OneOps on `8380`:
+
+- `panel_count`: `14`;
+- `binding_count`: `14`;
+- rendered panel keys include `interface_basic.error_port_count` and `interface_basic.discard_port_count`;
+- panel titles include `Error Ports` and `Discard Ports`.
+
+Grafana was overwritten on the same UID:
+
+```text
+http://127.0.0.1:3300/d/snmp-switch-ast3174801664/oneops-snmp-switch-ops-ast20260603174801664
+```
+
+Grafana API readback:
+
+- uid: `snmp-switch-ast3174801664`;
+- version: `4`;
+- panel count: `14`;
+- panel types: `piechart`, `stat`, `status-history`, `table`, `text`, `timeseries`.
+
+Verified query results:
+
+```bash
+curl -sS --get 'http://127.0.0.1:9390/api/v1/query' \
+  --data-urlencode 'query=count(max by (ifDescr, ifAlias) (oneops:if_in_error_rate:pps + oneops:if_out_error_rate:pps) > 0) or vector(0)'
+```
+
+- result count: `1`;
+- sample value: `0`.
+
+```bash
+curl -sS --get 'http://127.0.0.1:9390/api/v1/query' \
+  --data-urlencode 'query=count(max by (ifDescr, ifAlias) (oneops:if_in_discard_rate:pps + oneops:if_out_discard_rate:pps) > 0) or vector(0)'
+```
+
+- result count: `1`;
+- sample value: `0`.
+
+The `Error Ports` expression also returns `1` result through Grafana datasource proxy.
+
+Important boundary:
+
+- these are quality indicators, not alert records;
+- thresholding is panel-local for visualization only and does not create alert policy;
+- future alert/event panels should join a real alert model instead of inferring alerts from these stat panels.
+
+## 2026-06-12 Quick Env Update: Grafana PromQL Is Now Target-Scoped
+
+The switch operations dry-run materializer now scopes Grafana PromQL to the resolved target device.
+
+Why this matters:
+
+- the dry-run API is by target, so the generated dashboard must not aggregate all devices that share the same recording-rule names;
+- without label scoping, a multi-switch VictoriaMetrics dataset would mix CPU, memory, traffic, status, quality, and broadcast series across devices;
+- this fix keeps dashboard materialization aligned with the existing strict target-resolution chain.
+
+Implementation behavior:
+
+- Grafana expressions now wrap each recording-rule record with `device_code="<resolved device code>"`;
+- fallback target identity is `DeviceCode`, then `TargetPart`, then `DeviceID`;
+- panel bindings still retain original recording-rule names such as `oneops:if_in_rate:bps`;
+- only dashboard query expressions are scoped.
+
+Example before:
+
+```text
+topk(10, max by (ifDescr, ifAlias) (oneops:if_in_rate:bps / oneops:if_speed_bps))
+```
+
+Example after:
+
+```text
+topk(10, max by (ifDescr, ifAlias) (oneops:if_in_rate:bps{device_code="AST20260603174801664"} / oneops:if_speed_bps{device_code="AST20260603174801664"}))
+```
+
+Real quick env dry-run result after restarting OneOps on `8380`:
+
+- `panel_count`: `14`;
+- `binding_count`: `14`;
+- first generated expression: `oneops:cpu_usage_direct:ratio{device_code="AST20260603174801664"}`;
+- dashboard JSON contains `device_code="AST20260603174801664"`;
+- dashboard JSON no longer contains the unscoped utilization expression `oneops:if_in_rate:bps / oneops:if_speed_bps`.
+
+Grafana was overwritten on the same UID:
+
+```text
+http://127.0.0.1:3300/d/snmp-switch-ast3174801664/oneops-snmp-switch-ops-ast20260603174801664
+```
+
+Grafana API readback:
+
+- uid: `snmp-switch-ast3174801664`;
+- version: `5`;
+- panel count: `14`;
+- first expression: `oneops:cpu_usage_direct:ratio{device_code="AST20260603174801664"}`.
+
+Synthetic sample data was shifted to the current time and re-imported:
+
+- shifted file: `/tmp/oneops-snmp-switch-ops-sample-current.prom`;
+- imported line count: `5002`;
+- import result: HTTP `204`.
+
+Verified scoped query results:
+
+```bash
+curl -sS --get 'http://127.0.0.1:9390/api/v1/query' \
+  --data-urlencode 'query=oneops:cpu_usage_direct:ratio{device_code="AST20260603174801664"}'
+```
+
+- result count: `1`.
+
+```bash
+curl -sS --get 'http://127.0.0.1:9390/api/v1/query' \
+  --data-urlencode 'query=topk(10, max by (ifDescr, ifAlias) (oneops:if_in_rate:bps{device_code="AST20260603174801664"} / oneops:if_speed_bps{device_code="AST20260603174801664"}))'
+```
+
+- result count: `8`.
+
+The scoped interface-utilization query also returns `8` results through Grafana datasource proxy.
+
+Important boundary:
+
+- this assumes collected/recorded series carry a stable `device_code` label;
+- if future pipelines use another canonical device label, the materializer should centralize the label key rather than hard-code panel-specific filters;
+- this change still does not persist dashboards or call `syncToGrafana`.
+
+## 2026-06-12 Quick Env Update: Device Scope Uses Grafana Variable
+
+The switch operations dry-run materializer now expresses device scoping through a Grafana dashboard variable instead of hard-coding the target device code in every query.
+
+Why this matters:
+
+- the dashboard remains single-target by default, but the filter is centralized;
+- future save/sync/import flows can override or inspect one variable instead of rewriting every PromQL expression;
+- generated panel expressions are easier to diff and less noisy.
+
+Generated dashboard variable:
+
+```json
+{
+  "name": "device_code",
+  "type": "constant",
+  "label": "Device Code",
+  "query": "AST20260603174801664",
+  "current": {
+    "text": "AST20260603174801664",
+    "value": "AST20260603174801664"
+  },
+  "hide": 2
+}
+```
+
+Example query:
+
+```text
+oneops:cpu_usage_direct:ratio{device_code="$device_code"}
+```
+
+Real quick env dry-run result after restarting OneOps on `8380`:
+
+- `panel_count`: `14`;
+- `binding_count`: `14`;
+- variable `device_code` exists with current value `AST20260603174801664`;
+- first generated expression: `oneops:cpu_usage_direct:ratio{device_code="$device_code"}`;
+- dashboard JSON contains `device_code="$device_code"`;
+- dashboard JSON no longer hard-codes `device_code="AST20260603174801664"` inside query expressions.
+
+Grafana was overwritten on the same UID:
+
+```text
+http://127.0.0.1:3300/d/snmp-switch-ast3174801664/oneops-snmp-switch-ops-ast20260603174801664
+```
+
+Grafana API readback:
+
+- uid: `snmp-switch-ast3174801664`;
+- version: `6`;
+- panel count: `14`;
+- variable `device_code` current value: `AST20260603174801664`;
+- first expression: `oneops:cpu_usage_direct:ratio{device_code="$device_code"}`.
+
+Synthetic sample data was shifted to the current time and re-imported:
+
+- shifted file: `/tmp/oneops-snmp-switch-ops-sample-current.prom`;
+- imported line count: `5002`;
+- import result: HTTP `204`.
+
+Verified query results after substituting the variable value:
+
+```bash
+curl -sS --get 'http://127.0.0.1:9390/api/v1/query' \
+  --data-urlencode 'query=oneops:cpu_usage_direct:ratio{device_code="AST20260603174801664"}'
+```
+
+- result count: `1`.
+
+The scoped interface-utilization query also returns `8` results through Grafana datasource proxy.
+
+Important boundary:
+
+- `device_code` is currently a hidden constant because this dashboard is generated by strict by-target dry-run;
+- a future multi-device or reusable dashboard variant can expose a query/custom variable, but that should be a separate variant decision;
+- this change still does not persist dashboards or call `syncToGrafana`.
+
+## 2026-06-12 Quick Env Update: Datasource Variable Added To Generated Dashboard
+
+The switch operations dry-run materializer now emits Grafana datasource references directly in the generated dashboard JSON.
+
+Why this matters:
+
+- previous quick-env imports needed a jq step that injected `datasource: {type:"prometheus", uid:"victoriametrics"}` into each target;
+- that import-only patch would not exist when the dashboard is later persisted through `grafana_dashboard` or synced through `syncToGrafana`;
+- generated dashboard JSON should be self-contained enough for Grafana import.
+
+Generated datasource variable:
+
+```json
+{
+  "name": "datasource",
+  "type": "datasource",
+  "label": "Datasource",
+  "query": "prometheus",
+  "current": {
+    "text": "Prometheus",
+    "value": "Prometheus"
+  }
+}
+```
+
+Generated panel and target datasource reference:
+
+```json
+{
+  "type": "prometheus",
+  "uid": "${datasource}"
+}
+```
+
+Real quick env dry-run result after restarting OneOps on `8380`:
+
+- `panel_count`: `14`;
+- `binding_count`: `14`;
+- variables: `datasource`, `device_code`;
+- first panel datasource: `{type:"prometheus", uid:"${datasource}"}`;
+- first target datasource: `{type:"prometheus", uid:"${datasource}"}`;
+- first expression remains `oneops:cpu_usage_direct:ratio{device_code="$device_code"}`.
+
+Grafana was overwritten on the same UID using the generated dashboard JSON without target datasource injection:
+
+```text
+http://127.0.0.1:3300/d/snmp-switch-ast3174801664/oneops-snmp-switch-ops-ast20260603174801664
+```
+
+Grafana API readback:
+
+- uid: `snmp-switch-ast3174801664`;
+- version: `7`;
+- panel count: `14`;
+- variables: `datasource`, `device_code`;
+- first panel datasource: `{type:"prometheus", uid:"${datasource}"}`;
+- first target datasource: `{type:"prometheus", uid:"${datasource}"}`.
+
+Synthetic sample data was shifted to the current time and re-imported:
+
+- shifted file: `/tmp/oneops-snmp-switch-ops-sample-current.prom`;
+- imported line count: `5002`;
+- import result: HTTP `204`.
+
+Verified query results:
+
+- `oneops:cpu_usage_direct:ratio{device_code="AST20260603174801664"}` returns `1` result from VictoriaMetrics;
+- scoped interface utilization returns `8` results through Grafana datasource proxy.
+
+Important boundary:
+
+- the datasource variable follows existing OneOps Grafana template style and queries `prometheus`;
+- quick env resolves this to the VictoriaMetrics datasource because it is Prometheus-compatible;
+- this still does not persist dashboards or call `syncToGrafana`.
+
+## 2026-06-12 Quick Env Update: Stable Dashboard UID And Switch Title
+
+The switch operations dry-run materializer now emits a stable Grafana dashboard identity directly in the generated dashboard JSON.
+
+Generated dashboard fields:
+
+```json
+{
+  "uid": "snmp-switch-ast20260603174801-d01c0e303c",
+  "title": "OneOPS SNMP Switch Ops - AST20260603174801664",
+  "id": null
+}
+```
+
+Why this matters:
+
+- previous quick-env imports still patched `uid`, `title`, and `id` in the import payload;
+- future `grafana_dashboard` persistence and `syncToGrafana` need a stable dashboard identity from the materializer itself;
+- the generated UID is short enough for Grafana and includes a hash suffix to avoid collisions.
+
+Real quick env dry-run result after restarting OneOps on `8380`:
+
+- `uid`: `snmp-switch-ast20260603174801-d01c0e303c`;
+- `title`: `OneOPS SNMP Switch Ops - AST20260603174801664`;
+- `id`: `null`;
+- `panel_count`: `14`;
+- `binding_count`: `14`.
+
+Grafana import note:
+
+- the old manually imported dashboard UID `snmp-switch-ast3174801664` had the same title, so Grafana kept updating that existing dashboard;
+- the old manual dashboard was deleted from quick env Grafana;
+- the generated dashboard JSON was then imported without patching `uid`, `title`, datasource, or targets.
+
+Current Grafana URL:
+
+```text
+http://127.0.0.1:3300/d/snmp-switch-ast20260603174801-d01c0e303c/oneops-snmp-switch-ops-ast20260603174801664
+```
+
+Grafana API readback:
+
+- uid: `snmp-switch-ast20260603174801-d01c0e303c`;
+- title: `OneOPS SNMP Switch Ops - AST20260603174801664`;
+- version: `1`;
+- panel count: `14`;
+- variables: `datasource`, `device_code`;
+- first expression: `oneops:cpu_usage_direct:ratio{device_code="$device_code"}`.
+
+Synthetic sample data was shifted to the current time and re-imported:
+
+- shifted file: `/tmp/oneops-snmp-switch-ops-sample-current.prom`;
+- imported line count: `5002`;
+- import result: HTTP `204`.
+
+Verified query results:
+
+- `oneops:cpu_usage_direct:ratio{device_code="AST20260603174801664"}` returns `1` result from VictoriaMetrics;
+- scoped interface utilization returns `8` results through Grafana datasource proxy.
+
+Important boundary:
+
+- this still does not create or update a `grafana_dashboard` database row;
+- the current Grafana import remains a quick-env visual verification step;
+- the next persistence step should use this generated `uid`, title, variables, datasource references, panel bindings, and content hashes instead of reconstructing them elsewhere.
+
+## 2026-06-12 Update: Platform Dashboard Persistence And Strategy Set Binding
+
+The generated switch operations dashboard can now be saved back into the OneOps platform data model, not only dry-run generated or manually imported into Grafana.
+
+New backend API:
+
+```text
+POST /platform/metrics/teleabs/strategy-sets/:id/metric-contract/grafana/dashboards/save/by-target
+```
+
+Request:
+
+```json
+{
+  "target_part": "AST20260603174801664"
+}
+```
+
+Save behavior:
+
+- reuses the same strategy set target resolution, panel capability preview, recording rule preview, and Grafana dashboard materializer as the dry-run endpoint;
+- generates a stable Grafana `uid` from the target device code;
+- generates a stable platform dashboard `code` from that `uid`;
+- upserts one `grafana_dashboard` row with `state = Disabled`;
+- writes `platform_teleabs_strategy_set_dashboard_binding` so the strategy set points to this dashboard code;
+- replaces an older binding for the same strategy set, so repeated saves are idempotent;
+- does not call `syncToGrafana` and does not mutate the live Grafana instance.
+
+Response adds these platform persistence fields on top of the existing dry-run payload:
+
+```json
+{
+  "dashboard_code": "GDBSNMP...",
+  "dashboard_uid": "snmp-switch-...",
+  "dashboard_name": "OneOPS SNMP Switch Ops - ...",
+  "dashboard_state": "Disabled",
+  "saved": true,
+  "synced": false
+}
+```
+
+Why this closes an important loop:
+
+- the screenshot-style dashboard remains derived from metric groups, panel capability requirements, recording rules, and strategy set target matching;
+- the generated dashboard is now visible to platform dashboard management through `grafana_dashboard`;
+- strategy set details can discover the dashboard through the existing strategy set dashboard binding table;
+- enabling/syncing to Grafana stays an explicit later operation instead of being hidden inside materialization.
+
+Frontend touch points:
+
+- `OneOPS-UI/src/typings/platform/snmp-metric-contract.ts` now has save request/response types;
+- `OneOPS-UI/src/api/platform/teleabs.ts` now exposes `saveTeleabsStrategySetGrafanaDashboardByTarget`;
+- the smoke script checks both dry-run and save endpoint contracts.
+
+Remaining closure gaps after this step:
+
+1. Add a UI action in the strategy set or device dashboard workflow to call `saveTeleabsStrategySetGrafanaDashboardByTarget`, then surface the returned `dashboard_code`, `uid`, saved state, and binding status.
+2. Decide the explicit sync path: either reuse existing dashboard enable/toggle flow or add a controlled “保存并同步到 Grafana” action that uses the persisted row and existing Grafana sync service.
+3. Persist panel-level binding metadata if the platform needs first-class traceability from dashboard panel to metric group, capability, strategy, and recording rule. For now this traceability is returned by the materializer and embedded in the response, but not stored in a dedicated table.
+4. Add quick-env smoke coverage that calls the new save endpoint against the real seed strategy set and confirms one `grafana_dashboard` row plus one strategy set binding.
+5. After live sync is wired, verify the saved row can be enabled/synced and produces the same Grafana URL currently proven by manual quick-env import.
+
+Quick env verification note:
+
+- unauthenticated call reaches the HTTP layer but is rejected with `未登录或非法请求`;
+- with `X-Auth-Token: abc123`, the new save endpoint reaches business logic;
+- current quick env target `AST20260603174801664` is rejected before save because target context resolution reports missing `manufacturer_name`, `platform_name`, and `system_version`;
+- this means the next quick-env closure is not the save API itself, but ensuring the seed/device context used by `by-target` materialization is fully loaded before save/publish/sync flows run.
+
+## 2026-06-12 Update: Quick Env Dashboard Save Smoke Is Added
+
+The previous remaining gap "add quick-env smoke coverage for the save endpoint" is now closed.
+
+New script:
+
+```text
+quick_env/scripts/smoke_snmp_switch_dashboard_save.sh
+```
+
+It calls the real by-target dashboard save endpoint and then checks MySQL:
+
+```text
+POST /api/v1/platform/metrics/teleabs/strategy-sets/4284353d-1233-4022-ad18-871b3d8444c7/metric-contract/grafana/dashboards/save/by-target
+target_part = AST20260603174801664
+```
+
+Assertions:
+
+- HTTP response is `200`;
+- response `code` is `0`;
+- response contains `dashboard_code` and `dashboard_uid`;
+- `grafana_dashboard` has exactly 1 row for that uid/code;
+- `platform_teleabs_strategy_set_dashboard_binding` has exactly 1 row for that strategy set/dashboard code.
+
+Default runtime assumptions:
+
+```text
+OneOps API: http://127.0.0.1:8380/api/v1
+Auth token: abc123
+MySQL: 127.0.0.1:3606
+Database: UniOPS
+```
+
+Real quick env verification result:
+
+```text
+dashboard save smoke passed
+HTTP_CODE=200
+dashboard_code=GDBSNMP3E6A64DC49CDE413A4C27D84
+dashboard_uid=snmp-switch-ast20260603174801-d01c0e303c
+dashboard_count=1
+binding_count=1
+```
+
+Guard coverage:
+
+```text
+quick_env/tests/test_seed_template_guard.py
+  test_snmp_switch_dashboard_save_smoke_covers_real_quick_env_loop
+```
+
+Updated remaining closure gaps:
+
+1. Add a UI action in the strategy set or device dashboard workflow to call `saveTeleabsStrategySetGrafanaDashboardByTarget`, then surface the returned `dashboard_code`, `uid`, saved state, and binding status.
+2. Decide the explicit sync path: either reuse existing dashboard enable/toggle flow or add a controlled "保存并同步到 Grafana" action that uses the persisted row and existing Grafana sync service.
+3. Persist panel-level binding metadata if the platform needs first-class traceability from dashboard panel to metric group, capability, strategy, and recording rule.
+4. After live sync is wired, verify the saved row can be enabled/synced and produces the same Grafana URL currently proven by manual quick-env import.
+
+## 2026-06-12 Update: Save-And-Sync To Live Grafana Is Added
+
+The explicit sync path is now implemented as a separate SNMP by-target API. The existing `save/by-target` endpoint remains platform persistence only.
+
+New backend endpoint:
+
+```text
+POST /platform/metrics/teleabs/strategy-sets/:id/metric-contract/grafana/dashboards/save-and-sync/by-target
+```
+
+Behavior:
+
+- calls the existing by-target save resolver;
+- persists/upserts `grafana_dashboard`;
+- persists/upserts `platform_teleabs_strategy_set_dashboard_binding`;
+- calls the existing Grafana dashboard batch sync service with the saved `dashboard_code`;
+- returns the same dashboard materialization payload with `synced=true` and `dashboard_state=Enabled` only when Grafana sync reports one success and zero failures.
+
+Frontend API helper:
+
+```text
+saveAndSyncTeleabsStrategySetGrafanaDashboardByTarget
+```
+
+Quick env smoke now supports both modes:
+
+```bash
+quick_env/scripts/smoke_snmp_switch_dashboard_save.sh
+SAVE_AND_SYNC=true quick_env/scripts/smoke_snmp_switch_dashboard_save.sh
+```
+
+The sync mode calls `save-and-sync/by-target` and then reads back:
+
+```text
+GET http://127.0.0.1:3300/api/dashboards/uid/<dashboard_uid>
+```
+
+Real quick env verification result:
+
+```text
+dashboard save smoke passed
+HTTP_CODE=200
+dashboard_code=GDBSNMP3E6A64DC49CDE413A4C27D84
+dashboard_uid=snmp-switch-ast20260603174801-d01c0e303c
+synced=true
+dashboard_count=1
+binding_count=1
+grafana_title=OneOPS SNMP Switch Ops - AST20260603174801664
+```
+
+Important implementation note:
+
+- `cmd/wire_gen.go` was updated so the existing `GrafanaDashboardSrv` is injected into `TeleabsAPI`;
+- without this generated wiring update, the handler compiles in isolated tests but the real API returns `Grafana 仪表盘同步服务未初始化`.
+
+Remaining closure gaps after this step:
+
+1. Add a UI action in the strategy set or device dashboard workflow to call save or save-and-sync and surface the returned dashboard code, uid, state, and sync status.
+2. Persist panel-level binding metadata if first-class traceability from panel to metric group/capability/strategy/recording rule is required.
+3. Decide whether the strategy-set dashboard binding must become variant/profile/target aware instead of one dashboard per strategy set.
+4. Add dashboard diff/rollback before replacing an already-synced dashboard in higher-risk environments.
+
+## 2026-06-12 Update: Strategy Set Drawer Can Save And Sync Dashboard
+
+The first frontend action surface is now wired into the existing strategy-set detail drawer.
+
+Location:
+
+```text
+OneOPS-UI/src/views/platform/StrategyTemplate/StrategySetDetailDrawer.vue
+```
+
+Behavior:
+
+- the existing target device input remains the shared target source;
+- `预检面板能力` still calls the by-target panel capability preview;
+- `保存到平台` calls `saveTeleabsStrategySetGrafanaDashboardByTarget`;
+- `保存并同步` calls `saveAndSyncTeleabsStrategySetGrafanaDashboardByTarget`;
+- the drawer displays the returned dashboard code, UID, platform state, and sync status.
+
+New frontend state helper:
+
+```text
+OneOPS-UI/src/views/platform/StrategyTemplate/snmpStrategySetGrafanaDashboardSave.ts
+```
+
+It keeps the UI behavior testable outside the SFC:
+
+- validates strategy set id and target part;
+- separates save loading from sync loading;
+- stores the last result;
+- exposes summary items for `dashboard_code`, `dashboard_uid`, `dashboard_state`, and `synced`.
+
+New frontend smoke:
+
+```bash
+cd OneOPS-UI
+npm run smoke:snmp-strategy-set-grafana-dashboard-save-action
+```
+
+Verification:
+
+```text
+snmp strategy-set grafana dashboard save action smoke passed
+npm run typecheck passed
+```
+
+Remaining closure gaps after this step:
+
+1. Decide whether the strategy-set dashboard binding must become variant/profile/target aware instead of one dashboard per strategy set.
+2. Add dashboard diff/rollback before replacing an already-synced dashboard in higher-risk environments.
+3. Add browser-level acceptance coverage for the drawer action once a stable quick-env frontend page flow is available.
+
+## 2026-06-12 Update: Dashboard Panel Bindings Are Persisted
+
+The dashboard save path now persists panel-level trace metadata in addition to the dashboard row and strategy-set dashboard binding.
+
+New table/model:
+
+```text
+platform_teleabs_strategy_set_dashboard_panel_binding
+OneOps/app/platform/platform_model/teleabs_strategy_set.go
+OneOps/migrations/add_teleabs_strategy_set_dashboard_panel_binding.sql
+```
+
+Stored per panel:
+
+- strategy set id, dashboard code, dashboard uid, target part, device code;
+- panel key, panel id, title, section key, display intent, visual type, render policy;
+- metric group key;
+- strategy ids JSON;
+- metric keys JSON;
+- selected capability keys JSON;
+- recording rule names JSON;
+- managed state and content hash.
+
+Save behavior:
+
+- `save/by-target` and `save-and-sync/by-target` both materialize the dashboard first;
+- the resolver saves the dashboard as `Disabled`;
+- the resolver refreshes `platform_teleabs_strategy_set_dashboard_binding`;
+- the resolver then deletes old panel bindings for the same dashboard or the same strategy set + target and inserts the current materialized panel bindings;
+- the response now includes `panel_bindings_saved` and `panel_binding_count`.
+
+Frontend behavior:
+
+- `SnmpStrategySetTargetGrafanaDashboardSaveByTargetResponse` includes `panel_bindings_saved` and `panel_binding_count`;
+- the strategy-set detail drawer summary now displays `面板追踪` with the persisted binding count.
+
+Quick env smoke now verifies the full loop:
+
+```bash
+SAVE_AND_SYNC=true quick_env/scripts/smoke_snmp_switch_dashboard_save.sh
+```
+
+Real quick env verification result:
+
+```text
+dashboard save smoke passed
+HTTP_CODE=200
+dashboard_code=GDBSNMP3E6A64DC49CDE413A4C27D84
+dashboard_uid=snmp-switch-ast20260603174801-d01c0e303c
+synced=true
+dashboard_count=1
+binding_count=1
+panel_binding_count=2
+grafana_title=OneOPS SNMP Switch Ops - AST20260603174801664
+```
+
+Sample persisted panel trace from the running quick env:
+
+```text
+device.identity            panel_id=1 metric_group_key=                 record_names=[]
+system_basic.cpu.stat      panel_id=2 metric_group_key=system_basic     record_names=["oneops:cpu_usage_direct:ratio"]
+```
+
+Verification:
+
+```text
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver.*GrafanaDashboard|TestMetricCapabilityContractResolver.*RecordingRule' -count=1
+go test ./app/platform/api -run 'TestTeleabsAPI_.*GrafanaDashboard|TestTeleabsAPI_.*RecordingRule' -count=1
+go test ./app/platform/router -run TestTeleabsRoutes_ConsistentBetweenPlatformAndBidi -count=1
+go test ./initialize -run 'TestModelsIncludes|Test.*Teleabs' -count=1
+go test ./cmd -run '^$' -count=1
+npm run smoke:snmp-strategy-set-grafana-dashboard-save-action
+npm run smoke:snmp-strategy-set-grafana-dashboard-materialization-dry-run
+npm run typecheck
+bash -n quick_env/scripts/smoke_snmp_switch_dashboard_save.sh
+python3 quick_env/tests/test_seed_template_guard.py -v
+SAVE_AND_SYNC=true quick_env/scripts/smoke_snmp_switch_dashboard_save.sh
+```
+
+Remaining closure gaps after this step:
+
+1. Add dashboard diff/rollback before replacing an already-synced dashboard in higher-risk environments. Closed in the following "Dashboard Replacement Snapshots" step.
+2. Add browser-level acceptance coverage for the drawer action once a stable quick-env frontend page flow is available.
+
+## 2026-06-12 Update: Target-Aware Dashboard Bindings
+
+The generated SNMP dashboard path now keeps target-aware dashboard bindings, so saving a second target for the same strategy set no longer erases the traceability for the first target.
+
+New table/model:
+
+```text
+platform_teleabs_strategy_set_dashboard_target_binding
+OneOps/app/platform/platform_model/teleabs_strategy_set.go
+OneOps/migrations/add_teleabs_strategy_set_dashboard_target_binding.sql
+```
+
+Compatibility rule:
+
+- `platform_teleabs_strategy_set_dashboard_binding` is still kept as the existing compatibility/current binding table;
+- generated dashboards also write `platform_teleabs_strategy_set_dashboard_target_binding`;
+- the target-aware table is keyed by `strategy_set_id + target_part` and `dashboard_code`;
+- panel bindings are now refreshed by `dashboard_code` or `strategy_set_id + target_part`, not by the whole strategy set.
+
+Response/API surface:
+
+- `save/by-target` and `save-and-sync/by-target` now include `target_binding_saved`;
+- the frontend response type includes `target_binding_saved`;
+- the strategy-set detail drawer summary shows `目标绑定`.
+
+Regression covered:
+
+- saving `SW-1` and then `SW-2` under the same strategy set keeps two rows in `platform_teleabs_strategy_set_dashboard_target_binding`;
+- saving `SW-2` no longer deletes `SW-1` panel bindings.
+
+Real quick env verification result:
+
+```text
+dashboard save smoke passed
+HTTP_CODE=200
+dashboard_code=GDBSNMP3E6A64DC49CDE413A4C27D84
+dashboard_uid=snmp-switch-ast20260603174801-d01c0e303c
+synced=true
+dashboard_count=1
+binding_count=1
+target_binding_count=1
+panel_binding_count=2
+grafana_title=OneOPS SNMP Switch Ops - AST20260603174801664
+```
+
+Sample target-aware binding row from the running quick env:
+
+```text
+strategy_set_id=4284353d-1233-4022-ad18-871b3d8444c7
+target_part=AST20260603174801664
+dashboard_code=GDBSNMP3E6A64DC49CDE413A4C27D84
+dashboard_uid=snmp-switch-ast20260603174801-d01c0e303c
+panel_binding_count=2
+```
+
+Verification:
+
+```text
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver.*GrafanaDashboard|TestMetricCapabilityContractResolver.*RecordingRule' -count=1
+go test ./app/platform/api -run 'TestTeleabsAPI_.*GrafanaDashboard|TestTeleabsAPI_.*RecordingRule' -count=1
+go test ./app/platform/router -run TestTeleabsRoutes_ConsistentBetweenPlatformAndBidi -count=1
+go test ./initialize -run 'TestModelsIncludes|Test.*Teleabs' -count=1
+go test ./cmd -run '^$' -count=1
+npm run smoke:snmp-strategy-set-grafana-dashboard-save-action
+npm run smoke:snmp-strategy-set-grafana-dashboard-materialization-dry-run
+npm run typecheck
+bash -n quick_env/scripts/smoke_snmp_switch_dashboard_save.sh
+python3 quick_env/tests/test_seed_template_guard.py -v
+SAVE_AND_SYNC=true quick_env/scripts/smoke_snmp_switch_dashboard_save.sh
+```
+
+Remaining closure gaps after this step:
+
+1. Add dashboard diff/rollback before replacing an already-synced dashboard in higher-risk environments. Closed in the following "Dashboard Replacement Snapshots" step.
+2. Add browser-level acceptance coverage for the drawer action once a stable quick-env frontend page flow is available.
+
+## 2026-06-12 Update: Dashboard Replacement Snapshots
+
+The generated SNMP dashboard save path now records a lightweight replacement snapshot before overwriting an existing platform dashboard whose content differs from the newly materialized dashboard JSON.
+
+New table/model:
+
+```text
+platform_teleabs_strategy_set_dashboard_snapshot
+OneOps/app/platform/platform_model/teleabs_strategy_set.go
+OneOps/migrations/add_teleabs_strategy_set_dashboard_snapshot.sql
+```
+
+Replacement behavior:
+
+- first save of a generated dashboard does not create a snapshot;
+- idempotent save with the same dashboard JSON does not create a snapshot;
+- if an existing `grafana_dashboard.content` SHA differs from the newly generated SHA, the previous content, UID, state, target, previous SHA, and new SHA are persisted before overwrite;
+- snapshots are scoped by `strategy_set_id`, `dashboard_code`, and target context, so they can be used as rollback/diff evidence for a specific generated dashboard.
+
+Response/API surface:
+
+- `save/by-target` and `save-and-sync/by-target` now include `dashboard_sha256`;
+- replacement saves also include `previous_dashboard_snapshot_saved`, `previous_dashboard_snapshot_id`, and `previous_dashboard_sha256`;
+- the frontend response type includes these fields;
+- the strategy-set detail drawer summary shows the dashboard content SHA prefix and whether an overwrite snapshot was created;
+- the quick-env smoke requires `dashboard_sha256` and validates the snapshot id when a replacement snapshot is reported.
+
+Regression covered:
+
+- first save returns a generated dashboard SHA and no snapshot;
+- repeated same-content save creates zero snapshot rows;
+- overwriting a manually changed existing dashboard creates one snapshot row with the old content hash, old UID/state, and target part;
+- API tests verify hash/snapshot fields are preserved through save and save-and-sync responses.
+
+Real quick env verification result:
+
+```text
+dashboard save smoke passed
+HTTP_CODE=200
+dashboard_code=GDBSNMP3E6A64DC49CDE413A4C27D84
+dashboard_uid=snmp-switch-ast20260603174801-d01c0e303c
+dashboard_sha256=81a202d4cd012e53b50c62a16ae1d631335dd4079a4490d9735bc6d6212b79ab
+synced=true
+dashboard_count=1
+binding_count=1
+target_binding_count=1
+panel_binding_count=2
+grafana_title=OneOPS SNMP Switch Ops - AST20260603174801664
+```
+
+Verification:
+
+```text
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver.*GrafanaDashboard|TestMetricCapabilityContractResolver.*RecordingRule' -count=1
+go test ./app/platform/api -run 'TestTeleabsAPI_.*GrafanaDashboard|TestTeleabsAPI_.*RecordingRule' -count=1
+go test ./app/platform/router -run TestTeleabsRoutes_ConsistentBetweenPlatformAndBidi -count=1
+go test ./initialize -run 'TestModelsIncludes|Test.*Teleabs' -count=1
+go test ./cmd -run '^$' -count=1
+npm run smoke:snmp-strategy-set-grafana-dashboard-save-action
+npm run smoke:snmp-strategy-set-grafana-dashboard-materialization-dry-run
+npm run typecheck
+bash -n quick_env/scripts/smoke_snmp_switch_dashboard_save.sh
+python3 quick_env/tests/test_seed_template_guard.py -v
+SAVE_AND_SYNC=true quick_env/scripts/smoke_snmp_switch_dashboard_save.sh
+```
+
+Remaining closure gap after this step:
+
+1. Add browser-level acceptance coverage for the drawer action once a stable quick-env frontend page flow is available.
+
+## 2026-06-12 Update: Browser-Level Save-And-Sync Acceptance
+
+The strategy-set drawer now has a repeatable browser-level acceptance script for the SNMP Grafana dashboard save-and-sync action.
+
+New command:
+
+```text
+cd OneOPS-UI
+ONEOPS_UI_REAL_BASE_URL=http://127.0.0.1:3001 npm run smoke:snmp-strategy-set-grafana-dashboard-save-real-page
+```
+
+The script uses a real browser session through Chrome DevTools Protocol and validates the full page action:
+
+- mounts `StrategySetDetailDrawer` in a Vite-served fixture page;
+- seeds `X-Auth-Token` into browser local storage;
+- fills target `AST20260603174801664`;
+- clicks the real `保存并同步` button;
+- verifies the browser request body for `/metric-contract/grafana/dashboards/save-and-sync/by-target`;
+- verifies the backend response has `saved=true`, `synced=true`, `dashboard_state=Enabled`, a 64-char `dashboard_sha256`, target binding, and panel bindings;
+- verifies the drawer summary shows `同步=是`, `目标绑定=已保存`, content SHA prefix, and panel trace count;
+- reads back the dashboard from Grafana via `/api/dashboards/uid/:uid`;
+- writes a screenshot under `OneOPS-UI/.tmp/`.
+
+Real quick env browser verification result:
+
+```text
+ok=true
+base_url=http://127.0.0.1:3001
+target_part=AST20260603174801664
+strategy_set_id=4284353d-1233-4022-ad18-871b3d8444c7
+dashboard_code=GDBSNMP3E6A64DC49CDE413A4C27D84
+dashboard_uid=snmp-switch-ast20260603174801-d01c0e303c
+dashboard_sha256=81a202d4cd012e53b50c62a16ae1d631335dd4079a4490d9735bc6d6212b79ab
+panel_binding_count=2
+grafana_title=OneOPS SNMP Switch Ops - AST20260603174801664
+screenshot=OneOPS-UI/.tmp/snmp-grafana-dashboard-save-real-page-1781227948734.png
+```
+
+Verification:
+
+```text
+npm run smoke:snmp-strategy-set-grafana-dashboard-save-action
+ONEOPS_UI_REAL_BASE_URL=http://127.0.0.1:3001 npm run smoke:snmp-strategy-set-grafana-dashboard-save-real-page
+```
+
+Core closure status after this step:
+
+- platform strategy set to SNMP metric contract resolution: closed;
+- recording rule and dashboard materialization: closed;
+- platform save, target binding, panel binding, replacement snapshot: closed;
+- quick-env seed/runtime smoke: closed;
+- browser drawer save-and-sync action and Grafana readback: closed.
+
+Remaining enhancements, not core closure blockers:
+
+1. Improve generated Grafana dashboard visual density and switch-ops layout against the screenshot alignment spec.
+2. Add multi-vendor browser acceptance cases beyond the current quick-env switch target.
+3. Add a human-facing rollback UI/API over the saved dashboard snapshots.
+
+## 2026-06-12 Update: Switch Health Strip Visual Enhancement
+
+The generated switch dashboard now moves closer to the screenshot's first-screen operator model by adding a compact health command strip.
+
+New generated panels:
+
+```text
+device.overall_health
+device.active_alerts
+```
+
+Behavior:
+
+- `Overall Health` is a derived stat panel that turns the existing metric logic into a 0/1 health signal;
+- `Active Alerts` is a derived stat panel that counts active warning signals from CPU, memory, down ports, and interface error sources;
+- both panels are still generated from recording-rule-backed capabilities, not from hardcoded vendor assumptions;
+- the first metric row now prioritizes health and alert triage before CPU, memory, and port state;
+- existing traceability continues through `panel_bindings[]`, including section, display intent, capability keys, metric keys, and record names.
+
+Real quick env result after this visual enhancement:
+
+```text
+dashboard save smoke passed
+HTTP_CODE=200
+dashboard_code=GDBSNMP3E6A64DC49CDE413A4C27D84
+dashboard_uid=snmp-switch-ast20260603174801-d01c0e303c
+dashboard_sha256=166182f0b9290319d5cd9a0eef59a23d0b9a791387b013d419f854a30c49f276
+synced=true
+dashboard_count=1
+binding_count=1
+target_binding_count=1
+panel_binding_count=2
+previous_snapshot_id=f116f289-65ff-11f1-b681-cc15310828f2
+grafana_title=OneOPS SNMP Switch Ops - AST20260603174801664
+```
+
+Browser acceptance result:
+
+```text
+ok=true
+base_url=http://127.0.0.1:3001
+target_part=AST20260603174801664
+strategy_set_id=4284353d-1233-4022-ad18-871b3d8444c7
+dashboard_code=GDBSNMP3E6A64DC49CDE413A4C27D84
+dashboard_uid=snmp-switch-ast20260603174801-d01c0e303c
+dashboard_sha256=166182f0b9290319d5cd9a0eef59a23d0b9a791387b013d419f854a30c49f276
+panel_binding_count=2
+grafana_title=OneOPS SNMP Switch Ops - AST20260603174801664
+screenshot=OneOPS-UI/.tmp/snmp-grafana-dashboard-save-real-page-1781228546441.png
+```
+
+Verification:
+
+```text
+go test ./app/platform/service/impl -run TestMetricCapabilityContractResolverMaterializesScreenshotStyleGrafanaDashboard -count=1
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver.*GrafanaDashboard|TestMetricCapabilityContractResolver.*RecordingRule' -count=1
+go test ./app/platform/api -run 'TestTeleabsAPI_.*GrafanaDashboard|TestTeleabsAPI_.*RecordingRule' -count=1
+npm run smoke:snmp-strategy-set-grafana-dashboard-materialization-dry-run
+npm run smoke:snmp-strategy-set-grafana-dashboard-save-action
+bash -n quick_env/scripts/smoke_snmp_switch_dashboard_save.sh
+python3 quick_env/tests/test_seed_template_guard.py -v
+SAVE_AND_SYNC=true quick_env/scripts/smoke_snmp_switch_dashboard_save.sh
+ONEOPS_UI_REAL_BASE_URL=http://127.0.0.1:3001 npm run smoke:snmp-strategy-set-grafana-dashboard-save-real-page
+```
+
+Remaining enhancements:
+
+1. Add richer switch-ops sections for hardware health, layer-2/routing summaries, and event/config evidence when matching metric groups exist.
+2. Add multi-vendor browser acceptance cases beyond the current quick-env switch target.
+3. Add a human-facing rollback UI/API over the saved dashboard snapshots.
+
+## 2026-06-12 Update: Hardware Temperature Capability Closure
+
+The first hardware-health metric is now wired through the same strategy-set and recording-rule path as interface and system metrics.
+
+New standard capability:
+
+```text
+device_temperature_celsius
+```
+
+New generated panels:
+
+```text
+device_metrics.temperature.stat
+device_metrics.temperature.trend
+```
+
+Behavior:
+
+- SNMP passthrough fields named `temperature`, `temp`, `deviceTemperature`, or `hwTemperature` are normalized into the recordable `device_temperature_celsius` capability;
+- the generated recording rule is `oneops:device_temperature:celsius`;
+- `Temperature Now` renders as an instant stat with green/orange/red thresholds;
+- `Temperature Trend` renders as a time series for incident-window correlation;
+- unknown device metrics still remain config-driven and are not forced into switch hardware panels;
+- target dashboard materialization now proves the path: strategy set -> effective contract -> recording rule preview -> Grafana panel -> panel binding.
+
+Verification:
+
+```text
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver(ImportsInterfaceAndSystemCapabilities|DefaultPanelRequirements|BuildsRecordingRuleExpressions|MaterializesScreenshotStyleGrafanaDashboard|SkipsUnsupportedSwitchPanels)' -count=1
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver.*GrafanaDashboard|TestMetricCapabilityContractResolver.*RecordingRule|TestMetricCapabilityContractResolver.*PanelCapability|TestMetricCapabilityContractResolverImportsInterfaceAndSystemCapabilities' -count=1
+go test ./app/platform/api -run 'TestTeleabsAPI_.*GrafanaDashboard|TestTeleabsAPI_.*RecordingRule|TestTeleabsAPI_.*PanelCapability' -count=1
+```
+
+Quick-env seed follow-up:
+
+- H3C, Huawei, and Maipu SNMP network strategy bootstrap SQL now include `temperature` in `metric_manifest`;
+- their passthrough SNMP configs now include `[[inputs.snmp.field]] name = "temperature"`;
+- this lets `quick_env/start.sh` load seed data that can actually produce the temperature recording rule and Grafana panels.
+
+Seed verification:
+
+```text
+bash quick_env/tests/test_snmp_network_strategy_seed.sh
+python3 quick_env/tests/test_seed_template_guard.py -v
+bash -n quick_env/scripts/smoke_snmp_switch_dashboard_save.sh
+```
+
+Runtime quick-env verification on `demo2`:
+
+```text
+bash quick_env/scripts/sync_snmp_network_strategy_seed.sh --instance demo2
+```
+
+The running UniOPS database was verified to contain the temperature manifest and passthrough field for all three seeded SNMP strategies:
+
+```text
+H3C通用SNMP网络监控策略     1  1
+Huawei通用SNMP网络监控策略  1  1
+迈普通用SNMP网络监控策略    1  1
+```
+
+Real save-and-sync smoke after starting the local OneOps backend:
+
+```text
+dashboard save smoke passed
+HTTP_CODE=200
+dashboard_code=GDBSNMP3E6A64DC49CDE413A4C27D84
+dashboard_uid=snmp-switch-ast20260603174801-d01c0e303c
+dashboard_sha256=5837794966048d1453f2322b032def41cac321b577883e4a28d5a4be6734fc91
+synced=true
+dashboard_count=1
+binding_count=1
+target_binding_count=1
+panel_binding_count=4
+previous_snapshot_id=f2834df3-6601-11f1-88a8-cc15310828f2
+grafana_title=OneOPS SNMP Switch Ops - AST20260603174801664
+```
+
+Database verification confirmed the saved dashboard content and panel bindings contain:
+
+```text
+Temperature Now
+Temperature Trend
+oneops:device_temperature:celsius
+device_metrics.temperature.stat
+device_metrics.temperature.trend
+```
+
+## 2026-06-12 Update: Hardware Status Capability Closure
+
+Hardware status panels now follow the same optional capability model as temperature.
+
+New standard capabilities:
+
+```text
+device_fan_status
+device_power_status
+device_transceiver_status
+device_module_status
+```
+
+New generated panels:
+
+```text
+device_metrics.fan_status.stat
+device_metrics.power_status.stat
+device_metrics.transceiver_status.stat
+device_metrics.module_status.stat
+```
+
+Behavior:
+
+- passthrough fields such as `fanStatus`, `powerStatus`, `transceiverStatus`, and `moduleStatus` are normalized into recordable device health capabilities;
+- generated recording rules use `oneops:device_fan_status`, `oneops:device_power_status`, `oneops:device_transceiver_status`, and `oneops:device_module_status`;
+- status panels render only when the effective strategy contract exposes the capability or the recording-rule preview provides the record;
+- the active-alert and overall-health strip treats non-`1` hardware status as an alert signal;
+- unsupported hardware panels are still skipped, so switch dashboards do not invent fan, PSU, optical, or module health when a strategy cannot provide those fields.
+
+Verification:
+
+```text
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver(ImportsInterfaceAndSystemCapabilities|DefaultPanelRequirements|BuildsRecordingRuleExpressions|MaterializesScreenshotStyleGrafanaDashboard|SkipsUnsupportedSwitchPanels|MaterializesHuaweiS5735DashboardFromTemplateChain)' -count=1
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver.*GrafanaDashboard|TestMetricCapabilityContractResolver.*RecordingRule|TestMetricCapabilityContractResolver.*PanelCapability|TestMetricCapabilityContractResolverImportsInterfaceAndSystemCapabilities' -count=1
+go test ./app/platform/api -run 'TestTeleabsAPI_.*GrafanaDashboard|TestTeleabsAPI_.*RecordingRule|TestTeleabsAPI_.*PanelCapability' -count=1
+npm run smoke:snmp-strategy-set-grafana-dashboard-materialization-dry-run
+npm run smoke:snmp-strategy-set-grafana-dashboard-save-action
+```
+
+## 2026-06-12 Update: L2 Neighbor Evidence Panel Closure
+
+The first Layer-2 neighbor metric contract is now connected into the Grafana materializer as a narrow evidence-table path.
+
+Metric group:
+
+```text
+l2_neighbors
+```
+
+Generated panel:
+
+```text
+l2_neighbors.summary
+```
+
+Behavior:
+
+- LLDP-style passthrough tables such as `snmp_lldp_neighbors` / `LLDP-MIB::lldpRemTable` are normalized into a table-shaped contract;
+- stable fields include `local_port`, `neighbor_port`, `neighbor_name`, `neighbor_chassis_id`, and `neighbor_management_ip`;
+- unknown extra neighbor fields remain config-driven dimensions;
+- the group remains `table` / non-recordable because LLDP neighbor evidence is dimensional topology data, not a time-series recording-rule metric;
+- `l2_neighbors.summary` renders only when the effective capability support exposes `l2_neighbor_identity`;
+- the panel uses an evidence-table render policy and queries the raw LLDP measurement family with `__name__=~"snmp_lldp_neighbors.*"` scoped by `device_code`;
+- panel bindings keep `metric_group_key=l2_neighbors`, stable metric keys, and `selected_capability_keys=["l2_neighbor_identity"]`;
+- `record_names` is intentionally empty for this panel, so it does not pretend to be backed by Prometheus recording rules.
+
+Verification:
+
+```text
+go test ./app/platform/service/impl -run TestMetricCapabilityContractResolverImportsLldpNeighborContract -count=1
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver(DefaultPanelRequirements|MaterializesL2NeighborEvidencePanel)' -count=1
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver(ImportsLldpNeighborContract|DefaultPanelRequirements|ResolvesPanelCapabilitySupport|PreviewsStrategySetPanelCapabilitySupportWithDefaultRequirements|PreviewsStrategySetPanelCapabilitySupportByTarget|MaterializesL2NeighborEvidencePanel|MaterializesL2NeighborDashboardByTarget|MaterializesScreenshotStyleGrafanaDashboard|MaterializesHuaweiS5735DashboardFromTemplateChain|MaterializesStrategySetGrafanaDashboardByTarget|SavesStrategySetGrafanaDashboardByTarget)' -count=1
+go test ./app/platform/api -run 'TestTeleabsAPI_.*GrafanaDashboard|TestTeleabsAPI_.*PanelCapability' -count=1
+python3 quick_env/tests/test_seed_template_guard.py -v
+python3 quick_env/tests/test_validate_nacos_seed_runtime.py -v
+```
+
+Remaining closure gaps:
+
+1. MAC, ARP, VLAN, and STP still need their own metric-group contracts and evidence-panel bindings; they are not included in the LLDP closure above.
+2. Event/config evidence is still outside the SNMP metric contract and needs a separate binding model or a clear bridge from existing config/compliance tables.
+3. Multi-vendor real/browser acceptance still needs more targets beyond the current quick-env switch path.
+
+## 2026-06-12 Update: MAC Address Table Evidence Panel Closure
+
+The first MAC forwarding table contract now follows the same narrow evidence-table closure as LLDP.
+
+Metric group:
+
+```text
+l2_mac_table
+```
+
+Generated panel:
+
+```text
+l2_mac_table.summary
+```
+
+Behavior:
+
+- BRIDGE-MIB / Q-BRIDGE-MIB passthrough tables such as `snmp_mac_table` / `BRIDGE-MIB::dot1dTpFdbTable` are normalized into a table-shaped contract;
+- stable fields include `mac_address`, `bridge_port`, `mac_status`, and `vlan_id`;
+- fields remain dimensional and `not_recordable`, because the operator question is "where is this MAC learned now?" rather than "what is the averaged value?";
+- `l2_mac_table.summary` renders only when the effective capability support exposes `l2_mac_identity`;
+- the panel uses the existing evidence-table render policy and queries the raw MAC table measurement family with `__name__=~"snmp_mac_table.*"` scoped by `device_code`;
+- panel bindings keep `metric_group_key=l2_mac_table`, stable metric keys, and `selected_capability_keys=["l2_mac_identity"]`;
+- `record_names` is intentionally empty for this panel.
+
+Verification:
+
+```text
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver(ImportsMacTableContract|DefaultPanelRequirements|MaterializesMacTableDashboardByTarget)' -count=1
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver(ImportsLldpNeighborContract|ImportsMacTableContract|DefaultPanelRequirements|ResolvesPanelCapabilitySupport|PreviewsStrategySetPanelCapabilitySupportWithDefaultRequirements|PreviewsStrategySetPanelCapabilitySupportByTarget|MaterializesL2NeighborEvidencePanel|MaterializesL2NeighborDashboardByTarget|MaterializesMacTableDashboardByTarget|MaterializesScreenshotStyleGrafanaDashboard|MaterializesHuaweiS5735DashboardFromTemplateChain|MaterializesStrategySetGrafanaDashboardByTarget|SavesStrategySetGrafanaDashboardByTarget)' -count=1
+```
+
+Remaining closure gaps after this update:
+
+1. ARP, VLAN, and STP still need their own metric-group contracts and evidence-panel bindings.
+2. Event/config evidence is still outside the SNMP metric contract and needs a separate binding model or a clear bridge from existing config/compliance tables.
+3. Multi-vendor real/browser acceptance still needs more targets beyond the current quick-env switch path.
+
+## 2026-06-12 Update: ARP Table Evidence Panel Closure
+
+The first ARP table contract is now connected into the same evidence-table path.
+
+Metric group:
+
+```text
+l3_arp_table
+```
+
+Generated panel:
+
+```text
+l3_arp_table.summary
+```
+
+Behavior:
+
+- IP-MIB passthrough tables such as `snmp_arp_table` / `IP-MIB::ipNetToMediaTable` are normalized into a table-shaped contract;
+- stable fields include `ip_address`, `mac_address`, `if_index`, and `arp_type`;
+- fields remain dimensional and `not_recordable`, because the operator question is "which MAC owns this IP on which interface now?" rather than a trend;
+- `l3_arp_table.summary` renders only when the effective capability support exposes `l3_arp_identity`;
+- the panel uses the evidence-table render policy and queries the raw ARP table measurement family with `__name__=~"snmp_arp_table.*"` scoped by `device_code`;
+- panel bindings keep `metric_group_key=l3_arp_table`, stable metric keys, and `selected_capability_keys=["l3_arp_identity"]`;
+- `record_names` is intentionally empty for this panel.
+
+Verification:
+
+```text
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver(ImportsArpTableContract|DefaultPanelRequirements|MaterializesArpTableDashboardByTarget)' -count=1
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver(ImportsLldpNeighborContract|ImportsMacTableContract|ImportsArpTableContract|DefaultPanelRequirements|ResolvesPanelCapabilitySupport|PreviewsStrategySetPanelCapabilitySupportWithDefaultRequirements|PreviewsStrategySetPanelCapabilitySupportByTarget|MaterializesL2NeighborEvidencePanel|MaterializesL2NeighborDashboardByTarget|MaterializesMacTableDashboardByTarget|MaterializesArpTableDashboardByTarget|MaterializesScreenshotStyleGrafanaDashboard|MaterializesHuaweiS5735DashboardFromTemplateChain|MaterializesStrategySetGrafanaDashboardByTarget|SavesStrategySetGrafanaDashboardByTarget)' -count=1
+```
+
+Remaining closure gaps after this update:
+
+1. VLAN and STP still need their own metric-group contracts and evidence-panel bindings.
+2. Event/config evidence is still outside the SNMP metric contract and needs a separate binding model or a clear bridge from existing config/compliance tables.
+3. Multi-vendor real/browser acceptance still needs more targets beyond the current quick-env switch path.
+
+## 2026-06-12 Update: VLAN Table Evidence Panel Closure
+
+The first VLAN table contract is now connected into the evidence-table path.
+
+Metric group:
+
+```text
+l2_vlan_table
+```
+
+Generated panel:
+
+```text
+l2_vlan_table.summary
+```
+
+Behavior:
+
+- Q-BRIDGE-MIB passthrough tables such as `snmp_vlan_table` / `Q-BRIDGE-MIB::dot1qVlanStaticTable` are normalized into a table-shaped contract;
+- stable fields include `vlan_id`, `vlan_name`, `vlan_status`, and `vlan_type`;
+- fields remain dimensional and `not_recordable`, because the operator question is "which VLANs exist and what is their current state?" rather than a trend;
+- `l2_vlan_table.summary` renders only when the effective capability support exposes `l2_vlan_identity`;
+- the panel uses the evidence-table render policy and queries the raw VLAN table measurement family with `__name__=~"snmp_vlan_table.*"` scoped by `device_code`;
+- panel bindings keep `metric_group_key=l2_vlan_table`, stable metric keys, and `selected_capability_keys=["l2_vlan_identity"]`;
+- `record_names` is intentionally empty for this panel.
+
+Verification:
+
+```text
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver(ImportsVlanTableContract|DefaultPanelRequirements|MaterializesVlanTableDashboardByTarget)' -count=1
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver(ImportsLldpNeighborContract|ImportsMacTableContract|ImportsArpTableContract|ImportsVlanTableContract|DefaultPanelRequirements|ResolvesPanelCapabilitySupport|PreviewsStrategySetPanelCapabilitySupportWithDefaultRequirements|PreviewsStrategySetPanelCapabilitySupportByTarget|MaterializesL2NeighborEvidencePanel|MaterializesL2NeighborDashboardByTarget|MaterializesMacTableDashboardByTarget|MaterializesArpTableDashboardByTarget|MaterializesVlanTableDashboardByTarget|MaterializesScreenshotStyleGrafanaDashboard|MaterializesHuaweiS5735DashboardFromTemplateChain|MaterializesStrategySetGrafanaDashboardByTarget|SavesStrategySetGrafanaDashboardByTarget)' -count=1
+```
+
+Remaining closure gaps after this update:
+
+1. STP still needs its own metric-group contract and evidence-panel binding.
+2. Event/config evidence is still outside the SNMP metric contract and needs a separate binding model or a clear bridge from existing config/compliance tables.
+3. Multi-vendor real/browser acceptance still needs more targets beyond the current quick-env switch path.
+
+## 2026-06-12 Update: STP State Evidence Panel Closure
+
+The first STP state contract is now connected into the evidence-table path.
+
+Metric group:
+
+```text
+l2_stp_state
+```
+
+Generated panel:
+
+```text
+l2_stp_state.summary
+```
+
+Behavior:
+
+- BRIDGE-MIB passthrough tables such as `snmp_stp_state` / `BRIDGE-MIB::dot1dStpPortTable` are normalized into a table-shaped contract;
+- stable fields include `stp_port`, `stp_state`, `stp_enable`, `stp_path_cost`, and `stp_designated_bridge`;
+- fields remain dimensional and `not_recordable`, because the operator question is "which ports are participating in STP and what is their current state?" rather than a trend;
+- `l2_stp_state.summary` renders only when the effective capability support exposes `l2_stp_identity`;
+- the panel uses the evidence-table render policy and queries the raw STP table measurement family with `__name__=~"snmp_stp_state.*"` scoped by `device_code`;
+- panel bindings keep `metric_group_key=l2_stp_state`, stable metric keys, and `selected_capability_keys=["l2_stp_identity"]`;
+- `record_names` is intentionally empty for this panel.
+
+Verification:
+
+```text
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver(ImportsStpStateContract|DefaultPanelRequirements|MaterializesStpStateDashboardByTarget)' -count=1
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver(ImportsLldpNeighborContract|ImportsMacTableContract|ImportsArpTableContract|ImportsVlanTableContract|ImportsStpStateContract|DefaultPanelRequirements|ResolvesPanelCapabilitySupport|PreviewsStrategySetPanelCapabilitySupportWithDefaultRequirements|PreviewsStrategySetPanelCapabilitySupportByTarget|MaterializesL2NeighborEvidencePanel|MaterializesL2NeighborDashboardByTarget|MaterializesMacTableDashboardByTarget|MaterializesArpTableDashboardByTarget|MaterializesVlanTableDashboardByTarget|MaterializesStpStateDashboardByTarget|MaterializesScreenshotStyleGrafanaDashboard|MaterializesHuaweiS5735DashboardFromTemplateChain|MaterializesStrategySetGrafanaDashboardByTarget|SavesStrategySetGrafanaDashboardByTarget|.*RecordingRule)' -count=1
+```
+
+Remaining closure gaps after this update:
+
+1. Event/config evidence is still outside the SNMP metric contract and needs a separate binding model or a clear bridge from existing config/compliance tables.
+2. Multi-vendor real/browser acceptance still needs more targets beyond the current quick-env switch path.
+
+## 2026-06-12 Update: Config/Compliance Platform Evidence Link Closure
+
+Configuration backup and compliance evidence now have a platform bridge into the generated switch dashboard.
+
+Generated panels:
+
+```text
+platform_config.backup
+platform_config.compliance
+```
+
+Behavior:
+
+- these panels are not SNMP metric groups and do not generate recording rules;
+- target panel preview enriches the default SNMP support list with platform capabilities only when the target has matching OneOPS platform rows;
+- `platform_config.backup` is supported by existing backup/version evidence from tables such as `platform_device_config_backup` and `platform_config_version`;
+- `platform_config.compliance` is supported by baseline/compliance evidence from tables such as `platform_config_baseline_evaluation` or a populated `platform_config_version.baseline_status`;
+- Grafana renders these as `platform_evidence_link` text panels, pointing the operator back to OneOPS config evidence instead of pretending the data is Prometheus time-series data;
+- panel bindings keep `metric_group_key=platform_config_backup` or `metric_group_key=platform_config_compliance`, stable platform evidence keys, and selected capabilities;
+- `record_names` is intentionally empty for both panels.
+
+Verification:
+
+```text
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver(DefaultPanelRequirements|AddsPlatformConfigEvidenceSupportByTarget|MaterializesPlatformConfigEvidencePanelsByTarget)' -count=1
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver(ImportsInterfaceAndSystemCapabilities|ImportsLldpNeighborContract|ImportsMacTableContract|ImportsArpTableContract|ImportsVlanTableContract|ImportsStpStateContract|DefaultPanelRequirements|AddsPlatformConfigEvidenceSupportByTarget|MaterializesPlatformConfigEvidencePanelsByTarget|.*PanelCapability|.*GrafanaDashboard|MaterializesL2NeighborEvidencePanel|MaterializesL2NeighborDashboardByTarget|MaterializesMacTableDashboardByTarget|MaterializesArpTableDashboardByTarget|MaterializesVlanTableDashboardByTarget|MaterializesStpStateDashboardByTarget|.*RecordingRule)' -count=1
+```
+
+Remaining closure gaps after this update:
+
+1. Active alert and recent event evidence still need a platform source bridge.
+2. Multi-vendor real/browser acceptance still needs more targets beyond the current quick-env switch path.
+
+## 2026-06-12 Update: Alert/Event Platform Evidence Link Closure
+
+Active alerts and recent events now have a platform bridge into the generated switch dashboard.
+
+Generated panels:
+
+```text
+platform_alerts.active
+platform_events.recent
+```
+
+Behavior:
+
+- these panels are not SNMP metric groups and do not generate recording rules;
+- target panel preview enriches the default SNMP support list with platform capabilities only when the target has matching OneOPS platform rows;
+- `platform_alerts.active` is supported by active alert evidence from `alert_alarm`;
+- `platform_events.recent` is supported by recent platform events from sources such as `deployment_event_log`, `platform_config_change_event`, or `device_v2_change_event`;
+- Grafana renders these as `platform_evidence_link` text panels, pointing the operator back to OneOPS alert/event evidence instead of pretending the data is Prometheus time-series data;
+- panel bindings keep `metric_group_key=platform_active_alerts` or `metric_group_key=platform_recent_events`, stable platform evidence keys, and selected capabilities;
+- `record_names` is intentionally empty for both panels.
+
+Verification:
+
+```text
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver(DefaultPanelRequirements|AddsPlatformAlertEventEvidenceSupportByTarget|MaterializesPlatformAlertEventEvidencePanelsByTarget)' -count=1
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver(ImportsInterfaceAndSystemCapabilities|ImportsLldpNeighborContract|ImportsMacTableContract|ImportsArpTableContract|ImportsVlanTableContract|ImportsStpStateContract|DefaultPanelRequirements|AddsPlatformConfigEvidenceSupportByTarget|MaterializesPlatformConfigEvidencePanelsByTarget|AddsPlatformAlertEventEvidenceSupportByTarget|MaterializesPlatformAlertEventEvidencePanelsByTarget|.*PanelCapability|.*GrafanaDashboard|MaterializesL2NeighborEvidencePanel|MaterializesL2NeighborDashboardByTarget|MaterializesMacTableDashboardByTarget|MaterializesArpTableDashboardByTarget|MaterializesVlanTableDashboardByTarget|MaterializesStpStateDashboardByTarget|.*RecordingRule)' -count=1
+```
+
+Remaining closure gaps after this update:
+
+1. Multi-vendor real/browser acceptance still needs more targets beyond the current quick-env switch path.
+
+## 2026-06-12 Update: Huawei/S5735 Closed-Loop Acceptance Scaffold
+
+The local acceptance path now matches the intended production model for a concrete switch target:
+
+```text
+target = Huawei / VRP / S5735
+strategy set item = generic switch SNMP strategy
+selected strategy = concrete Huawei S5735 child strategy
+effective contract = generic switch parent + Huawei VRP parent + Huawei S5735 child
+dashboard template = snmp.switch.root -> snmp.switch.huawei.vrp -> snmp.switch.huawei.vrp.s5735
+```
+
+What this verifies:
+
+- a concrete target first resolves to the best leaf strategy, not to every matching sibling strategy;
+- the leaf strategy inherits parent and grandparent `passthrough_config` blocks before contract import;
+- the effective contract renders recording-rule panels, L2 evidence-table panels, and platform evidence-link panels in the same dashboard;
+- `l2_neighbors.summary`, `l2_mac_table.summary`, `l3_arp_table.summary`, `l2_vlan_table.summary`, and `l2_stp_state.summary` all keep `render_policy=evidence_table`;
+- `platform_config.backup`, `platform_config.compliance`, `platform_alerts.active`, and `platform_events.recent` all keep `render_policy=platform_evidence_link`;
+- recording-rule panels inherited from the parent contract still render beside evidence panels;
+- Huawei/S5735 dashboard template inheritance is materialized into one concrete Grafana dashboard JSON.
+
+Verification:
+
+```text
+go test ./app/platform/service/impl -run TestMetricCapabilityContractResolverMaterializesHuaweiS5735ClosedLoopDashboardByTarget -count=1
+```
+
+Current closure boundary:
+
+1. Backend materialization, panel capability trace, strategy inheritance, dashboard template inheritance, evidence-table panels, and platform evidence-link panels are covered by automated tests.
+2. quick_env can still save/sync the generated dashboard, but its seed does not yet contain stable L2/platform evidence rows for a hard smoke assertion of every closed-loop panel.
+3. Remaining real acceptance is therefore limited to quick_env seed enrichment plus Grafana browser readback/sample-data verification for the Huawei/S5735 target.
+
+## 2026-06-12 Update: quick_env SNMP Switch Seed Replay Closure
+
+quick_env startup now replays the SNMP switch closed-loop seed records for existing environments, not only for first-time MySQL initialization.
+
+Closed scope for this step:
+
+- `start.sh` now runs `sync_snmp_switch_dashboard_seed_records` after `sync_snmp_switch_device_context_records` and before optional external data loading;
+- the replayed seed files are `zzzzzzzzzz-huawei-snmp-network-strategy-bootstrap.sql` and `zzzzzzzzzz-snmp-switch-platform-evidence-bootstrap.sql`;
+- the Huawei SNMP strategy seed includes the switch evidence-table measurements needed by the screenshot-style dashboard: `snmp_lldp_neighbors`, `snmp_mac_table`, `snmp_arp_table`, `snmp_vlan_table`, and `snmp_stp_state`;
+- the platform evidence seed supplies the quick-env switch rows needed by config backup, compliance, active alert, and recent event link panels;
+- `smoke_snmp_switch_dashboard_save.sh` now asserts all closed-loop panel binding keys, including the five L2 evidence panels and four platform evidence-link panels.
+
+Verification:
+
+```text
+bash -n quick_env/start.sh quick_env/scripts/smoke_snmp_switch_dashboard_save.sh
+python3 quick_env/tests/test_seed_template_guard.py -v
+docker exec -i demo2-mysql mysql -uroot -pUniOPS@Passw0rd -D UniOPS < quick_env/docker-entrypoint-initdb.d/zzzzzzzzzz-huawei-snmp-network-strategy-bootstrap.sql
+docker exec -i demo2-mysql mysql -uroot -pUniOPS@Passw0rd -D UniOPS < quick_env/docker-entrypoint-initdb.d/zzzzzzzzzz-snmp-switch-platform-evidence-bootstrap.sql
+```
+
+Live demo2 MySQL replay notes:
+
+- `UniOPS.platform_device_config_backup`, `platform_config_version`, `platform_config_baseline_evaluation`, `alert_alarm`, and `deployment_event_log` each returned evidence for `AST20260603174801664`;
+- the platform evidence seed keeps all inserted primary keys within the current `varchar(36)` schema limit;
+- `alert_alarm` insertion handles schema drift by checking `information_schema.COLUMNS` and including `datasource_type='prometheus'` only when that column exists.
+- `alert_rule` insertion handles schema drift by checking `information_schema.COLUMNS` and including `expr='snmp_cpu_usage{device_code="AST20260603174801664"} > 80'` only when that column exists.
+
+Current closure boundary:
+
+1. Backend inheritance/materialization and quick_env seed replay are now covered by automated tests.
+2. Current demo2 has MySQL and Grafana running, and the seed replay has been verified against live MySQL.
+3. OneOps API was started from source with `go run main.go --config ../quick_env/.runtime/demo2/init-configs/nacos/cipher-aes-start-config.yaml`, listening on `:8380` with Bidi on `:7370`.
+4. `SAVE_AND_SYNC=true quick_env/scripts/smoke_snmp_switch_dashboard_save.sh` passed against live OneOps + Grafana.
+
+Live Grafana readback:
+
+```text
+dashboard_code=GDBSNMP3E6A64DC49CDE413A4C27D84
+dashboard_uid=snmp-switch-ast20260603174801-d01c0e303c
+grafana_title=OneOPS SNMP Switch Ops - AST20260603174801664
+panel_binding_count=28
+grafana_url=http://127.0.0.1:3300/d/snmp-switch-ast20260603174801-d01c0e303c
+```
+
+The smoke asserts these closed-loop panel keys:
+
+```text
+l2_neighbors.summary
+l2_mac_table.summary
+l3_arp_table.summary
+l2_vlan_table.summary
+l2_stp_state.summary
+platform_config.backup
+platform_config.compliance
+platform_alerts.active
+platform_events.recent
+```
+
+Closed-loop status:
+
+1. Huawei / VRP / S5735 concrete target matching is covered.
+2. Strategy parent/child inheritance is covered.
+3. Dashboard template inheritance is covered.
+4. quick_env seed replay is covered.
+5. OneOps DB save, panel binding persistence, target binding persistence, Grafana sync, and Grafana UID readback are covered.
+
+Remaining scope is no longer part of this switch closed loop: multi-vendor browser acceptance and visual tuning can proceed as separate follow-up work.
+
+## 2026-06-12 Update: Remaining SNMP Switch Dashboard Closure Boundary
+
+The next closure is intentionally limited to the four items explicitly requested after Huawei/S5735 closed-loop acceptance:
+
+| Item | Closure Evidence | Status |
+| --- | --- | --- |
+| Multi-vendor validation | `quick_env/scripts/smoke_snmp_switch_dashboard_vendor_matrix.sh` passes for Huawei, H3C, Cisco, Maipu, and Fiberhome | Pending implementation and live run |
+| Visual experience tuning | `TestSwitchGrafanaDashboardUsesOpsScreenshotLayoutContract` passes and panel keys match the screenshot-aligned information contract | Pending implementation |
+| Real SNMP data validation | `quick_env/scripts/smoke_snmp_switch_metric_data.sh` returns non-empty Prometheus-compatible query results for a live target | Pending real SNMP metric flow |
+| Frontend platform entry | `npm run smoke:snmp-strategy-set-grafana-dashboard-open-link` and the existing save-action smoke pass | Pending implementation |
+
+Scope guard:
+
+- keep the work inside the SNMP switch dashboard family;
+- keep strategy and dashboard inheritance in OneOPS materialization, not in Grafana runtime;
+- do not add a custom Grafana plugin, iframe embedding framework, new alert workflow, or non-switch device dashboard family;
+- treat real SNMP data validation as a live-environment gate, not as a synthetic seed substitute.
+
+Verification commands for this remaining closure:
+
+```text
+python3 quick_env/tests/test_seed_template_guard.py -v
+python3 quick_env/tests/test_validate_nacos_seed_runtime.py -v
+
+cd OneOps
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolverMaterializesHuaweiS5735ClosedLoopDashboardByTarget|TestMetricCapabilityContractResolverMaterializesSwitchDashboardByVendorFamily|TestSwitchGrafanaDashboardUsesOpsScreenshotLayoutContract' -count=1
+
+cd ../OneOPS-UI
+npm run smoke:snmp-strategy-set-grafana-dashboard-open-link
+npm run smoke:snmp-strategy-set-grafana-dashboard-save-action
+
+cd ..
+bash -n quick_env/scripts/smoke_snmp_switch_dashboard_save.sh
+bash -n quick_env/scripts/smoke_snmp_switch_dashboard_vendor_matrix.sh
+bash -n quick_env/scripts/smoke_snmp_switch_metric_data.sh
+```
+
+Live validation remains required before marking the remaining closure complete:
+
+```text
+SAVE_AND_SYNC=true \
+ONEOPS_API_BASE_URL=http://127.0.0.1:8380/api/v1 \
+ONEOPS_AUTH_TOKEN=abc123 \
+MYSQL_PORT=3606 \
+MYSQL_ROOT_PASSWORD='UniOPS@Passw0rd' \
+GRAFANA_URL=http://127.0.0.1:3300 \
+GRAFANA_USER=admin \
+GRAFANA_PASSWORD=admin \
+quick_env/scripts/smoke_snmp_switch_dashboard_vendor_matrix.sh
+
+PROMETHEUS_URL=http://127.0.0.1:8428 \
+SNMP_TARGET_DEVICE_CODE=AST20260603174801664 \
+quick_env/scripts/smoke_snmp_switch_metric_data.sh
 ```

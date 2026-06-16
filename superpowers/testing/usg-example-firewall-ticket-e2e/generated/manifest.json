@@ -1,0 +1,560 @@
+{
+  "yamlPath": "/home/jacky/project/OneOPS-ALL/ctrlhub/controller/pkg/nodemap/example/usg_example/test_policy.yaml",
+  "reportPath": "/home/jacky/project/OneOPS-ALL/ctrlhub/controller/pkg/nodemap/example/usg_example/test_policy_report.html",
+  "blueprintPath": "/home/jacky/project/OneOPS-ALL/OneOPS-UI/.tmp/usg-example-blueprints-live.json",
+  "generatedAt": "2026-06-15T05:34:43.535Z",
+  "nodes": [
+    {
+      "node_name": "NJ-GL4F-G16U5-FW.RP.M9010",
+      "blueprint_status": "resolved",
+      "blueprint_tag_code": "CTG20260615005",
+      "workbook_path": "/home/jacky/project/OneOPS-ALL/docs/superpowers/testing/usg-example-firewall-ticket-e2e/generated/usg-nj-gl4f-g16u5-fw-rp-m9010-f9b165fd.xlsx",
+      "row_count": 6,
+      "cases": [
+        {
+          "group_name": "group1",
+          "case_index": 1,
+          "scenario_name": "精确匹配",
+          "oracle_class": "matched_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 2,
+          "scenario_name": "策略复用1",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 3,
+          "scenario_name": "策略复用2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 4,
+          "scenario_name": "策略复用3",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 5,
+          "scenario_name": "新建策略",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 6,
+          "scenario_name": "策略复用4",
+          "oracle_class": "generated_only"
+        }
+      ]
+    },
+    {
+      "node_name": "NJ-JiS-E16&17-FW-3.DMZ.F5000",
+      "blueprint_status": "resolved",
+      "blueprint_tag_code": "CTG20260615001",
+      "workbook_path": "/home/jacky/project/OneOPS-ALL/docs/superpowers/testing/usg-example-firewall-ticket-e2e/generated/usg-nj-jis-e16-17-fw-3-dmz-f5000-7040c729.xlsx",
+      "row_count": 6,
+      "cases": [
+        {
+          "group_name": "group1",
+          "case_index": 1,
+          "scenario_name": "子集",
+          "oracle_class": "matched_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 2,
+          "scenario_name": "精确匹配",
+          "oracle_class": "matched_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 3,
+          "scenario_name": "策略复用",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 4,
+          "scenario_name": "策略复用2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 5,
+          "scenario_name": "策略复用3",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 6,
+          "scenario_name": "新建策略",
+          "oracle_class": "generated_only"
+        }
+      ]
+    },
+    {
+      "node_name": "CZ-LY-FW-1.BD.F5000",
+      "blueprint_status": "resolved",
+      "blueprint_tag_code": "CTG20260615006",
+      "workbook_path": "/home/jacky/project/OneOPS-ALL/docs/superpowers/testing/usg-example-firewall-ticket-e2e/generated/usg-cz-ly-fw-1-bd-f5000-540c4f07.xlsx",
+      "row_count": 6,
+      "cases": [
+        {
+          "group_name": "group1",
+          "case_index": 1,
+          "scenario_name": "子集",
+          "oracle_class": "matched_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 2,
+          "scenario_name": "精确匹配",
+          "oracle_class": "matched_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 3,
+          "scenario_name": "策略复用",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 4,
+          "scenario_name": "新建策略",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 5,
+          "scenario_name": "新建策略",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 6,
+          "scenario_name": "策略复用",
+          "oracle_class": "generated_only"
+        }
+      ]
+    },
+    {
+      "node_name": "CTY-YZ-JS-YZ-MTDD-01D04F403-J01_12-02U23-H3C-F5000-NFW",
+      "blueprint_status": "resolved",
+      "blueprint_tag_code": "CTG20260615003",
+      "workbook_path": "/home/jacky/project/OneOPS-ALL/docs/superpowers/testing/usg-example-firewall-ticket-e2e/generated/usg-cty-yz-js-yz-mtdd-01d04f403-j01-12-02u23-h3c-f-bd45a248.xlsx",
+      "row_count": 7,
+      "cases": [
+        {
+          "group_name": "group1",
+          "case_index": 1,
+          "scenario_name": "子集",
+          "oracle_class": "matched_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 2,
+          "scenario_name": "精确匹配",
+          "oracle_class": "matched_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 3,
+          "scenario_name": "策略复用1",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 4,
+          "scenario_name": "策略复用2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 5,
+          "scenario_name": "策略复用2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 6,
+          "scenario_name": "新建策略",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 7,
+          "scenario_name": "策略复用3",
+          "oracle_class": "generated_only"
+        }
+      ]
+    },
+    {
+      "node_name": "NJ-JiS-E24-FW-1.RP.Edu8000E",
+      "blueprint_status": "resolved",
+      "blueprint_tag_code": "CTG20260615004",
+      "workbook_path": "/home/jacky/project/OneOPS-ALL/docs/superpowers/testing/usg-example-firewall-ticket-e2e/generated/usg-nj-jis-e24-fw-1-rp-edu8000e-765bd911.xlsx",
+      "row_count": 7,
+      "cases": [
+        {
+          "group_name": "group1",
+          "case_index": 1,
+          "scenario_name": "子集",
+          "oracle_class": "matched_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 2,
+          "scenario_name": "精确匹配",
+          "oracle_class": "matched_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 3,
+          "scenario_name": "策略复用",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 4,
+          "scenario_name": "新建策略",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 5,
+          "scenario_name": "复用策略2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 6,
+          "scenario_name": "复用策略2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 7,
+          "scenario_name": "复用策略3",
+          "oracle_class": "generated_only"
+        }
+      ]
+    },
+    {
+      "node_name": "NJ-JiS-E19-FW-1.DMZ.DP1000",
+      "blueprint_status": "resolved",
+      "blueprint_tag_code": "CTG20260615014",
+      "workbook_path": "/home/jacky/project/OneOPS-ALL/docs/superpowers/testing/usg-example-firewall-ticket-e2e/generated/usg-nj-jis-e19-fw-1-dmz-dp1000-b3604188.xlsx",
+      "row_count": 8,
+      "cases": [
+        {
+          "group_name": "group1",
+          "case_index": 1,
+          "scenario_name": "子集",
+          "oracle_class": "matched_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 2,
+          "scenario_name": "精确匹配",
+          "oracle_class": "matched_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 3,
+          "scenario_name": "策略复用",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 4,
+          "scenario_name": "新建策略",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 5,
+          "scenario_name": "新建策略2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 6,
+          "scenario_name": "策略复用2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 7,
+          "scenario_name": "策略复用3",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 8,
+          "scenario_name": "策略复用3",
+          "oracle_class": "generated_only"
+        }
+      ]
+    },
+    {
+      "node_name": "CTY-YZ-JS-YZ-MTDD-01D04F403-A13-06U19-DP-FW1000-NFW",
+      "blueprint_status": "resolved",
+      "blueprint_tag_code": "CTG20260615010",
+      "workbook_path": "/home/jacky/project/OneOPS-ALL/docs/superpowers/testing/usg-example-firewall-ticket-e2e/generated/usg-cty-yz-js-yz-mtdd-01d04f403-a13-06u19-dp-fw100-384ba9e0.xlsx",
+      "row_count": 18,
+      "cases": [
+        {
+          "group_name": "group1",
+          "case_index": 1,
+          "scenario_name": "子集",
+          "oracle_class": "matched_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 2,
+          "scenario_name": "精确匹配",
+          "oracle_class": "matched_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 3,
+          "scenario_name": "策略复用1",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 4,
+          "scenario_name": "策略复用2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 5,
+          "scenario_name": "新建测试",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 6,
+          "scenario_name": "新建策略2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 7,
+          "scenario_name": "新建策略2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 8,
+          "scenario_name": "新建策略2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 9,
+          "scenario_name": "新建策略2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 10,
+          "scenario_name": "新建策略2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 11,
+          "scenario_name": "新建策略2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 12,
+          "scenario_name": "新建策略2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 13,
+          "scenario_name": "新建策略2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 14,
+          "scenario_name": "新建策略2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 15,
+          "scenario_name": "新建策略2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 16,
+          "scenario_name": "新建策略2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 17,
+          "scenario_name": "新建策略2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 18,
+          "scenario_name": "新建策略2",
+          "oracle_class": "generated_only"
+        }
+      ]
+    },
+    {
+      "node_name": "CTY-YZ-JS-YZ-MTDD-01D04F403-J02_06-07U16-DP-FW1000-NFW",
+      "blueprint_status": "resolved",
+      "blueprint_tag_code": "CTG20260615009",
+      "workbook_path": "/home/jacky/project/OneOPS-ALL/docs/superpowers/testing/usg-example-firewall-ticket-e2e/generated/usg-cty-yz-js-yz-mtdd-01d04f403-j02-06-07u16-dp-fw-fac8dc56.xlsx",
+      "row_count": 7,
+      "cases": [
+        {
+          "group_name": "group1",
+          "case_index": 1,
+          "scenario_name": "子集",
+          "oracle_class": "matched_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 2,
+          "scenario_name": "精确匹配",
+          "oracle_class": "matched_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 3,
+          "scenario_name": "策略复用1",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 4,
+          "scenario_name": "策略复用2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 5,
+          "scenario_name": "策略复用3",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 6,
+          "scenario_name": "新建策略",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 7,
+          "scenario_name": "新建策略2-潜在问题，没有使用地址组",
+          "oracle_class": "generated_only"
+        }
+      ]
+    },
+    {
+      "node_name": "YZ-YiZ-C8U31-FW-1.DCN.Edu1000E",
+      "blueprint_status": "resolved",
+      "blueprint_tag_code": "CTG20260615007",
+      "workbook_path": "/home/jacky/project/OneOPS-ALL/docs/superpowers/testing/usg-example-firewall-ticket-e2e/generated/usg-yz-yiz-c8u31-fw-1-dcn-edu1000e-941081a5.xlsx",
+      "row_count": 6,
+      "cases": [
+        {
+          "group_name": "group1",
+          "case_index": 1,
+          "scenario_name": "子集",
+          "oracle_class": "matched_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 2,
+          "scenario_name": "精确匹配",
+          "oracle_class": "matched_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 3,
+          "scenario_name": "策略复用1",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 4,
+          "scenario_name": "策略复用2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 5,
+          "scenario_name": "策略复用2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 6,
+          "scenario_name": "新建策略",
+          "oracle_class": "generated_only"
+        }
+      ]
+    },
+    {
+      "node_name": "CTY-YZ-JS-YZ-MTDD-01D04F403-J01_12-02U31-DP-FW1000-NFW",
+      "blueprint_status": "resolved",
+      "blueprint_tag_code": "CTG20260615013",
+      "workbook_path": "/home/jacky/project/OneOPS-ALL/docs/superpowers/testing/usg-example-firewall-ticket-e2e/generated/usg-cty-yz-js-yz-mtdd-01d04f403-j01-12-02u31-dp-fw-9c08315e.xlsx",
+      "row_count": 6,
+      "cases": [
+        {
+          "group_name": "group1",
+          "case_index": 1,
+          "scenario_name": "子集",
+          "oracle_class": "matched_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 2,
+          "scenario_name": "精确匹配",
+          "oracle_class": "matched_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 3,
+          "scenario_name": "策略复用1",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 4,
+          "scenario_name": "策略复用2",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 5,
+          "scenario_name": "策略复用3",
+          "oracle_class": "generated_only"
+        },
+        {
+          "group_name": "group1",
+          "case_index": 6,
+          "scenario_name": "新建策略",
+          "oracle_class": "generated_only"
+        }
+      ]
+    }
+  ]
+}

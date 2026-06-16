@@ -1,0 +1,909 @@
+[
+  {
+    "node_name": "NJ-GL4F-G16U5-FW.RP.M9010",
+    "work_order_code": "WOF20260615052",
+    "item_results": [
+      {
+        "nodeName": "NJ-GL4F-G16U5-FW.RP.M9010",
+        "groupName": "group1",
+        "caseIndex": 1,
+        "scenarioName": "精确匹配",
+        "oracleClass": "matched_only",
+        "actualClass": "matched_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615052",
+        "itemCode": "WFI202606150377"
+      },
+      {
+        "nodeName": "NJ-GL4F-G16U5-FW.RP.M9010",
+        "groupName": "group1",
+        "caseIndex": 2,
+        "scenarioName": "策略复用1",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615052",
+        "itemCode": "WFI202606150378"
+      },
+      {
+        "nodeName": "NJ-GL4F-G16U5-FW.RP.M9010",
+        "groupName": "group1",
+        "caseIndex": 3,
+        "scenarioName": "策略复用2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615052",
+        "itemCode": "WFI202606150379"
+      },
+      {
+        "nodeName": "NJ-GL4F-G16U5-FW.RP.M9010",
+        "groupName": "group1",
+        "caseIndex": 4,
+        "scenarioName": "策略复用3",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615052",
+        "itemCode": "WFI202606150380"
+      },
+      {
+        "nodeName": "NJ-GL4F-G16U5-FW.RP.M9010",
+        "groupName": "group1",
+        "caseIndex": 5,
+        "scenarioName": "新建策略",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615052",
+        "itemCode": "WFI202606150381"
+      },
+      {
+        "nodeName": "NJ-GL4F-G16U5-FW.RP.M9010",
+        "groupName": "group1",
+        "caseIndex": 6,
+        "scenarioName": "策略复用4",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615052",
+        "itemCode": "WFI202606150382"
+      }
+    ]
+  },
+  {
+    "node_name": "NJ-JiS-E16&17-FW-3.DMZ.F5000",
+    "work_order_code": "WOF20260615053",
+    "item_results": [
+      {
+        "nodeName": "NJ-JiS-E16&17-FW-3.DMZ.F5000",
+        "groupName": "group1",
+        "caseIndex": 1,
+        "scenarioName": "子集",
+        "oracleClass": "matched_only",
+        "actualClass": "matched_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615053",
+        "itemCode": "WFI202606150383"
+      },
+      {
+        "nodeName": "NJ-JiS-E16&17-FW-3.DMZ.F5000",
+        "groupName": "group1",
+        "caseIndex": 2,
+        "scenarioName": "精确匹配",
+        "oracleClass": "matched_only",
+        "actualClass": "matched_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615053",
+        "itemCode": "WFI202606150384"
+      },
+      {
+        "nodeName": "NJ-JiS-E16&17-FW-3.DMZ.F5000",
+        "groupName": "group1",
+        "caseIndex": 3,
+        "scenarioName": "策略复用",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615053",
+        "itemCode": "WFI202606150385"
+      },
+      {
+        "nodeName": "NJ-JiS-E16&17-FW-3.DMZ.F5000",
+        "groupName": "group1",
+        "caseIndex": 4,
+        "scenarioName": "策略复用2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615053",
+        "itemCode": "WFI202606150386"
+      },
+      {
+        "nodeName": "NJ-JiS-E16&17-FW-3.DMZ.F5000",
+        "groupName": "group1",
+        "caseIndex": 5,
+        "scenarioName": "策略复用3",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615053",
+        "itemCode": "WFI202606150387"
+      },
+      {
+        "nodeName": "NJ-JiS-E16&17-FW-3.DMZ.F5000",
+        "groupName": "group1",
+        "caseIndex": 6,
+        "scenarioName": "新建策略",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615053",
+        "itemCode": "WFI202606150388"
+      }
+    ]
+  },
+  {
+    "node_name": "CZ-LY-FW-1.BD.F5000",
+    "work_order_code": "WOF20260615054",
+    "item_results": [
+      {
+        "nodeName": "CZ-LY-FW-1.BD.F5000",
+        "groupName": "group1",
+        "caseIndex": 1,
+        "scenarioName": "子集",
+        "oracleClass": "matched_only",
+        "actualClass": "matched_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615054",
+        "itemCode": "WFI202606150389"
+      },
+      {
+        "nodeName": "CZ-LY-FW-1.BD.F5000",
+        "groupName": "group1",
+        "caseIndex": 2,
+        "scenarioName": "精确匹配",
+        "oracleClass": "matched_only",
+        "actualClass": "matched_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615054",
+        "itemCode": "WFI202606150390"
+      },
+      {
+        "nodeName": "CZ-LY-FW-1.BD.F5000",
+        "groupName": "group1",
+        "caseIndex": 3,
+        "scenarioName": "策略复用",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615054",
+        "itemCode": "WFI202606150391"
+      },
+      {
+        "nodeName": "CZ-LY-FW-1.BD.F5000",
+        "groupName": "group1",
+        "caseIndex": 4,
+        "scenarioName": "新建策略",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615054",
+        "itemCode": "WFI202606150392"
+      },
+      {
+        "nodeName": "CZ-LY-FW-1.BD.F5000",
+        "groupName": "group1",
+        "caseIndex": 5,
+        "scenarioName": "新建策略",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615054",
+        "itemCode": "WFI202606150393"
+      },
+      {
+        "nodeName": "CZ-LY-FW-1.BD.F5000",
+        "groupName": "group1",
+        "caseIndex": 6,
+        "scenarioName": "策略复用",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615054",
+        "itemCode": "WFI202606150394"
+      }
+    ]
+  },
+  {
+    "node_name": "CTY-YZ-JS-YZ-MTDD-01D04F403-J01_12-02U23-H3C-F5000-NFW",
+    "work_order_code": "WOF20260615055",
+    "item_results": [
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-J01_12-02U23-H3C-F5000-NFW",
+        "groupName": "group1",
+        "caseIndex": 1,
+        "scenarioName": "子集",
+        "oracleClass": "matched_only",
+        "actualClass": "matched_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615055",
+        "itemCode": "WFI202606150395"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-J01_12-02U23-H3C-F5000-NFW",
+        "groupName": "group1",
+        "caseIndex": 2,
+        "scenarioName": "精确匹配",
+        "oracleClass": "matched_only",
+        "actualClass": "matched_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615055",
+        "itemCode": "WFI202606150396"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-J01_12-02U23-H3C-F5000-NFW",
+        "groupName": "group1",
+        "caseIndex": 3,
+        "scenarioName": "策略复用1",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615055",
+        "itemCode": "WFI202606150397"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-J01_12-02U23-H3C-F5000-NFW",
+        "groupName": "group1",
+        "caseIndex": 4,
+        "scenarioName": "策略复用2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615055",
+        "itemCode": "WFI202606150398"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-J01_12-02U23-H3C-F5000-NFW",
+        "groupName": "group1",
+        "caseIndex": 5,
+        "scenarioName": "策略复用2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615055",
+        "itemCode": "WFI202606150399"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-J01_12-02U23-H3C-F5000-NFW",
+        "groupName": "group1",
+        "caseIndex": 6,
+        "scenarioName": "新建策略",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615055",
+        "itemCode": "WFI202606150400"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-J01_12-02U23-H3C-F5000-NFW",
+        "groupName": "group1",
+        "caseIndex": 7,
+        "scenarioName": "策略复用3",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615055",
+        "itemCode": "WFI202606150401"
+      }
+    ]
+  },
+  {
+    "node_name": "NJ-JiS-E24-FW-1.RP.Edu8000E",
+    "work_order_code": "WOF20260615056",
+    "item_results": [
+      {
+        "nodeName": "NJ-JiS-E24-FW-1.RP.Edu8000E",
+        "groupName": "group1",
+        "caseIndex": 1,
+        "scenarioName": "子集",
+        "oracleClass": "matched_only",
+        "actualClass": "matched_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615056",
+        "itemCode": "WFI202606150402"
+      },
+      {
+        "nodeName": "NJ-JiS-E24-FW-1.RP.Edu8000E",
+        "groupName": "group1",
+        "caseIndex": 2,
+        "scenarioName": "精确匹配",
+        "oracleClass": "matched_only",
+        "actualClass": "matched_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615056",
+        "itemCode": "WFI202606150403"
+      },
+      {
+        "nodeName": "NJ-JiS-E24-FW-1.RP.Edu8000E",
+        "groupName": "group1",
+        "caseIndex": 3,
+        "scenarioName": "策略复用",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615056",
+        "itemCode": "WFI202606150404"
+      },
+      {
+        "nodeName": "NJ-JiS-E24-FW-1.RP.Edu8000E",
+        "groupName": "group1",
+        "caseIndex": 4,
+        "scenarioName": "新建策略",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615056",
+        "itemCode": "WFI202606150405"
+      },
+      {
+        "nodeName": "NJ-JiS-E24-FW-1.RP.Edu8000E",
+        "groupName": "group1",
+        "caseIndex": 5,
+        "scenarioName": "复用策略2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615056",
+        "itemCode": "WFI202606150406"
+      },
+      {
+        "nodeName": "NJ-JiS-E24-FW-1.RP.Edu8000E",
+        "groupName": "group1",
+        "caseIndex": 6,
+        "scenarioName": "复用策略2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615056",
+        "itemCode": "WFI202606150407"
+      },
+      {
+        "nodeName": "NJ-JiS-E24-FW-1.RP.Edu8000E",
+        "groupName": "group1",
+        "caseIndex": 7,
+        "scenarioName": "复用策略3",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615056",
+        "itemCode": "WFI202606150408"
+      }
+    ]
+  },
+  {
+    "node_name": "NJ-JiS-E19-FW-1.DMZ.DP1000",
+    "work_order_code": "WOF20260615057",
+    "item_results": [
+      {
+        "nodeName": "NJ-JiS-E19-FW-1.DMZ.DP1000",
+        "groupName": "group1",
+        "caseIndex": 1,
+        "scenarioName": "子集",
+        "oracleClass": "matched_only",
+        "actualClass": "matched_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615057",
+        "itemCode": "WFI202606150409"
+      },
+      {
+        "nodeName": "NJ-JiS-E19-FW-1.DMZ.DP1000",
+        "groupName": "group1",
+        "caseIndex": 2,
+        "scenarioName": "精确匹配",
+        "oracleClass": "matched_only",
+        "actualClass": "matched_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615057",
+        "itemCode": "WFI202606150410"
+      },
+      {
+        "nodeName": "NJ-JiS-E19-FW-1.DMZ.DP1000",
+        "groupName": "group1",
+        "caseIndex": 3,
+        "scenarioName": "策略复用",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615057",
+        "itemCode": "WFI202606150411"
+      },
+      {
+        "nodeName": "NJ-JiS-E19-FW-1.DMZ.DP1000",
+        "groupName": "group1",
+        "caseIndex": 4,
+        "scenarioName": "新建策略",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615057",
+        "itemCode": "WFI202606150412"
+      },
+      {
+        "nodeName": "NJ-JiS-E19-FW-1.DMZ.DP1000",
+        "groupName": "group1",
+        "caseIndex": 5,
+        "scenarioName": "新建策略2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615057",
+        "itemCode": "WFI202606150413"
+      },
+      {
+        "nodeName": "NJ-JiS-E19-FW-1.DMZ.DP1000",
+        "groupName": "group1",
+        "caseIndex": 6,
+        "scenarioName": "策略复用2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615057",
+        "itemCode": "WFI202606150414"
+      },
+      {
+        "nodeName": "NJ-JiS-E19-FW-1.DMZ.DP1000",
+        "groupName": "group1",
+        "caseIndex": 7,
+        "scenarioName": "策略复用3",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615057",
+        "itemCode": "WFI202606150415"
+      },
+      {
+        "nodeName": "NJ-JiS-E19-FW-1.DMZ.DP1000",
+        "groupName": "group1",
+        "caseIndex": 8,
+        "scenarioName": "策略复用3",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615057",
+        "itemCode": "WFI202606150416"
+      }
+    ]
+  },
+  {
+    "node_name": "CTY-YZ-JS-YZ-MTDD-01D04F403-A13-06U19-DP-FW1000-NFW",
+    "work_order_code": "WOF20260615058",
+    "item_results": [
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-A13-06U19-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 1,
+        "scenarioName": "子集",
+        "oracleClass": "matched_only",
+        "actualClass": "matched_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615058",
+        "itemCode": "WFI202606150417"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-A13-06U19-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 2,
+        "scenarioName": "精确匹配",
+        "oracleClass": "matched_only",
+        "actualClass": "matched_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615058",
+        "itemCode": "WFI202606150418"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-A13-06U19-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 3,
+        "scenarioName": "策略复用1",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615058",
+        "itemCode": "WFI202606150419"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-A13-06U19-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 4,
+        "scenarioName": "策略复用2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615058",
+        "itemCode": "WFI202606150420"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-A13-06U19-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 5,
+        "scenarioName": "新建测试",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615058",
+        "itemCode": "WFI202606150421"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-A13-06U19-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 6,
+        "scenarioName": "新建策略2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615058",
+        "itemCode": "WFI202606150422"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-A13-06U19-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 7,
+        "scenarioName": "新建策略2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615058",
+        "itemCode": "WFI202606150423"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-A13-06U19-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 8,
+        "scenarioName": "新建策略2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615058",
+        "itemCode": "WFI202606150424"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-A13-06U19-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 9,
+        "scenarioName": "新建策略2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615058",
+        "itemCode": "WFI202606150425"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-A13-06U19-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 10,
+        "scenarioName": "新建策略2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615058",
+        "itemCode": "WFI202606150426"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-A13-06U19-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 11,
+        "scenarioName": "新建策略2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615058",
+        "itemCode": "WFI202606150427"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-A13-06U19-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 12,
+        "scenarioName": "新建策略2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615058",
+        "itemCode": "WFI202606150428"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-A13-06U19-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 13,
+        "scenarioName": "新建策略2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615058",
+        "itemCode": "WFI202606150429"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-A13-06U19-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 14,
+        "scenarioName": "新建策略2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615058",
+        "itemCode": "WFI202606150430"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-A13-06U19-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 15,
+        "scenarioName": "新建策略2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615058",
+        "itemCode": "WFI202606150431"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-A13-06U19-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 16,
+        "scenarioName": "新建策略2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615058",
+        "itemCode": "WFI202606150432"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-A13-06U19-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 17,
+        "scenarioName": "新建策略2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615058",
+        "itemCode": "WFI202606150433"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-A13-06U19-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 18,
+        "scenarioName": "新建策略2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615058",
+        "itemCode": "WFI202606150434"
+      }
+    ]
+  },
+  {
+    "node_name": "CTY-YZ-JS-YZ-MTDD-01D04F403-J02_06-07U16-DP-FW1000-NFW",
+    "work_order_code": "WOF20260615059",
+    "item_results": [
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-J02_06-07U16-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 1,
+        "scenarioName": "子集",
+        "oracleClass": "matched_only",
+        "actualClass": "matched_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615059",
+        "itemCode": "WFI202606150435"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-J02_06-07U16-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 2,
+        "scenarioName": "精确匹配",
+        "oracleClass": "matched_only",
+        "actualClass": "matched_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615059",
+        "itemCode": "WFI202606150436"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-J02_06-07U16-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 3,
+        "scenarioName": "策略复用1",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615059",
+        "itemCode": "WFI202606150437"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-J02_06-07U16-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 4,
+        "scenarioName": "策略复用2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615059",
+        "itemCode": "WFI202606150438"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-J02_06-07U16-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 5,
+        "scenarioName": "策略复用3",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615059",
+        "itemCode": "WFI202606150439"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-J02_06-07U16-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 6,
+        "scenarioName": "新建策略",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615059",
+        "itemCode": "WFI202606150440"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-J02_06-07U16-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 7,
+        "scenarioName": "新建策略2-潜在问题，没有使用地址组",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615059",
+        "itemCode": "WFI202606150441"
+      }
+    ]
+  },
+  {
+    "node_name": "YZ-YiZ-C8U31-FW-1.DCN.Edu1000E",
+    "work_order_code": "WOF20260615060",
+    "item_results": [
+      {
+        "nodeName": "YZ-YiZ-C8U31-FW-1.DCN.Edu1000E",
+        "groupName": "group1",
+        "caseIndex": 1,
+        "scenarioName": "子集",
+        "oracleClass": "matched_only",
+        "actualClass": "matched_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615060",
+        "itemCode": "WFI202606150442"
+      },
+      {
+        "nodeName": "YZ-YiZ-C8U31-FW-1.DCN.Edu1000E",
+        "groupName": "group1",
+        "caseIndex": 2,
+        "scenarioName": "精确匹配",
+        "oracleClass": "matched_only",
+        "actualClass": "matched_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615060",
+        "itemCode": "WFI202606150443"
+      },
+      {
+        "nodeName": "YZ-YiZ-C8U31-FW-1.DCN.Edu1000E",
+        "groupName": "group1",
+        "caseIndex": 3,
+        "scenarioName": "策略复用1",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615060",
+        "itemCode": "WFI202606150444"
+      },
+      {
+        "nodeName": "YZ-YiZ-C8U31-FW-1.DCN.Edu1000E",
+        "groupName": "group1",
+        "caseIndex": 4,
+        "scenarioName": "策略复用2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615060",
+        "itemCode": "WFI202606150445"
+      },
+      {
+        "nodeName": "YZ-YiZ-C8U31-FW-1.DCN.Edu1000E",
+        "groupName": "group1",
+        "caseIndex": 5,
+        "scenarioName": "策略复用2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615060",
+        "itemCode": "WFI202606150446"
+      },
+      {
+        "nodeName": "YZ-YiZ-C8U31-FW-1.DCN.Edu1000E",
+        "groupName": "group1",
+        "caseIndex": 6,
+        "scenarioName": "新建策略",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615060",
+        "itemCode": "WFI202606150447"
+      }
+    ]
+  },
+  {
+    "node_name": "CTY-YZ-JS-YZ-MTDD-01D04F403-J01_12-02U31-DP-FW1000-NFW",
+    "work_order_code": "WOF20260615061",
+    "item_results": [
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-J01_12-02U31-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 1,
+        "scenarioName": "子集",
+        "oracleClass": "matched_only",
+        "actualClass": "matched_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615061",
+        "itemCode": "WFI202606150448"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-J01_12-02U31-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 2,
+        "scenarioName": "精确匹配",
+        "oracleClass": "matched_only",
+        "actualClass": "matched_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615061",
+        "itemCode": "WFI202606150449"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-J01_12-02U31-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 3,
+        "scenarioName": "策略复用1",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615061",
+        "itemCode": "WFI202606150450"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-J01_12-02U31-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 4,
+        "scenarioName": "策略复用2",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615061",
+        "itemCode": "WFI202606150451"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-J01_12-02U31-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 5,
+        "scenarioName": "策略复用3",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615061",
+        "itemCode": "WFI202606150452"
+      },
+      {
+        "nodeName": "CTY-YZ-JS-YZ-MTDD-01D04F403-J01_12-02U31-DP-FW1000-NFW",
+        "groupName": "group1",
+        "caseIndex": 6,
+        "scenarioName": "新建策略",
+        "oracleClass": "generated_only",
+        "actualClass": "generated_only",
+        "consistent": true,
+        "workOrderCode": "WOF20260615061",
+        "itemCode": "WFI202606150453"
+      }
+    ]
+  }
+]

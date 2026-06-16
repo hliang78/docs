@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SNMP Generic Dashboard Layout Preview</title>
+  <style>
+    :root {
+      --bg: #0c1017;
+      --bg-2: #111722;
+      --panel: #171d28;
+      --panel-2: #1c2330;
+      --line: #2f3a4c;
+      --line-soft: #232c39;
+      --ink: #ecf1f7;
+      --muted: #96a3b9;
+      --green: #75c95d;
+      --green-2: #4d9e43;
+      --red: #ea4967;
+      --amber: #e5c74a;
+      --blue: #7ea3ff;
+      --cyan: #62d7dd;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      --radius: 18px;
+      --radius-sm: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(98, 215, 221, 0.08), transparent 28%),
+        radial-gradient(circle at top right, rgba(126, 163, 255, 0.08), transparent 24%),
+        linear-gradient(180deg, #091019 0%, var(--bg) 100%);
+      color: var(--ink);
+      font-family: "Segoe UI", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    }
+
+    body {
+      padding: 24px;
+    }
+
+    .page {
+      max-width: 1600px;
+      margin: 0 auto;
+      display: grid;
+      gap: 18px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 12px;
+      padding: 24px 28px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      background: rgba(15, 21, 31, 0.78);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--cyan);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      text-wrap: balance;
+    }
+
+    .sub {
+      max-width: 74ch;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 15px;
+      text-wrap: pretty;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex: 0 0 auto;
+    }
+
+    .dot.triage { background: var(--green); }
+    .dot.analytics { background: var(--amber); }
+    .dot.ops { background: var(--blue); }
+    .dot.health { background: var(--red); }
+
+    .dashboard-shell {
+      padding: 16px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(14, 19, 28, 0.92), rgba(12, 16, 23, 0.96));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: var(--shadow);
+      overflow-x: auto;
+    }
+
+    .dashboard {
+      min-width: 1320px;
+      display: grid;
+      grid-template-columns: repeat(24, minmax(0, 1fr));
+      grid-template-rows: repeat(26, 28px);
+      gap: 8px;
+      position: relative;
+      padding: 8px;
+      border-radius: 20px;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        var(--bg-2);
+      background-size: calc((100% - 23 * 8px) / 24 + 8px) 28px, calc((100% - 23 * 8px) / 24 + 8px) 28px, auto;
+      background-position: 8px 8px, 8px 8px, 0 0;
+    }
+
+    .panel {
+      position: relative;
+      display: grid;
+      align-content: start;
+      gap: 8px;
+      min-width: 0;
+      padding: 12px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      overflow: hidden;
+    }
+
+    .panel::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      border-radius: inherit;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    }
+
+    .identity {
+      grid-column: 1 / span 24;
+      grid-row: 1 / span 3;
+      padding: 14px 16px;
+      background:
+        linear-gradient(90deg, rgba(98, 215, 221, 0.08), transparent 26%),
+        linear-gradient(180deg, #151b25, #121823);
+    }
+
+    .triage {
+      background:
+        linear-gradient(180deg, rgba(117, 201, 93, 0.22), rgba(38, 48, 32, 0.18)),
+        linear-gradient(180deg, #151b25, #121823);
+    }
+
+    .triage.alert {
+      background:
+        linear-gradient(180deg, rgba(234, 73, 103, 0.18), rgba(48, 29, 35, 0.16)),
+        linear-gradient(180deg, #151b25, #121823);
+    }
+
+    .analytics {
+      background:
+        linear-gradient(180deg, rgba(229, 199, 74, 0.08), transparent 65%),
+        linear-gradient(180deg, #151b25, #121823);
+    }
+
+    .ops {
+      background:
+        linear-gradient(180deg, rgba(126, 163, 255, 0.1), transparent 65%),
+        linear-gradient(180deg, #151b25, #121823);
+    }
+
+    .health {
+      background:
+        linear-gradient(180deg, rgba(234, 73, 103, 0.09), transparent 65%),
+        linear-gradient(180deg, #151b25, #121823);
+    }
+
+    .kicker {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .name {
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .coord {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .zone-title {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: -0.03em;
+    }
+
+    .zone-text {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+      max-width: 72ch;
+    }
+
+    .meta-row,
+    .summary-stack,
+    .ops-stack,
+    .health-stack {
+      display: grid;
+      gap: 8px;
+    }
+
+    .meta-row {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .metric {
+      display: grid;
+      gap: 2px;
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line-soft);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .metric b {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .metric strong {
+      font-size: 18px;
+      color: var(--ink);
+      letter-spacing: -0.03em;
+    }
+
+    .mini-card {
+      display: grid;
+      align-content: start;
+      gap: 8px;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line-soft);
+      background: rgba(255, 255, 255, 0.03);
+      min-height: 0;
+    }
+
+    .mini-card h3 {
+      margin: 0;
+      font-size: 13px;
+      color: var(--ink);
+    }
+
+    .mini-card p,
+    .mini-card ul {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .mini-card ul {
+      padding-left: 16px;
+    }
+
+    .summary-stack {
+      height: 100%;
+      grid-template-rows: 4fr 5fr;
+    }
+
+    .ops-stack {
+      height: 100%;
+      grid-template-rows: 7fr 3fr;
+    }
+
+    .health-stack {
+      height: 100%;
+      grid-template-columns: 2fr 3fr 3fr 2fr;
+      grid-template-rows: repeat(10, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .health-small {
+      display: grid;
+      gap: 8px;
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+
+    .health-small.discard {
+      grid-row: 3 / span 2;
+    }
+
+    .health-temp {
+      grid-column: 1;
+      grid-row: 5 / span 6;
+    }
+
+    .health-power {
+      grid-column: 2;
+      grid-row: 1 / span 10;
+    }
+
+    .health-fan {
+      grid-column: 3;
+      grid-row: 1 / span 10;
+    }
+
+    .health-optical {
+      grid-column: 4;
+      grid-row: 1 / span 10;
+    }
+
+    .spec-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    .spec-card {
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(15, 21, 31, 0.72);
+    }
+
+    .spec-card h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .spec-card p,
+    .spec-card li {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 13px;
+    }
+
+    .spec-card ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    @media (max-width: 1024px) {
+      body {
+        padding: 16px;
+      }
+
+      .hero {
+        padding: 20px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        scroll-behavior: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <span class="eyebrow">Web Layout Preview</span>
+      <h1>SNMP Generic Dashboard, shown as a webpage layout</h1>
+      <p class="sub">
+        这不是 CE168 截图复刻，而是把当前规格里的通用布局骨架，用网页方式直接可视化。
+        页面严格按 24 列分区展示：顶部身份条、总览带、上半分析带、左下模块区、右侧健康集群。
+      </p>
+      <div class="legend">
+        <span class="pill"><span class="dot triage"></span>Band B: Triage Ribbon</span>
+        <span class="pill"><span class="dot analytics"></span>Band C: Upper Analytics</span>
+        <span class="pill"><span class="dot ops"></span>Band D-Left: Module Operations</span>
+        <span class="pill"><span class="dot health"></span>Band D-Right: Health Cluster</span>
+      </div>
+    </section>
+
+    <section class="dashboard-shell">
+      <div class="dashboard">
+        <article class="panel identity">
+          <div class="kicker">
+            <span class="name">Device Identity</span>
+            <span class="coord">x=0 y=0 w=24 h=3</span>
+          </div>
+          <h2 class="zone-title">Generic Network Device Identity Strip</h2>
+          <p class="zone-text">
+            设备名称、厂商、平台、型号、版本、位置、运行时长都在这里。这个区只负责识别，不与实时指标争抢视线。
+          </p>
+          <div class="meta-row">
+            <div class="metric"><b>Catalog</b><strong>SWITCH</strong></div>
+            <div class="metric"><b>Vendor</b><strong>Generic</strong></div>
+            <div class="metric"><b>Platform</b><strong>SNMP</strong></div>
+            <div class="metric"><b>Model</b><strong>Vendor-Neutral</strong></div>
+            <div class="metric"><b>Version</b><strong>Resolved</strong></div>
+            <div class="metric"><b>Uptime</b><strong>Stable</strong></div>
+          </div>
+        </article>
+
+        <article class="panel triage" style="grid-column:1 / span 4; grid-row:4 / span 4;">
+          <div class="kicker"><span class="name">Overall Health</span><span class="coord">0,3,4,4</span></div>
+          <p class="zone-text">设备总体健康态。</p>
+        </article>
+
+        <article class="panel triage" style="grid-column:5 / span 4; grid-row:4 / span 4;">
+          <div class="kicker"><span class="name">Active Alerts</span><span class="coord">4,3,4,4</span></div>
+          <p class="zone-text">当前告警计数。</p>
+        </article>
+
+        <article class="panel triage" style="grid-column:9 / span 4; grid-row:4 / span 4;">
+          <div class="kicker"><span class="name">CPU Now</span><span class="coord">8,3,4,4</span></div>
+          <p class="zone-text">当前 CPU 使用率。</p>
+        </article>
+
+        <article class="panel triage" style="grid-column:13 / span 4; grid-row:4 / span 4;">
+          <div class="kicker"><span class="name">Memory Now</span><span class="coord">12,3,4,4</span></div>
+          <p class="zone-text">当前内存使用率。</p>
+        </article>
+
+        <article class="panel triage" style="grid-column:17 / span 4; grid-row:4 / span 4;">
+          <div class="kicker"><span class="name">Ports Up</span><span class="coord">16,3,4,4</span></div>
+          <p class="zone-text">存活端口数。</p>
+        </article>
+
+        <article class="panel triage alert" style="grid-column:21 / span 4; grid-row:4 / span 4;">
+          <div class="kicker"><span class="name">Ports Down</span><span class="coord">20,3,4,4</span></div>
+          <p class="zone-text">右端固定为 down-state 视觉槽位，可承载一个或多个红色子统计。</p>
+        </article>
+
+        <article class="panel analytics" style="grid-column:1 / span 8; grid-row:8 / span 9;">
+          <div class="kicker"><span class="name">Interface Utilization Top N</span><span class="coord">0,7,8,9</span></div>
+          <p class="zone-text">上半区左侧主热点区，优先承载接口利用率排行。</p>
+        </article>
+
+        <article class="panel analytics" style="grid-column:9 / span 4; grid-row:8 / span 9;">
+          <div class="kicker"><span class="name">Traffic Mix</span><span class="coord">8,7,4,9</span></div>
+          <p class="zone-text">包类型构成，作为分析带里的辅助手段。</p>
+        </article>
+
+        <article class="panel analytics" style="grid-column:13 / span 3; grid-row:8 / span 9;">
+          <div class="kicker"><span class="name">L2 / Routing Summary Lane</span><span class="coord">12,7,3,9</span></div>
+          <div class="summary-stack">
+            <section class="mini-card">
+              <h3>L2 Summary</h3>
+              <p>MAC / ARP / VLAN / STP 紧凑堆叠。</p>
+              <div class="coord">x=12 y=7 w=3 h=4</div>
+            </section>
+            <section class="mini-card">
+              <h3>Routing Summary</h3>
+              <p>IPv4 / IPv6 / OSPF / BGP 紧凑堆叠。</p>
+              <div class="coord">x=12 y=11 w=3 h=5</div>
+            </section>
+          </div>
+        </article>
+
+        <article class="panel analytics" style="grid-column:16 / span 4; grid-row:8 / span 9;">
+          <div class="kicker"><span class="name">Packets Per Second</span><span class="coord">15,7,4,9</span></div>
+          <p class="zone-text">PPS 趋势必须紧贴吞吐趋势，不单独下沉。</p>
+        </article>
+
+        <article class="panel analytics" style="grid-column:20 / span 5; grid-row:8 / span 9;">
+          <div class="kicker"><span class="name">Traffic Throughput</span><span class="coord">19,7,5,9</span></div>
+          <p class="zone-text">上半分析带最右侧趋势面板。</p>
+        </article>
+
+        <article class="panel ops" style="grid-column:1 / span 8; grid-row:17 / span 10;">
+          <div class="kicker"><span class="name">Left Operations Zone</span><span class="coord">0,16,8,10</span></div>
+          <div class="ops-stack">
+            <section class="mini-card">
+              <h3>Interface State by Module</h3>
+              <p>这是左下主角，不是上半区 stat 卡片。应表现为模块条带、槽位块、或按板卡分组的状态矩阵。</p>
+              <div class="coord">x=0 y=16 w=8 h=7</div>
+            </section>
+            <section class="mini-card">
+              <h3>Interface Quality Hotspots</h3>
+              <p>作为模块区附属质量区，贴着模块态势，不再单独占一整排。</p>
+              <div class="coord">x=0 y=23 w=8 h=3</div>
+            </section>
+          </div>
+        </article>
+
+        <article class="panel ops" style="grid-column:9 / span 6; grid-row:17 / span 10;">
+          <div class="kicker"><span class="name">CPU / Memory Trend</span><span class="coord">8,16,6,10</span></div>
+          <p class="zone-text">
+            资源趋势位于左下模块区与右侧健康集群之间，负责连接“接口态势”和“硬件健康”。
+          </p>
+        </article>
+
+        <article class="panel health" style="grid-column:15 / span 10; grid-row:17 / span 10;">
+          <div class="kicker"><span class="name">Right Health Cluster</span><span class="coord">14,16,10,10</span></div>
+          <div class="health-stack">
+            <section class="mini-card health-small">
+              <h3>Error Ports</h3>
+              <p>2x2</p>
+              <div class="coord">14,16,2,2</div>
+            </section>
+            <section class="mini-card health-small discard">
+              <h3>Discard Ports</h3>
+              <p>2x2</p>
+              <div class="coord">14,18,2,2</div>
+            </section>
+            <section class="mini-card health-temp">
+              <h3>Temperature</h3>
+              <p>纵向温度列表，承接硬件感知。</p>
+              <div class="coord">14,20,2,6</div>
+            </section>
+            <section class="mini-card health-power">
+              <h3>Power Supply</h3>
+              <p>3x10，适合竖向 PSU 状态列。</p>
+              <div class="coord">16,16,3,10</div>
+            </section>
+            <section class="mini-card health-fan">
+              <h3>Fan Status</h3>
+              <p>3x10，适合竖向风扇状态列。</p>
+              <div class="coord">19,16,3,10</div>
+            </section>
+            <section class="mini-card health-optical">
+              <h3>Optical Rx/Tx Ranking</h3>
+              <p>2x10，位于最右，保持 slim ranking strip。</p>
+              <div class="coord">22,16,2,10</div>
+            </section>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="spec-grid">
+      <article class="spec-card">
+        <h2>布局原则</h2>
+        <ul>
+          <li>上半区负责 triage 和 analytics。</li>
+          <li>左下区负责 module-oriented operations。</li>
+          <li>右下区负责 compact health cluster。</li>
+          <li>`L2 Summary` 和 `Routing Summary` 不能漂到底部变大卡片。</li>
+        </ul>
+      </article>
+      <article class="spec-card">
+        <h2>实现提示</h2>
+        <ul>
+          <li>外层用 24 列 CSS Grid。</li>
+          <li>复合区内部再开子 Grid，不要靠绝对定位拼接。</li>
+          <li>移动端可以纵向折叠，但桌面端必须保持当前扫描路径。</li>
+          <li>这是通用布局展示，不承载 CE168 专有标题或槽位名。</li>
+        </ul>
+      </article>
+      <article class="spec-card">
+        <h2>文件用途</h2>
+        <p>
+          这个页面用于把规格文档里的抽象布局，直接转成可视化网页参考。
+          它适合在浏览器里对照 spec 讨论区块是否放对，而不是作为最终 Grafana 成品主题。
+        </p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

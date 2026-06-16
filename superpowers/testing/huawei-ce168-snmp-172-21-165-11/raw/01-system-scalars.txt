@@ -1,0 +1,9 @@
+.1.3.6.1.2.1.1.1.0 = STRING: Huawei Versatile Routing Platform Software 
+VRP (R) software, Version 8.240 (CE16800 V200R024C00SPC500) 
+Copyright (C) 2012-2024 Huawei Technologies Co., Ltd. 
+HUAWEI CE16808 
+
+.1.3.6.1.2.1.1.2.0 = OID: .1.3.6.1.4.1.2011.2.239.59
+.1.3.6.1.2.1.1.3.0 = Timeticks: (3161326421) 365 days, 21:27:44.21
+.1.3.6.1.2.1.1.5.0 = STRING: SH-HAP-ZJIDC-STO-CSW-HW-CE16808-1
+.1.3.6.1.2.1.1.6.0 = STRING: Beijing China

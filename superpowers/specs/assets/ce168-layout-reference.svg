@@ -1,0 +1,466 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2048" height="756" viewBox="0 0 2048 756">
+  <defs>
+    <style>
+      .bg { fill: #0f1217; }
+      .panel { fill: #171b22; stroke: #2a2f38; stroke-width: 1; rx: 6; ry: 6; }
+      .card-green { fill: #65b34e; rx: 6; ry: 6; }
+      .card-red { fill: #e72b4d; rx: 6; ry: 6; }
+      .title { fill: #d8dde7; font: 600 18px Arial, sans-serif; }
+      .label { fill: #cfd4de; font: 600 13px Arial, sans-serif; }
+      .meta { fill: #a7aebb; font: 12px Arial, sans-serif; }
+      .tiny { fill: #9098a8; font: 11px Arial, sans-serif; }
+      .value-xl { fill: #f4f6fa; font: 300 58px Arial, sans-serif; }
+      .value-lg { fill: #f4f6fa; font: 300 44px Arial, sans-serif; }
+      .value-md { fill: #7dce63; font: 300 28px Arial, sans-serif; }
+      .line-yellow { fill: none; stroke: #dfcb2c; stroke-width: 2; }
+      .line-green { fill: none; stroke: #7ccd5d; stroke-width: 2; }
+      .track { fill: #222731; rx: 3; ry: 3; }
+      .bar { fill: #77c760; rx: 3; ry: 3; }
+      .port-off { fill: #7b7b7b; }
+      .port-on { fill: #73bf5d; }
+      .border-soft { stroke: #323843; stroke-width: 1; }
+      .legend-green { fill: #73bf5d; }
+      .legend-yellow { fill: #dfcb2c; }
+      .legend-blue { fill: #7aa2ff; }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="2048" height="756" />
+
+  <rect class="panel" x="7" y="1" width="2030" height="85" />
+  <text class="title" x="16" y="22">Device Identity</text>
+  <text class="value-lg" x="14" y="58">CE16808-172-21-165-11</text>
+  <rect x="322" y="39" width="42" height="18" fill="#232730" stroke="#5c6472" stroke-width="1" rx="2" ry="2" />
+  <text class="tiny" x="331" y="52">SWITCH</text>
+  <text class="meta" x="16" y="78">Catalog</text>
+  <rect x="62" y="64" width="53" height="15" fill="#232730" stroke="#5c6472" stroke-width="1" rx="2" ry="2" />
+  <text class="tiny" x="74" y="76">SWITCH</text>
+  <text class="meta" x="125" y="78">Vendor/Platform</text>
+  <text class="meta" x="238" y="78">Huawei / VRP</text>
+  <text class="meta" x="318" y="78">Model</text>
+  <text class="meta" x="359" y="78">CE16808</text>
+  <text class="meta" x="430" y="78">Version</text>
+  <text class="meta" x="481" y="78">V200R024C00SPC500</text>
+  <rect x="2023" y="34" width="6" height="40" fill="#3e4550" rx="3" ry="3" />
+
+  <rect class="panel" x="7" y="91" width="332" height="116" />
+  <text class="label" x="16" y="110">Overall Health</text>
+  <rect class="card-green" x="7" y="118" width="332" height="89" />
+  <text class="value-xl" x="155" y="182">0</text>
+
+  <rect class="panel" x="346" y="91" width="334" height="116" />
+  <text class="label" x="355" y="110">Active Alerts</text>
+  <rect class="card-green" x="346" y="118" width="334" height="89" />
+  <text class="value-xl" x="501" y="182">0</text>
+
+  <rect class="panel" x="686" y="91" width="331" height="116" />
+  <text class="label" x="696" y="110">Huawei VRP Control Plane CPU</text>
+  <rect class="card-green" x="686" y="118" width="331" height="89" />
+  <text class="value-xl" x="815" y="175">4</text>
+  <text class="value-lg" x="874" y="183">%</text>
+
+  <rect class="panel" x="1024" y="91" width="333" height="116" />
+  <text class="label" x="1034" y="110">Huawei VRP Control Plane Memory</text>
+  <rect class="card-green" x="1024" y="118" width="333" height="89" />
+  <text class="value-xl" x="1156" y="175">9</text>
+  <text class="value-lg" x="1214" y="183">%</text>
+
+  <rect class="panel" x="1363" y="91" width="333" height="116" />
+  <text class="label" x="1374" y="110">Ports Up</text>
+  <rect class="card-green" x="1363" y="118" width="333" height="89" />
+  <text class="value-xl" x="1492" y="182">59</text>
+
+  <rect class="panel" x="1702" y="91" width="167" height="116" />
+  <text class="label" x="1712" y="110">Ports Down</text>
+  <rect class="card-red" x="1702" y="118" width="167" height="89" />
+  <text class="label" x="1712" y="140">Ports Down</text>
+  <text class="value-xl" x="1740" y="186">10</text>
+
+  <rect class="panel" x="1868" y="91" width="167" height="116" />
+  <text class="label" x="1879" y="110">All Down</text>
+  <rect class="card-red" x="1868" y="118" width="167" height="89" />
+  <text class="label" x="1879" y="140">All Down</text>
+  <text class="value-xl" x="1908" y="186">133</text>
+
+  <rect class="panel" x="7" y="214" width="673" height="268" />
+  <text class="title" x="15" y="232">Interface Utilization Top 10</text>
+  <circle cx="665" cy="224" r="2" fill="#7d8593" />
+  <circle cx="665" cy="230" r="2" fill="#7d8593" />
+  <circle cx="665" cy="236" r="2" fill="#7d8593" />
+  <g>
+    <text class="meta" x="20" y="258">10GE8/0/6</text>
+    <rect class="track" x="78" y="247" width="471" height="16" />
+    <rect class="bar" x="78" y="247" width="20" height="16" />
+    <text class="value-md" x="620" y="260">4.21%</text>
+
+    <text class="meta" x="20" y="282">10GE8/0/19</text>
+    <rect class="track" x="78" y="271" width="471" height="16" />
+    <rect class="bar" x="78" y="271" width="12" height="16" />
+    <text class="value-md" x="620" y="284">1.95%</text>
+
+    <text class="meta" x="20" y="306">10GE8/0/20</text>
+    <rect class="track" x="78" y="295" width="471" height="16" />
+    <rect class="bar" x="78" y="295" width="8" height="16" />
+    <text class="value-md" x="620" y="308">1.72%</text>
+
+    <text class="meta" x="20" y="330">100GE5/0/4</text>
+    <rect class="track" x="78" y="319" width="471" height="16" />
+    <rect class="bar" x="78" y="319" width="7" height="16" />
+    <text class="value-md" x="620" y="332">1.40%</text>
+
+    <text class="meta" x="20" y="354">100GE5/0/5</text>
+    <rect class="track" x="78" y="343" width="471" height="16" />
+    <rect class="bar" x="78" y="343" width="5" height="16" />
+    <text class="value-md" x="620" y="356">0.969%</text>
+
+    <text class="meta" x="20" y="378">10GE8/0/18</text>
+    <rect class="track" x="78" y="367" width="471" height="16" />
+    <rect class="bar" x="78" y="367" width="4" height="16" />
+    <text class="value-md" x="620" y="380">0.839%</text>
+
+    <text class="meta" x="20" y="402">100GE6/0/8</text>
+    <rect class="track" x="78" y="391" width="471" height="16" />
+    <rect class="bar" x="78" y="391" width="4" height="16" />
+    <text class="value-md" x="620" y="404">0.799%</text>
+
+    <text class="meta" x="20" y="426">100GE6/0/5</text>
+    <rect class="track" x="78" y="415" width="471" height="16" />
+    <rect class="bar" x="78" y="415" width="3" height="16" />
+    <text class="value-md" x="620" y="428">0.675%</text>
+
+    <text class="meta" x="20" y="450">100GE5/0/0</text>
+    <rect class="track" x="78" y="439" width="471" height="16" />
+    <rect class="bar" x="78" y="439" width="2" height="16" />
+    <text class="value-md" x="620" y="452">0.408%</text>
+
+    <text class="meta" x="20" y="474">100GE5/0/1</text>
+    <rect class="track" x="78" y="463" width="471" height="16" />
+    <rect class="bar" x="78" y="463" width="2" height="16" />
+    <text class="value-md" x="620" y="476">0.380%</text>
+  </g>
+
+  <rect class="panel" x="687" y="214" width="330" height="268" />
+  <text class="title" x="695" y="232">Traffic Mix (by Packets)</text>
+  <circle cx="812" cy="360" r="100" fill="none" stroke="#5fa942" stroke-width="34" />
+  <path d="M812 260 A100 100 0 0 1 815 260" fill="none" stroke="#dfcb2c" stroke-width="34" />
+  <path d="M812 260 A100 100 0 0 1 809 260" fill="none" stroke="#7aa2ff" stroke-width="34" />
+  <text class="meta" x="796" y="458">Unicast</text>
+  <text class="meta" x="799" y="472">100%</text>
+  <rect x="936" y="253" width="12" height="4" class="legend-green" />
+  <text class="meta" x="955" y="258">Unicast</text>
+  <rect x="936" y="272" width="12" height="4" class="legend-yellow" />
+  <text class="meta" x="955" y="277">Multicast</text>
+  <rect x="936" y="291" width="12" height="4" class="legend-blue" />
+  <text class="meta" x="955" y="296">Broadcast</text>
+
+  <rect class="panel" x="1024" y="214" width="164" height="268" />
+  <text class="title" x="1032" y="232">Routing &amp; Layer 2</text>
+  <g class="meta">
+    <text x="1032" y="258">MAC Entries</text><text x="1158" y="258" fill="#7dce63">168</text>
+    <text x="1032" y="290">ARP Entries</text><text x="1158" y="290" fill="#7dce63">194</text>
+    <text x="1032" y="322">VLANs</text><text x="1168" y="322" fill="#7dce63">8</text>
+    <text x="1032" y="354">STP Ports</text><text x="1156" y="354" fill="#7dce63">300</text>
+    <text x="1032" y="386">STP FWD</text><text x="1163" y="386" fill="#7dce63">16</text>
+    <text x="1032" y="418">STP BLK</text><text x="1170" y="418" fill="#7dce63">0</text>
+    <text x="1032" y="450">IPv4 Routes</text><text x="1170" y="450" fill="#7dce63">0</text>
+    <text x="1032" y="474">IPv6 Routes</text><text x="1170" y="474" fill="#7dce63">0</text>
+  </g>
+
+  <rect class="panel" x="1194" y="214" width="409" height="268" />
+  <text class="title" x="1203" y="232">Packets Per Second</text>
+  <g stroke="#2b313b" stroke-width="1">
+    <line x1="1210" y1="262" x2="1590" y2="262" />
+    <line x1="1210" y1="324" x2="1590" y2="324" />
+    <line x1="1210" y1="386" x2="1590" y2="386" />
+    <line x1="1210" y1="448" x2="1590" y2="448" />
+    <line x1="1290" y1="252" x2="1290" y2="455" />
+    <line x1="1360" y1="252" x2="1360" y2="455" />
+    <line x1="1430" y1="252" x2="1430" y2="455" />
+    <line x1="1500" y1="252" x2="1500" y2="455" />
+  </g>
+  <polyline class="line-yellow" points="1212,430 1224,300 1236,420 1248,280 1260,418 1272,295 1284,424 1296,278 1308,416 1320,296 1332,428 1344,286 1356,434 1368,304 1380,425 1392,315 1404,430 1416,302 1428,438 1440,310 1452,432 1464,318 1476,440 1488,306 1500,434 1512,314 1524,442 1536,320 1548,436 1560,322 1572,444 1584,330" />
+  <text class="meta" x="1202" y="266">600 k p/s</text>
+  <text class="meta" x="1202" y="328">500 k p/s</text>
+  <text class="meta" x="1202" y="390">400 k p/s</text>
+  <text class="meta" x="1202" y="452">300 k p/s</text>
+  <rect x="1203" y="465" width="12" height="4" class="legend-green" />
+  <text class="meta" x="1220" y="470">In PPS</text>
+  <rect x="1276" y="465" width="12" height="4" class="legend-yellow" />
+  <text class="meta" x="1293" y="470">Out PPS</text>
+
+  <rect class="panel" x="1618" y="214" width="417" height="268" />
+  <text class="title" x="1627" y="232">Traffic Throughput</text>
+  <g stroke="#2b313b" stroke-width="1">
+    <line x1="1638" y1="280" x2="2022" y2="280" />
+    <line x1="1638" y1="334" x2="2022" y2="334" />
+    <line x1="1638" y1="388" x2="2022" y2="388" />
+    <line x1="1638" y1="442" x2="2022" y2="442" />
+    <line x1="1710" y1="252" x2="1710" y2="455" />
+    <line x1="1780" y1="252" x2="1780" y2="455" />
+    <line x1="1850" y1="252" x2="1850" y2="455" />
+    <line x1="1920" y1="252" x2="1920" y2="455" />
+  </g>
+  <polyline class="line-yellow" points="1648,430 1660,292 1672,428 1684,276 1696,421 1708,286 1720,430 1732,280 1744,424 1756,292 1768,436 1780,312 1792,424 1804,298 1816,436 1828,306 1840,428 1852,302 1864,438 1876,314 1888,430 1900,310 1912,440 1924,318 1936,432 1948,322 1960,442 1972,326 1984,438 1996,330 2008,446" />
+  <text class="meta" x="1628" y="284">6 Gb/s</text>
+  <text class="meta" x="1628" y="338">5 Gb/s</text>
+  <text class="meta" x="1628" y="392">4 Gb/s</text>
+  <text class="meta" x="1628" y="446">3 Gb/s</text>
+  <rect x="1629" y="465" width="12" height="4" class="legend-green" />
+  <text class="meta" x="1647" y="470">In</text>
+  <rect x="1662" y="465" width="12" height="4" class="legend-yellow" />
+  <text class="meta" x="1680" y="470">Out</text>
+
+  <rect class="panel" x="7" y="488" width="673" height="56" />
+  <text class="title" x="15" y="507">100GE5/0</text>
+  <g transform="translate(7,515)">
+    <rect class="port-on" x="0" y="0" width="16" height="26" />
+    <rect class="port-on" x="18" y="0" width="16" height="26" />
+    <rect class="port-on" x="36" y="0" width="16" height="26" />
+    <rect class="port-on" x="54" y="0" width="16" height="26" />
+    <rect class="port-on" x="74" y="0" width="16" height="26" />
+    <rect class="port-on" x="93" y="0" width="16" height="26" />
+    <g transform="translate(113,0)">
+      <rect class="port-off" x="0" y="0" width="16" height="26" />
+      <rect class="port-off" x="18" y="0" width="16" height="26" />
+      <rect class="port-off" x="36" y="0" width="16" height="26" />
+      <rect class="port-off" x="54" y="0" width="16" height="26" />
+      <rect class="port-off" x="72" y="0" width="16" height="26" />
+      <rect class="port-off" x="90" y="0" width="16" height="26" />
+      <rect class="port-off" x="108" y="0" width="16" height="26" />
+      <rect class="port-off" x="126" y="0" width="16" height="26" />
+      <rect class="port-off" x="144" y="0" width="16" height="26" />
+      <rect class="port-off" x="162" y="0" width="16" height="26" />
+      <rect class="port-off" x="180" y="0" width="16" height="26" />
+      <rect class="port-off" x="198" y="0" width="16" height="26" />
+      <rect class="port-off" x="216" y="0" width="16" height="26" />
+      <rect class="port-off" x="234" y="0" width="16" height="26" />
+      <rect class="port-off" x="252" y="0" width="16" height="26" />
+      <rect class="port-off" x="270" y="0" width="16" height="26" />
+      <rect class="port-off" x="288" y="0" width="16" height="26" />
+      <rect class="port-off" x="306" y="0" width="16" height="26" />
+      <rect class="port-off" x="324" y="0" width="16" height="26" />
+      <rect class="port-off" x="342" y="0" width="16" height="26" />
+      <rect class="port-off" x="360" y="0" width="16" height="26" />
+      <rect class="port-off" x="378" y="0" width="16" height="26" />
+      <rect class="port-off" x="396" y="0" width="16" height="26" />
+      <rect class="port-off" x="414" y="0" width="16" height="26" />
+      <rect class="port-off" x="432" y="0" width="16" height="26" />
+      <rect class="port-off" x="450" y="0" width="16" height="26" />
+      <rect class="port-off" x="468" y="0" width="16" height="26" />
+      <rect class="port-off" x="486" y="0" width="16" height="26" />
+      <rect class="port-off" x="504" y="0" width="16" height="26" />
+      <rect class="port-off" x="522" y="0" width="16" height="26" />
+      <rect class="port-on" x="540" y="0" width="16" height="26" />
+    </g>
+  </g>
+
+  <rect class="panel" x="7" y="550" width="673" height="56" />
+  <text class="title" x="15" y="569">100GE6/0</text>
+  <g transform="translate(7,577)">
+    <rect class="port-on" x="0" y="0" width="16" height="26" />
+    <rect class="port-on" x="18" y="0" width="16" height="26" />
+    <rect class="port-on" x="36" y="0" width="16" height="26" />
+    <rect class="port-on" x="54" y="0" width="16" height="26" />
+    <rect class="port-on" x="74" y="0" width="16" height="26" />
+    <rect class="port-on" x="93" y="0" width="16" height="26" />
+    <g transform="translate(113,0)">
+      <rect class="port-off" x="0" y="0" width="16" height="26" />
+      <rect class="port-off" x="18" y="0" width="16" height="26" />
+      <rect class="port-off" x="36" y="0" width="16" height="26" />
+      <rect class="port-off" x="54" y="0" width="16" height="26" />
+      <rect class="port-off" x="72" y="0" width="16" height="26" />
+      <rect class="port-off" x="90" y="0" width="16" height="26" />
+      <rect class="port-off" x="108" y="0" width="16" height="26" />
+      <rect class="port-off" x="126" y="0" width="16" height="26" />
+      <rect class="port-off" x="144" y="0" width="16" height="26" />
+      <rect class="port-off" x="162" y="0" width="16" height="26" />
+      <rect class="port-off" x="180" y="0" width="16" height="26" />
+      <rect class="port-off" x="198" y="0" width="16" height="26" />
+      <rect class="port-off" x="216" y="0" width="16" height="26" />
+      <rect class="port-off" x="234" y="0" width="16" height="26" />
+      <rect class="port-off" x="252" y="0" width="16" height="26" />
+      <rect class="port-off" x="270" y="0" width="16" height="26" />
+      <rect class="port-off" x="288" y="0" width="16" height="26" />
+      <rect class="port-off" x="306" y="0" width="16" height="26" />
+      <rect class="port-off" x="324" y="0" width="16" height="26" />
+      <rect class="port-off" x="342" y="0" width="16" height="26" />
+      <rect class="port-off" x="360" y="0" width="16" height="26" />
+      <rect class="port-off" x="378" y="0" width="16" height="26" />
+      <rect class="port-off" x="396" y="0" width="16" height="26" />
+      <rect class="port-off" x="414" y="0" width="16" height="26" />
+      <rect class="port-off" x="432" y="0" width="16" height="26" />
+      <rect class="port-off" x="450" y="0" width="16" height="26" />
+      <rect class="port-off" x="468" y="0" width="16" height="26" />
+      <rect class="port-off" x="486" y="0" width="16" height="26" />
+      <rect class="port-off" x="504" y="0" width="16" height="26" />
+      <rect class="port-off" x="522" y="0" width="16" height="26" />
+      <rect class="port-on" x="540" y="0" width="16" height="26" />
+    </g>
+  </g>
+
+  <rect class="panel" x="7" y="612" width="673" height="56" />
+  <text class="title" x="15" y="631">40GE7/0</text>
+  <g transform="translate(7,639)">
+    <rect class="port-off" x="0" y="0" width="16" height="26" />
+    <rect class="port-off" x="18" y="0" width="16" height="26" />
+    <rect class="port-off" x="36" y="0" width="16" height="26" />
+    <rect class="port-off" x="54" y="0" width="16" height="26" />
+    <rect class="port-off" x="74" y="0" width="16" height="26" />
+    <rect class="port-off" x="93" y="0" width="16" height="26" />
+    <rect class="port-off" x="113" y="0" width="16" height="26" />
+    <rect class="port-off" x="131" y="0" width="16" height="26" />
+    <rect class="port-off" x="149" y="0" width="16" height="26" />
+    <rect class="port-off" x="167" y="0" width="16" height="26" />
+    <rect class="port-off" x="185" y="0" width="16" height="26" />
+    <rect class="port-off" x="203" y="0" width="16" height="26" />
+    <rect class="port-off" x="221" y="0" width="16" height="26" />
+    <rect class="port-off" x="239" y="0" width="16" height="26" />
+    <rect class="port-off" x="257" y="0" width="16" height="26" />
+    <rect class="port-off" x="275" y="0" width="16" height="26" />
+    <rect class="port-off" x="293" y="0" width="16" height="26" />
+    <rect class="port-off" x="311" y="0" width="16" height="26" />
+    <rect class="port-off" x="329" y="0" width="16" height="26" />
+    <rect class="port-off" x="347" y="0" width="16" height="26" />
+    <rect class="port-off" x="365" y="0" width="16" height="26" />
+    <rect class="port-off" x="383" y="0" width="16" height="26" />
+    <rect class="port-off" x="401" y="0" width="16" height="26" />
+    <rect class="port-off" x="419" y="0" width="16" height="26" />
+    <rect class="port-off" x="437" y="0" width="16" height="26" />
+    <rect class="port-off" x="455" y="0" width="16" height="26" />
+    <rect class="port-off" x="473" y="0" width="16" height="26" />
+    <rect class="port-off" x="491" y="0" width="16" height="26" />
+    <rect class="port-off" x="509" y="0" width="16" height="26" />
+    <rect class="port-off" x="527" y="0" width="16" height="26" />
+    <rect class="port-off" x="545" y="0" width="16" height="26" />
+    <rect class="port-off" x="563" y="0" width="16" height="26" />
+    <rect class="port-off" x="581" y="0" width="16" height="26" />
+    <rect class="port-off" x="599" y="0" width="16" height="26" />
+    <rect class="port-off" x="617" y="0" width="16" height="26" />
+    <rect class="port-off" x="635" y="0" width="16" height="26" />
+    <rect class="port-off" x="653" y="0" width="16" height="26" />
+  </g>
+
+  <rect class="panel" x="7" y="674" width="673" height="56" />
+  <text class="title" x="15" y="693">10GE8/0</text>
+  <g transform="translate(7,701)">
+    <rect class="port-on" x="0" y="0" width="13" height="24" />
+    <rect class="port-on" x="15" y="0" width="13" height="24" />
+    <rect class="port-on" x="30" y="0" width="13" height="24" />
+    <rect class="port-on" x="45" y="0" width="13" height="24" />
+    <rect class="port-on" x="60" y="0" width="13" height="24" />
+    <rect class="port-on" x="75" y="0" width="13" height="24" />
+    <rect class="port-on" x="90" y="0" width="13" height="24" />
+    <rect class="port-on" x="105" y="0" width="13" height="24" />
+    <rect class="port-on" x="120" y="0" width="13" height="24" />
+    <rect class="port-on" x="135" y="0" width="13" height="24" />
+    <rect class="port-on" x="150" y="0" width="13" height="24" />
+    <rect class="port-on" x="165" y="0" width="13" height="24" />
+    <rect class="port-on" x="180" y="0" width="13" height="24" />
+    <rect class="port-on" x="195" y="0" width="13" height="24" />
+    <rect class="port-off" x="210" y="0" width="13" height="24" />
+    <rect class="port-off" x="225" y="0" width="13" height="24" />
+    <rect class="port-off" x="240" y="0" width="13" height="24" />
+    <rect class="port-on" x="255" y="0" width="13" height="24" />
+    <rect class="port-on" x="270" y="0" width="13" height="24" />
+    <rect class="port-off" x="285" y="0" width="13" height="24" />
+    <rect class="port-off" x="300" y="0" width="13" height="24" />
+    <rect class="port-off" x="315" y="0" width="13" height="24" />
+    <rect class="port-on" x="340" y="0" width="13" height="24" />
+    <g transform="translate(355,0)">
+      <rect class="port-off" x="0" y="0" width="13" height="24" />
+      <rect class="port-off" x="15" y="0" width="13" height="24" />
+      <rect class="port-off" x="30" y="0" width="13" height="24" />
+      <rect class="port-off" x="45" y="0" width="13" height="24" />
+      <rect class="port-off" x="60" y="0" width="13" height="24" />
+      <rect class="port-off" x="75" y="0" width="13" height="24" />
+      <rect class="port-off" x="90" y="0" width="13" height="24" />
+      <rect class="port-off" x="105" y="0" width="13" height="24" />
+      <rect class="port-off" x="120" y="0" width="13" height="24" />
+      <rect class="port-off" x="135" y="0" width="13" height="24" />
+      <rect class="port-off" x="150" y="0" width="13" height="24" />
+      <rect class="port-off" x="165" y="0" width="13" height="24" />
+      <rect class="port-off" x="180" y="0" width="13" height="24" />
+      <rect class="port-off" x="195" y="0" width="13" height="24" />
+      <rect class="port-off" x="210" y="0" width="13" height="24" />
+      <rect class="port-off" x="225" y="0" width="13" height="24" />
+      <rect class="port-off" x="240" y="0" width="13" height="24" />
+      <rect class="port-off" x="255" y="0" width="13" height="24" />
+      <rect class="port-off" x="270" y="0" width="13" height="24" />
+      <rect class="port-off" x="285" y="0" width="13" height="24" />
+      <rect class="port-off" x="300" y="0" width="13" height="24" />
+    </g>
+  </g>
+
+  <rect class="panel" x="687" y="488" width="504" height="239" />
+  <text class="title" x="697" y="507">CPU / Memory Trend</text>
+  <g stroke="#2b313b" stroke-width="1">
+    <line x1="715" y1="540" x2="1173" y2="540" />
+    <line x1="715" y1="575" x2="1173" y2="575" />
+    <line x1="715" y1="610" x2="1173" y2="610" />
+    <line x1="715" y1="645" x2="1173" y2="645" />
+    <line x1="715" y1="680" x2="1173" y2="680" />
+    <line x1="790" y1="528" x2="790" y2="690" />
+    <line x1="885" y1="528" x2="885" y2="690" />
+    <line x1="980" y1="528" x2="980" y2="690" />
+    <line x1="1075" y1="528" x2="1075" y2="690" />
+  </g>
+  <polyline class="line-yellow" points="716,540 1180,540" />
+  <polyline class="line-green" points="716,680 1168,680 1168,650" />
+  <text class="meta" x="695" y="544">9%</text>
+  <text class="meta" x="695" y="579">8%</text>
+  <text class="meta" x="695" y="614">7%</text>
+  <text class="meta" x="695" y="649">6%</text>
+  <text class="meta" x="695" y="684">4%</text>
+  <rect x="696" y="706" width="12" height="4" class="legend-green" />
+  <text class="meta" x="714" y="711">Max CPU</text>
+  <rect x="766" y="706" width="12" height="4" class="legend-yellow" />
+  <text class="meta" x="784" y="711">Max Memory</text>
+
+  <rect class="panel" x="1198" y="488" width="160" height="239" />
+  <text class="title" x="1206" y="507">Temperature Sensors</text>
+  <g class="meta">
+    <text x="1206" y="529">CE-SFU083-G SFU8</text><text x="1324" y="529" fill="#7dce63">36 °C</text>
+    <text x="1206" y="556">CE-SFU086-G SFU5</text><text x="1324" y="556" fill="#7dce63">35 °C</text>
+    <text x="1206" y="583">CE-SFU083-G SFU3</text><text x="1324" y="583" fill="#7dce63">35 °C</text>
+    <text x="1206" y="610">CE-SFU083-G SFU4</text><text x="1324" y="610" fill="#7dce63">35 °C</text>
+    <text x="1206" y="637">CE-SFU083-G SFU7</text><text x="1324" y="637" fill="#7dce63">35 °C</text>
+    <text x="1206" y="664">CE-SFU083-G SFU6</text><text x="1324" y="664" fill="#7dce63">35 °C</text>
+    <text x="1206" y="691">POWER 2</text><text x="1324" y="691" fill="#7dce63">29 °C</text>
+    <text x="1206" y="718">POWER 1</text><text x="1324" y="718" fill="#7dce63">29 °C</text>
+  </g>
+
+  <rect class="panel" x="1363" y="488" width="249" height="239" />
+  <text class="title" x="1371" y="507">Power Supplies</text>
+  <g>
+    <text class="value-lg" x="1371" y="548">Power 289.1</text><text class="value-lg" x="1560" y="548" fill="#7dce63">OK</text>
+    <text class="value-lg" x="1371" y="602">Power 290.1</text><text class="value-lg" x="1560" y="602" fill="#7dce63">OK</text>
+    <text class="value-lg" x="1371" y="656">Power 291.1</text><text class="value-lg" x="1560" y="656" fill="#7dce63">OK</text>
+    <text class="value-lg" x="1371" y="710">Power 292.1</text><text class="value-lg" x="1560" y="710" fill="#7dce63">OK</text>
+  </g>
+
+  <rect class="panel" x="1618" y="488" width="248" height="239" />
+  <text class="title" x="1626" y="507">Fans</text>
+  <g>
+    <text class="value-lg" x="1626" y="558">Fan 286.1</text><text class="value-lg" x="1794" y="558" fill="#7dce63">OK</text>
+    <text class="value-lg" x="1626" y="629">Fan 287.1</text><text class="value-lg" x="1794" y="629" fill="#7dce63">OK</text>
+    <text class="value-lg" x="1626" y="700">Fan 288.1</text><text class="value-lg" x="1794" y="700" fill="#7dce63">OK</text>
+  </g>
+
+  <rect class="panel" x="1871" y="488" width="80" height="239" />
+  <text class="title" x="1878" y="507">Last 4 by</text>
+  <g class="meta">
+    <text x="1878" y="531">10GE8/0/8</text><text x="1878" y="548" fill="#7dce63">-3.13 dBm</text>
+    <text x="1878" y="585">10GE8/0/2</text><text x="1878" y="602" fill="#7dce63">-2.76 dBm</text>
+    <text x="1878" y="639">100GE8/0/14</text><text x="1878" y="656" fill="#7dce63">-2.56 dBm</text>
+    <text x="1878" y="693">10GE8/0/5</text><text x="1878" y="710" fill="#7dce63">-2.55 dBm</text>
+  </g>
+
+  <rect class="panel" x="1955" y="488" width="80" height="239" />
+  <text class="title" x="1962" y="507">Top 4 by</text>
+  <g class="meta">
+    <text x="1962" y="531">100GE6/0/3</text><text x="1962" y="548" fill="#7dce63">2.19 dBm</text>
+    <text x="1962" y="585">100GE5/0/35</text><text x="1962" y="602" fill="#7dce63">2.14 dBm</text>
+    <text x="1962" y="639">100GE5/0/5</text><text x="1962" y="656" fill="#7dce63">1.98 dBm</text>
+    <text x="1962" y="693">100GE5/0/3</text><text x="1962" y="710" fill="#7dce63">1.85 dBm</text>
+  </g>
+</svg>

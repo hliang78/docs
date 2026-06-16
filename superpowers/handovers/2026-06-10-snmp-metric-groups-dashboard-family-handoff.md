@@ -300,6 +300,10 @@ Current response shape:
 strategy_id
 parent_strategy_id
 source = backend_resolver
+contract_source
+read_issues[]
+effective_issues[]
+save_mode_hint
 contract
 parent_contract
 effective_contract
@@ -350,6 +354,20 @@ Frontend behavior:
 - if backend resolution fails, the existing local frontend resolver remains the fallback.
 - frontend also has a typed API wrapper for strategy-set contract resolution, but no page consumes or displays it yet.
 
+Additional current semantics now implemented:
+
+- backend `contract_source` distinguishes at least:
+  - `explicit_contract`
+  - `legacy_import`
+  - `backend_resolver`
+- backend `read_issues[]` surfaces compatibility-read or malformed explicit-contract shape problems instead of hiding them;
+- backend `effective_issues[]` currently exposes degraded-save reasons such as missing OID;
+- backend `save_mode_hint` distinguishes `full_sync` vs `contract_only`;
+- frontend workspace now shows whether it is in:
+  - backend authority mode,
+  - or frontend fallback mode;
+- frontend workspace also shows backend read issues explicitly instead of treating backend and fallback paths as identical.
+
 This creates a backend/frontend data logic loop without adding UI, Prometheus publishing, or Grafana JSON generation.
 
 Strategy-set resolver behavior:
@@ -361,6 +379,54 @@ Strategy-set resolver behavior:
 - when no context query is provided, the endpoint keeps the enabled-item aggregate behavior;
 - when context query is provided, it reuses `StrategySetMatcher` semantics to select matching strategies by catalog, manufacturer, platform, model, version, fallback, priority, and sort order;
 - no automatic device inventory lookup is performed yet; the caller must pass context values explicitly.
+
+### 8A. First-Round Contract Boundary Hardening Is Partially Landed
+
+The current SNMP metric refactor has moved beyond "initial capability foundation" and already hardened several contract boundaries.
+
+Frontend modules now split responsibilities more clearly:
+
+```text
+/OneOPS/OneOps-UI/src/views/platform/StrategyTemplate/plugin-forms/snmp/snmpMetricContractWire.ts
+/OneOPS/OneOps-UI/src/views/platform/StrategyTemplate/plugin-forms/snmp/snmpMetricLegacyCodec.ts
+/OneOPS/OneOps-UI/src/views/platform/StrategyTemplate/plugin-forms/snmp/snmpMetricValidation.ts
+```
+
+What is already true now:
+
+- canonical explicit persistence shape is fixed to:
+  - `metric_groups: { version: 1, metric_groups: [...] }`
+- frontend and backend both compatibility-read legacy bare-array explicit contract shapes;
+- compatibility-read and malformed-shape cases now produce structured issues instead of silently collapsing to empty contract;
+- frontend save behavior now exposes:
+  - `full_sync`
+  - `contract_only`
+- frontend strict validation now separates:
+  - `errors`
+  - `warnings`
+  - `degradations`
+- explicit-contract reads now surface draft-only defaulting as warnings when fields such as `action`, `role`, `value_type`, `calculation`, or `visual_type` are missing;
+- explicit-contract writes no longer silently invent those missing semantic defaults at persistence time;
+- legacy `passthrough_config` / `metric_manifest` parsing, import, export, and exportability checks are no longer all embedded directly inside one monolithic contract file.
+
+Important current boundary:
+
+- read path may still normalize draft/editor data so the page remains usable;
+- write path now tries to preserve missing semantic fields rather than silently writing invented defaults;
+- therefore "editor convenience defaults" and "persisted contract truth" are no longer the same thing.
+
+Focused current verification that has already been run in this state:
+
+- frontend:
+  - `npm run smoke:snmp-metric-contract`
+  - `npm run smoke:snmp-metric-contract-wire`
+  - `npm run smoke:snmp-workspace-view`
+- backend:
+  - `go test ./app/platform/service/impl -run 'TestReadExplicitSnmpMetricContract|TestMetricCapabilityContractResolverSurfacesStrategyContractMetadata|TestMetricCapabilityContractResolverResolvesStrategyContractFromFullParentChain' -count=1`
+
+Historical limitation at this stage of the refactor:
+
+- `npm run typecheck` had not yet returned within the waiting window at this point in time. That later got resolved during the OID online-test slice; see the later verification notes where `npm run typecheck` is confirmed passing.
 
 ### 9. Strategy-Set Panel Capability Preview Is Now Data-Closed
 
@@ -2649,6 +2715,29 @@ SNMP strategy metric contract
 
 The current implementation deliberately stops before Grafana.
 
+Additional hardening that is now landed for the Grafana path:
+
+```text
+Grafana dry-run/save
+  -> explicit dashboard_variant request
+  -> variant-aware current-instance ownership at application logic level
+  -> deterministic template ambiguity failure
+  -> variant-aware target binding / panel binding persistence
+```
+
+Canonical current dashboard owner key should now be treated as:
+
+```text
+strategy_set_id + target_part + dashboard_variant
+```
+
+Current implementation-level meaning:
+
+- `StrategySet` still owns semantic capability resolution;
+- dashboard templates still resolve as a single inheritance chain per variant;
+- saved dashboard instances are now intended to be variant-aware, not just target-aware;
+- `panel_key` remains the stable bridge from contract-side panel semantics to materialized dashboard panel bindings.
+
 ### Real Publish Fact
 
 Recording rules have been published to the current quick env runtime, not to production.
@@ -2717,6 +2806,30 @@ The frontend must not infer manufacturer, platform, model, catalog, or version. 
 
 The publisher only replaces the configured managed group. Existing unmanaged groups in the rule file must be preserved.
 
+The current publish channel is real but still narrow:
+
+```text
+backend = vmalert_file
+managed group replacement
+rule file write
+reload endpoint call
+publish record persistence
+```
+
+The write path now uses temp-file replacement semantics instead of direct truncate-in-place overwrite.
+
+The `save-and-sync` Grafana path now also persists the target-binding state transition after external sync succeeds:
+
+- API `save-and-sync` no longer only flips the response body to `Enabled`;
+- backend now explicitly updates `platform_teleabs_strategy_set_dashboard_target_binding.dashboard_state`;
+- owner lookup remains variant-aware: `strategy_set_id + target_part + dashboard_variant`.
+
+The older Grafana materialization tests that still hard-coded the pre-expansion default panel-requirement count (`21`) have now been reconciled with the current catalog-driven behavior:
+
+- broader support/materialization tests now follow `DefaultPanelCapabilityRequirements()` instead of pinning the old count;
+- the minimal H3C materialization fixture now asserts the currently rendered throughput panel instead of the older utilization-only assumption;
+- this closes the previously known “21 vs 33” test drift for the targeted resolver suite.
+
 ### Important Constraints For The Next AI
 
 Do not expand scope unless the user explicitly changes direction.
@@ -2732,25 +2845,44 @@ Do not add:
 - Prometheus Operator or object-storage publisher;
 - broad vendor/private metric standardization.
 
+Do not regress these newly hardened boundaries:
+
+- do not remove explicit `dashboard_variant` from Grafana dry-run/save request paths;
+- do not collapse dashboard ownership back to `strategy_set_id + target_part` only;
+- do not silently choose one dashboard template when multiple same-priority candidates match;
+- do not revert recording-rule file replacement back to truncate-write semantics.
+
 Do not introduce frontend fallback logic for device metadata. If a target cannot be resolved, the backend should return an error.
 
-### Suggested Next Step
+### 20. Strategy-Set Detail Drawer Now Consumes The Recording-Rule Loop
 
-The best next implementation step is page-level consumption of the existing recording-rule loop in `StrategySetDetailDrawer.vue`.
+The minimal page-level consumption for by-target recording rules is now wired into `StrategySetDetailDrawer.vue`.
 
-Minimal page scope:
+Within the existing target preview block, the drawer now exposes three explicit actions:
 
 ```text
-strategy-set detail drawer
-  -> user enters target_part
-  -> panel capability preview
-  -> recording rule preview
-  -> materialization dry-run YAML
-  -> explicit publish
-  -> show publish status and steps
+preview rules
+materialize YAML
+publish rules
 ```
 
-This should reuse the existing typed API wrappers:
+The same `target_part` input is reused across:
+
+```text
+panel capability preview
+recording rule preview
+recording rule YAML materialization dry-run
+explicit recording rule publish
+```
+
+The drawer now renders:
+
+- recording-rule summary cards;
+- a rule table;
+- materialized YAML;
+- publish steps / backend / managed-group status.
+
+This page-level integration reuses the existing typed frontend wrappers:
 
 ```text
 previewTeleabsStrategySetRecordingRulesByTarget(...)
@@ -2758,7 +2890,36 @@ materializeTeleabsStrategySetRecordingRulesByTarget(...)
 publishTeleabsStrategySetRecordingRulesByTarget(...)
 ```
 
-Do not make the page publish automatically. The publish action must remain a visible, explicit user action.
+The publish action remains explicit and user-triggered; no automatic publish behavior was added.
+
+New frontend files added for this page-level closure:
+
+- `/OneOPS/OneOps-UI/src/views/platform/StrategyTemplate/snmpStrategySetRecordingRuleState.ts`
+- `/OneOPS/OneOps-UI/scripts/snmp-strategy-set-recording-rule-state-smoke.ts`
+- `/OneOPS/OneOps-UI/scripts/snmp-strategy-set-recording-rule-drawer-smoke.ts`
+
+Additional verification completed for this page layer:
+
+```bash
+cd /OneOPS/OneOps-UI
+npm run smoke:snmp-strategy-set-recording-rule-drawer
+npm run smoke:snmp-strategy-set-recording-rule-state
+npm run smoke:snmp-strategy-set-recording-rule-preview
+npm run smoke:snmp-strategy-set-recording-rule-materialization-dry-run
+npm run smoke:snmp-strategy-set-recording-rule-publish
+git diff --check
+```
+
+The next most natural product-facing step is no longer recording-rule page consumption.
+It is the SNMP metric-group workflow itself:
+
+```text
+select group
+fill OID
+test OID inline
+repair failures
+save strategy
+```
 
 ### Recommended Verification Before Continuing
 
@@ -4873,3 +5034,651 @@ PROMETHEUS_URL=http://127.0.0.1:8428 \
 SNMP_TARGET_DEVICE_CODE=AST20260603174801664 \
 quick_env/scripts/smoke_snmp_switch_metric_data.sh
 ```
+
+### 10. SNMP OID Online Test Is Now Wired End-to-End
+
+The SNMP metric-group editor now supports real-target OID online testing without leaving the strategy page.
+
+Backend additions:
+
+- dedicated endpoint: `POST /platform/metrics/teleabs/strategies/:id/snmp-metric/oid-test/by-target`
+- resolver path: strategy scoped request -> target context resolution -> SNMP probe target resolution -> `collectsnmp.RealWalker`
+- field mode and group mode both return thin per-field results:
+  - `success`
+  - `failed`
+  - `value_kind`
+  - `sample_value`
+  - `message`
+  - `tested_at`
+
+Frontend additions:
+
+- `PluginFormSnmp.vue` now carries a lightweight `target_part` input for OID testing
+- the OID test entry was then moved from the left-side info column into the main editor lane, so users now see `target_part + 待测试提示` immediately above the active group editor
+- the OID task bar was then tightened again so the main editor lane now emphasizes only `target_part + compact readiness state`; the earlier long guidance copy was removed, and `测试本组待测项` remains a current-group header action rather than a page-level action
+- `SnmpMetricGroupEditor.vue` now exposes:
+  - field-level `测试`
+  - group-level `测试本组待测项`
+  - inline `未测 / 测试中 / 通过 / 失败` status
+- changing `target_part` clears prior OID test state
+- editing an OID marks that field back to `未测`
+- group test focuses the first failed field
+- save still remains available; the page now only adds a small `待测试 N` hint
+- the tightened task-bar pass was re-verified with `smoke:snmp-oid-online-test-page`, `smoke:snmp-oid-online-test-editor`, `smoke:snmp-workspace-view`, and a fresh `npm run typecheck`
+- explicit-contract draft-default warnings are now aggregated by group and issue type, so legacy contracts no longer dump dozens of near-duplicate `缺少 value_type/calculation` lines into the right-side alert area
+- the explicit-contract alert headline is now summary-first as well: it highlights affected groups and issue categories before showing detailed messages, instead of foregrounding a large raw issue count
+
+New frontend file added for this slice:
+
+- `/OneOPS/OneOps-UI/src/views/platform/StrategyTemplate/plugin-forms/snmp/snmpOidOnlineTestState.ts`
+
+Focused verification completed for this closure:
+
+```bash
+cd /OneOPS/OneOps
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver.*Oid.*Test' -count=1
+go test ./app/platform/api -run 'TestTeleabsAPI_TestStrategySnmpOidByTarget_.*' -count=1
+go test ./app/platform/router -run TestTeleabsRoutes_ConsistentBetweenPlatformAndBidi -count=1
+
+cd /OneOPS/OneOps-UI
+npm run smoke:snmp-oid-online-test-state
+npm run smoke:snmp-oid-online-test-editor
+npm run smoke:snmp-oid-online-test-page
+```
+
+Additional broad checks also completed after the initial closure:
+
+```bash
+cd /OneOPS/OneOps
+go test ./app/platform/api -run 'TestTeleabsAPI_.*Snmp.*Oid.*Test|TestTeleabsAPI_.*RecordingRulesByTarget|TestTeleabsAPI_.*Grafana.*' -count=1
+
+cd /OneOPS/OneOps-UI
+npm run smoke:snmp-metric-contract
+npm run smoke:snmp-workspace-view
+```
+
+Typecheck status:
+
+- `npm run typecheck` is now confirmed passing for this slice.
+- During investigation, the OID-related `vue-tsc` issues were traced to:
+  - missing `oid` in the new smoke mock result shape
+  - persistence normalizer casts in `snmpMetricContract.ts`
+  - missing union-type imports after tightening those casts
+
+### 11. Strategy Tree To Dashboard Tree Analysis Is Now Written Down
+
+The next architectural problem is no longer OID testing.
+It is the mismatch between the Teleabs strategy tree and the current Grafana dashboard generation unit.
+
+Current product intent:
+
+```text
+策略集 -> 根仪表盘
+策略 -> 具体仪表盘
+策略父子关系 -> 仪表盘父子关系
+target_part -> 这棵仪表盘树的目标实例
+```
+
+Current implementation reality:
+
+```text
+strategy_set_id + target_part + dashboard_variant
+  -> one dashboard instance
+```
+
+This means the current mechanism is still fundamentally flat.
+
+The key findings have now been written into three docs:
+
+1. target model / mapping spec:
+   - `/OneOPS/docs/superpowers/specs/2026-06-13-strategy-tree-dashboard-tree-mapping-design.md`
+2. current mechanism issue list:
+   - `/OneOPS/docs/superpowers/specs/2026-06-13-strategy-dashboard-current-mechanism-issues.md`
+3. minimal pilot implementation plan:
+   - `/OneOPS/docs/superpowers/plans/2026-06-13-strategy-dashboard-tree-pilot.md`
+
+Core architectural conclusion:
+
+- the current resolver flattens matched strategy items into one `effective_contract` too early for dashboard-node ownership;
+- template inheritance (`SnmpGrafanaDashboardTemplate.parent_key`) is a layout tree, not the business dashboard tree;
+- current target binding / panel binding / snapshot persistence are variant-scoped and target-scoped, but not strategy-node-scoped;
+- current automatic generation naturally tends toward “one strategy set, one oversized dashboard per variant”.
+
+Recommended implementation direction was:
+
+```text
+strategy tree
+-> dashboard logical tree
+-> target-scoped dashboard instance tree
+```
+
+Minimum pilot expected by the new plan was:
+
+- one root dashboard owned by `strategy_set`
+- one strategy dashboard per matched strategy node
+- explicit parent/child dashboard relationships in persistence
+- keep the old flat path available while piloting the new tree path
+
+### 12. Strategy Dashboard Tree Pilot Is Now Implemented In Backend
+
+The minimal backend-only pilot from:
+
+- `/OneOPS/docs/superpowers/plans/2026-06-13-strategy-dashboard-tree-pilot.md`
+
+is now landed.
+
+New routes:
+
+```text
+POST /platform/metrics/teleabs/strategy-sets/:id/metric-contract/grafana/dashboard-tree/materialize/dry-run/by-target
+POST /platform/metrics/teleabs/strategy-sets/:id/metric-contract/grafana/dashboard-tree/save/by-target
+```
+
+Current pilot behavior:
+
+- tree dry-run reuses the existing target-scoped flat Grafana materialization result;
+- the backend now expands the selected strategy item back into a visible strategy tree by re-introducing ancestor strategy nodes that are declared in the same strategy set;
+- one `root` dashboard node is created for the strategy set;
+- one `strategy` dashboard node is created per relevant strategy node in the pilot tree;
+- parent/child relationships are persisted through:
+  - `dashboard_role`
+  - `owner_strategy_id`
+  - `parent_dashboard_code`
+  - `root_dashboard_code`
+  on target-binding, panel-binding, and snapshot rows;
+- the old flat Grafana dry-run/save path is still kept for compatibility.
+
+Current ownership split is intentionally conservative:
+
+- root keeps identity / platform-style overview panels;
+- strategy nodes now prefer stronger strategy evidence before falling back to `metric_group_key`:
+  - if panel-level strategy ownership is specific, use it;
+  - if `strategy_ids` is still broad/set-wide, derive ownership from selected capability keys;
+  - only then fall back to the old `metric_group_key` heuristic;
+- target materialization still currently resolves one matched strategy item in the real `strategy_selector` path,
+  but the helper path now prunes ancestor matches and keeps the deepest matching strategy id when capability-derived ownership becomes multi-strategy again in future flows;
+- tree dry-run/save responses now also expand `item_contracts` to include the matched leaf plus same-set ancestors,
+  but this expansion is response-context only for now; it does not change the current panel planning path or flat target materialization behavior;
+- tree dry-run/save responses now also carry `matched_strategy_ids`,
+  so callers can distinguish:
+  - the real leaf match used by current target resolution;
+  - the ancestor-expanded `item_contracts` shown for tree context;
+- strategy ownership is restored structurally, but panel ownership is still not the final dashboard-family model.
+
+Focused verification completed for this pilot:
+
+```bash
+cd /OneOPS/OneOps
+go test ./app/platform/service/impl -run 'TestMetricCapabilityContractResolver.*DashboardTree.*' -count=1
+go test ./app/platform/api -run 'TestTeleabsAPI_.*DashboardTree.*' -count=1
+go test ./app/platform/router -run TestTeleabsRoutes_ConsistentBetweenPlatformAndBidi -count=1
+```
+
+Current boundary after this pilot:
+
+- backend tree dry-run/save routes now exist;
+- root/strategy dashboard split now exists in persistence metadata;
+- parent/child dashboard instance links now exist in the pilot save path;
+- old flat `grafana/dashboards/*` routes are still unchanged;
+- no frontend dashboard-tree UI exists yet;
+- no full dashboard-family normalization or panel-ownership perfection is claimed yet.
+
+### 13. Frontend Dashboard Tree Pilot Now Covers Dry-Run And Save
+
+The Strategy Set detail drawer now has a minimal frontend pilot for the new tree path.
+
+Files added or updated:
+
+- `/OneOPS/OneOps-UI/src/views/platform/StrategyTemplate/StrategySetDetailDrawer.vue`
+- `/OneOPS/OneOps-UI/src/views/platform/StrategyTemplate/snmpStrategySetDashboardTreeState.ts`
+- `/OneOPS/OneOps-UI/src/api/platform/teleabs.ts`
+- `/OneOPS/OneOps-UI/src/typings/platform/snmp-metric-contract.ts`
+- `/OneOPS/OneOps-UI/scripts/snmp-strategy-set-dashboard-tree-state-smoke.ts`
+- `/OneOPS/OneOps-UI/scripts/snmp-strategy-set-dashboard-tree-drawer-smoke.ts`
+
+Current frontend pilot behavior:
+
+- reuses the existing `target_part` input in `StrategySetDetailDrawer`;
+- keeps the old flat Grafana save buttons unchanged;
+- adds `预览仪表盘树` for tree dry-run;
+- adds `保存仪表盘树` for tree save;
+- shows a read-only node table with:
+  - `node_key`
+  - `role`
+  - `owner_strategy_id`
+  - `parent_node_key`
+  - `dashboard_code`
+  - `save_status` on tree-save results
+    - `created`
+    - `reused_updated`
+    - `reused_unchanged`
+  - `dashboard_content_changed` on reused nodes
+  - `panel_bindings_changed` on reused nodes
+  - `save_batch_id` on tree-save responses
+  - `parent_dashboard_code`
+  - `root_dashboard_code`
+  - `panel_binding_count`
+- shows a compact save summary after tree save:
+  - whether save succeeded
+  - saved node count
+  - created node count
+  - reused-updated node count
+  - reused-unchanged node count
+  - dashboard-content changed count
+  - panel-bindings changed count
+  - `save_batch_id`
+  - dashboard variant
+- adds `回看本次保存批次` in `StrategySetDetailDrawer`, which calls a new read-only backend endpoint to reload the persisted node-level audit rows for the current `save_batch_id`
+- adds `加载最近保存批次` in `StrategySetDetailDrawer`, which calls a new read-only backend endpoint to list recent save batches for the current `(strategy_set_id, target_part, dashboard_variant)` and then lets the user click `回看`
+- tree save now best-effort auto-refreshes `recentSaveBatches` after a successful save, so users usually do not need to click `加载最近保存批次` immediately after saving
+- the recent save-batch table now marks the latest saved batch with `当前批次`, making the auto-refreshed batch list easier to read after save
+- the recent save-batch table now also marks the batch currently being replayed in the tree table with `正在回看`, so “latest saved” and “currently viewed” are no longer conflated
+- the recent save-batch table now makes the replay action state-aware: the row currently being replayed shows `已回看` and disables the replay button instead of offering a redundant `回看`
+- the tree title area now echoes the current replay context as `当前正在查看: <save_batch_id>`, so users can tell what historical batch is rendered without scanning the recent-batch table
+- the tree title area now also provides `返回当前树`, which restores the latest in-memory save result and clears replay mode without making another backend call
+- frontend now uses the same node table for both live save responses and persisted batch-summary replay, instead of introducing a second audit-only view
+
+State handling now separates preview and save concerns:
+
+- `loading` continues to represent tree dry-run;
+- `saveLoading` represents tree save;
+- `result` holds the current visible tree payload;
+- `saveResult` holds the explicit save response;
+- `loadSaveSummary(strategySetId, saveBatchId)` reloads persisted node-level audit rows from the append-only save-summary table and repopulates `result`
+- `loadRecentSaveBatches(strategySetId, targetPart)` loads recent save-batch summaries into `recentSaveBatches`
+- `save(strategySetId, targetPart)` now also tries to refresh `recentSaveBatches` after a successful save; if that follow-up reload fails, the save itself still remains successful
+- `currentSaveBatchId` is derived from `saveResult.save_batch_id` and is used only for frontend batch-row highlighting
+- `currentViewedBatchId` is set only by `loadSaveSummary(...)` and cleared by preview/save/reset flows; it is used only for frontend “正在回看” row highlighting
+- replay button enablement is now derived from `currentViewedBatchId`; no backend state or persisted flag was added for this interaction
+- `showCurrentSavedTree()` restores `result` from `saveResult` and clears `currentViewedBatchId`; it is a frontend-only view switch, not a new backend query
+
+Current backend pilot behavior additionally includes:
+
+- `GET /platform/metrics/teleabs/strategy-sets/:id/metric-contract/grafana/dashboard-tree/save-summary/by-batch/:save_batch_id`
+- `GET /platform/metrics/teleabs/strategy-sets/:id/metric-contract/grafana/dashboard-tree/save-batches?target_part=...&dashboard_variant=...&limit=...`
+- resolver method `GetStrategySetGrafanaDashboardTreeSaveSummaryByBatch`
+- resolver method `ListStrategySetGrafanaDashboardTreeSaveBatches`
+- persisted rows in `platform_teleabs_strategy_set_dashboard_save_summary` are reconstructed back into:
+  - `node_key`
+  - `parent_node_key`
+  - `parent_dashboard_code`
+  - `root_dashboard_code`
+  - `save_status`
+  - `dashboard_content_changed`
+  - `panel_bindings_changed`
+- recent batches are aggregated from the same append-only table into:
+  - `save_batch_id`
+  - `matched_strategy_ids`
+  - `node_count`
+  - `created_count`
+  - `updated_count`
+  - `unchanged_count`
+  - `content_changed_count`
+  - `bindings_changed_count`
+  - `created_at`
+- `reset()` clears both preview and save state.
+
+Focused verification completed for this frontend slice:
+
+```bash
+cd /OneOPS/OneOps-UI
+npm run smoke:snmp-strategy-set-dashboard-tree-state
+npm run smoke:snmp-strategy-set-dashboard-tree-drawer
+npm run smoke:snmp-strategy-set-recording-rule-drawer
+npm run smoke:snmp-strategy-set-grafana-dashboard-save-action
+npm run typecheck
+git diff --check
+```
+
+Current boundary after this frontend pilot:
+
+- the new tree backend path is now minimally consumable from UI;
+- users can preview and save the tree path without replacing the old flat path;
+- tree save now returns node-level `save_status` (`created` / `reused_updated` / `reused_unchanged`) for minimal visibility;
+- tree save also returns two reused-node change signals:
+  - `dashboard_content_changed`
+  - `panel_bindings_changed`
+- tree save now also persists append-only node save audit rows in:
+  - `platform_teleabs_strategy_set_dashboard_save_summary`
+  grouped by `save_batch_id`
+- the drawer header now makes view mode explicit:
+  - `当前树视图`
+  - `历史回看视图`
+  and history replay still supports `返回当前树` without a new request
+- the tree summary itself now also carries:
+  - `叶子命中策略`
+  - `视图模式`
+  - `结果来源`
+  so screenshots / copied results stay self-explanatory even when the header scrolls away
+- `叶子命中策略` is now accurate in history replay too, because save-summary/by-batch also returns `matched_strategy_ids`
+  instead of relying on frontend in-memory fallback only;
+- recent save batch browsing can now also distinguish the leaf matched strategy without opening a batch first,
+  because the batch list itself carries `matched_strategy_ids`;
+- the tree view is still read-only;
+- there is still no frontend editing of node ownership or hierarchy;
+- this frontend pilot loop should now be treated as closed;
+- backend ownership refinement has started, but this is still a bounded pilot refinement rather than full dashboard-family normalization;
+- tree planner now uses `matched_strategy_ids` only as a narrow leaf tie-breaker
+  when a panel binding declares the whole strategy chain in `strategy_ids`
+  and `selected_capability_keys` do not provide a more specific ownership signal;
+- for reused tree nodes, `panel_bindings_changed` is now emitted as a deterministic boolean
+  even when the previous owned binding set was empty, so save/replay consumers no longer
+  need to treat `nil` as a separate “unchanged but unknown” state;
+- the frontend drawer now makes the rollout boundary explicit:
+  tree actions are labeled as a `Pilot 入口`, and the drawer states that this path
+  validates strategy-tree -> dashboard-tree mapping without replacing the existing flat save path;
+- the drawer copy now also names `保存到平台 / 保存并同步` as the default formal entry,
+  so the rollout contrast is explicit in both directions rather than only labeling the tree path as experimental;
+- the action button row itself now visually groups the two routes with
+  `Pilot 入口` and `默认正式入口` tags, so the rollout split is visible even before reading the helper copy;
+- tree pilot actions now stay disabled until a target device code / ID is entered,
+  which removes the last easy path to empty-target preview/save/batch-list errors from the drawer UI;
+- the frontend drawer now also supports a real rollout gate via
+  `VITE_ENABLE_SNMP_DASHBOARD_TREE_PILOT !== 'false'`:
+  when disabled, tree-pilot actions and tree result rendering disappear, while the flat formal path remains visible;
+- the flat formal path now also guards its biggest sequencing gap:
+  if the current target does not have a successful in-session recording-rule publish result,
+  `保存到平台 / 保存并同步` first shows a warning confirmation instead of silently proceeding;
+- the drawer now also exposes one explicit current-session formal-closure panel for the default path:
+  it shows `监控策略 -> Recording Rule -> 仪表盘` stage/readiness status for the current target,
+  makes the next recommended action explicit,
+  and now treats rule-publish readiness as backend-derived while keeping the rest of the chain session-scoped;
+- the backend now also exposes a strict by-target recording-rule readiness read path backed by
+  `platform_snmp_recording_rule_publish_records`, so the formal drawer and flat save guard
+  no longer depend only on in-session publish memory after a refresh;
+- readiness semantics are intentionally narrow:
+  it reports the latest attempt status for `strategy_set_id + target_part`,
+  but `ready=true` means there is at least one successful publish record for that same target;
+- readiness is now also version-aware against the current by-target materialized YAML:
+  the backend returns `current_yaml_sha256` and `version_matched`,
+  the formal-closure panel treats backend readiness as truly save-ready only when
+  `ready=true && version_matched=true`,
+  and a stale successful publish now surfaces as `版本不一致 / 当前规则已变更，请重新发布规则`
+  instead of being treated as dashboard-save ready;
+- the flat save guard is now also aligned with that stronger semantics:
+  `无成功发布记录` still stays a warning-level confirm,
+  but `ready=true && version_matched=false` becomes a hard stop that requires re-publishing rules first
+  before `保存到平台 / 保存并同步` can proceed;
+- after a successful `发布规则`, the drawer now also re-queries backend readiness for the same target,
+  so a stale `version_matched=false` state is cleared automatically once the new rule publish succeeds,
+  instead of waiting for a later manual reload or save-click refresh;
+- that post-publish readiness refresh is now also same-target scoped:
+  if the operator changes the target input while the publish request is still in flight,
+  the drawer does not overwrite the current target’s readiness with the older publish target result;
+- after a current tree save succeeds, the drawer now also shows an explicit info alert that
+  this save is still for pilot validation / audit and does not replace the default flat save+sync workflow;
+- clicking `保存仪表盘树` now requires an explicit confirmation dialog that repeats the same pilot-only boundary,
+  so the user sees the rollout guard before the write action rather than only after the save returns;
+- while the drawer is in `历史回看视图`, `保存仪表盘树` is now disabled and relabeled to `返回当前树后保存`,
+  so history replay can no longer be mistaken for an editable/saveable working context;
+- the next logical step should move back to larger-scope work such as backend ownership refinement, tree-editing design, or rollout strategy, rather than more micro-UX iteration here.
+
+### 14. Definition-Layer Vs Runtime-Layer Correction Is Now Explicit
+
+One important correction has now been written down:
+
+- `/OneOPS/docs/superpowers/plans/2026-06-14-snmp-definition-runtime-closure-correction.md`
+- `/OneOPS/docs/superpowers/specs/2026-06-14-snmp-definition-layer-model-note.md`
+- `/OneOPS/docs/superpowers/specs/2026-06-14-snmp-strategy-dashboard-panel-ownership-mapping-note.md`
+- `/OneOPS/docs/superpowers/specs/2026-06-14-snmp-current-panel-family-owner-decision-table.md`
+- `/OneOPS/docs/superpowers/specs/2026-06-14-snmp-tree-pilot-gap-map.md`
+- `/OneOPS/docs/superpowers/specs/2026-06-14-snmp-short-name-baseline.md`
+- `/OneOPS/docs/superpowers/specs/2026-06-14-snmp-definition-closure-summary.md`
+- `/OneOPS/docs/superpowers/plans/2026-06-14-snmp-panel-slot-owner-first-cut.md`
+
+The key clarification is that recent work closed a meaningful runtime loop:
+
+```text
+strategy_set_id + target_part
+  -> recording rule preview / materialize / publish
+  -> dashboard save / save+sync / readiness
+```
+
+but that runtime loop must not be mistaken for completion of the dashboard-family business model.
+
+The corrected boundary is:
+
+```text
+definition layer:
+StrategySet -> StrategyTree -> Dashboard Logical Tree
+
+runtime layer:
+(strategy_set_id, target_part) -> recording rules / dashboard instance materialization
+```
+
+Current correction direction after this note:
+
+- stop prioritizing more by-target runtime hardening as the main line;
+- treat current tree pilot as a transitional bridge, not as full definition-model completion;
+- shift the next primary task back to definition-layer closure:
+  - object identities
+  - ownership matrix
+  - mapping from strategy node to dashboard logical node
+- the first concrete implementation line under that correction is now
+  `PanelSlot ownership first cut`:
+  add short explicit `OwnerKind` / `OwnerKey` to panel bindings,
+  then let tree planning consume those fields before runtime heuristics.
+- the first cut is now partially implemented in code:
+  - `SnmpGrafanaPanelBindingPreview` now carries short explicit owner fields
+    `owner_kind` and `owner_key`;
+  - by-target Grafana dashboard materialization now assigns:
+    - root/evidence/navigation style bindings -> `owner_kind=root`, `owner_key=strategy_set_id`
+    - single-strategy bindings -> `owner_kind=strategy`, `owner_key=strategy_id`
+    - ambiguous bindings -> unresolved empty owner rather than root fallback;
+  - dashboard-tree planning now consumes explicit owner first,
+    then falls back to existing strategy/capability/group heuristics.
+  - current tree dry-run/save node previews now also expose `slot_owners`
+    such as `root:set-1`, `strategy:huawei-s5735-switch`, or `unowned`,
+    so the UI can distinguish `node owner` from `slot owner` without opening full binding detail.
+  - current tree dry-run/save node previews now also expose `unowned_slot_count`;
+    current materialized trees return a real count,
+    while historical save-summary replay still leaves that field empty rather than faking `0`.
+  - current tree dry-run/save node previews now also expose `unowned_families`,
+    using short panel-family labels such as `interface_basic.port_state` or `system_basic.cpu`
+    so unresolved slot clusters can be read directly without opening full binding detail;
+    historical save-summary replay still leaves that field empty rather than inventing a family list.
+  - the frontend tree pilot now also turns `unowned_slot_count > 0` into an explicit warning,
+    instead of leaving it only as one table number;
+    current wording is kept narrow and definition-layer focused.
+  - the frontend tree pilot summary/warning now also aggregates `unowned_families`
+    across the current tree result,
+    so operators can tell whether unresolved ownership is mainly concentrated in
+    `interface_basic.port_state`, `system_basic.cpu`, or another short family label
+    without scanning each node row first.
+  - nodes with `unowned_slot_count > 0` now also show a direct `待归属` tag in the tree table,
+    so operators can spot unresolved nodes without scanning the numeric column first.
+  - owner resolution is now also slightly stricter on the backend:
+    if one slot’s candidate owners are only a parent/child chain,
+    owner selection now prefers the deepest strategy owner instead of leaving the slot `unowned`.
+  - for strategy-owned families that may render without a populated `selected_capability_keys`
+    (currently validated on `interface_basic.port_state*` and `system_basic.cpu_memory.trend`),
+    binding planning now also falls back to definition-layer `capability_keys`
+    before giving up and widening to the whole strategy tree;
+    this is the current first concrete step that turns two real families
+    from heuristic-heavy/unowned-prone into explicit strategy-owned bindings.
+  - dashboard-tree binding strategy resolution now also consumes that same
+    `capability_keys` fallback,
+    so the tree planner itself no longer depends only on `selected_capability_keys`
+    when narrowing strategy-owned slots for those families.
+  - two root-summary families are now also made explicit in the root-owner rule:
+    `device.overall_health` and `device.active_alerts`
+    no longer drift into strategy ownership just because their capability set overlaps
+    with one concrete child strategy; this matches the current definition-layer note
+    that cross-strategy total-health / alerts summaries belong to the root node.
+  - the earlier `capability_keys` fallback is now also locked by stronger regression coverage
+    on strategy-local hardware detail panels:
+    `device_metrics.temperature.sensors`,
+    `device_metrics.fan_status.components`,
+    `device_metrics.power_status.components`,
+    `device_metrics.transceiver.rx_top4`,
+    `device_metrics.transceiver.rx_last4`
+    are all now explicitly asserted to stay strategy-owned in by-target materialization.
+  - `routing_l2.summary` is now also treated as an explicit root-summary family,
+    rather than drifting into child strategy ownership from its underlying
+    `l2_mac_table` evidence source;
+    the current interpretation is that this compact “Routing & Layer 2” rollup
+    behaves like a cross-strategy overview block on the root dashboard.
+
+The new definition-layer model note now makes one narrow thing explicit:
+
+- which objects are definition-layer objects;
+- which objects are runtime-layer objects;
+- who owns each object;
+- whether each object is allowed to depend on `target_part`.
+
+That note should now be treated as the immediate prerequisite before any more tree-pilot or by-target runtime polishing.
+
+The new panel-ownership mapping note then narrows the next missing design question further:
+
+- how one `strategy node` maps to one `dashboard logical node`;
+- how root dashboard ownership differs from strategy dashboard ownership;
+- how `panel slot ownership` must be decided before runtime materialization rather than inferred late from target-scoped results.
+
+The new current panel-family owner decision table then makes the first practical ownership baseline explicit:
+
+- current detailed families such as `interface_basic.*` and `system_basic.*` default to `strategy_id` ownership;
+- current overview / navigation / platform-evidence style panels default to `strategy_set_id` ownership;
+- root should no longer be treated as the generic fallback owner just because runtime heuristics are weak.
+
+The new tree-pilot gap map then makes the current bridge state easier to read with shorter names:
+
+- `RootNode`
+- `StrategyNode`
+- `NodeOwner`
+- `LeafMatch`
+- `SaveBatch`
+
+and clarifies which pilot fields already align with the definition model versus which fields are still runtime evidence or audit-only artifacts.
+
+The new short-name baseline then freezes the preferred naming direction:
+
+- short object names first
+- one name for one meaning
+- runtime evidence and logical ownership must not share the same short name
+
+So follow-up discussion should prefer names like:
+
+- `RootNode`
+- `StrategyNode`
+- `NodeOwner`
+- `LeafMatch`
+- `SaveBatch`
+
+instead of continuing to expand long mixed-layer phrases.
+
+The new definition-closure summary page is now the shortest re-entry point for this corrected direction:
+
+- boundary
+- core objects
+- owner split
+- current pilot gap
+
+Anyone resuming this line should read that one-page summary first, then drill into the narrower notes only if needed.
+
+There is now also one new batch-oriented execution note:
+
+- [2026-06-14-snmp-family-closure-matrix.md](/OneOPS/docs/superpowers/plans/2026-06-14-snmp-family-closure-matrix.md)
+
+That note is important because it changes the execution unit from:
+
+- one helper / one patch / one family at a time
+
+to:
+
+- one family group at a time
+
+Current recommendation is to use that matrix as the remaining closure denominator:
+
+- `closed`
+- `partial`
+- `open`
+
+and drive the remaining work by moving family rows to `closed`,
+instead of continuing to measure progress patch-by-patch.
+- 2026-06-14: family-closure execution has switched from micro-patches to the batch matrix in [2026-06-14-snmp-family-closure-matrix.md](/OneOPS/docs/superpowers/plans/2026-06-14-snmp-family-closure-matrix.md). Topology evidence families (`l2_neighbors.summary`, `l2_mac_table.*`, `l3_arp_table.*`, `l2_vlan_table.*`, `l2_stp_state.*`) are now frozen as `strategy`-owned in both the decision notes and regression tests. Current routing families (`l3_route_table.*`, `routing_bgp.*`, `routing_ospf.*`) are now explicitly treated as future scope, not part of the current switch dashboard-tree closure denominator, because they belong to a possible future routing-capable class or variant baseline rather than the current switch baseline. This means the current active family denominator can now be treated as closed, and any future routing inclusion should start as a separate batch instead of re-opening the current closure work.
+- 2026-06-14: the next line is now formalized in [2026-06-14-snmp-routing-family-activation-batch.md](/OneOPS/docs/superpowers/plans/2026-06-14-snmp-routing-family-activation-batch.md). That plan no longer uses runtime data presence as a gate for baseline family existence. The rule is now simpler: generation decides what families exist in a class/variant baseline, runtime only decides the current panel state. Routing therefore re-enters closure only when a routing-capable class or variant baseline is intentionally defined.
+- 2026-06-14: the simplified rule is now written down in [2026-06-14-snmp-class-baseline-generation-rule.md](/OneOPS/docs/superpowers/specs/2026-06-14-snmp-class-baseline-generation-rule.md). Use its short split going forward: `ClassBaseline` decides what families exist, `VariantBaseline` decides which view includes them, and `PanelState` only describes runtime state (`has_data / no_data / not_exposed`). Do not re-introduce runtime-gated baseline logic when discussing routing or any future family.
+- 2026-06-14: the next class-level step is now captured in [2026-06-14-snmp-routing-capable-switch-baseline.md](/OneOPS/docs/superpowers/specs/2026-06-14-snmp-routing-capable-switch-baseline.md). That note defines the first routing-capable switch baseline as an additive class baseline over the current switch baseline, keeps routing families strategy-owned by default, and explicitly avoids per-device branching or runtime-gated baseline existence.
+- 2026-06-14: baseline selection is now captured in [2026-06-14-snmp-switch-baseline-selection-rule.md](/OneOPS/docs/superpowers/specs/2026-06-14-snmp-switch-baseline-selection-rule.md). The current rule is: baseline follows class intent plus matched strategy responsibility. In practice, OneOPS should choose `routing-capable switch baseline` only when the matched strategy side actually carries routing responsibility (`l3_route_table.*`, `routing_bgp.*`, `routing_ospf.*`), not because one target currently has routing data.
+- 2026-06-14: the routing trigger itself is now narrowed in [2026-06-14-snmp-routing-responsibility-mapping-table.md](/OneOPS/docs/superpowers/specs/2026-06-14-snmp-routing-responsibility-mapping-table.md). Only `l3_route_table.*`, `routing_bgp.*`, and `routing_ospf.*` count as routing responsibility for baseline selection. Topology evidence (`l2_neighbors.*`, `l2_mac_table.*`, `l3_arp_table.*`, `l2_vlan_table.*`, `l2_stp_state.*`) stays outside that trigger and should not accidentally promote an ordinary switch into the routing-capable baseline.
+- 2026-06-14: the first backend-only baseline-selection cut is now implemented. In `/OneOPS/OneOps`, switch dashboard generation has one explicit definition-layer selection step before builtin panel-definition fallback. The current helper only distinguishes `switch.current` and `switch.routing_capable`, uses matched strategy responsibility as the trigger, and deliberately ignores runtime data presence. This cut is intentionally narrow: routing-capable selection is now wired into the generation path, but it still reuses the current switch panel set until the dedicated routing baseline panel expansion is implemented.
+- 2026-06-14: the next generation cut is now implemented too. `switch.routing_capable` no longer reuses the current switch panel set unchanged; it now adds six routing families at generation time: `l3_route_table.ipv4_count`, `l3_route_table.ipv6_count`, `routing_bgp.neighbor_total`, `routing_bgp.established_total`, `routing_ospf.neighbor_total`, and `routing_ospf.full_total`. The current switch baseline remains unchanged, and runtime data presence still does not participate in baseline existence or selection. Supporting backend work also landed in the same batch: routing summary contract import now recognizes route-count, BGP, and OSPF count fields, and Grafana expression generation now covers all six routing-capable baseline families.
+- 2026-06-14: baseline selection is no longer only internal helper logic. Flat materialization/save responses and tree dry-run/save responses now all carry the same short `Baseline` object: `class_baseline`, `variant_baseline`, `reason`. This is the current explicit generation-resolution boundary for switch dashboards, and it should be preferred over adding more ad-hoc booleans or hidden helper-only branches.
+- 2026-06-14: that same `Baseline` object now also propagates into tree save history. `save-summary/by-batch` and recent `save-batches` responses derive and return the same `class_baseline / variant_baseline / reason`, so current tree results and historical tree replay now speak one definition-layer language instead of splitting into “current generation” vs “history audit” dialects.
+- 2026-06-14: baseline resolution is also no longer assembled ad hoc inside each generation caller. `/OneOPS/OneOps` now has one internal switch-generation resolver that returns `class baseline + response Baseline + resolved template/panel set` together, and flat materialization already consumes that unified result directly. If this line continues, prefer extending that resolver boundary instead of reintroducing scattered helper combinations.
+- 2026-06-14: the next structural closure cut is now in place too. `/OneOPS/OneOps/app/platform/service/impl/snmp_grafana_switch_baseline_module.go` is the new internal baseline boundary for switch dashboards. `ClassBaseline`, `VariantBaseline`, routing-responsibility detection, baseline selection, strategy-ID baseline derivation, and baseline-aware template selection now live there instead of being split between resolver helpers and generator callers. Keep runtime gating out of that module.
+- 2026-06-14: generation is now also unified one layer lower. `/OneOPS/OneOps` has one internal switch-dashboard materialization resolver, and flat dry-run/save plus tree dry-run/save now all consume that same internal path instead of tree reaching generation by bouncing through separate public assembly steps. If more work lands here, keep extending the shared materialization path rather than creating tree-only or flat-only generation branches.
+- 2026-06-14: that shared materialization path now also has its own internal generation result object. Flat dry-run is now just a DTO adapter over the internal result, and tree planning helpers consume the same internal result directly. This means `Baseline + preview summaries + dashboard JSON + bindings + materialization` now travel together inside one shared generation shape before any public response mapping happens.
+- 2026-06-14: the shared switch-dashboard generation logic is now also behind a dedicated internal generator type, not just a growing set of resolver methods. `/OneOPS/OneOps/app/platform/service/impl/snmp_grafana_switch_dashboard_generator.go` now consumes the baseline module and owns dashboard generation plus binding-owner enrichment, while `MetricCapabilityContractResolver` keeps the public orchestration entrypoints. If this line continues, prefer extending that generator boundary instead of pushing more switch-generation detail back into the top-level resolver.
+- 2026-06-14: there is now also a dedicated internal switch dashboard service boundary above the generator. `/OneOPS/OneOps/app/platform/service/impl/snmp_grafana_switch_dashboard_service.go` now owns shared flat dry-run assembly, shared tree dry-run assembly, and the shared tree-generation bundle used before tree-save persistence starts. `MetricCapabilityContractResolver` still owns public API methods and persistence, but it no longer has to re-stitch generation pieces separately for flat dry-run, tree dry-run, and tree save. The active assembly split is now `resolver -> baseline module -> generator -> service`.
+- 2026-06-14: the active save path now also runs through a dedicated internal persistence boundary. `/OneOPS/OneOps/app/platform/service/impl/snmp_grafana_switch_dashboard_persistence_service.go` now owns flat save persistence and tree save persistence orchestration, while `MetricCapabilityContractResolver` keeps only the public save entrypoints. The active split for the current switch-dashboard backend line is now `resolver -> baseline module -> generator -> service -> persistence service`, and future work should extend those internal boundaries instead of re-growing resolver-owned save flow assembly.
+- 2026-06-14: the baseline side is now closed one layer further too. `/OneOPS/OneOps/app/platform/service/impl/snmp_grafana_switch_baseline_module.go` now owns `ClassBaseline / VariantBaseline / reason`, routing-responsibility detection, strategy-ID baseline derivation, and baseline-aware template selection. The active internal split for the current switch-dashboard backend line is now `resolver -> baseline module -> generator/service/persistence`, so future baseline work should extend that module instead of re-scattering baseline rules into resolver helpers or per-caller branches.
+- 2026-06-14: two baseline-module correctness gaps were also closed in the same batch. `resolveForStrategyIDs(...)` is now baseline-only instead of being coupled to template resolution success, and routing-capable selection now preserves its routing-capable template identity even when the current switch template came from DB-backed resolution. That keeps history/audit baseline derivation and generation-time baseline-aware template selection on the same definition-layer semantics.
+- 2026-06-14: the next closure target is now explicitly broader than the current switch line. See [2026-06-14-snmp-generic-baseline-model-closure-plan.md](/OneOPS/docs/superpowers/plans/2026-06-14-snmp-generic-baseline-model-closure-plan.md). The goal of that batch is to lift the current `switch.current / switch.routing_capable` path into one generic SNMP target-class model, add an explicit `snmp.generic` baseline for non-switch SNMP targets, and require all future SNMP dashboard generation to enter through the same `TargetClass -> ClassBaseline -> VariantBaseline -> Owner -> Generation` contract.
+- 2026-06-14: that generic SNMP target-class closure is now also implemented on the backend. `/OneOPS/OneOps/app/platform/service/impl/snmp_grafana_target_class_module.go` is the active generic entry for baseline resolution. `snmp.generic` now exists as an explicit non-switch SNMP baseline, while `switch.current` and `switch.routing_capable` are additive specializations under the same model. Current dashboard generation/history paths therefore no longer need to assume that every SNMP target is fundamentally switch-shaped before a baseline can be chosen.
+- 2026-06-14: the last generic-baseline save/tree correctness gap is now closed too. When backend callers omit `dashboard_variant`, flat save and tree save now persist the resolved `Baseline.VariantBaseline` instead of falling back to the switch default. In practice that means generic SNMP targets now consistently save/replay under `snmp.generic.operations`, while HTTP save/tree endpoints still keep their existing explicit-variant contract.
+- 2026-06-14: quick env now seeds the same SNMP dashboard baseline family explicitly. `zzzzzzzzzz-snmp-grafana-dashboard-template-bootstrap.sql` now includes `snmp.generic` as the generic SNMP template root and `snmp.switch.routing_capable` as the routing-capable switch delta template, so seeded template resolution no longer stops at the legacy switch-only family.
+- 2026-06-14: quick env no longer stops at SNMP template seeding. `/OneOPS/quick_env/scripts/ensure_snmp_dashboard_instances.sh` is now wired into `quick_env/start.sh`, so current environments auto-save real SNMP dashboard instances after startup. The live path now guarantees: existing switch targets keep `snmp.switch.operations`, and once a successful OOB SNMP server target exists, `server_oob_snmp` will persist a real `snmp.generic.operations` dashboard instance without manual demo-only steps.
+- 2026-06-14: quick env now also closes the live routing-capable gap. `/OneOPS/quick_env/docker-entrypoint-initdb.d/zzzzzzzzzz-snmp-switch-routing-capable-strategy-set-bootstrap.sql` seeds an independent `snmp_switch_routing_capable` suite with a Huawei VRP routing overlay leaf that carries explicit routing responsibility, and `/OneOPS/quick_env/scripts/ensure_snmp_dashboard_instances.sh` now persists one real `switch.routing_capable` dashboard instance for `DVC2C4468B0B813`. In the current environment this means the dashboard list now has all three real SNMP classes in use: ordinary switch, generic SNMP, and routing-capable switch.
+- 2026-06-14: shared dashboard persistence is now the intended SNMP save model. Flat SNMP save no longer treats target identity as the primary dashboard identity when `class_baseline + variant_baseline + template_key` are unchanged; instead it saves one shared dashboard object and fans multiple targets into target-binding rows. The persistence layer now rewrites saved dashboard `uid/title` to class-level identity and clears target-specific templating defaults from stored JSON. Quick env runtime ensure also drops the legacy unique `uk_strategy_target_dashboard_code` constraint if present, purges legacy per-target SNMP dashboard rows for a variant, and rebuilds them through the shared save path.
+- 2026-06-14: class-level generation now keeps panel families even when live runtime `supports` or rule evidence are weak. The materializer no longer drops SNMP panels by support-gate; instead it keeps baseline-owned panels and fills missing live queries with a harmless `no data` PromQL target. This is the current fix for the poor shared `OneOPS SNMP Switch Ops` result: the saved shared switch dashboard now preserves the CE168-derived operations structure instead of collapsing to a 5-panel runtime-only subset.
+- 2026-06-14: the current closure target is no longer “one class-level shared flat switch dashboard”. See [2026-06-14-snmp-suite-strategy-dashboard-tree-design.md](/OneOPS/docs/superpowers/specs/2026-06-14-snmp-suite-strategy-dashboard-tree-design.md) and [2026-06-14-snmp-suite-strategy-dashboard-tree-closure-plan.md](/OneOPS/docs/superpowers/plans/2026-06-14-snmp-suite-strategy-dashboard-tree-closure-plan.md). The active rule is now:
+  - `dashboard selection = projection of strategy selection`
+  - `monitoring suite -> root dashboard`
+  - `matched strategy node -> strategy dashboard node`
+  - `target -> binding to one dashboard tree`
+- 2026-06-14: suite-root plus strategy-node dashboard tree save is now the primary backend path. Flat save still exists, but it is only a compatibility projection of the saved root node. Current switch/generic/routing-capable rows therefore describe suite roots, while the full business model lives in the saved dashboard tree and its strategy child nodes.
+- 2026-06-14: class baselines (`snmp.generic`, `switch.current`, `switch.routing_capable`) are now generation floors, not independent business selectors. They still shape reusable panel-family floors and layout/template reuse, but they must not replace matched strategy selection.
+- 2026-06-14: quick env runtime ensure is now tree-first too. The switch path is healthy only when the suite root keeps explicit root-summary responsibility (`Device Identity`, `Overall Health`, `Active Alerts`) and at least one strategy dashboard under that root keeps explicit strategy-display responsibility (`Interface Utilization Top 10`, `Packets Per Second`, `OneOPS config evidence`).
+- 2026-06-14: the CE168 row remains intentionally visible:
+  - `OneOPS SNMP Switch Ops - CE16808-172-21-165-11`
+  but it is now reference-only. It should be treated as a quality sample and future overlay/layout input, not as the canonical mother template for the shared switch business model.
+- 2026-06-14: product visibility is now nudged toward the same model. The Grafana dashboard list no longer needs to explain SNMP rows only as generic “根/子仪表盘”; current UI semantics are `suite root / strategy / reference`, and the strategy-set drawer now presents `Root + Strategy Dashboard Tree` as the formal path while flat save remains the compatibility `root projection`.
+- 2026-06-14: the Grafana dashboard list now carries one more explicit suite-root affordance: `查看策略树`. Root rows can now open a dedicated modal that lists their `strategy dashboard nodes`, which makes the user path match the current business rule more directly:
+  - list page -> `suite root`
+  - tree modal / strategy-set drawer -> `strategy dashboards`
+  This is a UI-only visibility step; it does not change backend generation or persistence semantics.
+- 2026-06-14: that visibility step is now also connected to the formal strategy-set drawer path. The suite-root strategy-tree modal can deep-link to `StrategyTemplate` and auto-open `StrategySetDetailDrawer` for the bound strategy set, while forwarding `focusStrategyId` from a clicked strategy-dashboard row. The drawer now exposes that focus context inside the dashboard-tree section, so the product path is no longer “list -> modal -> stop”; it is now “list -> modal -> formal tree drawer”.
+- 2026-06-14: the next dashboard batch must not start from CE168 layout copying. The fixed entry is now:
+  - per-strategy `effective_contract`
+  - per-strategy dashboard derivation
+  - CE168 decomposition into reusable concept / regenerate / overlay-only / forbidden hard-coded sample
+  See:
+  - `/OneOPS/docs/superpowers/specs/2026-06-14-snmp-strategy-effective-metrics-dashboard-derivation-design.md`
+  - `/OneOPS/docs/superpowers/specs/2026-06-14-snmp-strategy-effective-metrics-inventory.md`
+  - `/OneOPS/docs/superpowers/plans/2026-06-14-snmp-strategy-dashboard-regeneration-plan.md`
+  This is the current correction to preserve:
+  - every current SNMP strategy row needs its own strategy dashboard node;
+  - CE168 is a quality reference sample only;
+  - hard-coded interface panels and vendor-specific literal titles must not be copied directly into shared generation.
+- 2026-06-14: the first runtime-backed effective-metrics inventory now exists too. `/OneOPS/quick_env/scripts/export_snmp_strategy_effective_metrics_inventory.py` exports it from the live OneOPS API into `/OneOPS/docs/superpowers/specs/2026-06-14-snmp-strategy-effective-metrics-inventory.md`. The current runtime result is important: 17 network-oriented SNMP strategies currently share one identical effective metric signature, so the next dashboard regeneration batch must treat CE168 as layout/reference inspiration only and regenerate topology/routing/hardware nodes from actual strategy metrics instead of copying vendor- or interface-specific sample panels.
+- 2026-06-14: the next output after the live inventory is now exported too. `/OneOPS/quick_env/scripts/export_snmp_strategy_dashboard_derivation_table.py` produces:
+  - `/OneOPS/docs/superpowers/specs/2026-06-14-snmp-strategy-dashboard-derivation-table.md`
+  - `/OneOPS/docs/superpowers/specs/2026-06-14-snmp-strategy-dashboard-derivation-table.json`
+  This derivation table is the current machine-readable rule for regeneration:
+  - keep one strategy dashboard node per strategy row;
+  - allow same-signature strategies to share one recipe;
+  - keep firewall/routing/server node identity explicit even when current metrics are sparse;
+  - treat CE168 panel content only as reusable concept / regenerate-only reference / forbidden carryover, never as direct mother-template content.
+- 2026-06-14: those regeneration semantics are now exposed in the formal dashboard-tree UI too. Tree dry-run, tree save, and save-summary replay nodes all carry `recipe_key`, `panel_families`, `metric_group_keys`, `display_scope_summary`, `optional_overlay_families`, and `ce168_handling_summary`, and `StrategySetDetailDrawer` renders them directly. The tree UI is therefore now the current place to read both:
+  - root/strategy dashboard semantics; and
+  - per-strategy dashboard regeneration intent.
+- 2026-06-14: the machine-readable node-definition layer now exists as well. `/OneOPS/quick_env/scripts/export_snmp_strategy_dashboard_node_definitions.py` exports:
+  - `/OneOPS/docs/superpowers/specs/2026-06-14-snmp-strategy-dashboard-node-definitions.md`
+  - `/OneOPS/docs/superpowers/specs/2026-06-14-snmp-strategy-dashboard-node-definitions.json`
+  This is the current artifact to consume before real Grafana regeneration:
+  - one strategy row keeps one node definition;
+  - `recipe_key` is reusable generation logic only;
+  - `panel_families` + `metric_group_keys` define node-local metric responsibility;
+  - `ce168_reusable_concepts`, `ce168_regenerate_panels`, and `ce168_forbidden_carryovers` are the only legal CE168 inputs.
+- 2026-06-14: formal tree nodes now also surface `generated_panels`. This is the recipe-projected panel-definition preview for each root/strategy node. It still stops before final Grafana layout composition, but it gives the current structured answer to:
+  - “which panel definitions does this strategy dashboard node currently generate?”
+  This list is rendered directly in `StrategySetDetailDrawer`, alongside recipe, metric scope, and CE168 handling fields.
+- 2026-06-14: `snmp.switch.topology-common` is now backed by its own node-local panel-definition source instead of filtering `switch.current`. The topology recipe explicitly owns the evidence-table and count-card set for `l2_neighbors`, `l2_mac_table`, `l3_arp_table`, `l2_vlan_table`, and `l2_stp_state`. `snmp.firewall.current-common` has now been split again into its own node-local recipe source: current mandatory families are still the same, but the generated panel source is firewall-local (`firewall` section and firewall-specific titles) instead of inheriting switch topology titles or flat switch interface/hardware panels.
+- 2026-06-14: `device_metrics.default` no longer shows up as a raw fallback panel key in node regeneration previews. It now resolves into recipe-specific node-local panel definitions across recipes:
+  - topology -> `Node Device Metrics`
+  - firewall -> `Firewall Device Metrics`
+  - server basic -> `Server Device Metrics`
+  - server OOB -> `OOB Device Metrics`
+  - device summary -> `Device Metrics Summary`
+  This is still only the first step toward richer summary/detail regeneration, but it removes one more placeholder layer from the tree-first dashboard path.

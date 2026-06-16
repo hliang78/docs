@@ -1,0 +1,1404 @@
+[
+  {
+    "strategy_id": "0ee83a51-bda6-4d64-8b3a-370a7a7c465d",
+    "strategy_name": "SNMP服务器监控策略 (副本)",
+    "parent_strategy_id": "1a20d032-83f4-4c21-9bd5-ab6c14d6bcc2",
+    "parent_strategy_name": "SNMP服务器监控策略",
+    "suite_root": "OneOPS SNMP Server Ops",
+    "node_key": "0ee83a51_bda6_4d64_8b3a_370a7a7c465d",
+    "node_role": "server-basic",
+    "recipe_key": "snmp.server.basic",
+    "effective_signature": "5cc29af1ae28",
+    "effective_groups": [
+      "device_metrics"
+    ],
+    "mandatory_panel_families": [
+      "device_metrics.default"
+    ],
+    "optional_overlay_families": [
+      "system_basic.cpu_memory.trend",
+      "device_metrics.processes.summary"
+    ],
+    "metric_scope_summary": "当前对基础 device metrics summary 负责，不应借用 switch/chassis 样式。",
+    "ce168_reusable_concepts": [
+      "summary + detail 的抽象层次"
+    ],
+    "ce168_regenerate_panels": [
+      "device summary panels -> 由当前 effective metric keys 直接重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies"
+    ],
+    "notes": []
+  },
+  {
+    "strategy_id": "10000000-0000-4000-8000-000000000001",
+    "strategy_name": "H3C通用SNMP网络监控策略",
+    "parent_strategy_id": "baf7bb34-86b7-45f8-8e28-2afce170966a",
+    "parent_strategy_name": "SNMP网络监控策略",
+    "suite_root": "OneOPS SNMP Network Ops",
+    "node_key": "10000000_0000_4000_8000_000000000001",
+    "node_role": "switch-common",
+    "recipe_key": "snmp.switch.topology-common",
+    "effective_signature": "11530cbbb679",
+    "effective_groups": [
+      "l2_neighbors",
+      "l2_mac_table",
+      "l3_arp_table",
+      "l2_vlan_table",
+      "l2_stp_state",
+      "device_metrics"
+    ],
+    "mandatory_panel_families": [
+      "l2_neighbors.summary",
+      "l2_mac_table.summary",
+      "l2_mac_table.count",
+      "l3_arp_table.summary",
+      "l3_arp_table.count",
+      "l2_vlan_table.summary",
+      "l2_vlan_table.count",
+      "l2_stp_state.summary",
+      "l2_stp_state.port_count",
+      "l2_stp_state.forwarding_count",
+      "l2_stp_state.blocking_count",
+      "device_metrics.default"
+    ],
+    "optional_overlay_families": [
+      "system_basic.cpu_memory.trend",
+      "interface_basic.utilization_topn",
+      "interface_basic.pps",
+      "device_metrics.temperature.sensors",
+      "device_metrics.fan_status.components",
+      "device_metrics.power_status.components",
+      "device_metrics.transceiver.rx_top4"
+    ],
+    "metric_scope_summary": "当前只对 L2/L3 topology summary 与 device_metrics.default 负责；不包含 CE168 中 CPU、接口排行、温度、风扇、电源、光模块等硬编码样本语义。",
+    "ce168_reusable_concepts": [
+      "邻居 / MAC / ARP / VLAN / STP 作为 topology summary family 的组织方式",
+      "root summary 与 strategy summary 分层展示"
+    ],
+    "ce168_regenerate_panels": [
+      "Interface Utilization Top 10 -> 仅当策略长出 interface traffic/status 指标后重生",
+      "Traffic Throughput -> 仅当策略长出 interface octets/throughput 指标后重生",
+      "Packets Per Second -> 仅当策略长出 interface packet counters 后重生",
+      "CPU / Memory Trend -> 仅当策略长出 system cpu/memory 指标后重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies",
+      "Huawei VRP Control Plane CPU",
+      "Huawei VRP Control Plane Memory"
+    ],
+    "notes": [
+      "当前 runtime 实际上与多个 vendor/model 策略同构；节点仍需保留独立 strategy identity，但可以共享同一 recipe。"
+    ]
+  },
+  {
+    "strategy_id": "10000000-0000-4000-8000-000000000002",
+    "strategy_name": "H3C网络设备监控 (副本)",
+    "parent_strategy_id": "10000000-0000-4000-8000-000000000001",
+    "parent_strategy_name": "H3C通用SNMP网络监控策略",
+    "suite_root": "OneOPS SNMP Network Ops",
+    "node_key": "10000000_0000_4000_8000_000000000002",
+    "node_role": "switch-common",
+    "recipe_key": "snmp.switch.topology-common",
+    "effective_signature": "11530cbbb679",
+    "effective_groups": [
+      "l2_neighbors",
+      "l2_mac_table",
+      "l3_arp_table",
+      "l2_vlan_table",
+      "l2_stp_state",
+      "device_metrics"
+    ],
+    "mandatory_panel_families": [
+      "l2_neighbors.summary",
+      "l2_mac_table.summary",
+      "l2_mac_table.count",
+      "l3_arp_table.summary",
+      "l3_arp_table.count",
+      "l2_vlan_table.summary",
+      "l2_vlan_table.count",
+      "l2_stp_state.summary",
+      "l2_stp_state.port_count",
+      "l2_stp_state.forwarding_count",
+      "l2_stp_state.blocking_count",
+      "device_metrics.default"
+    ],
+    "optional_overlay_families": [
+      "system_basic.cpu_memory.trend",
+      "interface_basic.utilization_topn",
+      "interface_basic.pps",
+      "device_metrics.temperature.sensors",
+      "device_metrics.fan_status.components",
+      "device_metrics.power_status.components",
+      "device_metrics.transceiver.rx_top4"
+    ],
+    "metric_scope_summary": "当前只对 L2/L3 topology summary 与 device_metrics.default 负责；不包含 CE168 中 CPU、接口排行、温度、风扇、电源、光模块等硬编码样本语义。",
+    "ce168_reusable_concepts": [
+      "邻居 / MAC / ARP / VLAN / STP 作为 topology summary family 的组织方式",
+      "root summary 与 strategy summary 分层展示"
+    ],
+    "ce168_regenerate_panels": [
+      "Interface Utilization Top 10 -> 仅当策略长出 interface traffic/status 指标后重生",
+      "Traffic Throughput -> 仅当策略长出 interface octets/throughput 指标后重生",
+      "Packets Per Second -> 仅当策略长出 interface packet counters 后重生",
+      "CPU / Memory Trend -> 仅当策略长出 system cpu/memory 指标后重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies",
+      "Huawei VRP Control Plane CPU",
+      "Huawei VRP Control Plane Memory"
+    ],
+    "notes": [
+      "当前 runtime 实际上与多个 vendor/model 策略同构；节点仍需保留独立 strategy identity，但可以共享同一 recipe。"
+    ]
+  },
+  {
+    "strategy_id": "1a20d032-83f4-4c21-9bd5-ab6c14d6bcc2",
+    "strategy_name": "SNMP服务器监控策略",
+    "parent_strategy_id": "",
+    "parent_strategy_name": "",
+    "suite_root": "OneOPS SNMP Server Ops",
+    "node_key": "1a20d032_83f4_4c21_9bd5_ab6c14d6bcc2",
+    "node_role": "server-basic",
+    "recipe_key": "snmp.server.basic",
+    "effective_signature": "4f53cda18c2b",
+    "effective_groups": [],
+    "mandatory_panel_families": [],
+    "optional_overlay_families": [
+      "system_basic.cpu_memory.trend",
+      "device_metrics.processes.summary"
+    ],
+    "metric_scope_summary": "当前有效契约为空；不能直接生成具体 strategy dashboard 内容。",
+    "ce168_reusable_concepts": [
+      "summary + detail 的抽象层次"
+    ],
+    "ce168_regenerate_panels": [
+      "device summary panels -> 由当前 effective metric keys 直接重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies"
+    ],
+    "notes": []
+  },
+  {
+    "strategy_id": "20000000-0000-4000-8000-000000000001",
+    "strategy_name": "Huawei通用SNMP网络监控策略",
+    "parent_strategy_id": "baf7bb34-86b7-45f8-8e28-2afce170966a",
+    "parent_strategy_name": "SNMP网络监控策略",
+    "suite_root": "OneOPS SNMP Network Ops",
+    "node_key": "20000000_0000_4000_8000_000000000001",
+    "node_role": "switch-common",
+    "recipe_key": "snmp.switch.topology-common",
+    "effective_signature": "11530cbbb679",
+    "effective_groups": [
+      "l2_neighbors",
+      "l2_mac_table",
+      "l3_arp_table",
+      "l2_vlan_table",
+      "l2_stp_state",
+      "device_metrics"
+    ],
+    "mandatory_panel_families": [
+      "l2_neighbors.summary",
+      "l2_mac_table.summary",
+      "l2_mac_table.count",
+      "l3_arp_table.summary",
+      "l3_arp_table.count",
+      "l2_vlan_table.summary",
+      "l2_vlan_table.count",
+      "l2_stp_state.summary",
+      "l2_stp_state.port_count",
+      "l2_stp_state.forwarding_count",
+      "l2_stp_state.blocking_count",
+      "device_metrics.default"
+    ],
+    "optional_overlay_families": [
+      "system_basic.cpu_memory.trend",
+      "interface_basic.utilization_topn",
+      "interface_basic.pps",
+      "device_metrics.temperature.sensors",
+      "device_metrics.fan_status.components",
+      "device_metrics.power_status.components",
+      "device_metrics.transceiver.rx_top4"
+    ],
+    "metric_scope_summary": "当前只对 L2/L3 topology summary 与 device_metrics.default 负责；不包含 CE168 中 CPU、接口排行、温度、风扇、电源、光模块等硬编码样本语义。",
+    "ce168_reusable_concepts": [
+      "邻居 / MAC / ARP / VLAN / STP 作为 topology summary family 的组织方式",
+      "root summary 与 strategy summary 分层展示"
+    ],
+    "ce168_regenerate_panels": [
+      "Interface Utilization Top 10 -> 仅当策略长出 interface traffic/status 指标后重生",
+      "Traffic Throughput -> 仅当策略长出 interface octets/throughput 指标后重生",
+      "Packets Per Second -> 仅当策略长出 interface packet counters 后重生",
+      "CPU / Memory Trend -> 仅当策略长出 system cpu/memory 指标后重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies",
+      "Huawei VRP Control Plane CPU",
+      "Huawei VRP Control Plane Memory"
+    ],
+    "notes": [
+      "当前 runtime 实际上与多个 vendor/model 策略同构；节点仍需保留独立 strategy identity，但可以共享同一 recipe。"
+    ]
+  },
+  {
+    "strategy_id": "20000000-0000-4000-8000-000000000002",
+    "strategy_name": "华为网络设备监控 (副本)",
+    "parent_strategy_id": "20000000-0000-4000-8000-000000000001",
+    "parent_strategy_name": "Huawei通用SNMP网络监控策略",
+    "suite_root": "OneOPS SNMP Network Ops",
+    "node_key": "20000000_0000_4000_8000_000000000002",
+    "node_role": "switch-common",
+    "recipe_key": "snmp.switch.topology-common",
+    "effective_signature": "11530cbbb679",
+    "effective_groups": [
+      "l2_neighbors",
+      "l2_mac_table",
+      "l3_arp_table",
+      "l2_vlan_table",
+      "l2_stp_state",
+      "device_metrics"
+    ],
+    "mandatory_panel_families": [
+      "l2_neighbors.summary",
+      "l2_mac_table.summary",
+      "l2_mac_table.count",
+      "l3_arp_table.summary",
+      "l3_arp_table.count",
+      "l2_vlan_table.summary",
+      "l2_vlan_table.count",
+      "l2_stp_state.summary",
+      "l2_stp_state.port_count",
+      "l2_stp_state.forwarding_count",
+      "l2_stp_state.blocking_count",
+      "device_metrics.default"
+    ],
+    "optional_overlay_families": [
+      "system_basic.cpu_memory.trend",
+      "interface_basic.utilization_topn",
+      "interface_basic.pps",
+      "device_metrics.temperature.sensors",
+      "device_metrics.fan_status.components",
+      "device_metrics.power_status.components",
+      "device_metrics.transceiver.rx_top4"
+    ],
+    "metric_scope_summary": "当前只对 L2/L3 topology summary 与 device_metrics.default 负责；不包含 CE168 中 CPU、接口排行、温度、风扇、电源、光模块等硬编码样本语义。",
+    "ce168_reusable_concepts": [
+      "邻居 / MAC / ARP / VLAN / STP 作为 topology summary family 的组织方式",
+      "root summary 与 strategy summary 分层展示"
+    ],
+    "ce168_regenerate_panels": [
+      "Interface Utilization Top 10 -> 仅当策略长出 interface traffic/status 指标后重生",
+      "Traffic Throughput -> 仅当策略长出 interface octets/throughput 指标后重生",
+      "Packets Per Second -> 仅当策略长出 interface packet counters 后重生",
+      "CPU / Memory Trend -> 仅当策略长出 system cpu/memory 指标后重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies",
+      "Huawei VRP Control Plane CPU",
+      "Huawei VRP Control Plane Memory"
+    ],
+    "notes": [
+      "当前 runtime 实际上与多个 vendor/model 策略同构；节点仍需保留独立 strategy identity，但可以共享同一 recipe。"
+    ]
+  },
+  {
+    "strategy_id": "20000000-0000-4000-8000-000000000003",
+    "strategy_name": "华为网络设备监控 (副本)",
+    "parent_strategy_id": "20000000-0000-4000-8000-000000000001",
+    "parent_strategy_name": "Huawei通用SNMP网络监控策略",
+    "suite_root": "OneOPS SNMP Network Ops",
+    "node_key": "20000000_0000_4000_8000_000000000003",
+    "node_role": "switch-common",
+    "recipe_key": "snmp.switch.topology-common",
+    "effective_signature": "11530cbbb679",
+    "effective_groups": [
+      "l2_neighbors",
+      "l2_mac_table",
+      "l3_arp_table",
+      "l2_vlan_table",
+      "l2_stp_state",
+      "device_metrics"
+    ],
+    "mandatory_panel_families": [
+      "l2_neighbors.summary",
+      "l2_mac_table.summary",
+      "l2_mac_table.count",
+      "l3_arp_table.summary",
+      "l3_arp_table.count",
+      "l2_vlan_table.summary",
+      "l2_vlan_table.count",
+      "l2_stp_state.summary",
+      "l2_stp_state.port_count",
+      "l2_stp_state.forwarding_count",
+      "l2_stp_state.blocking_count",
+      "device_metrics.default"
+    ],
+    "optional_overlay_families": [
+      "system_basic.cpu_memory.trend",
+      "interface_basic.utilization_topn",
+      "interface_basic.pps",
+      "device_metrics.temperature.sensors",
+      "device_metrics.fan_status.components",
+      "device_metrics.power_status.components",
+      "device_metrics.transceiver.rx_top4"
+    ],
+    "metric_scope_summary": "当前只对 L2/L3 topology summary 与 device_metrics.default 负责；不包含 CE168 中 CPU、接口排行、温度、风扇、电源、光模块等硬编码样本语义。",
+    "ce168_reusable_concepts": [
+      "邻居 / MAC / ARP / VLAN / STP 作为 topology summary family 的组织方式",
+      "root summary 与 strategy summary 分层展示"
+    ],
+    "ce168_regenerate_panels": [
+      "Interface Utilization Top 10 -> 仅当策略长出 interface traffic/status 指标后重生",
+      "Traffic Throughput -> 仅当策略长出 interface octets/throughput 指标后重生",
+      "Packets Per Second -> 仅当策略长出 interface packet counters 后重生",
+      "CPU / Memory Trend -> 仅当策略长出 system cpu/memory 指标后重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies",
+      "Huawei VRP Control Plane CPU",
+      "Huawei VRP Control Plane Memory"
+    ],
+    "notes": [
+      "当前 runtime 实际上与多个 vendor/model 策略同构；节点仍需保留独立 strategy identity，但可以共享同一 recipe。"
+    ]
+  },
+  {
+    "strategy_id": "20000000-0000-4000-8000-000000000004",
+    "strategy_name": "华为网络设备监控 (副本)",
+    "parent_strategy_id": "20000000-0000-4000-8000-000000000001",
+    "parent_strategy_name": "Huawei通用SNMP网络监控策略",
+    "suite_root": "OneOPS SNMP Network Ops",
+    "node_key": "20000000_0000_4000_8000_000000000004",
+    "node_role": "switch-common",
+    "recipe_key": "snmp.switch.topology-common",
+    "effective_signature": "11530cbbb679",
+    "effective_groups": [
+      "l2_neighbors",
+      "l2_mac_table",
+      "l3_arp_table",
+      "l2_vlan_table",
+      "l2_stp_state",
+      "device_metrics"
+    ],
+    "mandatory_panel_families": [
+      "l2_neighbors.summary",
+      "l2_mac_table.summary",
+      "l2_mac_table.count",
+      "l3_arp_table.summary",
+      "l3_arp_table.count",
+      "l2_vlan_table.summary",
+      "l2_vlan_table.count",
+      "l2_stp_state.summary",
+      "l2_stp_state.port_count",
+      "l2_stp_state.forwarding_count",
+      "l2_stp_state.blocking_count",
+      "device_metrics.default"
+    ],
+    "optional_overlay_families": [
+      "system_basic.cpu_memory.trend",
+      "interface_basic.utilization_topn",
+      "interface_basic.pps",
+      "device_metrics.temperature.sensors",
+      "device_metrics.fan_status.components",
+      "device_metrics.power_status.components",
+      "device_metrics.transceiver.rx_top4"
+    ],
+    "metric_scope_summary": "当前只对 L2/L3 topology summary 与 device_metrics.default 负责；不包含 CE168 中 CPU、接口排行、温度、风扇、电源、光模块等硬编码样本语义。",
+    "ce168_reusable_concepts": [
+      "邻居 / MAC / ARP / VLAN / STP 作为 topology summary family 的组织方式",
+      "root summary 与 strategy summary 分层展示"
+    ],
+    "ce168_regenerate_panels": [
+      "Interface Utilization Top 10 -> 仅当策略长出 interface traffic/status 指标后重生",
+      "Traffic Throughput -> 仅当策略长出 interface octets/throughput 指标后重生",
+      "Packets Per Second -> 仅当策略长出 interface packet counters 后重生",
+      "CPU / Memory Trend -> 仅当策略长出 system cpu/memory 指标后重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies",
+      "Huawei VRP Control Plane CPU",
+      "Huawei VRP Control Plane Memory"
+    ],
+    "notes": [
+      "当前 runtime 实际上与多个 vendor/model 策略同构；节点仍需保留独立 strategy identity，但可以共享同一 recipe。"
+    ]
+  },
+  {
+    "strategy_id": "20000000-0000-4000-8000-000000000005",
+    "strategy_name": "华为网络设备监控 (副本)",
+    "parent_strategy_id": "20000000-0000-4000-8000-000000000001",
+    "parent_strategy_name": "Huawei通用SNMP网络监控策略",
+    "suite_root": "OneOPS SNMP Network Ops",
+    "node_key": "20000000_0000_4000_8000_000000000005",
+    "node_role": "switch-common",
+    "recipe_key": "snmp.switch.topology-common",
+    "effective_signature": "11530cbbb679",
+    "effective_groups": [
+      "l2_neighbors",
+      "l2_mac_table",
+      "l3_arp_table",
+      "l2_vlan_table",
+      "l2_stp_state",
+      "device_metrics"
+    ],
+    "mandatory_panel_families": [
+      "l2_neighbors.summary",
+      "l2_mac_table.summary",
+      "l2_mac_table.count",
+      "l3_arp_table.summary",
+      "l3_arp_table.count",
+      "l2_vlan_table.summary",
+      "l2_vlan_table.count",
+      "l2_stp_state.summary",
+      "l2_stp_state.port_count",
+      "l2_stp_state.forwarding_count",
+      "l2_stp_state.blocking_count",
+      "device_metrics.default"
+    ],
+    "optional_overlay_families": [
+      "system_basic.cpu_memory.trend",
+      "interface_basic.utilization_topn",
+      "interface_basic.pps",
+      "device_metrics.temperature.sensors",
+      "device_metrics.fan_status.components",
+      "device_metrics.power_status.components",
+      "device_metrics.transceiver.rx_top4"
+    ],
+    "metric_scope_summary": "当前只对 L2/L3 topology summary 与 device_metrics.default 负责；不包含 CE168 中 CPU、接口排行、温度、风扇、电源、光模块等硬编码样本语义。",
+    "ce168_reusable_concepts": [
+      "邻居 / MAC / ARP / VLAN / STP 作为 topology summary family 的组织方式",
+      "root summary 与 strategy summary 分层展示"
+    ],
+    "ce168_regenerate_panels": [
+      "Interface Utilization Top 10 -> 仅当策略长出 interface traffic/status 指标后重生",
+      "Traffic Throughput -> 仅当策略长出 interface octets/throughput 指标后重生",
+      "Packets Per Second -> 仅当策略长出 interface packet counters 后重生",
+      "CPU / Memory Trend -> 仅当策略长出 system cpu/memory 指标后重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies",
+      "Huawei VRP Control Plane CPU",
+      "Huawei VRP Control Plane Memory"
+    ],
+    "notes": [
+      "当前 runtime 实际上与多个 vendor/model 策略同构；节点仍需保留独立 strategy identity，但可以共享同一 recipe。"
+    ]
+  },
+  {
+    "strategy_id": "20000000-0000-4000-8000-000000000099",
+    "strategy_name": "Huawei VRP 路由能力监控策略",
+    "parent_strategy_id": "",
+    "parent_strategy_name": "",
+    "suite_root": "OneOPS SNMP Network Ops",
+    "node_key": "20000000_0000_4000_8000_000000000099",
+    "node_role": "routing-overlay",
+    "recipe_key": "snmp.switch.routing-overlay",
+    "effective_signature": "d9a25c291e40",
+    "effective_groups": [
+      "routing_summary"
+    ],
+    "mandatory_panel_families": [
+      "l3_route_table.ipv4_count",
+      "l3_route_table.ipv6_count",
+      "routing_bgp.neighbor_total",
+      "routing_bgp.established_total",
+      "routing_ospf.neighbor_total",
+      "routing_ospf.full_total"
+    ],
+    "optional_overlay_families": [
+      "routing_bgp.neighbor_total",
+      "routing_bgp.established_total",
+      "routing_ospf.neighbor_total",
+      "routing_ospf.full_total",
+      "l3_route_table.ipv4_count",
+      "l3_route_table.ipv6_count"
+    ],
+    "metric_scope_summary": "当前只对 route/BGP/OSPF summary 负责，必须作为独立 routing overlay node 存在。",
+    "ce168_reusable_concepts": [
+      "overlay 独立存在而不是塞进 root 大盘"
+    ],
+    "ce168_regenerate_panels": [
+      "routing summary cards -> 由当前 routing effective panel keys 直接重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies"
+    ],
+    "notes": []
+  },
+  {
+    "strategy_id": "23618ca7-5af3-4727-b649-aed7ecfa18f5",
+    "strategy_name": "SNMP网络监控策略 (副本)",
+    "parent_strategy_id": "baf7bb34-86b7-45f8-8e28-2afce170966a",
+    "parent_strategy_name": "SNMP网络监控策略",
+    "suite_root": "OneOPS SNMP Network Ops",
+    "node_key": "23618ca7_5af3_4727_b649_aed7ecfa18f5",
+    "node_role": "firewall-common",
+    "recipe_key": "snmp.firewall.current-common",
+    "effective_signature": "11530cbbb679",
+    "effective_groups": [
+      "l2_neighbors",
+      "l2_mac_table",
+      "l3_arp_table",
+      "l2_vlan_table",
+      "l2_stp_state",
+      "device_metrics"
+    ],
+    "mandatory_panel_families": [
+      "l2_neighbors.summary",
+      "l2_mac_table.summary",
+      "l2_mac_table.count",
+      "l3_arp_table.summary",
+      "l3_arp_table.count",
+      "l2_vlan_table.summary",
+      "l2_vlan_table.count",
+      "l2_stp_state.summary",
+      "l2_stp_state.port_count",
+      "l2_stp_state.forwarding_count",
+      "l2_stp_state.blocking_count",
+      "device_metrics.default"
+    ],
+    "optional_overlay_families": [
+      "system_basic.cpu_memory.trend",
+      "interface_basic.summary",
+      "security.sessions.summary",
+      "security.throughput.summary"
+    ],
+    "metric_scope_summary": "当前仍只对 topology summary 与 device_metrics.default 负责；防火墙语义节点已独立，但 sessions / throughput / security panels 需等待策略契约显式长出。",
+    "ce168_reusable_concepts": [
+      "summary-first 的信息层次"
+    ],
+    "ce168_regenerate_panels": [
+      "security / sessions / throughput panels -> 仅当防火墙策略 effective metrics 显式提供时重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies"
+    ],
+    "notes": [
+      "当前 runtime 实际上与多个 vendor/model 策略同构；节点仍需保留独立 strategy identity，但可以共享同一 recipe。",
+      "虽然当前 effective signature 与 switch-common 同构，但业务上必须保留独立 firewall strategy dashboard node。"
+    ]
+  },
+  {
+    "strategy_id": "30000000-0000-4000-8000-000000000001",
+    "strategy_name": "Cisco generic SNMP network monitoring strategy",
+    "parent_strategy_id": "baf7bb34-86b7-45f8-8e28-2afce170966a",
+    "parent_strategy_name": "SNMP网络监控策略",
+    "suite_root": "OneOPS SNMP Network Ops",
+    "node_key": "30000000_0000_4000_8000_000000000001",
+    "node_role": "switch-common",
+    "recipe_key": "snmp.switch.topology-common",
+    "effective_signature": "11530cbbb679",
+    "effective_groups": [
+      "l2_neighbors",
+      "l2_mac_table",
+      "l3_arp_table",
+      "l2_vlan_table",
+      "l2_stp_state",
+      "device_metrics"
+    ],
+    "mandatory_panel_families": [
+      "l2_neighbors.summary",
+      "l2_mac_table.summary",
+      "l2_mac_table.count",
+      "l3_arp_table.summary",
+      "l3_arp_table.count",
+      "l2_vlan_table.summary",
+      "l2_vlan_table.count",
+      "l2_stp_state.summary",
+      "l2_stp_state.port_count",
+      "l2_stp_state.forwarding_count",
+      "l2_stp_state.blocking_count",
+      "device_metrics.default"
+    ],
+    "optional_overlay_families": [
+      "system_basic.cpu_memory.trend",
+      "interface_basic.utilization_topn",
+      "interface_basic.pps",
+      "device_metrics.temperature.sensors",
+      "device_metrics.fan_status.components",
+      "device_metrics.power_status.components",
+      "device_metrics.transceiver.rx_top4"
+    ],
+    "metric_scope_summary": "当前只对 L2/L3 topology summary 与 device_metrics.default 负责；不包含 CE168 中 CPU、接口排行、温度、风扇、电源、光模块等硬编码样本语义。",
+    "ce168_reusable_concepts": [
+      "邻居 / MAC / ARP / VLAN / STP 作为 topology summary family 的组织方式",
+      "root summary 与 strategy summary 分层展示"
+    ],
+    "ce168_regenerate_panels": [
+      "Interface Utilization Top 10 -> 仅当策略长出 interface traffic/status 指标后重生",
+      "Traffic Throughput -> 仅当策略长出 interface octets/throughput 指标后重生",
+      "Packets Per Second -> 仅当策略长出 interface packet counters 后重生",
+      "CPU / Memory Trend -> 仅当策略长出 system cpu/memory 指标后重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies",
+      "Huawei VRP Control Plane CPU",
+      "Huawei VRP Control Plane Memory"
+    ],
+    "notes": [
+      "当前 runtime 实际上与多个 vendor/model 策略同构；节点仍需保留独立 strategy identity，但可以共享同一 recipe。"
+    ]
+  },
+  {
+    "strategy_id": "30000000-0000-4000-8000-000000000002",
+    "strategy_name": "思科网络设备监控 (副本)",
+    "parent_strategy_id": "baf7bb34-86b7-45f8-8e28-2afce170966a",
+    "parent_strategy_name": "SNMP网络监控策略",
+    "suite_root": "OneOPS SNMP Network Ops",
+    "node_key": "30000000_0000_4000_8000_000000000002",
+    "node_role": "switch-common",
+    "recipe_key": "snmp.switch.topology-common",
+    "effective_signature": "11530cbbb679",
+    "effective_groups": [
+      "l2_neighbors",
+      "l2_mac_table",
+      "l3_arp_table",
+      "l2_vlan_table",
+      "l2_stp_state",
+      "device_metrics"
+    ],
+    "mandatory_panel_families": [
+      "l2_neighbors.summary",
+      "l2_mac_table.summary",
+      "l2_mac_table.count",
+      "l3_arp_table.summary",
+      "l3_arp_table.count",
+      "l2_vlan_table.summary",
+      "l2_vlan_table.count",
+      "l2_stp_state.summary",
+      "l2_stp_state.port_count",
+      "l2_stp_state.forwarding_count",
+      "l2_stp_state.blocking_count",
+      "device_metrics.default"
+    ],
+    "optional_overlay_families": [
+      "system_basic.cpu_memory.trend",
+      "interface_basic.utilization_topn",
+      "interface_basic.pps",
+      "device_metrics.temperature.sensors",
+      "device_metrics.fan_status.components",
+      "device_metrics.power_status.components",
+      "device_metrics.transceiver.rx_top4"
+    ],
+    "metric_scope_summary": "当前只对 L2/L3 topology summary 与 device_metrics.default 负责；不包含 CE168 中 CPU、接口排行、温度、风扇、电源、光模块等硬编码样本语义。",
+    "ce168_reusable_concepts": [
+      "邻居 / MAC / ARP / VLAN / STP 作为 topology summary family 的组织方式",
+      "root summary 与 strategy summary 分层展示"
+    ],
+    "ce168_regenerate_panels": [
+      "Interface Utilization Top 10 -> 仅当策略长出 interface traffic/status 指标后重生",
+      "Traffic Throughput -> 仅当策略长出 interface octets/throughput 指标后重生",
+      "Packets Per Second -> 仅当策略长出 interface packet counters 后重生",
+      "CPU / Memory Trend -> 仅当策略长出 system cpu/memory 指标后重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies",
+      "Huawei VRP Control Plane CPU",
+      "Huawei VRP Control Plane Memory"
+    ],
+    "notes": [
+      "当前 runtime 实际上与多个 vendor/model 策略同构；节点仍需保留独立 strategy identity，但可以共享同一 recipe。"
+    ]
+  },
+  {
+    "strategy_id": "30000000-0000-4000-8000-000000000003",
+    "strategy_name": "思科网络设备监控 (副本)",
+    "parent_strategy_id": "baf7bb34-86b7-45f8-8e28-2afce170966a",
+    "parent_strategy_name": "SNMP网络监控策略",
+    "suite_root": "OneOPS SNMP Network Ops",
+    "node_key": "30000000_0000_4000_8000_000000000003",
+    "node_role": "switch-common",
+    "recipe_key": "snmp.switch.topology-common",
+    "effective_signature": "11530cbbb679",
+    "effective_groups": [
+      "l2_neighbors",
+      "l2_mac_table",
+      "l3_arp_table",
+      "l2_vlan_table",
+      "l2_stp_state",
+      "device_metrics"
+    ],
+    "mandatory_panel_families": [
+      "l2_neighbors.summary",
+      "l2_mac_table.summary",
+      "l2_mac_table.count",
+      "l3_arp_table.summary",
+      "l3_arp_table.count",
+      "l2_vlan_table.summary",
+      "l2_vlan_table.count",
+      "l2_stp_state.summary",
+      "l2_stp_state.port_count",
+      "l2_stp_state.forwarding_count",
+      "l2_stp_state.blocking_count",
+      "device_metrics.default"
+    ],
+    "optional_overlay_families": [
+      "system_basic.cpu_memory.trend",
+      "interface_basic.utilization_topn",
+      "interface_basic.pps",
+      "device_metrics.temperature.sensors",
+      "device_metrics.fan_status.components",
+      "device_metrics.power_status.components",
+      "device_metrics.transceiver.rx_top4"
+    ],
+    "metric_scope_summary": "当前只对 L2/L3 topology summary 与 device_metrics.default 负责；不包含 CE168 中 CPU、接口排行、温度、风扇、电源、光模块等硬编码样本语义。",
+    "ce168_reusable_concepts": [
+      "邻居 / MAC / ARP / VLAN / STP 作为 topology summary family 的组织方式",
+      "root summary 与 strategy summary 分层展示"
+    ],
+    "ce168_regenerate_panels": [
+      "Interface Utilization Top 10 -> 仅当策略长出 interface traffic/status 指标后重生",
+      "Traffic Throughput -> 仅当策略长出 interface octets/throughput 指标后重生",
+      "Packets Per Second -> 仅当策略长出 interface packet counters 后重生",
+      "CPU / Memory Trend -> 仅当策略长出 system cpu/memory 指标后重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies",
+      "Huawei VRP Control Plane CPU",
+      "Huawei VRP Control Plane Memory"
+    ],
+    "notes": [
+      "当前 runtime 实际上与多个 vendor/model 策略同构；节点仍需保留独立 strategy identity，但可以共享同一 recipe。"
+    ]
+  },
+  {
+    "strategy_id": "40000000-0000-4000-8000-000000000001",
+    "strategy_name": "锐捷网络设备监控 (副本)",
+    "parent_strategy_id": "baf7bb34-86b7-45f8-8e28-2afce170966a",
+    "parent_strategy_name": "SNMP网络监控策略",
+    "suite_root": "OneOPS SNMP Network Ops",
+    "node_key": "40000000_0000_4000_8000_000000000001",
+    "node_role": "switch-common",
+    "recipe_key": "snmp.switch.topology-common",
+    "effective_signature": "11530cbbb679",
+    "effective_groups": [
+      "l2_neighbors",
+      "l2_mac_table",
+      "l3_arp_table",
+      "l2_vlan_table",
+      "l2_stp_state",
+      "device_metrics"
+    ],
+    "mandatory_panel_families": [
+      "l2_neighbors.summary",
+      "l2_mac_table.summary",
+      "l2_mac_table.count",
+      "l3_arp_table.summary",
+      "l3_arp_table.count",
+      "l2_vlan_table.summary",
+      "l2_vlan_table.count",
+      "l2_stp_state.summary",
+      "l2_stp_state.port_count",
+      "l2_stp_state.forwarding_count",
+      "l2_stp_state.blocking_count",
+      "device_metrics.default"
+    ],
+    "optional_overlay_families": [
+      "system_basic.cpu_memory.trend",
+      "interface_basic.utilization_topn",
+      "interface_basic.pps",
+      "device_metrics.temperature.sensors",
+      "device_metrics.fan_status.components",
+      "device_metrics.power_status.components",
+      "device_metrics.transceiver.rx_top4"
+    ],
+    "metric_scope_summary": "当前只对 L2/L3 topology summary 与 device_metrics.default 负责；不包含 CE168 中 CPU、接口排行、温度、风扇、电源、光模块等硬编码样本语义。",
+    "ce168_reusable_concepts": [
+      "邻居 / MAC / ARP / VLAN / STP 作为 topology summary family 的组织方式",
+      "root summary 与 strategy summary 分层展示"
+    ],
+    "ce168_regenerate_panels": [
+      "Interface Utilization Top 10 -> 仅当策略长出 interface traffic/status 指标后重生",
+      "Traffic Throughput -> 仅当策略长出 interface octets/throughput 指标后重生",
+      "Packets Per Second -> 仅当策略长出 interface packet counters 后重生",
+      "CPU / Memory Trend -> 仅当策略长出 system cpu/memory 指标后重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies",
+      "Huawei VRP Control Plane CPU",
+      "Huawei VRP Control Plane Memory"
+    ],
+    "notes": [
+      "当前 runtime 实际上与多个 vendor/model 策略同构；节点仍需保留独立 strategy identity，但可以共享同一 recipe。"
+    ]
+  },
+  {
+    "strategy_id": "40000000-0000-4000-8000-000000000002",
+    "strategy_name": "锐捷网络设备监控 (副本)",
+    "parent_strategy_id": "baf7bb34-86b7-45f8-8e28-2afce170966a",
+    "parent_strategy_name": "SNMP网络监控策略",
+    "suite_root": "OneOPS SNMP Network Ops",
+    "node_key": "40000000_0000_4000_8000_000000000002",
+    "node_role": "switch-common",
+    "recipe_key": "snmp.switch.topology-common",
+    "effective_signature": "11530cbbb679",
+    "effective_groups": [
+      "l2_neighbors",
+      "l2_mac_table",
+      "l3_arp_table",
+      "l2_vlan_table",
+      "l2_stp_state",
+      "device_metrics"
+    ],
+    "mandatory_panel_families": [
+      "l2_neighbors.summary",
+      "l2_mac_table.summary",
+      "l2_mac_table.count",
+      "l3_arp_table.summary",
+      "l3_arp_table.count",
+      "l2_vlan_table.summary",
+      "l2_vlan_table.count",
+      "l2_stp_state.summary",
+      "l2_stp_state.port_count",
+      "l2_stp_state.forwarding_count",
+      "l2_stp_state.blocking_count",
+      "device_metrics.default"
+    ],
+    "optional_overlay_families": [
+      "system_basic.cpu_memory.trend",
+      "interface_basic.utilization_topn",
+      "interface_basic.pps",
+      "device_metrics.temperature.sensors",
+      "device_metrics.fan_status.components",
+      "device_metrics.power_status.components",
+      "device_metrics.transceiver.rx_top4"
+    ],
+    "metric_scope_summary": "当前只对 L2/L3 topology summary 与 device_metrics.default 负责；不包含 CE168 中 CPU、接口排行、温度、风扇、电源、光模块等硬编码样本语义。",
+    "ce168_reusable_concepts": [
+      "邻居 / MAC / ARP / VLAN / STP 作为 topology summary family 的组织方式",
+      "root summary 与 strategy summary 分层展示"
+    ],
+    "ce168_regenerate_panels": [
+      "Interface Utilization Top 10 -> 仅当策略长出 interface traffic/status 指标后重生",
+      "Traffic Throughput -> 仅当策略长出 interface octets/throughput 指标后重生",
+      "Packets Per Second -> 仅当策略长出 interface packet counters 后重生",
+      "CPU / Memory Trend -> 仅当策略长出 system cpu/memory 指标后重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies",
+      "Huawei VRP Control Plane CPU",
+      "Huawei VRP Control Plane Memory"
+    ],
+    "notes": [
+      "当前 runtime 实际上与多个 vendor/model 策略同构；节点仍需保留独立 strategy identity，但可以共享同一 recipe。"
+    ]
+  },
+  {
+    "strategy_id": "4c902a48-5f12-11f1-a9bb-0242ac14000c",
+    "strategy_name": "H3C SecPath 防火墙 SNMP监控策略",
+    "parent_strategy_id": "baf7bb34-86b7-45f8-8e28-2afce170966a",
+    "parent_strategy_name": "SNMP网络监控策略",
+    "suite_root": "OneOPS SNMP Network Ops",
+    "node_key": "4c902a48_5f12_11f1_a9bb_0242ac14000c",
+    "node_role": "firewall-common",
+    "recipe_key": "snmp.firewall.current-common",
+    "effective_signature": "11530cbbb679",
+    "effective_groups": [
+      "l2_neighbors",
+      "l2_mac_table",
+      "l3_arp_table",
+      "l2_vlan_table",
+      "l2_stp_state",
+      "device_metrics"
+    ],
+    "mandatory_panel_families": [
+      "l2_neighbors.summary",
+      "l2_mac_table.summary",
+      "l2_mac_table.count",
+      "l3_arp_table.summary",
+      "l3_arp_table.count",
+      "l2_vlan_table.summary",
+      "l2_vlan_table.count",
+      "l2_stp_state.summary",
+      "l2_stp_state.port_count",
+      "l2_stp_state.forwarding_count",
+      "l2_stp_state.blocking_count",
+      "device_metrics.default"
+    ],
+    "optional_overlay_families": [
+      "system_basic.cpu_memory.trend",
+      "interface_basic.summary",
+      "security.sessions.summary",
+      "security.throughput.summary"
+    ],
+    "metric_scope_summary": "当前仍只对 topology summary 与 device_metrics.default 负责；防火墙语义节点已独立，但 sessions / throughput / security panels 需等待策略契约显式长出。",
+    "ce168_reusable_concepts": [
+      "summary-first 的信息层次"
+    ],
+    "ce168_regenerate_panels": [
+      "security / sessions / throughput panels -> 仅当防火墙策略 effective metrics 显式提供时重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies"
+    ],
+    "notes": [
+      "当前 runtime 实际上与多个 vendor/model 策略同构；节点仍需保留独立 strategy identity，但可以共享同一 recipe。",
+      "虽然当前 effective signature 与 switch-common 同构，但业务上必须保留独立 firewall strategy dashboard node。"
+    ]
+  },
+  {
+    "strategy_id": "50000000-0000-4000-8000-000000000001",
+    "strategy_name": "迈普通用SNMP网络监控策略",
+    "parent_strategy_id": "baf7bb34-86b7-45f8-8e28-2afce170966a",
+    "parent_strategy_name": "SNMP网络监控策略",
+    "suite_root": "OneOPS SNMP Network Ops",
+    "node_key": "50000000_0000_4000_8000_000000000001",
+    "node_role": "switch-common",
+    "recipe_key": "snmp.switch.topology-common",
+    "effective_signature": "11530cbbb679",
+    "effective_groups": [
+      "l2_neighbors",
+      "l2_mac_table",
+      "l3_arp_table",
+      "l2_vlan_table",
+      "l2_stp_state",
+      "device_metrics"
+    ],
+    "mandatory_panel_families": [
+      "l2_neighbors.summary",
+      "l2_mac_table.summary",
+      "l2_mac_table.count",
+      "l3_arp_table.summary",
+      "l3_arp_table.count",
+      "l2_vlan_table.summary",
+      "l2_vlan_table.count",
+      "l2_stp_state.summary",
+      "l2_stp_state.port_count",
+      "l2_stp_state.forwarding_count",
+      "l2_stp_state.blocking_count",
+      "device_metrics.default"
+    ],
+    "optional_overlay_families": [
+      "system_basic.cpu_memory.trend",
+      "interface_basic.utilization_topn",
+      "interface_basic.pps",
+      "device_metrics.temperature.sensors",
+      "device_metrics.fan_status.components",
+      "device_metrics.power_status.components",
+      "device_metrics.transceiver.rx_top4"
+    ],
+    "metric_scope_summary": "当前只对 L2/L3 topology summary 与 device_metrics.default 负责；不包含 CE168 中 CPU、接口排行、温度、风扇、电源、光模块等硬编码样本语义。",
+    "ce168_reusable_concepts": [
+      "邻居 / MAC / ARP / VLAN / STP 作为 topology summary family 的组织方式",
+      "root summary 与 strategy summary 分层展示"
+    ],
+    "ce168_regenerate_panels": [
+      "Interface Utilization Top 10 -> 仅当策略长出 interface traffic/status 指标后重生",
+      "Traffic Throughput -> 仅当策略长出 interface octets/throughput 指标后重生",
+      "Packets Per Second -> 仅当策略长出 interface packet counters 后重生",
+      "CPU / Memory Trend -> 仅当策略长出 system cpu/memory 指标后重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies",
+      "Huawei VRP Control Plane CPU",
+      "Huawei VRP Control Plane Memory"
+    ],
+    "notes": [
+      "当前 runtime 实际上与多个 vendor/model 策略同构；节点仍需保留独立 strategy identity，但可以共享同一 recipe。"
+    ]
+  },
+  {
+    "strategy_id": "50000000-0000-4000-8000-000000000002",
+    "strategy_name": "烽火通用SNMP网络监控策略",
+    "parent_strategy_id": "baf7bb34-86b7-45f8-8e28-2afce170966a",
+    "parent_strategy_name": "SNMP网络监控策略",
+    "suite_root": "OneOPS SNMP Network Ops",
+    "node_key": "50000000_0000_4000_8000_000000000002",
+    "node_role": "switch-common",
+    "recipe_key": "snmp.switch.topology-common",
+    "effective_signature": "11530cbbb679",
+    "effective_groups": [
+      "l2_neighbors",
+      "l2_mac_table",
+      "l3_arp_table",
+      "l2_vlan_table",
+      "l2_stp_state",
+      "device_metrics"
+    ],
+    "mandatory_panel_families": [
+      "l2_neighbors.summary",
+      "l2_mac_table.summary",
+      "l2_mac_table.count",
+      "l3_arp_table.summary",
+      "l3_arp_table.count",
+      "l2_vlan_table.summary",
+      "l2_vlan_table.count",
+      "l2_stp_state.summary",
+      "l2_stp_state.port_count",
+      "l2_stp_state.forwarding_count",
+      "l2_stp_state.blocking_count",
+      "device_metrics.default"
+    ],
+    "optional_overlay_families": [
+      "system_basic.cpu_memory.trend",
+      "interface_basic.utilization_topn",
+      "interface_basic.pps",
+      "device_metrics.temperature.sensors",
+      "device_metrics.fan_status.components",
+      "device_metrics.power_status.components",
+      "device_metrics.transceiver.rx_top4"
+    ],
+    "metric_scope_summary": "当前只对 L2/L3 topology summary 与 device_metrics.default 负责；不包含 CE168 中 CPU、接口排行、温度、风扇、电源、光模块等硬编码样本语义。",
+    "ce168_reusable_concepts": [
+      "邻居 / MAC / ARP / VLAN / STP 作为 topology summary family 的组织方式",
+      "root summary 与 strategy summary 分层展示"
+    ],
+    "ce168_regenerate_panels": [
+      "Interface Utilization Top 10 -> 仅当策略长出 interface traffic/status 指标后重生",
+      "Traffic Throughput -> 仅当策略长出 interface octets/throughput 指标后重生",
+      "Packets Per Second -> 仅当策略长出 interface packet counters 后重生",
+      "CPU / Memory Trend -> 仅当策略长出 system cpu/memory 指标后重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies",
+      "Huawei VRP Control Plane CPU",
+      "Huawei VRP Control Plane Memory"
+    ],
+    "notes": [
+      "当前 runtime 实际上与多个 vendor/model 策略同构；节点仍需保留独立 strategy identity，但可以共享同一 recipe。"
+    ]
+  },
+  {
+    "strategy_id": "baf7bb34-86b7-45f8-8e28-2afce170966a",
+    "strategy_name": "SNMP网络监控策略",
+    "parent_strategy_id": "",
+    "parent_strategy_name": "",
+    "suite_root": "OneOPS SNMP Network Ops",
+    "node_key": "baf7bb34_86b7_45f8_8e28_2afce170966a",
+    "node_role": "switch-common",
+    "recipe_key": "snmp.switch.topology-common",
+    "effective_signature": "11530cbbb679",
+    "effective_groups": [
+      "l2_neighbors",
+      "l2_mac_table",
+      "l3_arp_table",
+      "l2_vlan_table",
+      "l2_stp_state",
+      "device_metrics"
+    ],
+    "mandatory_panel_families": [
+      "l2_neighbors.summary",
+      "l2_mac_table.summary",
+      "l2_mac_table.count",
+      "l3_arp_table.summary",
+      "l3_arp_table.count",
+      "l2_vlan_table.summary",
+      "l2_vlan_table.count",
+      "l2_stp_state.summary",
+      "l2_stp_state.port_count",
+      "l2_stp_state.forwarding_count",
+      "l2_stp_state.blocking_count",
+      "device_metrics.default"
+    ],
+    "optional_overlay_families": [
+      "system_basic.cpu_memory.trend",
+      "interface_basic.utilization_topn",
+      "interface_basic.pps",
+      "device_metrics.temperature.sensors",
+      "device_metrics.fan_status.components",
+      "device_metrics.power_status.components",
+      "device_metrics.transceiver.rx_top4"
+    ],
+    "metric_scope_summary": "当前只对 L2/L3 topology summary 与 device_metrics.default 负责；不包含 CE168 中 CPU、接口排行、温度、风扇、电源、光模块等硬编码样本语义。",
+    "ce168_reusable_concepts": [
+      "邻居 / MAC / ARP / VLAN / STP 作为 topology summary family 的组织方式",
+      "root summary 与 strategy summary 分层展示"
+    ],
+    "ce168_regenerate_panels": [
+      "Interface Utilization Top 10 -> 仅当策略长出 interface traffic/status 指标后重生",
+      "Traffic Throughput -> 仅当策略长出 interface octets/throughput 指标后重生",
+      "Packets Per Second -> 仅当策略长出 interface packet counters 后重生",
+      "CPU / Memory Trend -> 仅当策略长出 system cpu/memory 指标后重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies",
+      "Huawei VRP Control Plane CPU",
+      "Huawei VRP Control Plane Memory"
+    ],
+    "notes": [
+      "当前 runtime 实际上与多个 vendor/model 策略同构；节点仍需保留独立 strategy identity，但可以共享同一 recipe。"
+    ]
+  },
+  {
+    "strategy_id": "server_oob_snmp_common_strategy",
+    "strategy_name": "服务器带外SNMP通用监控策略",
+    "parent_strategy_id": "server_oob_snmp_strategy",
+    "parent_strategy_name": "服务器带外SNMP监控策略",
+    "suite_root": "OneOPS SNMP Server Ops",
+    "node_key": "server_oob_snmp_common_strategy",
+    "node_role": "server-oob",
+    "recipe_key": "snmp.server.oob-common",
+    "effective_signature": "0bd7d00bb3aa",
+    "effective_groups": [
+      "device_metrics"
+    ],
+    "mandatory_panel_families": [
+      "device_metrics.default"
+    ],
+    "optional_overlay_families": [
+      "hardware.inventory.summary",
+      "oob.health.summary"
+    ],
+    "metric_scope_summary": "当前对 OOB 设备基础指标负责；可继续向硬件 inventory / health overlay 演进。",
+    "ce168_reusable_concepts": [
+      "summary + detail 的抽象层次"
+    ],
+    "ce168_regenerate_panels": [
+      "device summary panels -> 由当前 effective metric keys 直接重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies"
+    ],
+    "notes": []
+  },
+  {
+    "strategy_id": "server_oob_snmp_strategy",
+    "strategy_name": "服务器带外SNMP监控策略",
+    "parent_strategy_id": "",
+    "parent_strategy_name": "",
+    "suite_root": "OneOPS SNMP Server Ops",
+    "node_key": "server_oob_snmp_strategy",
+    "node_role": "server-oob",
+    "recipe_key": "snmp.server.oob-common",
+    "effective_signature": "0bd7d00bb3aa",
+    "effective_groups": [
+      "device_metrics"
+    ],
+    "mandatory_panel_families": [
+      "device_metrics.default"
+    ],
+    "optional_overlay_families": [
+      "hardware.inventory.summary",
+      "oob.health.summary"
+    ],
+    "metric_scope_summary": "当前对 OOB 设备基础指标负责；可继续向硬件 inventory / health overlay 演进。",
+    "ce168_reusable_concepts": [
+      "summary + detail 的抽象层次"
+    ],
+    "ce168_regenerate_panels": [
+      "device summary panels -> 由当前 effective metric keys 直接重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies"
+    ],
+    "notes": []
+  },
+  {
+    "strategy_id": "server_oob_snmp_sugon_strategy",
+    "strategy_name": "曙光服务器带外SNMP硬件监控策略",
+    "parent_strategy_id": "server_oob_snmp_strategy",
+    "parent_strategy_name": "服务器带外SNMP监控策略",
+    "suite_root": "OneOPS SNMP Server Ops",
+    "node_key": "server_oob_snmp_sugon_strategy",
+    "node_role": "server-oob",
+    "recipe_key": "snmp.server.oob-common",
+    "effective_signature": "5c14ce2706c2",
+    "effective_groups": [
+      "device_metrics"
+    ],
+    "mandatory_panel_families": [
+      "device_metrics.default"
+    ],
+    "optional_overlay_families": [
+      "hardware.inventory.summary",
+      "oob.health.summary"
+    ],
+    "metric_scope_summary": "当前对 OOB 设备基础指标负责；可继续向硬件 inventory / health overlay 演进。",
+    "ce168_reusable_concepts": [
+      "summary + detail 的抽象层次"
+    ],
+    "ce168_regenerate_panels": [
+      "device summary panels -> 由当前 effective metric keys 直接重生"
+    ],
+    "ce168_forbidden_carryovers": [
+      "100GE5/0",
+      "100GE6/0",
+      "40GE7/0",
+      "10GE8/0",
+      "Top 4 by Rx Power",
+      "Last 4 by Rx Power",
+      "Temperature Sensors",
+      "Fans",
+      "Power Supplies"
+    ],
+    "notes": []
+  }
+]

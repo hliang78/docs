@@ -1,0 +1,637 @@
+[
+  {
+    "tc": "TC-01",
+    "name": "设备入库测试",
+    "route": "/device/device-v2-management",
+    "url": "http://10.0.110.251:3001/#/device/device-v2-management",
+    "screenshot": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-01-device-onboarding.png",
+    "fit": "direct",
+    "status": "matched",
+    "support": "pass",
+    "support_label": "通过（按当前前端取证）",
+    "rationale": "设备管理页直接展示区域、机房、机柜树和设备清单，可作为入库与字段核对的主页面证据。",
+    "related_routes": [
+      "/device/device_inventory",
+      "/base/site",
+      "/base/rack"
+    ],
+    "actual_result": "设备管理页可见区域/机房/机柜分层和设备清单，当前平台已具备设备入库后的列表化核查入口，可支撑设备编码、位置与基础字段的前端核对。",
+    "extra_screenshots": [],
+    "downloaded_artifacts": [],
+    "title": "UniOPS",
+    "headings": [
+      "OneOPS",
+      "首页/设备管理/",
+      "设备分组",
+      "设备清单"
+    ],
+    "bodySnippet": "OneOPS 统一运维管理平台 仪表盘 监控面板 防火墙管理 采集管理 AIOPS 计划任务 观测处理 智算管理 设备巡检 基础数据 设备管理 设备管理 交换机入库 服务器入库 专线 带外日志 库存设备 变更历史 资源清册 终端管理 应用管理 PON管理 标签管理 报表管理 配置管理 服务管理 虚机管理 工单管理 告警管理 IPAM 运维管理 补丁管理 采集测试 系统管理 首页/ 设备管理 设备管理 设备分组 展 开 收 起 当前分层 编 辑 区域 > 机房 > 机架 全部设备 51 上海 51 张江IDC机房 28 D05 28 颛桥IDC机房 23 M2-08-10 11 M2-09-09 12 设备清单 当前查看全部设备，共 10 台设备。 配置管理 监控任务 设备导入 设备模型 刷新 条件过滤 添加条件 查 询 重 置 未选择设备 勾选设备后，可在这里发起批量采集或批量监控。 批量采集 批量监控 下载设备信息 打标签 恢"
+  },
+  {
+    "tc": "TC-02",
+    "name": "自动监控测试",
+    "route": "/platform/monitoring-tasks",
+    "url": "http://10.0.110.251:3001/#/platform/monitoring-tasks",
+    "screenshot": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-02-auto-monitoring.png",
+    "fit": "direct",
+    "status": "matched",
+    "support": "pass",
+    "support_label": "通过（按当前前端取证）",
+    "rationale": "监控任务管理页直接对应自动监控任务、执行 Agent 与任务运行态，是自动采集主线的核心入口。",
+    "related_routes": [
+      "/monitor-panel/monitoring-center",
+      "/platform/monitoring-metric-assets"
+    ],
+    "actual_result": "监控任务管理页已具备任务列表、执行 Agent、运行工具和任务态势视图；结合设备监控页，当前平台具备自动监控任务的前端承载能力。",
+    "extra_screenshots": [],
+    "downloaded_artifacts": [],
+    "title": "UniOPS",
+    "headings": [
+      "OneOPS",
+      "首页/监控任务管理/",
+      "监控任务工作台",
+      "任务态势",
+      "筛选",
+      "任务列表"
+    ],
+    "bodySnippet": "OneOPS 统一运维管理平台 仪表盘 监控面板 防火墙管理 采集管理 监控指标资产 策略模版 应用管理 分组管理 设备管理 区域控制器 Agent列表 文件管理 部署管理 升级管理 托管标签 监控输出 监控任务 仓库 定时任务 任务模版 变量集 任务管理 设备适配 日志转发 日志解析 日志文件 AIOPS 计划任务 观测处理 智算管理 设备巡检 基础数据 设备管理 终端管理 应用管理 PON管理 标签管理 报表管理 配置管理 服务管理 虚机管理 工单管理 告警管理 IPAM 运维管理 补丁管理 采集测试 系统管理 首页/ 监控任务管理 设备管理 监控任务管理 监控任务工作台 新建任务 系统工具 刷新 任务态势 全部任务 73 当前筛选总数 待同步 0 运行侧未发现 存在漂移 0 配置不一致 正常 20 已对齐 待对账 0 缺快照或对账结论 筛选 任务状态 全部任务 (73) 执行 Agent 采集模板 关键字 查 询 重 置 "
+  },
+  {
+    "tc": "TC-03",
+    "name": "日志监听测试",
+    "route": "/platform/area-listener-services",
+    "url": "http://10.0.110.251:3001/#/platform/area-listener-services",
+    "screenshot": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-03-log-listening.png",
+    "fit": "direct",
+    "status": "matched",
+    "support": "pass",
+    "support_label": "通过（按当前前端取证）",
+    "rationale": "区域日志接入服务页直接面向区域 Agent 的 syslog/snmp trap 监听配置，最贴近日志监听任务下发场景。",
+    "related_routes": [
+      "/platform/log-forward-plans",
+      "/dashboard/log"
+    ],
+    "actual_result": "区域日志接入服务页可见监听服务管理入口；同时日志中心已可打开并展示交换机日志样本，说明当前平台已具备日志监听与集中接入的前端链路。",
+    "extra_screenshots": [],
+    "downloaded_artifacts": [],
+    "title": "UniOPS",
+    "headings": [
+      "OneOPS",
+      "首页/区域日志接入服务/",
+      "区域日志接入服务"
+    ],
+    "bodySnippet": "OneOPS 统一运维管理平台 仪表盘 监控面板 防火墙管理 采集管理 监控指标资产 策略模版 应用管理 分组管理 设备管理 区域控制器 Agent列表 文件管理 部署管理 升级管理 托管标签 监控输出 监控任务 仓库 定时任务 任务模版 变量集 任务管理 设备适配 日志转发 日志解析 日志文件 AIOPS 计划任务 观测处理 智算管理 设备巡检 基础数据 设备管理 终端管理 应用管理 PON管理 标签管理 报表管理 配置管理 服务管理 虚机管理 工单管理 告警管理 IPAM 运维管理 补丁管理 采集测试 系统管理 首页/ 区域日志接入服务 设备管理 监控任务管理 区域日志接入服务 区域日志接入服务 独立管理区域 agent 上的 syslog / snmp trap listener，复用现有 remote_syslog / log_forward_plan 发布链 日志转发计划 Grok 配置 Telegraf Output"
+  },
+  {
+    "tc": "TC-04",
+    "name": "集中监控测试",
+    "route": "/monitor-panel/monitoring-center",
+    "url": "http://10.0.110.251:3001/#/monitor-panel/monitoring-center",
+    "screenshot": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-04-centralized-monitoring.png",
+    "fit": "direct",
+    "status": "matched",
+    "support": "pass",
+    "support_label": "通过（按当前前端取证）",
+    "rationale": "设备监控页直接承载按设备筛选和查看监控详情的集中监控入口。",
+    "related_routes": [
+      "/dashboard/monitor",
+      "/platform/monitoring-tasks"
+    ],
+    "actual_result": "已在设备监控页选中设备 `张江IDC机房-D05-40-40`（`DVCEFB68A85655D` / `172.21.165.17`），右侧成功加载该设备对应的 Grafana 监控仪表盘。截图中可直接看到 `CPU Now`、`Memory Now`、`Traffic Throughput`、`Packets Per Second` 等监控图表，能够证明平台已支持按设备集中查看监控面板。",
+    "extra_screenshots": [],
+    "downloaded_artifacts": [],
+    "title": "UniOPS",
+    "headings": [
+      "OneOPS",
+      "首页/监控面板/设备监控/",
+      "设备导航已加载 50 / 51 台"
+    ],
+    "bodySnippet": "OneOPS 统一运维管理平台 仪表盘 监控面板 数据源管理 仪表盘管理 设备监控 防火墙管理 采集管理 AIOPS 计划任务 观测处理 智算管理 设备巡检 基础数据 设备管理 终端管理 应用管理 PON管理 标签管理 报表管理 配置管理 服务管理 虚机管理 工单管理 告警管理 IPAM 运维管理 补丁管理 采集测试 系统管理 首页/ 监控面板/ 设备监控 设备监控 设备导航 已加载 50 / 51 台 筛选条件 关键词 功能区域 全部 平台 全部 刷新列表 重置条件 51 当前匹配 50 设备总计 设备列表 张江IDC机房-D05-40-40 DVCEFB68A85655D · 172.21.165.17 DefaultArea VRP SWITCH 运行正常 2 个监控任务正在 agent 正常运行 颛桥IDC机房-M2-08-10-46-46 DVCCA22A138D1A3 · 172.22.166.63 DefaultArea VRP SWITCH 运行正常 2 个监控任务正在 agent 正常运行 张江IDC机房-D05-01-01 DVCF21C6B43350C · 172.21.253.9 DefaultArea MyPower SWITCH 运行正常 2 个监控任务正在 agent 正常运行 张江IDC机房-D05-02-02 DVC65F6466753AB · 172.21.166.35 DefaultArea SecPath FIREWALL 运行正常 2 个监控任务正在 agent 正常运行 张江IDC机房-D05-03-03 DVC16AC9C8F66C7 · 172.21.166.3 DefaultArea SecPath FIREWALL 运行正常 2 个监控任务正在 agent 正常运行 颛桥IDC机房-M2-08-10-30-30 DVCF7E071D7B2CE · 172.22.166.14 DefaultArea SecPath FIREWALL 运行正常 2 个监控任务正在 agent 正常运行 张江IDC机房-D05-04-04 "
+  },
+  {
+    "tc": "TC-05",
+    "name": "集中日志测试",
+    "route": "/dashboard/log",
+    "url": "http://10.0.110.251:3001/#/dashboard/log",
+    "screenshot": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-05-centralized-log-search.png",
+    "fit": "direct",
+    "status": "matched",
+    "support": "pass",
+    "support_label": "通过（按当前前端取证）",
+    "rationale": "日志中心页直接对应平台内日志过滤、检索与查看详情的场景。",
+    "related_routes": [
+      "/platform/log-forward-plans",
+      "/platform/area-listener-services"
+    ],
+    "actual_result": "日志中心页面可正常打开，能看到时间窗、日志级别、高级过滤和日志内容区域，当前平台已具备集中日志检索的前端入口。",
+    "extra_screenshots": [],
+    "downloaded_artifacts": [],
+    "title": "UniOPS",
+    "headings": [
+      "OneOPS",
+      "首页/仪表盘/日志中心/",
+      "交换机日志",
+      "日志等级分布"
+    ],
+    "bodySnippet": "OneOPS 统一运维管理平台 仪表盘 监控中心 日志中心 网络拓扑 监控面板 防火墙管理 采集管理 AIOPS 计划任务 观测处理 智算管理 设备巡检 基础数据 设备管理 终端管理 应用管理 PON管理 标签管理 报表管理 配置管理 服务管理 虚机管理 工单管理 告警管理 IPAM 运维管理 补丁管理 采集测试 系统管理 首页/ 仪表盘/ 日志中心 设备管理 监控任务管理 区域日志接入服务 设备监控 日志中心 5分钟 297s 日志级别 高级过滤 重置过滤 租户视图 全屏 编辑 交换机日志 2026/06/16 13:42:07 - raw_message=\"{\"level\":\"info\",\"ts\":\"2026-06-16T13:24:07.555+0800\",\"caller\":\"metrics/telegraf_collector.go:1926\",\"msg\":\"Metric debug dump\",\"measurement"
+  },
+  {
+    "tc": "TC-06",
+    "name": "网络拓扑测试",
+    "route": "/dashboard/topology",
+    "url": "http://10.0.110.251:3001/#/dashboard/topology",
+    "screenshot": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-06-network-topology.png",
+    "fit": "partial",
+    "status": "partial",
+    "support": "fail",
+    "support_label": "不通过（需补充现场或后端联调）",
+    "rationale": "网络拓扑页是拓扑与钻取的唯一直接页面，但当前页面未呈现有效拓扑数据。",
+    "related_routes": [
+      "/device/device-v2-management"
+    ],
+    "actual_result": "网络拓扑页面可以打开，但当前取证时页面显示“暂无拓扑数据”，未形成可用于比对链路关系与钻取路径的现网前端证据。",
+    "extra_screenshots": [],
+    "downloaded_artifacts": [],
+    "title": "UniOPS",
+    "headings": [
+      "OneOPS",
+      "首页/仪表盘/网络拓扑/"
+    ],
+    "bodySnippet": "OneOPS 统一运维管理平台 仪表盘 监控中心 日志中心 网络拓扑 监控面板 防火墙管理 采集管理 AIOPS 计划任务 观测处理 智算管理 设备巡检 基础数据 设备管理 终端管理 应用管理 PON管理 标签管理 报表管理 配置管理 服务管理 虚机管理 工单管理 告警管理 IPAM 运维管理 补丁管理 采集测试 系统管理 首页/ 仪表盘/ 网络拓扑 设备管理 监控任务管理 区域日志接入服务 设备监控 日志中心 网络拓扑 上海移动研究院 节点 6/39 链路 26 显示孤点 聚焦连边 概览 设备聚焦 全量 图例 对象 SWITCH 5 SERVER 1 关系 snapshot 26"
+  },
+  {
+    "tc": "TC-07",
+    "name": "Agent 部署测试",
+    "route": "/platform/deployment",
+    "url": "http://10.0.110.251:3001/#/platform/deployment",
+    "screenshot": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-07-agent-deployment.png",
+    "fit": "direct",
+    "status": "matched",
+    "support": "pass",
+    "support_label": "通过（按当前前端取证）",
+    "rationale": "部署管理页直接面向 Agent 批量部署、状态跟踪与诊断日志下载。",
+    "related_routes": [
+      "/platform/agent_management"
+    ],
+    "actual_result": "部署管理页可正常打开，当前平台具备 Agent 部署看板、历史记录和诊断下载入口，前端流程完整。",
+    "extra_screenshots": [],
+    "downloaded_artifacts": [],
+    "title": "UniOPS",
+    "headings": [
+      "OneOPS",
+      "首页/采集管理/部署管理/",
+      "批量部署编排器"
+    ],
+    "bodySnippet": "OneOPS 统一运维管理平台 仪表盘 监控面板 防火墙管理 采集管理 监控指标资产 策略模版 应用管理 分组管理 设备管理 区域控制器 Agent列表 文件管理 部署管理 升级管理 托管标签 监控输出 监控任务 仓库 定时任务 任务模版 变量集 任务管理 设备适配 日志转发 日志解析 日志文件 AIOPS 计划任务 观测处理 智算管理 设备巡检 基础数据 设备管理 终端管理 应用管理 PON管理 标签管理 报表管理 配置管理 服务管理 虚机管理 工单管理 告警管理 IPAM 运维管理 补丁管理 采集测试 系统管理 首页/ 采集管理/ 部署管理 设备管理 监控任务管理 区域日志接入服务 设备监控 日志中心 网络拓扑 部署管理 批量部署编排器 部署历史 新建部署任务 部署类型 Agent 部署 服务包部署 部署配置 目标版本 选择版本 并发数量 超时时间(分钟) 重试次数 设备选择 选择区域 选择状态 全选当前页 清空选择 DVC"
+  },
+  {
+    "tc": "TC-08",
+    "name": "Agent 与 Controller 运维测试",
+    "route": "/platform/agent_management",
+    "url": "http://10.0.110.251:3001/#/platform/agent_management",
+    "screenshot": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-08-agent-controller-ops.png",
+    "fit": "direct",
+    "status": "matched",
+    "support": "pass",
+    "support_label": "通过（按当前前端取证）",
+    "rationale": "Agent 列表页与区域控制器页共同组成 Agent/Controller 运维主入口，其中 Agent 列表页更贴近在线状态与详情核对。",
+    "related_routes": [
+      "/platform/controller_management",
+      "/platform/deployment"
+    ],
+    "actual_result": "Agent 列表页可正常访问，当前平台已具备 Agent 在线状态、详情查看及与部署链路联动的前端入口，可作为 Agent/Controller 运维测试主取证页面。",
+    "extra_screenshots": [],
+    "downloaded_artifacts": [],
+    "title": "UniOPS",
+    "headings": [
+      "OneOPS",
+      "首页/采集管理/Agent列表/"
+    ],
+    "bodySnippet": "OneOPS 统一运维管理平台 仪表盘 监控面板 防火墙管理 采集管理 监控指标资产 策略模版 应用管理 分组管理 设备管理 区域控制器 Agent列表 文件管理 部署管理 升级管理 托管标签 监控输出 监控任务 仓库 定时任务 任务模版 变量集 任务管理 设备适配 日志转发 日志解析 日志文件 AIOPS 计划任务 观测处理 智算管理 设备巡检 基础数据 设备管理 终端管理 应用管理 PON管理 标签管理 报表管理 配置管理 服务管理 虚机管理 工单管理 告警管理 IPAM 运维管理 补丁管理 采集测试 系统管理 首页/ 采集管理/ Agent列表 设备管理 监控任务管理 区域日志接入服务 设备监控 日志中心 网络拓扑 部署管理 Agent列表 Agent部署 升级任务 批量删除 告警 全选 Agent 已选择 0 / 5 个 agent-DVCC488229BB59E-bff1abbc DefaultArea 10.0.11"
+  },
+  {
+    "tc": "TC-09",
+    "name": "告警触发、列表呈现与通知送达",
+    "route": "/alert/alarm",
+    "url": "http://10.0.110.251:3001/#/alert/alarm",
+    "screenshot": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-09-alert-trigger-notify.png",
+    "fit": "partial",
+    "status": "partial",
+    "support": "fail",
+    "support_label": "不通过（需补充现场或后端联调）",
+    "rationale": "告警列表页可作为告警呈现证据，但通知送达属于站外链路，无法仅凭当前前端截图完成闭环验证。",
+    "related_routes": [
+      "/alert/receiver",
+      "/alert/group",
+      "/alert/strategy"
+    ],
+    "actual_result": "告警列表页面已具备告警检索与列表展示能力，但邮件/IM 等通知送达结果未在当前截图链路中形成直接证据，需现场联调补测。",
+    "extra_screenshots": [],
+    "downloaded_artifacts": [],
+    "title": "UniOPS",
+    "headings": [
+      "OneOPS",
+      "首页/告警管理/告警列表/",
+      "条件过滤",
+      "告警列表"
+    ],
+    "bodySnippet": "OneOPS 统一运维管理平台 仪表盘 监控面板 防火墙管理 采集管理 AIOPS 计划任务 观测处理 智算管理 设备巡检 基础数据 设备管理 终端管理 应用管理 PON管理 标签管理 报表管理 配置管理 服务管理 虚机管理 工单管理 告警管理 数据源 接收者 接收组 维护组 告警规则 告警策略 告警抑制 告警列表 IPAM 运维管理 补丁管理 采集测试 系统管理 首页/ 告警管理/ 告警列表 设备管理 监控任务管理 区域日志接入服务 设备监控 日志中心 网络拓扑 部署管理 Agent列表 告警列表 告警列表 发送日志 条件过滤 告警标签 请选择告警标签过滤 告警标签值 请选择标签值过滤 查询重置展开 告警列表 历史告警 告警标题 告警编码 触发目标 所属租户 触发值 状态 持续时间 标签 告警规则 告警规则编码 数据源 数据源编码 确认人 激活时间 触发时间 确认时间 确认截止时间 恢复时间 描述 操作 High CPU on"
+  },
+  {
+    "tc": "TC-10",
+    "name": "分责订阅",
+    "route": "/alert/strategy",
+    "url": "http://10.0.110.251:3001/#/alert/strategy",
+    "screenshot": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-10-alert-subscription-strategy.png",
+    "fit": "direct",
+    "status": "matched",
+    "support": "pass",
+    "support_label": "通过（按当前前端取证）",
+    "rationale": "告警策略页直接对应责任分层、接收策略与升级规则配置。",
+    "related_routes": [
+      "/alert/group",
+      "/alert/receiver"
+    ],
+    "actual_result": "告警策略页可见策略集与策略列表，当前平台已具备分责订阅与分层策略配置的前端入口。",
+    "extra_screenshots": [],
+    "downloaded_artifacts": [],
+    "title": "UniOPS",
+    "headings": [
+      "OneOPS",
+      "首页/告警管理/告警策略/",
+      "策略集",
+      "条件过滤",
+      "策略列表"
+    ],
+    "bodySnippet": "OneOPS 统一运维管理平台 仪表盘 监控面板 防火墙管理 采集管理 AIOPS 计划任务 观测处理 智算管理 设备巡检 基础数据 设备管理 终端管理 应用管理 PON管理 标签管理 报表管理 配置管理 服务管理 虚机管理 工单管理 告警管理 数据源 接收者 接收组 维护组 告警规则 告警策略 告警抑制 告警列表 IPAM 运维管理 补丁管理 采集测试 系统管理 首页/ 告警管理/ 告警策略 设备管理 监控任务管理 区域日志接入服务 设备监控 日志中心 网络拓扑 部署管理 Agent列表 告警列表 告警策略 策略集 新建策略集 quick-env-switch-alert-strategy-set ASS_SNMP_SW quick env SNMP switch alert strategy set 条件过滤 策略名称 策略编码 查询重置展开 策略列表 请先选择策略集 策略编码 告警时间段 告警持续触发时间 告警间隔/自愈冷"
+  },
+  {
+    "tc": "TC-11",
+    "name": "告警抑制",
+    "route": "/alert/inhibit",
+    "url": "http://10.0.110.251:3001/#/alert/inhibit",
+    "screenshot": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-11-alert-inhibit.png",
+    "fit": "direct",
+    "status": "matched",
+    "support": "pass",
+    "support_label": "通过（按当前前端取证）",
+    "rationale": "告警抑制页直接展示抑制规则与抑制日志，是该测试用例最直接的页面。",
+    "related_routes": [
+      "/alert/alarm"
+    ],
+    "actual_result": "告警抑制页面可见抑制规则与抑制日志两类对象，当前平台已具备告警抑制配置与查看入口。",
+    "extra_screenshots": [],
+    "downloaded_artifacts": [],
+    "title": "UniOPS",
+    "headings": [
+      "OneOPS",
+      "首页/告警管理/告警抑制/",
+      "条件过滤",
+      "抑制规则列表"
+    ],
+    "bodySnippet": "OneOPS 统一运维管理平台 仪表盘 监控面板 防火墙管理 采集管理 AIOPS 计划任务 观测处理 智算管理 设备巡检 基础数据 设备管理 终端管理 应用管理 PON管理 标签管理 报表管理 配置管理 服务管理 虚机管理 工单管理 告警管理 数据源 接收者 接收组 维护组 告警规则 告警策略 告警抑制 告警列表 IPAM 运维管理 补丁管理 采集测试 系统管理 首页/ 告警管理/ 告警抑制 设备管理 监控任务管理 区域日志接入服务 设备监控 日志中心 网络拓扑 部署管理 Agent列表 告警列表 告警策略 告警抑制 抑制规则 抑制日志 条件过滤 规则名称 规则编码 查询重置展开 抑制规则列表 新增 规则名称 规则编码 源表达式 目标表达式 关联标签 创建时间 更新时间 描述 操作 暂无数据"
+  },
+  {
+    "tc": "TC-12",
+    "name": "维护窗口支持",
+    "route": "/alert/maintain",
+    "url": "http://10.0.110.251:3001/#/alert/maintain",
+    "screenshot": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-12-maintain-window.png",
+    "fit": "partial",
+    "status": "partial",
+    "support": "pass",
+    "support_label": "通过（按当前前端取证）",
+    "rationale": "当前告警域最接近维护窗口场景的入口是维护组页面，可作为维护对象与维护范围配置证据。",
+    "related_routes": [
+      "/alert/strategy"
+    ],
+    "actual_result": "维护组页面可正常打开，可作为维护对象管理的前端入口；是否完全覆盖维护窗口静默语义仍需结合策略联调确认。",
+    "extra_screenshots": [],
+    "downloaded_artifacts": [],
+    "title": "UniOPS",
+    "headings": [
+      "OneOPS",
+      "首页/告警管理/维护组/",
+      "条件过滤",
+      "维护组列表"
+    ],
+    "bodySnippet": "OneOPS 统一运维管理平台 仪表盘 监控面板 防火墙管理 采集管理 AIOPS 计划任务 观测处理 智算管理 设备巡检 基础数据 设备管理 终端管理 应用管理 PON管理 标签管理 报表管理 配置管理 服务管理 虚机管理 工单管理 告警管理 数据源 接收者 接收组 维护组 告警规则 告警策略 告警抑制 告警列表 IPAM 运维管理 补丁管理 采集测试 系统管理 首页/ 告警管理/ 维护组 设备管理 监控任务管理 区域日志接入服务 设备监控 日志中心 网络拓扑 部署管理 Agent列表 告警列表 告警策略 告警抑制 维护组 条件过滤 维护组名称 维护组编码 查询重置展开 维护组列表 新增 维护组名称 维护组编码 所属租户 IPS 维护时间 维护日期 维护月 有效期 创建时间 更新时间 描述 操作 暂无数据"
+  },
+  {
+    "tc": "TC-13",
+    "name": "故障恢复后的告警闭环",
+    "route": "/alert/alarm",
+    "url": "http://10.0.110.251:3001/#/alert/alarm",
+    "screenshot": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-13-alert-recovery-closure.png",
+    "fit": "partial",
+    "status": "partial",
+    "support": "fail",
+    "support_label": "不通过（需补充现场或后端联调）",
+    "rationale": "告警列表页可作为活跃/历史告警入口，但自动恢复闭环需要告警源恢复后的时序结果，当前截图无法直接证明。",
+    "related_routes": [
+      "/alert/strategy",
+      "/alert/inhibit"
+    ],
+    "actual_result": "当前平台具备告警列表与历史告警入口，但“故障恢复后自动收口”这一时序闭环未在当前取证中直接呈现，需现场补测。",
+    "extra_screenshots": [],
+    "downloaded_artifacts": [],
+    "title": "UniOPS",
+    "headings": [
+      "OneOPS",
+      "首页/告警管理/告警列表/",
+      "条件过滤",
+      "告警列表"
+    ],
+    "bodySnippet": "OneOPS 统一运维管理平台 仪表盘 监控面板 防火墙管理 采集管理 AIOPS 计划任务 观测处理 智算管理 设备巡检 基础数据 设备管理 终端管理 应用管理 PON管理 标签管理 报表管理 配置管理 服务管理 虚机管理 工单管理 告警管理 数据源 接收者 接收组 维护组 告警规则 告警策略 告警抑制 告警列表 IPAM 运维管理 补丁管理 采集测试 系统管理 首页/ 告警管理/ 告警列表 设备管理 监控任务管理 区域日志接入服务 设备监控 日志中心 网络拓扑 部署管理 Agent列表 告警列表 告警策略 告警抑制 维护组 告警列表 发送日志 条件过滤 告警标签 请选择告警标签过滤 告警标签值 请选择标签值过滤 查询重置展开 告警列表 历史告警 告警标题 告警编码 触发目标 所属租户 触发值 状态 持续时间 标签 告警规则 告警规则编码 数据源 数据源编码 确认人 激活时间 触发时间 确认时间 确认截止时间 恢复时间 描述 "
+  },
+  {
+    "tc": "TC-14",
+    "name": "凭据引用驱动远程任务",
+    "route": "/setting/credential-unified",
+    "url": "http://10.0.110.251:3001/#/setting/credential-unified",
+    "screenshot": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-14-credential-reference-task.png",
+    "fit": "direct",
+    "status": "matched",
+    "support": "pass",
+    "support_label": "通过（按当前前端取证）",
+    "rationale": "统一凭证工作台是凭据引用、绑定与版本管理的主页面，直接对应“平台只绑定凭证引用”的场景。",
+    "related_routes": [
+      "/platform/task-center"
+    ],
+    "actual_result": "统一凭证页面可正常访问，页面明确承载凭证引用、绑定和工作台操作，当前平台已具备凭据引用的前端入口。",
+    "extra_screenshots": [],
+    "downloaded_artifacts": [],
+    "title": "UniOPS",
+    "headings": [
+      "OneOPS",
+      "首页/统一凭证（列表与绑定）/",
+      "凭证列表（无明文）",
+      "Vault Catalog 管理"
+    ],
+    "bodySnippet": "OneOPS 统一运维管理平台 仪表盘 监控面板 防火墙管理 采集管理 AIOPS 计划任务 观测处理 智算管理 设备巡检 基础数据 设备管理 终端管理 应用管理 PON管理 标签管理 报表管理 配置管理 统一凭证 Secret Community 服务管理 虚机管理 工单管理 告警管理 IPAM 运维管理 补丁管理 采集测试 系统管理 首页/ 统一凭证（列表与绑定） 设备管理 监控任务管理 区域日志接入服务 设备监控 日志中心 网络拓扑 部署管理 Agent列表 告警列表 告警策略 告警抑制 维护组 统一凭证（列表与绑定） 统一凭证工作台 把目录管理、迁移审计、绑定操作收在一个页面里，但不再整页铺开。 刷新工作台 同步 Vault Catalog 新增目录项 当前凭证 24 Vault 目录 24 Ready 0 未迁移 0 凭证与目录 迁移与审计 绑定管理 引用查询 凭证列表（无明文） 全部 全部来源 Active 查 询 "
+  },
+  {
+    "tc": "TC-15",
+    "name": "操作日志检索与导出审计抽样",
+    "route": "/sys/LogRecord",
+    "url": "http://10.0.110.251:3001/#/sys/LogRecord",
+    "screenshot": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-15-operation-audit.png",
+    "fit": "direct",
+    "status": "matched",
+    "support": "pass",
+    "support_label": "通过（按当前前端取证）",
+    "rationale": "系统管理中的操作审计页面直接提供责任主体、时间与业务对象等维度检索，并展示已有审计记录。",
+    "related_routes": [],
+    "actual_result": "操作审计页面已加载并显示总命中记录数与当前页数据，当前平台已形成统一操作审计入口，可支撑检索类取证。",
+    "extra_screenshots": [],
+    "downloaded_artifacts": [],
+    "title": "UniOPS",
+    "headings": [
+      "OneOPS",
+      "首页/系统管理/操作审计/",
+      "条件过滤",
+      "操作审计"
+    ],
+    "bodySnippet": "OneOPS 统一运维管理平台 仪表盘 监控面板 防火墙管理 采集管理 AIOPS 计划任务 观测处理 智算管理 设备巡检 基础数据 设备管理 终端管理 应用管理 PON管理 标签管理 报表管理 配置管理 服务管理 虚机管理 工单管理 告警管理 IPAM 运维管理 补丁管理 采集测试 系统管理 组织管理 账户管理 操作审计 用户管理 授权信息 菜单管理 LLM Provider 消息管理 首页/ 系统管理/ 操作审计 设备管理 监控任务管理 区域日志接入服务 设备监控 日志中心 网络拓扑 部署管理 Agent列表 告警列表 告警策略 告警抑制 维护组 统一凭证（列表与绑定） 操作审计 操作审计 当前页面已经作为正式入口承载统一操作审计查询。旧日志页仍可作为兼容页回看原始系统日志。 返回旧日志页 总命中 1905 当前页 10 当前页来源分布 旧系统日志 10 条件过滤 模块 来源 关键字 查询重置展开 操作审计 时间 模块 来源"
+  },
+  {
+    "tc": "TC-16",
+    "name": "模板与变量集驱动的例行巡检",
+    "route": "/platform/task-center",
+    "url": "http://10.0.110.251:3001/#/platform/task-center",
+    "screenshot": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-16-template-variable-inspection.png",
+    "fit": "direct",
+    "status": "matched",
+    "support": "pass",
+    "support_label": "通过（按当前前端取证）",
+    "rationale": "任务中心可直接基于已发布模板创建服务器巡检/采集任务；本次取证使用已发布的 `task-center-ansible-server-config-collection` 模板，页面自动带出变量组 `task-center-ansible-server-config-collection-defaults`，随后在任务日志与配置管理页形成执行和下载闭环。",
+    "related_routes": [
+      "/platform/task-templates",
+      "/platform/variable-sets",
+      "/device/config-management"
+    ],
+    "actual_result": "已在任务中心通过已发布模板 `task-center-ansible-server-config-collection` 打开创建任务弹窗，并预填项目 `project-server-config-management`，页面可见模板来源、Playbook 路径 `ansible/server-config-collection/site.yml` 与变量组 `task-center-ansible-server-config-collection-defaults`。随后定位到同模板子任务 `2cf1c705-1280-4edd-b288-390179c1f77c` 的执行日志，日志中可见 Agent 执行 `ansible-playbook` 成功；最后在配置管理页定位到资产 `DVCF2B08FF8702C` 的版本 `v3`，并已实际下载产物 `server-config-DVCF2B08FF8702C.txt`，形成创建、执行、下载三段证据链。",
+    "extra_screenshots": [
+      {
+        "label": "执行日志",
+        "path": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-16-template-variable-inspection-logs.png",
+        "route": "/platform/task-center?taskId=2cf1c705-1280-4edd-b288-390179c1f77c"
+      },
+      {
+        "label": "配置下载",
+        "path": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-16-template-variable-inspection-download.png",
+        "route": "/device/config-management"
+      }
+    ],
+    "downloaded_artifacts": [
+      {
+        "label": "配置产物",
+        "path": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/downloads/tc-16-server-config-DVCF2B08FF8702C.txt",
+        "source_task_id": "58a40c24-8acd-4409-9ed1-2782d8ff028b",
+        "source_child_task_id": "2cf1c705-1280-4edd-b288-390179c1f77c",
+        "version_id": "f2bccb8f-ad50-4794-a385-d67a2c5343c6"
+      }
+    ],
+    "title": "UniOPS",
+    "headings": [
+      "OneOPS",
+      "首页/任务中心/",
+      "任务列表"
+    ],
+    "bodySnippet": "OneOPS 统一运维管理平台 仪表盘 监控面板 防火墙管理 采集管理 监控指标资产 策略模版 应用管理 分组管理 设备管理 区域控制器 Agent列表 文件管理 部署管理 升级管理 托管标签 监控输出 监控任务 仓库 定时任务 任务模版 变量集 任务管理 设备适配 日志转发 日志解析 日志文件 AIOPS 计划任务 观测处理 智算管理 设备巡检 基础数据 设备管理 终端管理 应用管理 PON管理 标签管理 报表管理 配置管理 服务管理 虚机管理 工单管理 告警管理 IPAM 运维管理 补丁管理 采集测试 系统管理 首页/ 任务中心 设备管理 监控任务管理 区域日志接入服务 设备监控 日志中心 网络拓扑 部署管理 Agent列表 告警列表 告警策略 告警抑制 维护组 统一凭证（列表与绑定） 操作审计 任务中心 主线入口 已导入的常用模板可以直接拿来预填任务。先按主线挑入口，再补项目/分组，通常就能开始第一轮 smoke test"
+  },
+  {
+    "tc": "TC-17",
+    "name": "定时任务",
+    "route": "/platform/scheduled-tasks",
+    "url": "http://10.0.110.251:3001/#/platform/scheduled-tasks",
+    "screenshot": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-17-scheduled-tasks.png",
+    "fit": "direct",
+    "status": "matched",
+    "support": "pass",
+    "support_label": "通过（按当前前端取证）",
+    "rationale": "定时任务管理页直接对应计划策略、触发时刻和运行记录查看。",
+    "related_routes": [
+      "/platform/task-center"
+    ],
+    "actual_result": "定时任务管理页可正常访问，页面提供定时作业主线与运行观察入口，当前平台具备定时任务前端承载能力。",
+    "extra_screenshots": [],
+    "downloaded_artifacts": [],
+    "title": "UniOPS",
+    "headings": [
+      "OneOPS",
+      "首页/定时任务管理/",
+      "定时任务"
+    ],
+    "bodySnippet": "OneOPS 统一运维管理平台 仪表盘 监控面板 防火墙管理 采集管理 监控指标资产 策略模版 应用管理 分组管理 设备管理 区域控制器 Agent列表 文件管理 部署管理 升级管理 托管标签 监控输出 监控任务 仓库 定时任务 任务模版 变量集 任务管理 设备适配 日志转发 日志解析 日志文件 AIOPS 计划任务 观测处理 智算管理 设备巡检 基础数据 设备管理 终端管理 应用管理 PON管理 标签管理 报表管理 配置管理 服务管理 虚机管理 工单管理 告警管理 IPAM 运维管理 补丁管理 采集测试 系统管理 首页/ 定时任务管理 设备管理 监控任务管理 区域日志接入服务 设备监控 日志中心 网络拓扑 部署管理 Agent列表 告警列表 告警策略 告警抑制 维护组 统一凭证（列表与绑定） 操作审计 定时任务管理 定时作业主线 挑两三个主线作业启用，观察运行和日志 全部主线 主 机 网 络 交换机 F5 只看示例作业 查看模"
+  },
+  {
+    "tc": "TC-18",
+    "name": "智能辅助脚本",
+    "route": "/platform/script-template-studio",
+    "url": "http://10.0.110.251:3001/#/platform/script-template-studio?session_id=76078751-6947-11f1-bf04-fa163e7745bf",
+    "screenshot": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-18-ai-script-assistant.png",
+    "fit": "direct",
+    "status": "matched",
+    "support": "pass",
+    "support_label": "通过（按当前前端取证）",
+    "rationale": "脚本模板工作台直接承载 AI 对话生成脚本的流程；本次取证以“AI 已返回内容，且生成草稿已进入脚本编辑器”为准。",
+    "related_routes": [
+      "/platform/task-templates"
+    ],
+    "actual_result": "已完成一次真实 AI 对话生成：左侧显示用户指令与 LLM 回复，右侧生成草稿版本，中间脚本编辑器已加载生成的 shell 巡检脚本内容，可直接作为智能辅助脚本的前端证据。",
+    "extra_screenshots": [],
+    "downloaded_artifacts": [],
+    "title": "UniOPS",
+    "headings": [
+      "OneOPS",
+      "首页/脚本模板工作台/"
+    ],
+    "bodySnippet": "OneOPS 统一运维管理平台 仪表盘 监控面板 防火墙管理 采集管理 监控指标资产 策略模版 应用管理 分组管理 设备管理 区域控制器 Agent列表 文件管理 部署管理 升级管理 托管标签 监控输出 监控任务 仓库 定时任务 任务模版 变量集 任务管理 设备适配 日志转发 日志解析 日志文件 AIOPS 计划任务 观测处理 智算管理 设备巡检 基础数据 设备管理 终端管理 应用管理 PON管理 标签管理 报表管理 配置管理 服务管理 虚机管理 工单管理 告警管理 IPAM 运维管理 补丁管理 采集测试 系统管理 首页/ 脚本模板工作台 脚本模板工作台 POC TC18 AI脚本生成截图会话 1781589106896 shell active 仓库：- 分支：main 文件：scripts/tc18-demo.sh 草稿 v1 刷 新 重置编辑区 退出工作台 AI 对话 展开上下文 用户 #1 请生成一个 shell 巡检脚"
+  },
+  {
+    "tc": "TC-19",
+    "name": "凭证驱动的远程任务",
+    "route": "/platform/script-template-studio",
+    "url": "http://10.0.110.251:3001/#/platform/script-template-studio?import_repository_url=http%3A%2F%2F10.0.110.251%3A3004%2Fnetxops%2Ftask-center-example-scripts.git&import_script_type=ansible&import_target_branch=script-studio%2Ftest%2Flongpath-1780975075&import_target_file_path=ansible%2Fpositive-remote%2Fsite.yml&import_git_credential_ref=vault_git_prod&import_project_id=script-studio-ui-positive-ansible-retry&import_function_area=DefaultArea&import_run_on_agent=1&import_agent_code=agent-DVCCF3C11FF7D2B-f8cab20c&import_credential_ref=vault_ssh_inband_sy_cmsr_oneops_secrets",
+    "screenshot": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-19-credential-driven-remote-task.png",
+    "fit": "direct",
+    "status": "matched",
+    "support": "pass",
+    "support_label": "通过（按当前前端取证）",
+    "rationale": "脚本模板工作台的“执行测试”弹窗可直接指定 Agent、Inventory 与执行凭证；本次取证主图保留“执行凭证下拉已展开、目标凭证可见”，并补充同一条成功远程测试记录与请求载荷文件，形成“选择凭证 + 远程执行成功”的闭环。",
+    "related_routes": [
+      "/setting/credential-unified",
+      "/platform/task-center"
+    ],
+    "actual_result": "已基于 Ansible 远程任务打开脚本工作台执行测试弹窗，页面中已预填并展开执行凭证下拉，目标凭证 `vault_ssh_inband_sy_cmsr_oneops_secrets` 在候选列表中可见。补充取证中同时定位到同一会话下的成功测试记录 `dcd54140-63c1-11f1-8d5d-fa163e7745bf`，日志可见远程任务已准备 SSH 凭据并执行成功；并已落地保存该次 run 明细 JSON，可直接对应“凭证驱动的远程任务”。",
+    "extra_screenshots": [
+      {
+        "label": "执行成功",
+        "path": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-19-credential-driven-remote-task-success.png",
+        "route": "/platform/script-template-studio?session_id=b6f8cd16-63bb-11f1-8e5a-fa163e7745bf"
+      }
+    ],
+    "downloaded_artifacts": [
+      {
+        "label": "Run明细",
+        "path": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/downloads/tc-19-credential-driven-remote-task-run.json",
+        "run_id": "dcd54140-63c1-11f1-8d5d-fa163e7745bf",
+        "task_id": "f37ee04d-fe37-4177-ad0c-ecc3323912e0"
+      }
+    ],
+    "title": "UniOPS",
+    "headings": [
+      "OneOPS",
+      "首页/脚本模板工作台/"
+    ],
+    "bodySnippet": "OneOPS 统一运维管理平台 仪表盘 监控面板 防火墙管理 采集管理 监控指标资产 策略模版 应用管理 分组管理 设备管理 区域控制器 Agent列表 文件管理 部署管理 升级管理 托管标签 监控输出 监控任务 仓库 定时任务 任务模版 变量集 任务管理 设备适配 日志转发 日志解析 日志文件 AIOPS 计划任务 观测处理 智算管理 设备巡检 基础数据 设备管理 终端管理 应用管理 PON管理 标签管理 报表管理 配置管理 服务管理 虚机管理 工单管理 告警管理 IPAM 运维管理 补丁管理 采集测试 系统管理 首页/ 脚本模板工作台 脚本模板工作台 positive-ansible-1780979330490211908 ansible active 仓库：http://10.0.110.251:3004/netxops/task-center-example-scripts.git 分支：script-studio/te"
+  },
+  {
+    "tc": "TC-20",
+    "name": "沙箱环境中的脚本草稿试跑",
+    "route": "/platform/script-template-studio",
+    "url": "http://10.0.110.251:3001/#/platform/script-template-studio?session_id=b6f8cd16-63bb-11f1-8e5a-fa163e7745bf",
+    "screenshot": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-20-sandbox-draft-run.png",
+    "fit": "direct",
+    "status": "matched",
+    "support": "pass",
+    "support_label": "通过（按当前前端取证）",
+    "rationale": "脚本模板工作台中的测试详情直接呈现远程执行结果；本次取证主图保留“执行测试成功、task_id 已生成、日志可查看”的成功态，并补充更聚焦的日志细节图和日志导出文件。",
+    "related_routes": [
+      "/platform/task-center"
+    ],
+    "actual_result": "已定位到一条真实执行成功的远程测试记录：页面右侧可见成功状态、task_id、执行模式、Agent 与任务日志，能够证明脚本草稿已完成远程调试/沙箱试跑并通过。补充取证进一步保留同一测试详情中的日志细节画面，并已导出日志文本文件，形成“脚本工作台成功 + 日志细节 + 日志落地”的闭环。",
+    "extra_screenshots": [
+      {
+        "label": "日志细节",
+        "path": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-20-sandbox-draft-run-log-detail.png",
+        "route": "/platform/script-template-studio?session_id=b6f8cd16-63bb-11f1-8e5a-fa163e7745bf"
+      }
+    ],
+    "downloaded_artifacts": [
+      {
+        "label": "任务日志",
+        "path": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/downloads/tc-20-sandbox-draft-run-logs.txt",
+        "run_id": "dcd54140-63c1-11f1-8d5d-fa163e7745bf",
+        "task_id": "f37ee04d-fe37-4177-ad0c-ecc3323912e0"
+      }
+    ],
+    "title": "UniOPS",
+    "headings": [
+      "OneOPS",
+      "首页/脚本模板工作台/"
+    ],
+    "bodySnippet": "OneOPS 统一运维管理平台 仪表盘 监控面板 防火墙管理 采集管理 监控指标资产 策略模版 应用管理 分组管理 设备管理 区域控制器 Agent列表 文件管理 部署管理 升级管理 托管标签 监控输出 监控任务 仓库 定时任务 任务模版 变量集 任务管理 设备适配 日志转发 日志解析 日志文件 AIOPS 计划任务 观测处理 智算管理 设备巡检 基础数据 设备管理 终端管理 应用管理 PON管理 标签管理 报表管理 配置管理 服务管理 虚机管理 工单管理 告警管理 IPAM 运维管理 补丁管理 采集测试 系统管理 首页/ 脚本模板工作台 脚本模板工作台 positive-ansible-1780979330490211908 ansible active 仓库：http://10.0.110.251:3004/netxops/task-center-example-scripts.git 分支：script-studio/te"
+  },
+  {
+    "tc": "TC-21",
+    "name": "防火墙策略工单",
+    "route": "/ticket/firewall",
+    "url": "http://10.0.110.251:3001/#/ticket/firewall",
+    "screenshot": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-21-firewall-ticket.png",
+    "fit": "direct",
+    "status": "matched",
+    "support": "pass",
+    "support_label": "通过（按当前前端取证）",
+    "rationale": "防火墙工单页直接提供工单上传、工单列表和执行入口，是工单主链路页面。",
+    "related_routes": [
+      "/firewall/security_planning"
+    ],
+    "actual_result": "防火墙工单页面可正常访问，已具备工单上传、工单项查看与执行入口，当前平台已形成工单链路的前端承载页面。",
+    "extra_screenshots": [],
+    "downloaded_artifacts": [],
+    "title": "UniOPS",
+    "headings": [
+      "OneOPS",
+      "首页/防火墙管理/防火墙工单/",
+      "条件过滤",
+      "工单列表"
+    ],
+    "bodySnippet": "OneOPS 统一运维管理平台 仪表盘 监控面板 防火墙管理 安全规划 黑白名单 策略校验 防火墙工单 策略查询 采集管理 AIOPS 计划任务 观测处理 智算管理 设备巡检 基础数据 设备管理 终端管理 应用管理 PON管理 标签管理 报表管理 配置管理 服务管理 虚机管理 工单管理 告警工单 告警管理 IPAM 运维管理 补丁管理 采集测试 系统管理 首页/ 防火墙管理/ 防火墙工单 脚本模板工作台 防火墙工单 条件过滤 工单号 工单状态 请选择执行状态查询 查询重置展开 工单列表 新增 工单名称 工单号 创建人 创建时间 工单状态 错误信息 描述 操作 测试工单1-WOF20260610021 WOF20260610021 2026-06-10 08:11:06 待执行 执行删除 测试工单2-WOF20260610020 WOF20260610020 2026-06-10 08:09:54 策略存在 删除 1 10 条/页"
+  },
+  {
+    "tc": "TC-22",
+    "name": "策略查询与对账",
+    "route": "/l3/nodemap",
+    "url": "http://10.0.110.251:3001/#/l3/nodemap",
+    "screenshot": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-22-policy-query-reconciliation.png",
+    "fit": "direct",
+    "status": "matched",
+    "support": "pass",
+    "support_label": "通过（按当前前端取证）",
+    "rationale": "策略查询页直接面向多条件策略查询、节点选择和查询结果展示。",
+    "related_routes": [
+      "/ticket/firewall"
+    ],
+    "actual_result": "已通过策略查询页实际发起蓝图标签“RBM_S<SH-HAP-ZQIDC-CMNET-FW-H3C-M9016-2>”的查询任务 L3QueryTask202606160009，查询条件为源目地址 172.22.166.14 且匹配模式为 contains。任务执行成功，并在结果弹窗中返回设备“SH-HAP-ZQIDC-CMNET-FW-H3C-M9016-2”上的 7 条匹配策略；同时已展开首条策略详情，展示源/目地址、CLI 配置与对象关系，可作为“策略查询与对账”的真实前端证据。",
+    "extra_screenshots": [
+      {
+        "label": "查询结果",
+        "path": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-22-policy-query-reconciliation-result.png",
+        "route": "/l3/nodemap"
+      },
+      {
+        "label": "策略详情",
+        "path": "/OneOPS/docs/poc-deliverables/2026-06-16-sh-mobile-poc/testcase-screenshots/tc-22-policy-query-reconciliation-policy-detail.png",
+        "route": "/l3/nodemap"
+      }
+    ],
+    "downloaded_artifacts": [],
+    "title": "UniOPS",
+    "headings": [
+      "OneOPS",
+      "首页/防火墙管理/策略查询/",
+      "条件过滤",
+      "防火墙策略查询任务列表",
+      "防火墙策略查询结果",
+      "选择防火墙节点",
+      "策略列表",
+      "源地址",
+      "目标地址",
+      "CLI 配置",
+      "对象关系"
+    ],
+    "bodySnippet": "OneOPS 统一运维管理平台 仪表盘 监控面板 防火墙管理 安全规划 黑白名单 策略校验 防火墙工单 策略查询 采集管理 AIOPS 计划任务 观测处理 智算管理 设备巡检 基础数据 设备管理 终端管理 应用管理 PON管理 标签管理 报表管理 配置管理 服务管理 虚机管理 工单管理 告警管理 IPAM 运维管理 补丁管理 采集测试 系统管理 首页/ 防火墙管理/ 策略查询 策略查询 条件过滤 任务名称 任务编码 查询重置展开 防火墙策略查询任务列表 策略查询 状态 任务ID 查询条件 执行耗时 创建时间 完成时间 备注说明 操作 执行完成 L3QueryTask202606160009 源目地址172.22.166.14 地址查询类型命中查询 源目匹配模式contains (包含) 1秒 2026-06-16 14:52:26 2026-06-16 14:52:27 1 10 条/页 防火墙策略查询结果 查询完成，共找到 7 条策略 导出报告 查询时长 1 秒 查询设备 1 台 匹配策略 7 条 完成时间 2026-06-16 14:52:27 查询条件 源目地址 172.22.166.14 地址查询类型 命中查询 源目匹配模式 contains (包含) 选择防火墙节点 SH-HAP-ZQIDC-CMNET-FW-H3C-M9016-2 7 条 策略列表 7 条策略 SH-HAP-ZQIDC-CMNET-FW-H3C-M9016-2 策略列表 规则名称 动作 匹配类型 匹配地址 服务 是否匹配 untrust_to_trust 允许 源匹配 172.22.166.14/32 IP 匹配 源地址 0.0.0.0/0 目标地址 172.21.128.0/24,172.22.128.0/24,10.81.0.0/22,10.81.4.0/22,10.81.8.0/22,10.81.100.0/22,10.81.104.0/22,10.81.108.0/22,10.82.0.0/22,10.82.4.0/22,10.82.104.0/22,10.82.112.0/22,10.82.12.0/22,10.82.100.0/22,10.82.120.0/22,10.82.116.0/22 CLI 配置 rule 201 name untrust_to_trust description action pass counting enable destination-ip float_ip destination-ip private_ip_address 对象关系 策略行 CLI配置 名称 类型 rule 201 name untrust_to_trust description action pass counting enable destination-ip"
+  }
+]

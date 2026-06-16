@@ -1,0 +1,67 @@
+2026-06-09T13:12:55.983+08:00 [INFO] [oneops/v2] 任务已创建
+2026-06-09T13:12:55.995+08:00 [INFO] [oneops/v2] 参数信封: kind=task, mode=task_execution, source=script_studio, project_id=script-studio-ui-positive-ansible-retry, function_area=DefaultArea, triggered_by=ui-positive-ansible-retry-playwright, app_type=ansible, entry_point=ansible/positive-remote/site.yml, target=inline_inventory, repo=configured, repo_branch=script-studio/ui-positive-ansible-retry-1780981970994, run_on_agent=true, agent_code=agent-DVCCF3C11FF7D2B-f8cab20c, credential_ref=set, protocol=ansible:ansible_var
+2026-06-09T13:12:56+08:00 [INFO] [agent] 启动进程: command=ansible-playbook arg_count=7 cwd=/home/sy_cmsr/app/agent/tasks/f37ee04d-fe37-4177-ad0c-ecc3323912e0/repo
+2026-06-09T13:12:56+08:00 [INFO] [controller] 开始调用 Agent.RunTask: remote_addr=10.0.110.252:53814 summary=app_type=ansible, playbook_path=ansible/positive-remote/site.yml, repo_branch=script-studio/ui-positive-ansible-retry-1780981970994, repo=configured, inventory=inline, agent_code=agent-DVCCF3C11FF7D2B-f8cab20c
+2026-06-09T13:12:56+08:00 [INFO] PLAY [all] *********************************************************************
+2026-06-09T13:12:56+08:00 [WARN] Running as unit: oneops-task-f37ee04d-fe37-4177-ad0c-ecc3323912e0.service
+2026-06-09T13:12:56+08:00 [INFO] [agent] 仓库克隆完成
+2026-06-09T13:12:56+08:00 [INFO] [agent] 准备执行 Ansible: playbook_path=ansible/positive-remote/site.yml inventory=inline
+2026-06-09T13:12:56+08:00 [INFO] [agent] 开始准备仓库内容: repo=10.0.110.251 branch=script-studio/ui-positive-ansible-retry-1780981970994
+2026-06-09T13:12:56+08:00 [INFO] [agent] 仓库子模块准备完成
+2026-06-09T13:12:56+08:00 [WARN] deprecation_warnings=False in ansible.cfg.
+2026-06-09T13:12:56+08:00 [INFO] [controller] 收到 OneOps 创建任务请求: app_type=ansible, playbook_path=ansible/positive-remote/site.yml, repo=configured, repo_branch=script-studio/ui-positive-ansible-retry-1780981970994, inventory=inline, run_on_agent=true, agent_code=agent-DVCCF3C11FF7D2B-f8cab20c
+2026-06-09T13:12:56+08:00 [INFO] TASK [positive remote marker] **************************************************
+2026-06-09T13:12:56+08:00 [INFO] [agent] 任务 SSH 密码凭据已准备: user=sy_cmsr password_file=set
+2026-06-09T13:12:56+08:00 [INFO] [controller] 任务将由 Agent 执行: agent_code=agent-DVCCF3C11FF7D2B-f8cab20c remote_addr=10.0.110.252:53814
+2026-06-09T13:12:56+08:00 [INFO] [agent] 任务工作目录已就绪: /home/sy_cmsr/app/agent/tasks/f37ee04d-fe37-4177-ad0c-ecc3323912e0/repo
+2026-06-09T13:12:56+08:00 [INFO] [agent] 收到 Controller.RunTask: app_type=ansible playbook_path=ansible/positive-remote/site.yml repo=10.0.110.251 repo_branch=script-studio/ui-positive-ansible-retry-1780981970994 workspace=/home/sy_cmsr/app/agent
+2026-06-09T13:12:56+08:00 [WARN] 2023, 05:18:43) [GCC 7.3.0]. This feature will be removed from ansible-core in
+2026-06-09T13:12:56+08:00 [WARN] version 2.12. Deprecation warnings can be disabled by setting
+2026-06-09T13:12:56+08:00 [WARN] controller starting with Ansible 2.12. Current version: 3.7.9 (default, Sep 20
+2026-06-09T13:12:56+08:00 [WARN] [DEPRECATION WARNING]: Ansible will require Python 3.8 or newer on the
+2026-06-09T13:12:56.005+08:00 [INFO] [oneops/v2] 下发摘要: project_id=script-studio-ui-positive-ansible-retry, function_area=DefaultArea, app_type=ansible, run_on_agent=true, agent_code=agent-DVCCF3C11FF7D2B-f8cab20c, credential_ref=set, protocol=ansible:ansible_var
+2026-06-09T13:12:56.039+08:00 [INFO] [oneops/v2] 执行上下文: app_type=ansible, playbook_path=ansible/positive-remote/site.yml, inventory=inline, repo=configured, repo_branch=script-studio/ui-positive-ansible-retry-1780981970994, arguments=empty, run_on_agent=true, agent_code=agent-DVCCF3C11FF7D2B-f8cab20c, credential_ref=set
+2026-06-09T13:12:56.06+08:00 [INFO] [oneops/v2] 已调用 Controller.CreateTask: area=DefaultArea controller_id=quickenv-demo-core-defaultarea-10-0-110-251
+2026-06-09T13:12:56.092+08:00 [INFO] [oneops] task material resolved task_id=f37ee04d-fe37-4177-ad0c-ecc3323912e0 project_id=script-studio-ui-positive-ansible-retry controller_id=quickenv-demo-core-defaultarea-10-0-110-251 usage=inband credential_ref=vault_signed:redacted decision=allow audit_ticket=<nil> approval_ticket_id=<nil> material_handle_kind=vault_signed
+2026-06-09T13:12:57+08:00 [INFO] "msg": "POS_ANSIBLE_A252_REMOTE host=zq01-oneops-poc-03.novalocal user=sy_cmsr"
+2026-06-09T13:12:57+08:00 [INFO] changed: [target253]
+2026-06-09T13:12:57+08:00 [WARN] interpreter at /usr/bin/python, but future installation of another Python
+2026-06-09T13:12:57+08:00 [WARN] [WARNING]: Platform linux on host target253 is using the discovered Python
+2026-06-09T13:12:57+08:00 [INFO] ok: [target253] => {
+2026-06-09T13:12:57+08:00 [INFO] }
+2026-06-09T13:12:57+08:00 [WARN] https://docs.ansible.com/ansible-
+2026-06-09T13:12:57+08:00 [WARN] interpreter could change the meaning of that path. See
+2026-06-09T13:12:57+08:00 [INFO] core/2.11/reference_appendices/interpreter_discovery.html for more information.
+2026-06-09T13:12:57+08:00 [INFO] TASK [debug] *******************************************************************
+2026-06-09T13:12:58+08:00 [INFO] target253                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+2026-06-09T13:12:58+08:00 [INFO] Running as unit: oneops-task-f37ee04d-fe37-4177-ad0c-ecc3323912e0.service
+[DEPRECATION WARNING]: Ansible will require Python 3.8 or newer on the
+controller starting with Ansible 2.12. Current version: 3.7.9 (default, Sep 20
+2023, 05:18:43) [GCC 7.3.0]. This feature will be removed from ansible-core in
+version 2.12. Deprecation warnings can be disabled by setting
+deprecation_warnings=False in ansible.cfg.
+PLAY [all] *********************************************************************
+TASK [positive remote marker] **************************************************
+[WARNING]: Platform linux on host target253 is using the discovered Python
+interpreter at /usr/bin/python, but future installation of another Python
+interpreter could change the meaning of that path. See
+https://docs.ansible.com/ansible-
+core/2.11/reference_appendices/interpreter_discovery.html for more information.
+changed: [target253]
+TASK [debug] *******************************************************************
+ok: [target253] => {
+"msg": "POS_ANSIBLE_A252_REMOTE host=zq01-oneops-poc-03.novalocal user=sy_cmsr"
+}
+PLAY RECAP *********************************************************************
+target253                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+Finished with result: success
+Main processes terminated with: code=exited/status=0
+Service runtime: 1.834s
+2026-06-09T13:12:58+08:00 [WARN] Finished with result: success
+2026-06-09T13:12:58+08:00 [INFO] [controller] Agent.RunTask 完成: remote_addr=10.0.110.252:53814 duration=2.026s status=success message=
+2026-06-09T13:12:58+08:00 [INFO] Main processes terminated with: code=exited/status=0
+2026-06-09T13:12:58+08:00 [INFO] success
+2026-06-09T13:12:58+08:00 [INFO] [agent] 任务执行完成
+2026-06-09T13:12:58+08:00 [INFO] PLAY RECAP *********************************************************************
+2026-06-09T13:12:58+08:00 [WARN] Service runtime: 1.834s
+2026-06-09T13:12:58+08:00 [INFO] [agent] 进程执行完成: command=ansible-playbook sandbox=oneops-task-f37ee04d-fe37-4177-ad0c-ecc3323912e0.service duration=1.852s

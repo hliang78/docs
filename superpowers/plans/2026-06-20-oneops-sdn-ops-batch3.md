@@ -24,6 +24,20 @@
 - Do not enable live config execution or rollback execution.
 - Do not revert unrelated dirty files.
 - Commit each repo separately and stage only SDN-related files.
+- Do not directly write unified `alert_alarm` from CtrlHub or the current SDN
+  sync path in this batch. Keep `platform_sdn_alarm` as the evidence layer and
+  leave unified alert-center projection to the next bridge workstream.
+
+## Follow-Up: Unified Alert Management Bridge
+
+After this batch, add a dedicated bridge from `platform_sdn_alarm` to the
+existing OneOPS alert center. The bridge should:
+
+- Use stable source identity `sdn:<controller_id>:<alarm_key>` for idempotency.
+- Map SDN severity and state into the existing alert lifecycle.
+- Preserve the SDN row as evidence and store/link the unified alert reference.
+- Reuse existing confirmation, ticket, notification, and RCA flows.
+- Keep CtrlHub vendor-only and avoid vendor-specific clients in OneOPS.
 
 ## Workstream W9: OneOPS Alarm Persistence And History
 

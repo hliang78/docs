@@ -92,6 +92,29 @@ Upsert behavior:
 - Preserve historical rows instead of deleting them.
 - Do not persist credentials or request payloads.
 
+## Unified Alert Management Decision
+
+SDN alarms should ultimately be visible in OneOPS unified alert management.
+However, `platform_sdn_alarm` remains the SDN source-of-truth/evidence layer for
+this batch. It preserves controller, provider, tenant, resource, DN, normalized
+severity/status, and raw vendor context that does not belong directly in the
+generic alert lifecycle table.
+
+Do not make CtrlHub write OneOPS alert records. CtrlHub only normalizes vendor
+alarms. A later OneOPS bridge should project selected `platform_sdn_alarm` rows
+into the existing alert center using a stable source identity such as:
+
+- `source_type`: `sdn`
+- `source_key`: `sdn:<controller_id>:<alarm_key>`
+- `datasource_type` or equivalent: `sdn`
+- `summary`: SDN alarm title/message
+- labels: controller, provider, resource type/name, DN, tenant
+
+The bridge should map open/acknowledged/cleared state into the existing alert
+lifecycle and reuse confirmation, ticket, notification, and RCA entry points.
+The SDN controller page should keep domain-rich alarm history and optionally link
+to the unified alert record when such a reference exists.
+
 ## Alarm APIs
 
 Add OneOPS APIs:

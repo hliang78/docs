@@ -148,6 +148,23 @@
 - 确认 `ReportTaskOverview` 回调后调用了 `snapshot.Sync()`
 - 参考：P0-3 阻塞项
 
+### 5.3 仪表盘种子都在，但设备监控中心仍然不出盘
+
+**症状：**
+- `platform_teleabs_strategy_set_dashboard_binding` 已有绑定
+- Grafana dashboard 种子也已存在
+- 但 `/api/v1/platform/metrics/strategy/device-dashboards?target_part=...` 返回空
+
+**根因：**
+- 静态 `strategy_set -> dashboard` 绑定不等于设备已经关联到策略集
+- 当前后端仍需要 `platform_monitoring_task_subject.subject_id -> strategy_set_id` 这层设备关联证据
+
+**解决方案：**
+- 先查目标设备是否已有 `platform_monitoring_task_subject` 记录
+- 再查 binding 表是否覆盖对应 `strategy_set_id`
+- 不要再优先怀疑旧的 runtime dashboard materialization 缺失
+- 参考：`docs/knowledge/oneops-mvp-strategy-dashboard-seed-only-lessons-2026-06-17.md`
+
 ## 6. 性能相关
 
 ### 6.1 Agent 列表查询慢

@@ -479,6 +479,12 @@ IPAM projection rule:
 - `mac_table_entry` adds switching evidence and duplicate-MAC or drift context
 - missing ARP or MAC evidence must not block projection of a valid `interface_ip`
 
+Implementation note:
+
+- `mac_table_entry` is frozen as a shared fact family, but the IPAM `ProjectCanonicalLatest` API keeps its default fact list narrow in phase one.
+- Operators may still request `mac_table_entry` explicitly for validation or future projection work.
+- This keeps the shared contract ahead of the default projection workflow without pretending that MAC-only records already produce first-class IPAM address facts.
+
 ## Dataset State Model
 
 Each canonical fact family should be labeled in one of these states:

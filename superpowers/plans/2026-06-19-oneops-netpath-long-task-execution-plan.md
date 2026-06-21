@@ -161,8 +161,17 @@ Current Phase 4A progress:
 - Phase 4B added a OneOPS `DeviceTenantScopeAuthorizer` backed by `IDeviceTenantMapping.FindByRelationKeyAndMasterKeys`; all requested `device_codes` must belong to `tenant_code`.
 - Snapshot preview now also requires explicit `device_codes` and uses the same tenant/device authorizer before reading DC2 latest facts.
 - Service/runtime construction now fails fast when a latest-fact-backed path lacks a tenant/device authorizer, and tests cover zero DC2 fact reads after authorization denial.
+- Phase 4C service-level persistence stores analysis runs in `netpath_analysis_run` when a DB is configured, including normalized request JSON, result JSON, status, disposition, error, timestamps, tenant, and snapshot ID.
+- Result JSON now includes `source_refs` with config version IDs, topology snapshot ID, collection run IDs, and fact run IDs; SDK runtime preserves `fact_run_ids` through `oneops-netpath` `SourceRefs`.
+- Build-tagged smoke coverage now drives scoped DC2 latest facts through provider snapshot assembly, SDK analysis, DB persistence, and fresh-service reload.
+- `ProvideNetPathService` initialize/wiring coverage now explicitly checks that `db != nil` installs the DB-backed fact resolver even without snapshot reader/runtime engine wiring.
+- SDK wiring coverage now also proves a persisted SDK-created run can be reopened through a freshly provided service and still resolve route/topology `source_fact` in device-evidence drilldown via module-installed DB fact resolution.
+- Fresh service instances can reload persisted successful and failed runs by `tenant_code + code`; no-DB mode remains in-memory for lightweight tests.
+- Review follow-up fixed request device-scope mutation isolation in no-DB mode and generated-code collision retry in DB mode.
+- `NetPathAnalysisRun` is registered in OneOPS startup AutoMigrate models after schema-change approval; initialize tests cover model-list inclusion and required columns.
 - Analysis run retrieval now requires matching `tenant_code`.
 - `app/netpath/service/impl.NetPathServiceSet`, `app/netpath/api.NetPathSet`, and `app/netpath/router.NetPath` are source-level ready for Wire integration.
+- API tests cover typed create/get analysis-run payloads, including `source_refs` preservation.
 - `initialize.Router` has a guarded NetPath route call, so stale `cmd/wire_gen.go` does not expose a broken route.
 
 Deferred integration item:
@@ -186,6 +195,28 @@ Purpose:
 
 - Let operators inspect route, topology, and policy evidence related to a path.
 
+Current progress:
+
+- `AnalyzeResult` now has a run-level `evidence_summary` projection for create/get flows.
+- `evidence_summary.devices[]` is derived in OneOPS from trace hops and currently normalizes:
+  - route lookup evidence (`prefix`, `next_hop_ip`, `out_interface`, `route_source_ref`, `raw_ref`, `message`);
+  - peer forwarding evidence (`peer_device_code`, `peer_interface`, `topology_source`, `topology_source_ref`, `message`).
+- Persisted legacy `result_json` rows that predate `evidence_summary` are hydrated on read, so the summary can roll out without a data migration.
+- OneOPS now exposes a first device-on-path evidence endpoint:
+  - `GET /netpath/analysis-runs/:code/devices/:device_code/evidence?tenant_code=...`
+  - response carries run identity, snapshot identity, `source_refs`, and all matching path occurrences for that device.
+  - route lookup occurrences preserve canonical `route_source_ref` from the originating DC2 route fact when the SDK path is used.
+  - route lookup occurrences now also expose a compact `source_fact` summary when the canonical route fact can be resolved on the OneOPS side.
+  - forward peer occurrences preserve `topology_source` and canonical `topology_source_ref` from the originating topology fact when the SDK path is used.
+  - device evidence now uses a drilldown-only DTO surface for `source_fact`; run-level `evidence_summary` stays provenance-aware (`*_source_ref`) but does not expand DC2 fact summaries.
+  - forward peer occurrences now also expose a compact topology `source_fact` summary when the canonical topology-neighbor fact can be resolved on the OneOPS side.
+  - device evidence drilldown now also exposes trace-derived `policy_steps`, `nat_steps`, and `pbr_steps`, preserving `matched_object`, `raw_ref`, message, details, and future `*_source_ref` positions without claiming those evaluation phases are complete.
+  - `policy_steps`, `nat_steps`, and `pbr_steps` can now attach compact `source_fact` summaries for canonical `acl_rule` / `firewall_policy`, `nat_rule`, and `pbr_rule` facts when the OneOPS side can resolve the referenced DC2 fact rows.
+  - policy, NAT, and PBR still remain evidence/provenance surfaces at this phase; they are not yet real evaluators and continue to emit explicit unsupported diagnostics.
+  - route/topology fact summaries now fail closed unless both `target_id` and `fact_type` match the current device occurrence, avoiding stale or cross-device fact attachment.
+  - response diagnostics now also flag `topology_source_ref_unavailable` when peer forwarding evidence lacks canonical topology provenance.
+  - response diagnostics explicitly mark `policy`, `nat`, and `pbr` evaluation as unsupported today, instead of silently implying they were evaluated.
+
 Exit criteria:
 
 - Device-on-path evidence endpoint returns matched route entries and source refs.
@@ -201,6 +232,25 @@ Consent required:
 Purpose:
 
 - Render complete path results with topology, arrows, highlights, device drilldown, and blockers.
+
+Current implementation assessment:
+
+- Backend is already close to supporting a first demonstrable frontend page because preview/create/get/evidence contracts exist and persisted runs can be reopened.
+- `OneOPS-UI` is also structurally ready because it already has:
+  - dynamic menu-to-view route loading;
+  - an existing topology canvas component;
+  - mature drawer, table, and form patterns in topology, firewall, and monitor-probe pages.
+- So the shortest route to “frontend usable” is a focused NetPath page that first renders run form + result summary + device evidence, then upgrades into graph interaction.
+
+Default continue:
+
+- Build the frontend MVP in this order:
+  1. Add `OneOPS-UI` NetPath API module and typings.
+  2. Add NetPath analysis page shell and hidden route or menu entry.
+  3. Add run creation form plus result summary and diagnostics panel.
+  4. Add device list plus evidence drawer backed by `GET /analysis-runs/:code/devices/:device_code/evidence`.
+  5. Add trace-to-graph projection and reuse existing topology highlighting.
+  6. Add a run history/list API only if reopening runs from the UI becomes a hard requirement.
 
 Exit criteria:
 
@@ -264,8 +314,8 @@ Consent required:
 - [x] Phase 1 complete.
 - [x] Phase 2 complete.
 - [ ] Phase 3 active next.
-- [ ] Phase 4 active: Phase 4A/4B runtime wiring and tenant-scoped device authorization complete; persistence pending.
-- [ ] Phase 5 pending.
+- [ ] Phase 4 active: Phase 4A/4B runtime wiring and tenant-scoped device authorization complete; Phase 4C service persistence and schema registration complete; source-ref enrichment pending.
+- [ ] Phase 5 active: run-level evidence summary complete; dedicated evidence endpoints pending.
 - [ ] Phase 6 pending.
 - [ ] Phase 7 pending.
 - [ ] Phase 8 pending.

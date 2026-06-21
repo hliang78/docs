@@ -238,3 +238,57 @@ Latest evidence:
 Known follow-up:
 
 - Stabilize smoke scripts by choosing a free Chrome debugging port dynamically instead of relying on fixed `9234` / `9235` defaults.
+
+## 2026-06-20 Smoke stability checkpoint
+
+Completed in this pass:
+
+- `ipam-journey-smoke.cjs` now chooses an available Chrome debugging port dynamically when `IPAM_CHROME_PORT` is not explicitly provided.
+- `ipam-operation-smoke.cjs` now chooses an available Chrome debugging port dynamically when `IPAM_OPERATION_CHROME_PORT` is not explicitly provided.
+- Both smoke summaries now include the actual Chrome debugging port used, making future failures easier to diagnose.
+
+Latest evidence:
+
+- `npm run smoke:ipam-journey`: PASS with default command.
+- `npm run smoke:ipam-operation`: PASS with default command.
+
+This closes the previously observed fixed-port startup flake around default `9234` / `9235` usage.
+
+## 2026-06-20 Fact source explainability checkpoint
+
+Completed in this pass:
+
+- IPAM observed fact table now exposes source explainability columns:
+  - source type label (`manual`, `canonical_interface_ip`, `canonical_arp_entry`, etc.)
+  - source fact id
+  - source identity key
+  - source run id
+  - source dataset key
+  - source processor key
+- Frontend parses compact IPAM RawData/RawRef metadata keys produced by the canonical projection layer (`fi`, `sr`, `sd`, `sp`, `sf`, `si`, etc.).
+- Manual facts remain readable: they display as manual facts with empty canonical source references.
+- Journey smoke now asserts the presence of source explainability columns in the fact/audit journey.
+
+Latest evidence:
+
+- `npm run smoke:ipam-journey`: PASS and covers source fact/run/dataset/processor columns.
+- `npm run typecheck`: PASS.
+
+## 2026-06-20 Projection trigger smoke checkpoint
+
+Completed in this pass:
+
+- Operation smoke now clicks `同步采集事实` in the fact/audit journey before manual fact ingestion.
+- The smoke verifies projection feedback is visible in-page.
+- If the currently running backend has the new `project-canonical-latest` route loaded, the smoke accepts the success feedback with source/projected/skipped counts.
+- If the running backend is stale and returns 404, the smoke accepts the visible page-level error and continues the manual fact/audit closure. This prevents local runtime staleness from hiding whether the frontend interaction and error handling work.
+- The smoke still continues through manual fact creation, manual finding generation, and finding resolution.
+
+Latest evidence:
+
+- `npm run smoke:ipam-operation`: PASS. Current runtime surfaced a visible page-level projection error because the backend route appears stale or not restarted.
+- `npm run typecheck`: PASS.
+
+Follow-up:
+
+- Restart/reload the backend service and rerun `npm run smoke:ipam-operation` to verify the projection success path against the newly added route.

@@ -40,3 +40,13 @@ IPAM ready state:
 ## Operating Rule
 
 When a phase changes status, update this board in the same round as the phase-local spec/plan or implementation checkpoint.
+
+## Related Docs
+
+- `specs/2026-06-22-oneops-netpath-ipam-dual-closure-master-design.md`
+- `plans/2026-06-22-oneops-netpath-ipam-dual-closure-master.md`
+- `specs/2026-06-22-oneops-ipam-launch-closure-design.md`
+- `plans/2026-06-22-oneops-ipam-launch-closure.md`
+- `specs/2026-06-22-oneops-netpath-demo-closure-design.md`
+- `plans/2026-06-22-oneops-netpath-demo-closure.md`
+- `2026-06-22-oneops-dual-closure-phase-open-criteria.md`

@@ -32,10 +32,10 @@ IPAM ready state:
 
 | Line | Phase | Status | Target Ready State | Notes |
 | --- | --- | --- | --- | --- |
-| `IPAM` | Launch closure | `planned` | `launch-ready` | Waiting for focused closure spec and plan |
-| `NetPath` | Demo closure | `planned` | `demo-ready` | Waiting for focused closure spec and plan |
-| `NetPath` | Production closure | `planned` | `production-ready` | Opens only after demo closure is integrated |
-| `dc2` | Shared contract hardening | `planned` | minimal hardened contract | Opens only after IPAM and NetPath prove stable consumer needs |
+| `IPAM` | Launch closure | `planned` | `launch-ready` | Focused design and implementation plan now exist; execution not started |
+| `NetPath` | Demo closure | `planned` | `demo-ready` | Focused design and implementation plan now exist; execution not started |
+| `NetPath` | Production closure | `planned` | `production-ready` | Deferred until demo closure reaches the open criteria |
+| `dc2` | Shared contract hardening | `planned` | minimal hardened contract | Deferred until IPAM and NetPath expose stable shared-fact needs |
 
 ## Operating Rule
 

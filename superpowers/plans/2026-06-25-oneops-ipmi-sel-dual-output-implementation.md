@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Extend `oneops_ipmi` so one input task can emit IPMI metrics to Prometheus-style outputs and incremental SEL event logs to Loki with durable local cursors and strict whitelist-based stream separation.
+**Goal:** Extend `oneops_ipmi` so one input task can emit IPMI metrics to Prometheus-style outputs and incremental SEL event logs to Loki with durable local cursors, conservative SEL parsing, Loki-friendly labels, and strict whitelist-based stream separation.
 
-**Architecture:** The implementation adds explicit dual-stream template metadata in `teleabs`, a new `sel_logs` collector plus durable cursor store in the `ctrlhub` Telegraf input, and explicit `namepass` routing plus productized seed updates in `OneOps`. The rollout is deliberately phased so existing `oneops_ipmi` metric-only behavior remains unchanged unless `sel_logs` is enabled.
+**Architecture:** The implementation adds explicit dual-stream template metadata in `teleabs`, a new `sel_logs` collector plus durable cursor store in the `ctrlhub` Telegraf input, a conservative structured parser for decodable PCIe and CXL SEL payloads, and explicit `namepass` routing plus productized seed updates in `OneOps`. The rollout is deliberately phased so existing `oneops_ipmi` metric-only behavior remains unchanged unless `sel_logs` is enabled.
 
 **Tech Stack:** Go, Telegraf input/output plugins, Teleabs JSON templates, OneOps platform services, SQL seed migrations, Loki, Prometheus remote write
 
@@ -50,6 +50,10 @@ This feature spans four Git repos inside the workspace:
   - isolate SEL incremental delta logic and event-to-metric conversion
 - Create: `/home/jacky/project/OneOPS-ALL/ctrlhub/controller/agent/pkg/telegraf/plugins/inputs/oneops_ipmi/sel_log_collector_test.go`
   - test delta selection, duplicate avoidance, and measurement shape
+- Create: `/home/jacky/project/OneOPS-ALL/ctrlhub/controller/agent/pkg/telegraf/plugins/inputs/oneops_ipmi/sel_log_parser.go`
+  - conservative PCIe and CXL SEL parsing helpers for Loki enrichment
+- Create: `/home/jacky/project/OneOPS-ALL/ctrlhub/controller/agent/pkg/telegraf/plugins/inputs/oneops_ipmi/sel_log_parser_test.go`
+  - test AMI, Intel, CXL, and generic fallback parser behavior
 
 ### OneOps Platform
 
@@ -509,6 +513,215 @@ git add controller/agent/pkg/telegraf/plugins/inputs/oneops_ipmi/oneops_ipmi.go 
 git commit -m "feat: add incremental sel log collector to oneops ipmi"
 ```
 
+## Task 3B: Add Conservative SEL Parsing And Loki Label Enrichment
+
+**Files:**
+- Create: `/home/jacky/project/OneOPS-ALL/ctrlhub/controller/agent/pkg/telegraf/plugins/inputs/oneops_ipmi/sel_log_parser.go`
+- Create: `/home/jacky/project/OneOPS-ALL/ctrlhub/controller/agent/pkg/telegraf/plugins/inputs/oneops_ipmi/sel_log_parser_test.go`
+- Modify: `/home/jacky/project/OneOPS-ALL/ctrlhub/controller/agent/pkg/telegraf/plugins/inputs/oneops_ipmi/sel_log_collector.go`
+- Modify: `/home/jacky/project/OneOPS-ALL/ctrlhub/controller/agent/pkg/telegraf/plugins/inputs/oneops_ipmi/sel_log_collector_test.go`
+
+- [ ] **Step 1: Write the failing parser tests**
+
+```go
+func TestParseSELLogEntry_AMIPCIEvent(t *testing.T) {
+	entry := selStandardEntry{
+		RecordID:       0x51,
+		GeneratorID:    "0021",
+		SensorType:     "Critical Interrupt",
+		SensorNumber:   "00",
+		EventType:      "OEM",
+		EventDirection: "asserted",
+		RawHex:         "a700e0",
+	}
+
+	parsed, ok := parseSELLogEntry(entry)
+	if !ok {
+		t.Fatalf("expected AMI PCIe event to parse")
+	}
+	if parsed.Kind != "pcie" {
+		t.Fatalf("Kind = %q, want %q", parsed.Kind, "pcie")
+	}
+	if parsed.Decoder != "ami_pcie" {
+		t.Fatalf("Decoder = %q, want %q", parsed.Decoder, "ami_pcie")
+	}
+	if parsed.BDF != "0000:00:1c.0" {
+		t.Fatalf("BDF = %q, want %q", parsed.BDF, "0000:00:1c.0")
+	}
+}
+
+func TestParseSELLogEntry_IntelPCIEvent(t *testing.T) {
+	entry := selStandardEntry{
+		GeneratorID:  "0033",
+		SensorType:   "Critical Interrupt",
+		RawHex:       "0102a1",
+	}
+
+	parsed, ok := parseSELLogEntry(entry)
+	if !ok {
+		t.Fatalf("expected Intel PCIe event to parse")
+	}
+	if parsed.Decoder != "intel_pcie" {
+		t.Fatalf("Decoder = %q, want %q", parsed.Decoder, "intel_pcie")
+	}
+	if parsed.BDF != "0000:02:14.1" {
+		t.Fatalf("BDF = %q, want %q", parsed.BDF, "0000:02:14.1")
+	}
+}
+
+func TestParseSELLogEntry_CXLEvent(t *testing.T) {
+	entry := selStandardEntry{
+		SensorType: "CXL",
+		RawHex:     "1103d8",
+	}
+
+	parsed, ok := parseSELLogEntry(entry)
+	if !ok {
+		t.Fatalf("expected CXL event to parse")
+	}
+	if parsed.Kind != "cxl" {
+		t.Fatalf("Kind = %q, want %q", parsed.Kind, "cxl")
+	}
+	if parsed.ErrorType != "CXL.mem Non-fatal" {
+		t.Fatalf("ErrorType = %q, want %q", parsed.ErrorType, "CXL.mem Non-fatal")
+	}
+}
+
+func TestParseSELLogEntry_GenericFallback(t *testing.T) {
+	entry := selStandardEntry{
+		GeneratorID: "9999",
+		SensorType:  "Temperature",
+		RawHex:      "001122",
+	}
+
+	_, ok := parseSELLogEntry(entry)
+	if ok {
+		t.Fatalf("expected unsupported payload to remain generic")
+	}
+}
+```
+
+- [ ] **Step 2: Run the parser tests and verify they fail**
+
+Run:
+
+```bash
+cd /home/jacky/project/OneOPS-ALL/ctrlhub
+go test ./controller/agent/pkg/telegraf/plugins/inputs/oneops_ipmi -run 'TestParseSELLogEntry|TestSELLogEntryToMetric' -v
+```
+
+Expected: FAIL because the parser helpers and enrichment shape do not exist yet.
+
+- [ ] **Step 3: Implement conservative parser helpers**
+
+Create focused decoding types and helpers:
+
+```go
+type parsedSELLogEntry struct {
+	Kind       string
+	Decoder    string
+	ErrorType  string
+	BDF        string
+	Bus        int64
+	Device     int64
+	Function   int64
+	DecodeNote string
+}
+
+func parseSELLogEntry(entry selStandardEntry) (parsedSELLogEntry, bool) {
+	b1, b2, b3, ok := parseSELRawEventData(entry.RawHex)
+	if !ok {
+		return parsedSELLogEntry{}, false
+	}
+	for _, decoder := range []func(selStandardEntry, byte, byte, byte) (parsedSELLogEntry, bool){
+		parseAMIPCISELLogEntry,
+		parseIntelPCISELLogEntry,
+		parseCXLSELLogEntry,
+	} {
+		if parsed, matched := decoder(entry, b1, b2, b3); matched {
+			return parsed, true
+		}
+	}
+	return parsedSELLogEntry{}, false
+}
+```
+
+Keep the parser deliberately narrow:
+
+- accept only exact generator or sensor-type patterns we have confidence in
+- extract `bus`, `device`, and `function` directly from event-data bytes
+- return `false` for anything ambiguous so the collector keeps the generic SEL log path
+
+- [ ] **Step 4: Enrich emitted SEL logs without changing stream separation**
+
+Update the log conversion path so every SEL log gets stable routing tags and only parsed events get the extra PCIe or CXL fields:
+
+```go
+func buildSELLogMetric(entry selStandardEntry, baseTags map[string]string, includeRaw bool) (map[string]string, map[string]interface{}) {
+	tags := mergeTags(baseTags, map[string]string{
+		"severity":        defaultSELTag(entry.Severity, "unknown"),
+		"sensor_type":     defaultSELTag(entry.SensorType, "unknown"),
+		"sensor_number":   defaultSELTag(entry.SensorNumber, "unknown"),
+		"generator_id":    defaultSELTag(entry.GeneratorID, "unknown"),
+		"event_direction": defaultSELTag(entry.EventDirection, "unknown"),
+		"event_type":      defaultSELTag(entry.EventType, "unknown"),
+		"sel_kind":        "generic",
+		"sel_decoder":     "generic",
+	})
+	fields := map[string]interface{}{
+		"message":         entry.Message,
+		"record_id":       strconv.FormatUint(uint64(entry.RecordID), 10),
+		"event_timestamp": entry.TimestampUnix,
+	}
+	if includeRaw && entry.RawHex != "" {
+		fields["raw_hex"] = entry.RawHex
+	}
+	if parsed, ok := parseSELLogEntry(entry); ok {
+		tags["sel_kind"] = parsed.Kind
+		tags["sel_decoder"] = parsed.Decoder
+		if parsed.ErrorType != "" {
+			tags["pci_error_type"] = parsed.ErrorType
+		}
+		fields["pci_bdf"] = parsed.BDF
+		fields["pci_bus"] = parsed.Bus
+		fields["pci_device"] = parsed.Device
+		fields["pci_function"] = parsed.Function
+		if parsed.DecodeNote != "" {
+			fields["decode_note"] = parsed.DecodeNote
+		}
+	}
+	return tags, fields
+}
+```
+
+This step must preserve the existing guarantees:
+
+- unparsed SEL events still emit as `ipmi_sel_event_log`
+- metrics still never route to Loki
+- the SEL log measurement name stays unchanged
+
+- [ ] **Step 5: Run focused tests and verify they pass**
+
+Run:
+
+```bash
+cd /home/jacky/project/OneOPS-ALL/ctrlhub
+go test ./controller/agent/pkg/telegraf/plugins/inputs/oneops_ipmi -run 'TestParseSELLogEntry|TestSELLogEntryToMetric|TestSELLogDelta' -v
+```
+
+Expected: PASS with AMI, Intel, CXL, and generic fallback coverage plus stable tag and field assertions.
+
+- [ ] **Step 6: Commit the parser enrichment change**
+
+```bash
+cd /home/jacky/project/OneOPS-ALL/ctrlhub
+git add controller/agent/pkg/telegraf/plugins/inputs/oneops_ipmi/sel_log_parser.go \
+  controller/agent/pkg/telegraf/plugins/inputs/oneops_ipmi/sel_log_parser_test.go \
+  controller/agent/pkg/telegraf/plugins/inputs/oneops_ipmi/sel_log_collector.go \
+  controller/agent/pkg/telegraf/plugins/inputs/oneops_ipmi/sel_log_collector_test.go
+git commit -m "feat: enrich oneops ipmi sel logs with parsed pcie labels"
+```
+
 ## Task 4: Make OneOps Respect Explicit Dual-Stream Template Produces
 
 **Files:**
@@ -783,6 +996,7 @@ git commit -m "test: finalize oneops ipmi dual-output verification coverage"
 - Single `oneops_ipmi` task with dual outputs: covered by Tasks 1, 4, and 5
 - Incremental SEL-only logs to Loki: covered by Tasks 2 and 3
 - Restart-safe local cursor persistence: covered by Tasks 2 and 3
+- Conservative PCIe and CXL SEL parsing with Loki labels: covered by Task 3B
 - Logs never reach Prometheus and metrics never reach Loki: covered by Task 5
 - Existing metric-only behavior remains intact: covered by Tasks 3 and 6
 - Productized server OOB IPMI seed path: covered by Task 5
@@ -797,4 +1011,5 @@ git commit -m "test: finalize oneops ipmi dual-output verification coverage"
 
 - `Produces []string` is introduced in `teleabs/models.go` and consumed consistently through the OneOps provider
 - `SELCursorState`, `selCursorStore`, and `sel_logs` are named consistently across Task 2 and Task 3
+- `parsedSELLogEntry`, `parseSELLogEntry`, `sel_kind`, `sel_decoder`, and `pci_error_type` are named consistently across Task 3B
 - `ipmi_sel_event_log` is the single log measurement name referenced by template, collector, and output routing tasks

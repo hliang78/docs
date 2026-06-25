@@ -10,13 +10,15 @@ This design extends `inputs.oneops_ipmi` so a single plugin instance can:
 - collect SEL event logs for Loki
 - incrementally ship only newly appeared SEL events
 - persist per-target SEL cursors on local agent disk so collection resumes after agent or Telegraf restart
+- attach stable Loki-friendly labels to SEL logs
+- perform high-confidence structured parsing for decodable PCIe and CXL related SEL events without dropping unparsed events
 
 The design explicitly forbids cross-stream leakage:
 
 - logs must not be sent to Prometheus outputs
 - metrics must not be sent to Loki outputs
 
-The first phase targets host-level SEL observability only. It does not attempt GPU-card-level SEL attachment, OEM SEL deep parsing, or historical SEL replay.
+The first phase targets host-level SEL observability only. It does not attempt GPU-card-level SEL attachment, arbitrary OEM SEL deep parsing, or historical SEL replay.
 
 ## Problem
 
@@ -41,6 +43,8 @@ Current behavior does not support:
 - Incrementally send only newly appeared SEL events.
 - Persist SEL cursors locally so restart resumes from the last confirmed position.
 - Use explicit whitelist routing so stream separation is deterministic.
+- Attach low-cardinality SEL labels that make Loki querying and alert routing practical.
+- Parse only clearly recognizable PCIe and CXL style SEL payloads into structured fields and labels.
 - Preserve backward compatibility for existing `oneops_ipmi` tasks that do not enable SEL log collection.
 
 ## Non-Goals
@@ -50,6 +54,7 @@ Current behavior does not support:
 - Shipping runtime logs such as connection failures or privilege errors to Loki.
 - Solving GPU-card-level attachment for SEL logs in phase 1.
 - Replacing the existing `sel` and `sel_events` metric collectors.
+- Promoting high-cardinality identifiers such as BDF or record ID to broad Loki labels by default.
 
 ## Confirmed Requirements
 
@@ -60,6 +65,8 @@ Current behavior does not support:
 - SEL logs are sent incrementally only.
 - SEL cursor state must survive agent or Telegraf restart.
 - Cursor state may be stored on local agent disk.
+- Loki should receive only SEL event logs plus their attached labels.
+- Parsing failures must fall back to generic SEL logs instead of dropping events.
 
 ## Approaches Considered
 
@@ -139,7 +146,8 @@ SEL log path:
 2. the collector reads current SEL entries from the BMC
 3. the collector computes the incremental delta using a per-target persisted cursor
 4. each newly observed SEL entry becomes one `ipmi_sel_event_log` measurement
-5. the Loki output includes only `ipmi_sel_event_log`
+5. the collector enriches the entry with stable labels and optional parsed PCIe or CXL fields when a high-confidence decoder matches
+6. the Loki output includes only `ipmi_sel_event_log`
 
 ### Stream Separation
 
@@ -201,10 +209,9 @@ Measurement:
 
 - `ipmi_sel_event_log`
 
-Tags:
+Base tags:
 
 - `server`
-- `record_id`
 - `severity`
 - `sensor_type`
 - `sensor_number`
@@ -212,13 +219,59 @@ Tags:
 - `event_direction`
 - `event_type`
 
+Additional SEL routing tags:
+
+- `sel_kind`
+  - default `generic`
+  - parsed events may emit values such as `pcie` or `cxl`
+- `sel_decoder`
+  - default `generic`
+  - parsed events may emit values such as `ami_pcie`, `intel_pcie`, or `cxl`
+- `pci_error_type`
+  - present only when a parser can classify the PCIe or CXL error family
+
 Fields:
 
 - `message`
+- `record_id`
 - `event_timestamp`
 - `raw_hex` when enabled
 - `entity_id` when available
 - `entity_instance` when available
+- `decode_note` when a parser matched and wants to describe the heuristic
+- `pci_bdf` when a parser matched
+- `pci_bus` when a parser matched
+- `pci_device` when a parser matched
+- `pci_function` when a parser matched
+
+Label policy:
+
+- Loki labels come from tags only.
+- `sel_kind`, `sel_decoder`, `severity`, `sensor_type`, `event_type`, and `event_direction` are intentionally low-cardinality and safe for labels.
+- `record_id` remains available on the event as a field for deduplication and debugging, but it should not be promoted to a Loki label in phase 1.
+- `pci_bdf`, `pci_bus`, `pci_device`, and `pci_function` remain fields, not labels, to avoid stream explosion on large GPU fleets.
+
+### SEL Parsing Scope
+
+Phase 1 parsing is conservative.
+
+Included:
+
+- AMI BIOS PCIe style event-data payloads with recognizable BDF encoding
+- Intel PCIe or AER style payloads with recognizable BDF encoding
+- CXL style payloads that clearly encode component class, severity, and BDF
+
+Excluded:
+
+- arbitrary OEM payload families
+- speculative decoding when the payload shape is ambiguous
+- GPU card attachment inference beyond the BDF carried by the SEL payload itself
+
+The collector must follow a no-loss fallback:
+
+- if parsing succeeds, emit the generic SEL event plus structured parsed fields and tags
+- if parsing does not match, emit the generic SEL event unchanged
+- if parsing errors internally, log locally for operator troubleshooting but still emit the generic SEL event
 
 The log body should be centered on `message`. Loki labels come from tags.
 
@@ -306,6 +359,12 @@ The design target is at-least-once delivery, not exactly-once.
 
 If the downstream pipeline fails after events are emitted but before cursor advancement is durably confirmed, the next scrape may repeat a small suffix of events. This is acceptable in phase 1 and preferred over silent loss.
 
+### SEL Parse Failure
+
+- never drop the SEL event because parsing failed
+- keep `sel_kind=generic` and `sel_decoder=generic`
+- omit parsed PCIe or CXL fields when confidence is insufficient
+
 ## Idempotency and Delivery Semantics
 
 The system provides at-least-once semantics for SEL logs.
@@ -364,6 +423,9 @@ Existing `sel` and `sel_events` collectors continue to emit only metrics and con
 - incremental send when new record IDs appear
 - restart resume from persisted cursor
 - reset detection when record IDs roll back
+- high-confidence parser coverage for AMI PCIe, Intel PCIe or AER, and CXL payloads
+- unparsed payload fallback coverage
+- Loki tag and field shape coverage for parsed and generic events
 - whitelist measurement routing assumptions
 
 ### Integration Tests
@@ -386,11 +448,13 @@ Included:
 - local persistent SEL cursor state
 - strict whitelist routing
 - host-level Loki search and alerting for SEL logs
+- conservative structured parsing for decodable PCIe and CXL SEL events
+- Loki labels suitable for downstream routing and alert grouping
 
 Excluded:
 
 - GPU-card-level SEL attachment
-- OEM SEL deep structured parsing
+- arbitrary OEM SEL deep structured parsing
 - initial historical replay
 - non-SEL runtime logs to Loki
 - cross-agent shared cursor storage
@@ -400,14 +464,16 @@ Excluded:
 - The plugin should prefer simple, inspectable JSON state files for cursor persistence in phase 1.
 - One file per target is preferred over a shared monolithic state file for easier debugging.
 - A bounded per-scrape entry cap is required so a burst of new SEL records does not overwhelm Loki or block the scrape loop for too long.
+- The parser should prefer explicit decoder tables and simple byte extraction over broad heuristic guesswork so operational behavior stays explainable.
 
 ## Rollout Plan
 
 1. extend `inputs.oneops_ipmi` with `sel_logs` and local cursor persistence
-2. add tests for bootstrap, incremental delivery, restart recovery, and reset detection
-3. productize a `oneops_ipmi` template variant that declares both `metrics` and `logs`
-4. configure separate metrics and Loki outputs with explicit `namepass` whitelists
-5. validate end-to-end on a MEGARAC SP-X target with real SEL generation
+2. add tests for bootstrap, incremental delivery, restart recovery, reset detection, and structured PCIe or CXL SEL parsing
+3. attach stable Loki tags and structured parsed fields to `ipmi_sel_event_log`
+4. productize a `oneops_ipmi` template variant that declares both `metrics` and `logs`
+5. configure separate metrics and Loki outputs with explicit `namepass` whitelists
+6. validate end-to-end on a MEGARAC SP-X target with real SEL generation
 
 ## Acceptance Criteria
 
@@ -416,5 +482,7 @@ Excluded:
 - existing IPMI metric measurements are sent only to metrics outputs.
 - first startup does not replay historical SEL records.
 - new SEL records appear incrementally in Loki.
+- parsed PCIe or CXL SEL events expose stable routing labels and structured BDF fields in Loki.
+- undecodable SEL events still appear in Loki as generic SEL logs.
 - restart resumes from the stored cursor rather than rebuilding from scratch.
 - SEL reset or target replacement rebuilds baseline without replaying stale history.

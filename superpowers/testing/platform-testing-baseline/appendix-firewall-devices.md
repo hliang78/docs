@@ -3,7 +3,7 @@
 ## Critical Journeys
 
 - page import -> online collection -> fact parse -> detail/read-model verification
-- config/object workflow -> precheck -> collection result display
+- config/object workflow -> precheck execute -> collection result render
 
 ## Device / Protocol / Capability Matrix
 

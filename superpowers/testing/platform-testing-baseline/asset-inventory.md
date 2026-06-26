@@ -7,7 +7,7 @@ This inventory records the current testing-adjacent assets already present acros
 - `OneOPS`: Go tests in `app/**`, `pkg/**`, `cmd/**`
 - `OneOPS/tools/device_v2_envtest`: replay runner, seeded cases, and report generation
 - `OneOPS-UI`: smoke commands in `package.json`
-- `docs/superpowers/testing/zb-device-v2-e2e-*.md`: harnessed + real-chain case inventory
+- `docs/superpowers/testing/zb-device-v2-e2e-*.md`: device-v2 e2e planning, handoff, and overlooked-factor notes
 - `docs/superpowers/acceptance/*.md`: acceptance checklists
 
 ## Current Repo Reality

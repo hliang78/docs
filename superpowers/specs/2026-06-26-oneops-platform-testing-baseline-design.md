@@ -459,6 +459,10 @@ Phase 1 的交付物不是单份方案，而是一套共享资产：
 5. `GitHub private + self-hosted runner` 的 PR 核心门禁基线
 6. `证据、finding、边界、缺口` 的标准化沉淀路径
 
+## Implementation Artifacts
+
+Phase 1 implementation artifacts live under `docs/superpowers/testing/platform-testing-baseline/`.
+
 ## Roles And Collaboration
 
 建议建立以下角色分工：

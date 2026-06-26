@@ -4,7 +4,7 @@ This matrix captures the agreed baseline dimensions for the first shared platfor
 
 | Domain | Chain | Entry | Protocol | State | Truth Layer | Gate Level | Current Coverage | Owner |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Network | ingest -> collect -> monitor | ZB | SNMP | success | source + projection + runtime | PR core | backend + frontend repo core gates landed | network owner |
+| Network | ingest -> collect -> monitor | ZB | SNMP | success | source + projection + runtime | PR core | backend + frontend repo core gates landed; frontend local gate green on 2026-06-26 | network owner |
 | Server | ingest -> collect -> monitor | page store/start | SSH/IPMI | blocked | source + detail + runtime | nightly | nightly-led, docs partial, no PR core gate | server owner |
 | Firewall | import -> collect -> config facts | page import | SSH/API | success | source + detail | nightly | smoke/docs led, no PR core gate | firewall owner |
 

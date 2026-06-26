@@ -17,6 +17,13 @@ This inventory records the current testing-adjacent assets already present acros
 - `OneOPS-UI/package.json` already exposes many smoke commands, including device-v2, firewall, D2, and netpath-oriented flows.
 - `docs/superpowers/acceptance` already contains checklist-style acceptance assets that can anchor human validation before automation is promoted.
 
+## Landed Repo-Level Gate Entrypoints
+
+- Backend local script: `OneOPS/scripts/platform-testing-core.sh`
+- Backend workflow: `OneOPS/.github/workflows/platform-testing-core.yml`
+- Frontend local script: `OneOPS-UI/scripts/platform-testing-core.sh`
+- Frontend workflow: `OneOPS-UI/.github/workflows/platform-testing-core.yml`
+
 ## Repo Topology Constraint
 
 - shared docs live in `docs`

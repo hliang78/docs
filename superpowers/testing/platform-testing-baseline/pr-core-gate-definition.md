@@ -1,3 +1,7 @@
+# PR Core Gate Definition
+
+Purpose: define the Phase 1 PR core gate contract for the shared platform testing baseline.
+
 ## Gate Contract
 
 - `OneOPS` backend gate runs Go core tests plus `device_v2_envtest` dry/local core replay.

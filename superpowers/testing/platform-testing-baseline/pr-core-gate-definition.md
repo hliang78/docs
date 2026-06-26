@@ -11,5 +11,5 @@ Purpose: define the Phase 1 PR core gate contract for the shared platform testin
 
 ## Execution Commands
 
-- Backend local gate: `cd /Users/huangliang/project/OneOPS-ALL/OneOPS && bash scripts/platform-testing-core.sh`
-- Frontend local gate: `cd /Users/huangliang/project/OneOPS-ALL/OneOPS-UI && bash scripts/platform-testing-core.sh`
+- From workspace root, run backend local gate: `cd OneOPS && bash scripts/platform-testing-core.sh`
+- From workspace root, run frontend local gate: `cd OneOPS-UI && bash scripts/platform-testing-core.sh`

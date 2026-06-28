@@ -71,6 +71,7 @@
 | C3 | Cisco ASAv 管理与访问控制链 | Cisco ASAv + 1 台 Server | SSH、对象、策略、持久化 | P1 |
 | D1 | 服务器穿越防火墙联动 | Debian/Ubuntu/Kylin + 任一主线防火墙 | 资产、任务、策略联动 | P1 |
 | E1 | 小规模批量监控与任务下发 | 全部已就绪主线设备 | 监控、任务、失败隔离、接口响应 | P1 |
+| N1 | 网络主线 `4+2+1` 首包 | `R1-R4` + `S1/S2` + `OBS` | 采集、监控、拓扑主线闭环 | P0 |
 
 ## 4. 场景 A1：单设备接入基线
 
@@ -343,13 +344,59 @@
 ## 12. 推荐执行顺序
 
 1. 先做 A1，统一所有主线设备接入基线
-2. 再做 B1 和 B2，把网络设备与共同管理底座打实
-3. 再做 C1 和 C2，把两条差异最大的防火墙线打实
-4. 然后做 C3，补齐 Cisco 防火墙样本
-5. 再做 D1，验证服务器与防火墙的跨层联动
-6. 最后做 E1，形成第一轮小规模并发与稳定性结论
+2. 再做 N1，把第一条 `4+2+1` 网络主线按 `采集 -> 监控 -> 拓扑` 跑通
+3. 再做 B1 和 B2，把网络设备与共同管理底座打实
+4. 再做 C1 和 C2，把两条差异最大的防火墙线打实
+5. 然后做 C3，补齐 Cisco 防火墙样本
+6. 再做 D1，验证服务器与防火墙的跨层联动
+7. 最后做 E1，形成第一轮小规模并发与稳定性结论
 
-## 13. 每轮执行后的文档产出
+## 13. 场景 N1：网络主线 `4+2+1` 首包
+
+### 13.1 目标
+
+1. 把第一条网络设备主线从“已设计”推进到“下一条明确执行包”
+2. 固定 `R1-R4 + S1/S2 + OBS` 的第一波联合验证入口
+3. 用一轮执行同时回收采集、监控、拓扑三类主线证据
+
+### 13.2 冻结入口
+
+1. [第一阶段网络设备主线标准场景](/Users/huangliang/project/OneOPS-ALL/docs/testing/phase1-network-mainline-standard-scenario.md)
+2. [第一阶段网络设备主线地址与端口分配](/Users/huangliang/project/OneOPS-ALL/docs/testing/phase1-network-mainline-addressing-and-port-map.md)
+3. [第一阶段网络设备主线执行 Runbook](/Users/huangliang/project/OneOPS-ALL/docs/testing/phase1-network-mainline-execution-runbook.md)
+4. [第一阶段网络设备主线采集基线回执（第一版）](/Users/huangliang/project/OneOPS-ALL/docs/testing/phase1-network-mainline-collection-receipt-v1.md)
+5. [第一阶段网络设备主线监控基线回执（第一版）](/Users/huangliang/project/OneOPS-ALL/docs/testing/phase1-network-mainline-monitoring-receipt-v1.md)
+6. [第一阶段网络设备主线拓扑基线回执（第一版）](/Users/huangliang/project/OneOPS-ALL/docs/testing/phase1-network-mainline-topology-receipt-v1.md)
+7. [第一阶段网络设备主线薄弱点登记册](/Users/huangliang/project/OneOPS-ALL/docs/testing/phase1-network-mainline-weak-point-register.md)
+
+### 13.3 设备组合
+
+1. `4` 台业务路由设备：`R1`、`R2`、`R3`、`R4`
+2. `2` 台业务服务器：`S1`、`S2`
+3. `1` 台观测服务器：`OBS`
+4. `GW`、`ACC1`、`ACC2` 作为固定底座随包执行，但不计入 `4+2+1` 主体验证规模
+
+### 13.4 最小检查点
+
+1. 按冻结位序搭好管理平面、接入平面、路由平面
+2. `R1-R4` 的身份、接口、邻居、路由事实能进入采集链
+3. `R1-R4` 与 `S1/S2` 的最小监控任务能形成四层证据
+4. 平台拓扑结果能回对 Full Mesh 和 `S1/S2` 接入关系
+
+### 13.5 要重点观察的薄弱点
+
+1. 管理平面是否误混入业务拓扑
+2. `R1/R3` 网关真值与 `R2/R4` 非网关角色是否会被平台误判
+3. 监控是否停留在任务创建层，没有稳定落到目标结果层
+4. 采集、监控、拓扑三类回执之间是否出现同一事实互相打架
+
+### 13.6 退出标准
+
+1. `phase1-network-mainline-collection-receipt-v1`、`phase1-network-mainline-monitoring-receipt-v1`、`phase1-network-mainline-topology-receipt-v1` 三份主线回执都有首轮有效回填
+2. `phase1-network-mainline-weak-point-register` 至少登记本轮发现的真实薄弱点或明确边界
+3. 能明确给出这条 `4+2+1` 网络主线是否进入下一轮复跑或平台修补
+
+## 14. 每轮执行后的文档产出
 
 每执行完一条场景，至少新增或更新以下内容：
 

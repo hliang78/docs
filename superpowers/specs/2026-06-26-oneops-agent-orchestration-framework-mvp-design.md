@@ -47,8 +47,9 @@ Automation level must be environment-aware. Production defaults should be conser
 The recommended architecture is:
 
 - `OneOps` acts as experience layer, integration layer, and capability provider
-- `flow` evolves into the standalone orchestration kernel
+- `dagengine/v2/engine` acts as the execution kernel through a local adapter layer
 - templates define scenario behavior
+- `flow` is optional and should not be treated as the phase 1 execution runtime
 
 ### 3.1 Layering
 
@@ -77,12 +78,12 @@ This layer should be implemented as a new thin OneOps module, for example `OneOp
 
 #### L3. Agent Orchestration Kernel
 
-This is the independent runtime core, preferably evolved from the existing `flow` repo:
+This is the independent runtime core, built on top of `dagengine/v2/engine` through a narrow anti-corruption layer:
 
 - template loading and validation
-- outer workflow state machine
-- inner agent node runner
-- execution context storage
+- template-to-DAG compilation
+- execution lifecycle and state transitions
+- human-gate and pause/resume support
 - tool gateway
 - audit and policy guard
 
@@ -210,13 +211,14 @@ Responsibilities:
 
 Responsibilities:
 
-- execute the outer workflow state machine
+- compile the outer workflow state machine into a DAG process
+- execute the compiled process through `dagengine`
 - track current step
 - handle timeout
 - handle retry
 - determine completion, escalation, or failure
 
-This is the main deterministic control plane.
+This is the main deterministic control plane. In phase 1, OneOps should not call `dagengine` raw APIs directly; it should go through a local adapter layer.
 
 ### 5.3 Agent Node Runner
 
@@ -227,7 +229,7 @@ Responsibilities:
 - enforce maximum rounds and timeout
 - return structured diagnosis output back to the execution engine
 
-This should only be entered from explicitly declared `agent_step` nodes.
+This should only be entered from explicitly declared `agent_step` nodes. In phase 1, an `agent_step` can still be represented as a compiled DAG node with bounded execution and controlled tools.
 
 ### 5.4 Context Store
 
@@ -487,13 +489,14 @@ At least one alert-to-ticket execution path should be runnable end to end in a t
 
 ### 11.1 Orchestration kernel
 
-The orchestration kernel should be built from the existing `flow` repository instead of being embedded directly inside OneOps.
+The orchestration kernel should be built on `dagengine/v2/engine` through a library-level adapter, instead of expanding `flow` into the runtime core.
 
 Reasoning:
 
-- a service boundary already exists
-- it matches the chosen hybrid architecture
-- it avoids making OneOps heavier in phase 1
+- `dagengine` already has stronger execution-kernel semantics: process, node, dependency, scheduler, task, and ticket models
+- `dagengine` has much broader execution-oriented test coverage than `flow`
+- `flow` currently looks more like a definition/experiment layer than a stable runtime kernel
+- this keeps OneOps lighter while avoiding a custom execution engine fork
 
 ### 11.2 OneOps integration module
 
@@ -504,6 +507,8 @@ Add a thin module such as `OneOps/app/orchestration` to handle:
 - approval callback
 - integration-layer context assembly
 - operations-facing views
+
+This module should also host the anti-corruption layer that maps template definitions into `dagengine` process and node definitions.
 
 ### 11.3 Task execution reuse
 
@@ -527,6 +532,15 @@ Only five capability adapters should be built first:
 - `ObservabilityAdapter`
 - `KnowledgeAdapter`
 
+### 11.7 Dagengine reuse boundary
+
+Phase 1 should reuse `dagengine` at the library level only:
+
+- reuse: `dagengine/v2/engine`, `dagengine/v2/interfaces`, `dagengine/pkg/logging`
+- do not reuse directly: `dagengine/cmd/server`, `dagengine/v2/api`, `dagengine/old`
+
+OneOps should own the business-facing API contract. `dagengine` should remain the execution kernel, not the business truth layer.
+
 ## 12. Out of Scope
 
 The following are explicitly out of scope for phase 1:
@@ -543,8 +557,8 @@ The following are explicitly out of scope for phase 1:
 
 After design approval, implementation planning should focus on one narrow slice:
 
-1. evolve `flow` into a minimal orchestration runtime
-2. create `OneOps/app/orchestration`
+1. create `OneOps/app/orchestration`
+2. add a local `dagengine` adapter and template compiler
 3. wire the `Alert-To-Ticket Loop` template first
 4. prove the model with one diagnosis-oriented template second
 

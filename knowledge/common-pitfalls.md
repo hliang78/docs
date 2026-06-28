@@ -214,6 +214,36 @@
 - 确保测试环境与生产环境配置一致
 - 使用 docker-compose 统一测试环境
 
+### 7.2 USG `description` 元数据导致规则被静默跳过
+
+**症状：**
+- 配置可以编译
+- 但运行时策略匹配或 NAT 复用像“少了一条规则”
+
+**根因：**
+- `description` 这类 metadata 子句被 lowerer 误判为 unsupported syntax
+- 规则随后被标记为 `SkipRuntime`
+
+**解决方案：**
+- 检查 `v2/usgrt` lowerer 是否显式忽略 `description`
+- 优先补真实配置 smoke test，不要先怀疑匹配算法
+- 参考：`docs/knowledge/firewall-usg-example-skipruntime-patterns-2026-06-24.md`
+
+### 7.3 SecPath `#` 分隔行导致复用规则不可见
+
+**症状：**
+- 精确匹配正常
+- 但策略复用场景异常，系统误以为需要新建策略
+
+**根因：**
+- `security-policy` rule 下的 `#` 分隔行被当成 unsupported child
+- 目标 rule 被静默排除出 runtime
+
+**解决方案：**
+- 检查 `v2/secpathrt` lowerer 是否把 `#` 视为可忽略内容
+- 先看 rule 是否 `SkipRuntime=true`
+- 参考：`docs/knowledge/firewall-usg-example-skipruntime-patterns-2026-06-24.md`
+
 ## 8. 运维环境相关
 
 ### 8.1 调整 inotify 后 Docker/Grafana 外部访问无响应

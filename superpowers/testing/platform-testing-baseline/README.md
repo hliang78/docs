@@ -3,6 +3,7 @@
 ## Contents
 
 - [Testing Objective Basis](./testing-objective-basis.md)
+- [Shared Real-Device Testing Docs](../../../testing/README.md)
 - [Phase 1 Goal-Oriented Testing Design](../../specs/2026-06-26-oneops-phase1-goal-oriented-testing-design.md)
 - [Phase 1 Goal-Oriented Testing Plan](../../plans/2026-06-26-oneops-phase1-goal-oriented-testing-plan.md)
 - [Platform Baseline Spec](../../specs/2026-06-26-oneops-platform-testing-baseline-design.md)

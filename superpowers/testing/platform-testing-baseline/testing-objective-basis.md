@@ -16,6 +16,10 @@ The user's latest emphasis is:
 
 > 具体到测试我希望是针对一系列真实设备通过各种数据组合来验证各种场景，关键是分析薄弱环节，进行测试。需要有针对性的设计测试。
 
+The user's additional constraint is:
+
+> 允许不同设备有不同的登录账号
+
 ## Agreed Interpretation
 
 The core concern is not simply "more tests", but "more delivery certainty".
@@ -25,6 +29,7 @@ What the testing baseline must prove:
 - AI-accumulated functionality is not only present, but trustworthy under real data, edge cases, and scale.
 - A device is not considered "supported" because one API succeeds once; it is only considered supported when its full capability chain is understood and verified.
 - Device adaptation is inherently non-standard, so the platform must verify both support breadth and clear unsupported boundaries.
+- Login credentials are part of device reality, not a forced unification target. Different device families may keep different standard login accounts as long as they are documented, reproducible, and explicitly included in the test evidence.
 - Customer delivery risk is the real reference point: support scope, behavior stability, failure clarity, and large-scale operability must all be explainable with evidence.
 - Phase 1 should not spread effort evenly across modules. It should use real-device samples, data combinations, and weak-link analysis to design deliberately targeted tests.
 
@@ -37,6 +42,7 @@ Phase 1 testing decisions should always prefer the following questions over modu
 3. For each unsupported or partial case, is the boundary explicit and observable?
 4. Can the platform remain stable, robust, reliable, usable, and resilient when data shape, protocol behavior, or scale changes?
 5. Which real-device and data-combination scenarios expose the current weakest links first?
+6. For each device family, are the real usable login entry and credential baseline clearly recorded, instead of being assumed to be globally uniform?
 
 ## Decision Rule
 

@@ -1,0 +1,103 @@
+{
+  "program": "aidc-business-workbench-rollout",
+  "batch": "batch-001",
+  "title": "Collections, outreach, and radar workbench rollout",
+  "status": "reviewed",
+  "targetTaskIds": ["aidc-fe"],
+  "releaseGate": "User explicitly requested generating the long task for all remaining pages.",
+  "stories": [
+    {
+      "id": "AIDCWB-001",
+      "title": "Convert collections page into a list-first workbench",
+      "lanes": ["aidc-fe"],
+      "status": "open",
+      "priority": 40,
+      "risk": "Medium",
+      "scope": "Restructure `/business/collections` into a compact workbench with short header, action rail, list-first task area, and supporting diagnostics while preserving collection run, enrichment rerun, and runtime check actions.",
+      "nonGoals": "Do not add backend behavior, new data sources, or broad shell changes.",
+      "allowedPaths": [
+        "apps/aidc-web/app/(platform)/business/collections/**",
+        "apps/aidc-web/components/**",
+        "apps/aidc-web/lib/**",
+        "docs/superpowers/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/aidc-fe/**"
+      ],
+      "acceptance": [
+        "Collections page uses a workbench layout instead of a dashboard-first card wall.",
+        "Run, rerun enrichment, and runtime check actions remain reachable.",
+        "Task list and runtime state are visually prioritized over description text.",
+        "Typecheck and tests pass."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/aidc_hunt/apps/aidc-web && pnpm typecheck",
+        "cd /Users/huangliang/project/aidc_hunt/apps/aidc-web && pnpm test"
+      ],
+      "notes": [
+        "PRD: /Users/huangliang/project/OneOPS-ALL/docs/prd-autodev/aidc-business-workbench-rollout/prd.md",
+        "Evidence: /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/aidc-fe/AIDCWB-001/summary.md"
+      ]
+    },
+    {
+      "id": "AIDCWB-002",
+      "title": "Reframe outreach page as a list-detail workbench",
+      "lanes": ["aidc-fe"],
+      "status": "open",
+      "priority": 45,
+      "risk": "Medium",
+      "scope": "Rework `/business/outreach` into a stable workbench that keeps status filters, message deep links, task list, detail panel, and draft workspace, but makes the list-detail rhythm clearer and the draft tools secondary to the task queue.",
+      "nonGoals": "Do not redesign outreach business semantics or remove existing draft recovery capability.",
+      "allowedPaths": [
+        "apps/aidc-web/app/(platform)/business/outreach/**",
+        "apps/aidc-web/components/**",
+        "apps/aidc-web/lib/**",
+        "docs/superpowers/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/aidc-fe/**"
+      ],
+      "acceptance": [
+        "Outreach page presents task queue first and detail/editor as supporting areas.",
+        "Message focus and notice-contact filters remain functional.",
+        "Draft restore and save affordances remain available without dominating the page header.",
+        "Typecheck and tests pass."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/aidc_hunt/apps/aidc-web && pnpm typecheck",
+        "cd /Users/huangliang/project/aidc_hunt/apps/aidc-web && pnpm test"
+      ],
+      "notes": [
+        "Keep URL query handling and restore receipts intact.",
+        "Evidence: /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/aidc-fe/AIDCWB-002/summary.md"
+      ]
+    },
+    {
+      "id": "AIDCWB-003",
+      "title": "Turn radar page into an opportunity queue workbench",
+      "lanes": ["aidc-fe"],
+      "status": "open",
+      "priority": 50,
+      "risk": "Medium",
+      "scope": "Refocus `/business/radar` around the radar opportunity queue, selected detail, and high-value actions, while demoting external search/import tooling into a supporting region and preserving take-over, outreach creation, and message deep links.",
+      "nonGoals": "Do not change radar scoring logic or backend import semantics.",
+      "allowedPaths": [
+        "apps/aidc-web/app/(platform)/business/radar/**",
+        "apps/aidc-web/components/**",
+        "apps/aidc-web/lib/**",
+        "docs/superpowers/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/aidc-fe/**"
+      ],
+      "acceptance": [
+        "Radar page is visibly queue-first rather than tool-first.",
+        "Selected item detail and takeover/outreach actions remain easy to reach.",
+        "External import/search stays available as an auxiliary area.",
+        "Typecheck and tests pass."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/aidc_hunt/apps/aidc-web && pnpm typecheck",
+        "cd /Users/huangliang/project/aidc_hunt/apps/aidc-web && pnpm test"
+      ],
+      "notes": [
+        "Preserve score/take-status filters and message-center focus behavior.",
+        "Evidence: /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/aidc-fe/AIDCWB-003/summary.md"
+      ]
+    }
+  ]
+}

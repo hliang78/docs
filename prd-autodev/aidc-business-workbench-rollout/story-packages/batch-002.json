@@ -1,0 +1,70 @@
+{
+  "program": "aidc-business-workbench-rollout",
+  "batch": "batch-002",
+  "title": "Supply and workflows workbench rollout",
+  "status": "draft",
+  "targetTaskIds": ["aidc-fe"],
+  "releaseGate": "Publish only after batch-001 evidence confirms the shared workbench rhythm is stable.",
+  "stories": [
+    {
+      "id": "AIDCWB-004",
+      "title": "Convert supply page into a list-form-import workbench",
+      "lanes": ["aidc-fe"],
+      "status": "open",
+      "priority": 55,
+      "risk": "Low",
+      "scope": "Restructure `/business/supply` so product list, selected product editor, and import result handling follow one compact workbench flow without losing template download, problem export, or import confirmation behavior.",
+      "nonGoals": "Do not change supply import file format or backend save semantics.",
+      "allowedPaths": [
+        "apps/aidc-web/app/(platform)/business/supply/**",
+        "apps/aidc-web/components/**",
+        "apps/aidc-web/lib/**",
+        "docs/superpowers/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/aidc-fe/**"
+      ],
+      "acceptance": [
+        "Supply page clearly prioritizes the product list and selected-item editing flow.",
+        "Import preview and result areas are visible but secondary.",
+        "Template download and problem-row export remain available.",
+        "Typecheck and tests pass."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/aidc_hunt/apps/aidc-web && pnpm typecheck",
+        "cd /Users/huangliang/project/aidc_hunt/apps/aidc-web && pnpm test"
+      ],
+      "notes": [
+        "Evidence: /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/aidc-fe/AIDCWB-004/summary.md"
+      ]
+    },
+    {
+      "id": "AIDCWB-005",
+      "title": "Reframe workflows page around archive queue operations",
+      "lanes": ["aidc-fe"],
+      "status": "open",
+      "priority": 60,
+      "risk": "Low",
+      "scope": "Refocus `/business/workflows` on archive-ready contracts, flow status, and archive batch navigation so the page behaves like a queue-driven workflow workbench rather than a summary dashboard.",
+      "nonGoals": "Do not redesign contract archive business logic or add new flow nodes.",
+      "allowedPaths": [
+        "apps/aidc-web/app/(platform)/business/workflows/**",
+        "apps/aidc-web/components/**",
+        "apps/aidc-web/lib/**",
+        "docs/superpowers/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/aidc-fe/**"
+      ],
+      "acceptance": [
+        "Workflow page prioritizes queue and actionable contract objects.",
+        "Archive-ready focus from message center remains functional.",
+        "Contract-center and archive-ledger links remain accessible.",
+        "Typecheck and tests pass."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/aidc_hunt/apps/aidc-web && pnpm typecheck",
+        "cd /Users/huangliang/project/aidc_hunt/apps/aidc-web && pnpm test"
+      ],
+      "notes": [
+        "Evidence: /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/aidc-fe/AIDCWB-005/summary.md"
+      ]
+    }
+  ]
+}

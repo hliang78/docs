@@ -1,0 +1,70 @@
+{
+  "program": "aidc-business-workbench-rollout",
+  "batch": "batch-003",
+  "title": "Cross-page consistency and final regression",
+  "status": "draft",
+  "targetTaskIds": ["aidc-fe"],
+  "releaseGate": "Publish only after batch-001 and batch-002 are both complete and evidence has been reviewed.",
+  "stories": [
+    {
+      "id": "AIDCWB-006",
+      "title": "Run cross-page workbench consistency pass",
+      "lanes": ["aidc-fe"],
+      "status": "open",
+      "priority": 70,
+      "risk": "Medium",
+      "scope": "Compare all nine business pages and make only bounded consistency fixes so headers, list density, action placement, and supporting detail regions align with the confirmed workbench language.",
+      "nonGoals": "Do not reopen page-specific redesign scope beyond consistency-level fixes.",
+      "allowedPaths": [
+        "apps/aidc-web/app/(platform)/business/**",
+        "apps/aidc-web/components/**",
+        "apps/aidc-web/lib/**",
+        "docs/superpowers/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/aidc-fe/**"
+      ],
+      "acceptance": [
+        "All nine business pages share a recognizable workbench rhythm.",
+        "Any baseline-page adjustments stay narrow and documented.",
+        "Typecheck and tests pass."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/aidc_hunt/apps/aidc-web && pnpm typecheck",
+        "cd /Users/huangliang/project/aidc_hunt/apps/aidc-web && pnpm test"
+      ],
+      "notes": [
+        "Evidence: /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/aidc-fe/AIDCWB-006/summary.md"
+      ]
+    },
+    {
+      "id": "AIDCWB-007",
+      "title": "Capture final browser and build verification for the rollout",
+      "lanes": ["aidc-fe"],
+      "status": "open",
+      "priority": 80,
+      "risk": "Low",
+      "scope": "Run final browser verification across the business pages, capture rollout evidence, and confirm `pnpm build` in `apps/aidc-web` after the consistency pass.",
+      "nonGoals": "Do not add new UI scope after verification except for tiny blocker-level fixes.",
+      "allowedPaths": [
+        "apps/aidc-web/app/(platform)/business/**",
+        "apps/aidc-web/components/**",
+        "apps/aidc-web/lib/**",
+        "docs/superpowers/**",
+        "/Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/aidc-fe/**"
+      ],
+      "acceptance": [
+        "Browser evidence exists for the redesigned pages and consistency pass.",
+        "Build succeeds after the final FE pass.",
+        "Known backend blockers are explicitly recorded if they affect verification."
+      ],
+      "validation": [
+        "cd /Users/huangliang/project/aidc_hunt/apps/aidc-web && pnpm typecheck",
+        "cd /Users/huangliang/project/aidc_hunt/apps/aidc-web && pnpm test",
+        "cd /Users/huangliang/project/aidc_hunt/apps/aidc-web && pnpm build"
+      ],
+      "notes": [
+        "Evidence: /Users/huangliang/project/OneOPS-ALL/docs/openclaw-autodev/evidence/aidc-fe/AIDCWB-007/summary.md",
+        "Record any remaining backend runtime blocker instead of masking it."
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # 第一阶段网络设备主线执行 Runbook
 
-更新时间：2026-06-28  
+更新时间：2026-06-29  
 适用环境：`192.168.100.20` 上的 EVE-NG Community `6.2.0-4`
 
 ## 1. 目的
@@ -28,6 +28,8 @@
 8. [EVE-NG H3C VSR 路由器标准操作手册](/Users/huangliang/project/OneOPS-ALL/docs/testing/eve-ng-h3c-vsr-router-standard-operation.md)
 9. [EVE-NG Linux Server 标准操作手册](/Users/huangliang/project/OneOPS-ALL/docs/testing/eve-ng-linux-server-standard-operation.md)
 10. [A1 最小监控任务补证标准](/Users/huangliang/project/OneOPS-ALL/docs/testing/phase1-a1-minimal-monitoring-task-evidence.md)
+11. [第一阶段网络设备主线 EVE 底座实测回执（第一版）](/Users/huangliang/project/OneOPS-ALL/docs/testing/phase1-network-mainline-eve-baseline-live-validation-v1.md)
+12. [OBS `controller + agent` 部署前置检查清单](/Users/huangliang/project/OneOPS-ALL/docs/testing/phase1-obs-controller-agent-precheck-checklist.md)
 
 ## 3. 场景冻结范围
 
@@ -42,11 +44,12 @@
 执行边界固定如下：
 
 1. `OBS` 部署 `controller + agent`，只走管理平面
-2. `GW` 负责 `pnet0` 外联和管理平面，不参加业务验证
-3. `ACC1`、`ACC2` 只承接接入关系，不承接服务器业务网关
-4. `R1` 固定承接 `172.32.101.254`
-5. `R3` 固定承接 `172.32.102.254`
-6. `R2`、`R4` 在 V1 不承接服务器业务网关，也不在对应服务器业务网段配置 IP
+2. `OBS` 固定按 `8 vCPU / 16G RAM` 起机
+3. `GW` 负责 `pnet0` 外联和管理平面，不参加业务验证
+4. `ACC1`、`ACC2` 只承接接入关系，不承接服务器业务网关
+5. `R1` 固定承接 `172.32.101.254`
+6. `R3` 固定承接 `172.32.102.254`
+7. `R2`、`R4` 在 V1 不承接服务器业务网关，也不在对应服务器业务网段配置 IP
 
 ## 4. 总执行顺序
 
@@ -90,6 +93,11 @@
 3. `拓扑基线` 回写到 `/Users/huangliang/project/OneOPS-ALL/docs/testing/phase1-network-mainline-topology-receipt-v1.md`
 4. 在 Task 3/4 的固定模板完成前，证据也必须按以上 3 个目标文件名收集，不允许现场新建临时命名文件
 
+前置实测口径：
+
+1. 在正式进入 `6.5 采集基线` 之前，应先参考 [第一阶段网络设备主线 EVE 底座实测回执（第一版）](/Users/huangliang/project/OneOPS-ALL/docs/testing/phase1-network-mainline-eve-baseline-live-validation-v1.md)
+2. 若底座回执未满足“拓扑已成、初始化已成、管理面已通、业务地址与 OSPF 已通”四条，不进入 OneOps 正式回执阶段
+
 ## 6. 执行步骤
 
 ### 6.1 建拓扑
@@ -106,6 +114,7 @@
 2. `GW` 到 `pnet0` 的外联边界参照 [EVE-NG `bridge` 到 `pnet0` 最小拓扑模板](/Users/huangliang/project/OneOPS-ALL/docs/testing/eve-ng-bridge-pnet0-boundary-template.md)
 3. 管理底座参照 [EVE-NG 管理网关拓扑标准](/Users/huangliang/project/OneOPS-ALL/docs/testing/eve-ng-mgt-gateway-topology-standard.md)
 4. 设备、地址、接口位序严格服从 [第一阶段网络设备主线地址与端口分配](/Users/huangliang/project/OneOPS-ALL/docs/testing/phase1-network-mainline-addressing-and-port-map.md)
+5. `OBS` 建点时必须显式核对资源规格为 `8 vCPU / 16G RAM`
 
 核对点：
 
@@ -115,6 +124,7 @@
 4. `ACC2` 只接 `S2`、`R3`、`R4`
 5. `R1/R2/R3/R4` 六条 `L3MESH` 链路齐全
 6. `OBS` 只接管理口
+7. `OBS` 节点规格已按 `8 vCPU / 16G RAM` 创建
 
 放行条件：
 
@@ -127,7 +137,8 @@
 1. 记录 Lab 名称
 2. 记录节点 ID
 3. 记录双端链路核对结果
-4. 标注是否存在模板接口数量不足或接口名漂移
+4. 记录 `OBS` 资源规格
+5. 标注是否存在模板接口数量不足或接口名漂移
 
 ### 6.2 设备初始化复核
 
@@ -143,6 +154,7 @@
 3. Linux 服务器参照 [EVE-NG Linux Server 标准操作手册](/Users/huangliang/project/OneOPS-ALL/docs/testing/eve-ng-linux-server-standard-operation.md)
 4. `GW` 和交换机侧初始化参照 [EVE-NG Cisco 网关交换机标准操作手册](/Users/huangliang/project/OneOPS-ALL/docs/testing/eve-ng-cisco-gateway-standard-operation.md)
 5. `GW`、`ACC1`、`ACC2` 也必须完成各自标准初始化并可登录
+6. `OBS` 进入 `controller + agent` 部署前，必须先过 [OBS `controller + agent` 部署前置检查清单](/Users/huangliang/project/OneOPS-ALL/docs/testing/phase1-obs-controller-agent-precheck-checklist.md)
 
 核对点：
 
@@ -152,12 +164,14 @@
 4. `OBS` 已装好 `controller + agent`
 5. `OBS` 不额外拉观测网
 6. 各设备 SSH 或控制台入口可复现
+7. `OBS` 资源规格仍为 `8 vCPU / 16G RAM`
 
 放行条件：
 
 1. 所有节点都能稳定登录
 2. 所有管理地址都已固定
 3. 没有设备把管理面误放到业务口
+4. `OBS` 规格未被降配
 
 回执要求：
 
@@ -165,6 +179,7 @@
 2. 记录管理接口名
 3. 记录管理地址和默认网关
 4. 记录登录入口是否通过
+5. 记录 `OBS` 节点规格核对结果
 
 ### 6.3 管理平面连通性验证
 

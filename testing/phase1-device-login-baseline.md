@@ -37,18 +37,44 @@
 
 ## 3. 主线设备凭据矩阵
 
-| 设备 | 首选登录入口 | 标准账号 | 标准口令 | 首登行为 | 关键边界 |
-| --- | --- | --- | --- | --- | --- |
-| Cisco Gateway Switch | `SSH` | `admin` | `admin@123` | 无额外改密 | 客户端需兼容老 IOS SSH 算法 |
-| Huawei AR | `SSH` | `admin` | `admin@123` | 首次 Console 创建账号后，必须重新登录一次 | 需补 `ssh server permit interface` |
-| H3C VSR | `SSH` | `admin` | `admin@123` | 需先放宽密码策略并完成 SSH 初始化 | 客户端需兼容 `ssh-rsa` |
-| Huawei USG | `SSH` | `admin` | `admin@123` | 默认内置 `admin/Admin@123`，首次 Console 强制改密到 `admin@123` | `HTTPS 443` 仍未形成稳定外部访问 |
-| H3C VFW | `SSH` | `admin` | `Admin@1234` | `admin@123` 只作为首登触发口令，稳定口令需收敛到 `Admin@1234` | 管理面需显式放通 `Management <-> Local` |
-| Ruijie Firewall | `SSH` | `admin` | `admin@123` | 当前标准模板基于离线启动文件；真实运行节点允许存在设备级例外 | 当前在线节点已漂移到 `qwerASDF!@34` |
-| Cisco ASAv | `SSH` | `admin` | `Adm1n@134` | 先用临时口令 `Adm1n@132`，首次 SSH 强制改密到 `Adm1n@134` | `enable` 口令需同步；客户端需兼容 `ssh-rsa` |
-| Ubuntu Server | `SSH` | `admin` | `admin@123` | 无额外改密 | `root/admin@123` 作为回退入口 |
-| Debian Server | `SSH` | `admin` | `admin@123` | 无额外改密 | `root/admin@123` 作为回退入口 |
-| Kylin Server | `SSH` | `admin` | `admin@123` | 无额外改密 | `root/admin@123` 作为回退入口；串口控制台不稳定 |
+### 3.1 当前主线拓扑设备 IP 与凭据
+
+这一节只对应当前主线 Lab `oneops-network-mainline-v1`。
+
+| 设备 | 角色 | 管理 IP | 业务 IP / 业务网关 | 首选登录入口 | 标准账号 | 标准口令 | SNMP 版本 | SNMP 信息 | 关键边界 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `GW` | Cisco Gateway Switch | `172.32.2.254` | `192.168.100.150/24` 上联 `pnet0` | `SSH` | `admin` | `admin@123` | `v2c` | `community = admin@123` | 客户端需兼容老 IOS SSH 算法 |
+| `ACC1` | Access Switch 1 | `172.32.2.10` | 当前不承接三层业务网关 | `SSH` | `admin` | `admin@123` | `v2c` | `community = admin@123` | 只承接 `S1/R1/R2` 接入关系 |
+| `ACC2` | Access Switch 2 | `172.32.2.20` | 当前不承接三层业务网关 | `SSH` | `admin` | `admin@123` | `v2c` | `community = admin@123` | 只承接 `S2/R3/R4` 接入关系 |
+| `R1` | Huawei AR Router 1 | `172.32.2.31` | `172.32.101.254/24`；Mesh: `172.32.64.31` `172.32.65.31` `172.32.66.31` | `SSH` | `admin` | `admin@123` | `v2c` | `community = admin@123` | 首次 Console 创建账号后，必须重新登录一次；需补 `ssh server permit interface` |
+| `R2` | Huawei AR Router 2 | `172.32.2.32` | Mesh: `172.32.64.32` `172.32.67.32` `172.32.68.32` | `SSH` | `admin` | `admin@123` | `v2c` | `community = admin@123` | 首次 Console 创建账号后，必须重新登录一次；不承接服务器业务网关 |
+| `R3` | Huawei AR Router 3 | `172.32.2.33` | `172.32.102.254/24`；Mesh: `172.32.65.33` `172.32.67.33` `172.32.69.33` | `SSH` | `admin` | `admin@123` | `v2c` | `community = admin@123` | 首次 Console 创建账号后，必须重新登录一次；需补 `ssh server permit interface` |
+| `R4` | Huawei AR Router 4 | `172.32.2.34` | Mesh: `172.32.66.34` `172.32.68.34` `172.32.69.34` | `SSH` | `admin` | `admin@123` | `v2c` | `community = admin@123` | 首次 Console 创建账号后，必须重新登录一次；不承接服务器业务网关 |
+| `S1` | Ubuntu Server 1 | `172.32.2.61` | `172.32.101.61/24`，网关 `172.32.101.254` | `SSH` | `admin` | `admin@123` | `v2c` | `community = admin@123` | `root/admin@123` 作为回退入口 |
+| `S2` | Ubuntu Server 2 | `172.32.2.62` | `172.32.102.62/24`，网关 `172.32.102.254` | `SSH` | `admin` | `admin@123` | `v2c` | `community = admin@123` | `root/admin@123` 作为回退入口 |
+| `OBS` | Ubuntu Observe Server | `172.32.2.71` | 当前不单独分配业务 IP | `SSH` | `admin` | `admin@123` | `v2c` | `community = admin@123` | `root/admin@123` 作为回退入口；固定 `8 vCPU / 16G RAM` |
+
+补充说明：
+
+1. 当前主线设备 IP 基线以 [第一阶段网络设备主线地址与端口分配](/Users/huangliang/project/OneOPS-ALL/docs/testing/phase1-network-mainline-addressing-and-port-map.md) 为准
+2. 当前主线管理网统一为 `172.32.2.0/24`
+3. 除 `GW` 外，其余主线设备管理默认网关统一指向 `172.32.2.254`
+4. 当前主线设备 OneOps 入库统一按 `SSH + SNMP v2c` 处理
+5. 当前主线 `SNMP community` 统一为 `admin@123`
+
+### 3.2 其他设备类型凭据矩阵
+
+这部分设备当前不在 `oneops-network-mainline-v1` 主线拓扑中，因此这里先给出登录基线，设备 IP 由各自单设备场景或后续专题拓扑决定。
+
+| 设备类型 | 当前主线管理 IP | 首选登录入口 | 标准账号 | 标准口令 | SNMP 版本 | SNMP 信息 | 首登行为 | 关键边界 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| H3C VSR | 当前主线未纳入 | `SSH` | `admin` | `admin@123` | 待单设备场景确认 | 待单设备场景确认 | 需先放宽密码策略并完成 SSH 初始化 | 客户端需兼容 `ssh-rsa` |
+| Huawei USG | 当前主线未纳入 | `SSH` | `admin` | `admin@123` | 待单设备场景确认 | 待单设备场景确认 | 默认内置 `admin/Admin@123`，首次 Console 强制改密到 `admin@123` | `HTTPS 443` 仍未形成稳定外部访问 |
+| H3C VFW | 当前主线未纳入 | `SSH` | `admin` | `Admin@1234` | 待单设备场景确认 | 待单设备场景确认 | `admin@123` 只作为首登触发口令，稳定口令需收敛到 `Admin@1234` | 管理面需显式放通 `Management <-> Local` |
+| Ruijie Firewall | 当前主线未纳入 | `SSH` | `admin` | `admin@123` | 待单设备场景确认 | 待单设备场景确认 | 当前标准模板基于离线启动文件；真实运行节点允许存在设备级例外 | 当前在线节点已漂移到 `qwerASDF!@34` |
+| Cisco ASAv | 当前主线未纳入 | `SSH` | `admin` | `Adm1n@134` | 待单设备场景确认 | 待单设备场景确认 | 先用临时口令 `Adm1n@132`，首次 SSH 强制改密到 `Adm1n@134` | `enable` 口令需同步；客户端需兼容 `ssh-rsa` |
+| Debian Server | 当前主线未纳入 | `SSH` | `admin` | `admin@123` | 待单设备场景确认 | 待单设备场景确认 | 无额外改密 | `root/admin@123` 作为回退入口 |
+| Kylin Server | 当前主线未纳入 | `SSH` | `admin` | `admin@123` | 待单设备场景确认 | 待单设备场景确认 | 无额外改密 | `root/admin@123` 作为回退入口；串口控制台不稳定 |
 
 ## 4. 设备级说明
 

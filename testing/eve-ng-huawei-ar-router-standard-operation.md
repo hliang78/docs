@@ -223,6 +223,17 @@ ssh server permit interface GigabitEthernet 0/0/19
 ```
 
 否则 SSH 端口虽然显示已监听，但同网段 TCP 建连仍会卡住。
+6. 当前这台镜像不支持 `LLDP` 和 `CDP`：
+   - `display lldp neighbor brief` 返回 `Unrecognized command`
+   - `lldp enable` 返回 `Unrecognized command`
+   - `display cdp neighbor` 返回 `Unrecognized command`
+7. 因此这条设备线在 OneOps 第一阶段里，不能把 `LLDP/CDP` 当成拓扑事实源。
+8. 当前更可靠的拓扑补证链应优先使用：
+   - `display ospf peer brief`
+   - `display ospf interface`
+   - `display ip routing-table`
+   - `display ip routing-table protocol ospf`
+   - `display arp all`
 
 ## 9. 当前标准结论
 
@@ -235,3 +246,9 @@ ssh server permit interface GigabitEthernet 0/0/19
 5. 已知边界已明确
 
 后续如果要把它接入 OneOPS 的采集、监控、接口/路由/邻居验证，可以直接以这份手册作为路由器类设备的标准起点。
+
+补充口径：
+
+1. 这台华为 AR 可以稳定提供三层邻接和路由事实
+2. 但当前不应要求它提供 `LLDP/CDP` 邻居事实
+3. 主线拓扑恢复时，应把它归类为“以 `OSPF + 路由 + ARP` 为主的三层事实设备”

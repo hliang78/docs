@@ -101,6 +101,10 @@
    记录 Cisco ASAv 当前已经实证可复用的恢复启动、`Mgmt0/0` 管理配置、SSH、`enable` 与重启复验路径。
 43. [EVE-NG Cisco ASAv 防火墙首轮初始化与边界记录](/Users/huangliang/project/OneOPS-ALL/docs/testing/eve-ng-cisco-asav-firewall-initialization-boundary.md)
    记录 Cisco ASAv 为什么会卡在 `enable_1/priv 1`、为什么必须走恢复启动，以及密码策略、首次 SSH 改密、`tmp` 覆盖目录复用等关键边界。
+44. [EVE Mainline Topology Script Usage](/Users/huangliang/project/OneOPS-ALL/docs/testing/eve-ng-mainline-topology-script-usage.md)
+   记录当前本地 EVE 主线拓扑脚本的命令入口、运行方式、边界和非目标范围，并明确“P2P `bridge + visibility=0` 折叠为真正 link 画法”的当前标准。
+45. [EVE Mainline Topology Script Live Validation](/Users/huangliang/project/OneOPS-ALL/docs/testing/eve-ng-mainline-topology-script-live-validation.md)
+   记录 `2026-06-29` 以来这套脚本在真实 EVE 上跑通 `plan -> apply -> destroy`、清理旧 Lab、消除 console 冲突、以及把主线切换为 hidden P2P link 画法的 live 回执。
 
 ## 3. 统一方法
 
